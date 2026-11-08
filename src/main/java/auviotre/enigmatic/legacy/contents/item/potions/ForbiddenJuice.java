@@ -10,23 +10,24 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.flag.FeatureFlagSet;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+import java.util.List;
 
 public class ForbiddenJuice extends BaseDrinkableItem {
-    public static final FoodProperties FOOD_PROPERTIES = new FoodProperties.Builder()
-            .effect(() -> new MobEffectInstance(MobEffects.WITHER, 400, 3), 1.0F)
-            .effect(() -> new MobEffectInstance(MobEffects.NAUSEA, 400, 2), 1.0F)
-            .effect(() -> new MobEffectInstance(MobEffects.WEAKNESS, 480, 3), 1.0F)
-            .effect(() -> new MobEffectInstance(MobEffects.SLOWNESS, 640, 2), 1.0F)
-            .alwaysEdible().build();
+    // 26.1.2-port: was FoodProperties with effects (applied by the removed Player.eat).
+    public static final List<DrinkEffect> EFFECTS = List.of(
+            new DrinkEffect(() -> new MobEffectInstance(MobEffects.WITHER, 400, 3), 1.0F),
+            new DrinkEffect(() -> new MobEffectInstance(MobEffects.NAUSEA, 400, 2), 1.0F),
+            new DrinkEffect(() -> new MobEffectInstance(MobEffects.WEAKNESS, 480, 3), 1.0F),
+            new DrinkEffect(() -> new MobEffectInstance(MobEffects.SLOWNESS, 640, 2), 1.0F)
+    );
 
     public ForbiddenJuice() {
-        super(IItemHelper.singleProperties().food(FOOD_PROPERTIES).craftRemainder(Items.GLASS_BOTTLE).rarity(Rarity.RARE).fireResistant());
+        super(IItemHelper.singleProperties().craftRemainder(Items.GLASS_BOTTLE).rarity(Rarity.RARE).fireResistant());
     }
 
     public static boolean isForbiddenCursed(LivingEntity entity) {
@@ -45,7 +46,7 @@ public class ForbiddenJuice extends BaseDrinkableItem {
 
     @Override
     public void onConsumed(Level level, @NotNull Player player, ItemStack stack) {
-        player.eat(level, stack);
+        applyDrinkEffects(level, player, EFFECTS);
         EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);
         data.setThirstForbiddenCursed(true);
     }

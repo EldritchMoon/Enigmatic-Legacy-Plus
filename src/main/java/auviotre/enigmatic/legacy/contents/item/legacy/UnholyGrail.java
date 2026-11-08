@@ -81,7 +81,7 @@ public class UnholyGrail extends BaseItem {
     // 26.1.2-port: replaces getDrinkingSound/getEatingSound (see BaseDrinkableItem.onUseTick).
     @Override
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingTicks) {
-        BaseDrinkableItem.playDrinkSound(entity, remainingTicks, this.getUseDuration(stack, entity), SoundEvents.HONEY_DRINK);
+        BaseDrinkableItem.playDrinkSound(entity, remainingTicks, this.getUseDuration(stack, entity), SoundEvents.HONEY_DRINK.value());
     }
 
     @Override

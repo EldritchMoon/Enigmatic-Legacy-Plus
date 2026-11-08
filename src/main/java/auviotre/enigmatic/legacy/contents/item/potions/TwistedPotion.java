@@ -59,7 +59,7 @@ public class TwistedPotion extends BaseDrinkableItem {
         ResourceKey<Level> deathDimension = ResourceKey.create(Registries.DIMENSION, Identifier.parse(deathLoc.getStringOr("dimension", "")));
         ServerLevel destLevel = player.level().getServer().getLevel(deathDimension);
         if (destLevel == null) return;
-        BlockPos respawnPos = new BlockPos(deathLoc.getInt("x"), deathLoc.getInt("y") + 2, deathLoc.getInt("z"));
+        BlockPos respawnPos = new BlockPos(deathLoc.getIntOr("x", 0), deathLoc.getIntOr("y", 0) + 2, deathLoc.getIntOr("z", 0));
         Vec3 vec3 = respawnPos.getBottomCenter();
         if (!player.level().equals(destLevel))
             player.teleport(new TeleportTransition(destLevel, vec3, player.getDeltaMovement(), player.getYRot(), player.getXRot(), TeleportTransition.DO_NOTHING));

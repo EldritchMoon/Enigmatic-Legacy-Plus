@@ -9,6 +9,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.jetbrains.annotations.NotNull;
+import net.minecraft.server.level.ServerLevel;
 
 public class MoltenHeart extends MobEffect {
     public MoltenHeart() {
@@ -17,9 +18,9 @@ public class MoltenHeart extends MobEffect {
     }
 
     @Override
-    public boolean applyEffectTick(@NotNull LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(ServerLevel level, @NotNull LivingEntity entity, int amplifier) { // 26.1.2-port: server-only, gets the level
         if (entity.isOnFire()) entity.clearFire();
-        return super.applyEffectTick(entity, amplifier);
+        return super.applyEffectTick(level, entity, amplifier);
     }
 
     @SubscribeEvent

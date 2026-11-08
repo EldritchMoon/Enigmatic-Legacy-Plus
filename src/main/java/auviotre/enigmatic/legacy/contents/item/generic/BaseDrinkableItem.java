@@ -17,6 +17,10 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.NotNull;
 import net.minecraft.util.Mth;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
+import net.minecraft.world.effect.MobEffectInstance;
+import java.util.function.Supplier;
+import java.util.List;
+import net.minecraft.sounds.SoundSource;
 
 public class BaseDrinkableItem extends BaseItem {
 
@@ -66,12 +70,27 @@ public class BaseDrinkableItem extends BaseItem {
     // consumable component, so the drinking sound is played here on the same schedule as before.
     @Override
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingTicks) {
-        playDrinkSound(entity, remainingTicks, this.getUseDuration(stack, entity), SoundEvents.GENERIC_DRINK);
+        playDrinkSound(entity, remainingTicks, this.getUseDuration(stack, entity), SoundEvents.GENERIC_DRINK.value());
     }
 
     public static void playDrinkSound(LivingEntity entity, int remainingTicks, int useDuration, SoundEvent sound) {
         if (useDuration - remainingTicks > (int) (useDuration * 0.21875F) && remainingTicks % 4 == 0)
             entity.playSound(sound, 0.5F, Mth.randomBetween(entity.getRandom(), 0.9F, 1.0F));
+    }
+
+    /** 26.1.2-port: FoodProperties no longer carries effects, so drinkables list them as DrinkEffects. */
+    public record DrinkEffect(Supplier<MobEffectInstance> effect, float probability) {
+    }
+
+    /** 26.1.2-port: replaces Player.eat(level, stack) (removed) for drinkables: same sounds and effect rolls. */
+    public static void applyDrinkEffects(Level level, Player player, List<DrinkEffect> effects) {
+        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.GENERIC_DRINK.value(), SoundSource.NEUTRAL, 1.0F,
+                1.0F + (level.getRandom().nextFloat() - level.getRandom().nextFloat()) * 0.4F);
+        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_BURP, SoundSource.PLAYERS, 0.5F,
+                level.getRandom().nextFloat() * 0.1F + 0.9F);
+        if (level.isClientSide()) return;
+        for (DrinkEffect effect : effects)
+            if (level.getRandom().nextFloat() < effect.probability()) player.addEffect(effect.effect().get());
     }
 
     public boolean canDrink(Level level, Player player, ItemStack stack) {

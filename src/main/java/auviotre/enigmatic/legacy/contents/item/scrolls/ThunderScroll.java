@@ -49,6 +49,7 @@ import top.theillusivec4.curios.api.SlotContext;
 import java.util.List;
 import java.util.function.Consumer;
 import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.entity.EntitySpawnReason;
 
 public class ThunderScroll extends CursedCurioItem {
     public static final String TAG_ID = "ElectricPoint";
@@ -119,7 +120,7 @@ public class ThunderScroll extends CursedCurioItem {
                 int electric = entity.getPersistentData().getIntOr(TAG_ID, 0);
                 if (electric > 0) {
                     if (electric > 1200) {
-                        LightningBolt lightningbolt = EntityType.LIGHTNING_BOLT.create(entity.level());
+                        LightningBolt lightningbolt = EntityType.LIGHTNING_BOLT.create(entity.level(), EntitySpawnReason.TRIGGERED);
                         if (lightningbolt != null) {
                             lightningbolt.snapTo(Vec3.atBottomCenterOf(entity.blockPosition()));
                             lightningbolt.setSilent(entity.getRandom().nextBoolean());

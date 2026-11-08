@@ -46,7 +46,7 @@ public class WormholePotion extends BaseDrinkableItem {
             level.sendParticles(particle, player.getX(), player.getY(0.5), player.getZ(), 48, hOffset, yOffset, hOffset, 0.03);
             level.playSound(null, player.blockPosition(), SoundEvents.PLAYER_TELEPORT, SoundSource.PLAYERS, 1.0F, 0.8F + player.getRandom().nextFloat() * 0.2F);
             Vec3 vec3 = player.adjustSpawnLocation(level, target.blockPosition()).getBottomCenter();
-            if (player.teleportTo(level, vec3.x, vec3.y, vec3.z, relativeList, player.getYRot(), player.getXRot())) {
+            if (player.teleportTo(level, vec3.x, vec3.y, vec3.z, relativeList, player.getYRot(), player.getXRot(), true /* 26.1.2-port: resetCamera, as /tp does */)) {
                 level.sendParticles(particle, player.getX(), player.getY(0.5), player.getZ(), 48, hOffset, yOffset, hOffset, 0.03);
                 level.playSound(null, player.blockPosition(), SoundEvents.PLAYER_TELEPORT, SoundSource.PLAYERS, 1.0F, 0.8F + player.getRandom().nextFloat() * 0.2F);
                 if (player instanceof LivingEntity livingentity) {

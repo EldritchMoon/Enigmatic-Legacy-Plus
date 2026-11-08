@@ -17,6 +17,7 @@ import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingHealEvent;
 import org.jetbrains.annotations.NotNull;
+import net.minecraft.server.level.ServerLevel;
 
 public class Poison extends MobEffect {
     public Poison() {
@@ -25,10 +26,10 @@ public class Poison extends MobEffect {
     }
 
     @Override
-    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(ServerLevel level, LivingEntity entity, int amplifier) { // 26.1.2-port: server-only, gets the level
         if (entity.getHealth() > (1.5F + amplifier * 0.125F)) {
             Registry<DamageType> types = entity.damageSources().damageTypes;
-            Holder.Reference<DamageType> type = types.getHolder(NeoForgeMod.POISON_DAMAGE).orElse(types.getHolderOrThrow(DamageTypes.MAGIC));
+            Holder.Reference<DamageType> type = types.get(NeoForgeMod.POISON_DAMAGE).orElseGet(() -> types.getOrThrow(DamageTypes.MAGIC));
             entity.hurt(new DamageSource(type), 1.5F + amplifier * 0.125F);
             if (amplifier >= 4) entity.invulnerableTime = 10;
         }

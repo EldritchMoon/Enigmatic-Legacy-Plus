@@ -98,6 +98,7 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemInstance;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
+import net.minecraft.world.entity.EntitySpawnReason;
 
 public class SpellstoneSword extends Item {
     private static final float BASE_DAMAGE = 6.0F;
@@ -151,7 +152,7 @@ public class SpellstoneSword extends Item {
             double range = shooter.getAttributeValue(Attributes.ENTITY_INTERACTION_RANGE) + 0.5F;
             List<LivingEntity> list = level.getEntitiesOfClass(LivingEntity.class, new AABB(shooter.getX() - range, shooter.getY() - range, shooter.getZ() - range, shooter.getX() + range, shooter.getY() + range, shooter.getZ() + range));
             list.removeIf(entity -> entity == shooter || entity.position().subtract(shooter.position()).normalize().dot(shooter.getForward()) < 0.25);
-            AngelBeam angelBeam = EnigmaticEntities.ANGEL_BEAM.get().create(level);
+            AngelBeam angelBeam = EnigmaticEntities.ANGEL_BEAM.get().create(level, EntitySpawnReason.TRIGGERED);
             if (angelBeam != null) {
                 angelBeam.setPos(shooter.position());
                 angelBeam.setOwner(shooter);

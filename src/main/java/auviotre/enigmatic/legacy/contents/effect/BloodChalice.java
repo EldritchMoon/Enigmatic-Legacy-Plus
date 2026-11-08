@@ -11,6 +11,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.server.level.ServerLevel;
 
 public class BloodChalice extends MobEffect {
     public BloodChalice() {
@@ -23,7 +24,7 @@ public class BloodChalice extends MobEffect {
     }
 
     @Override
-    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(ServerLevel level, LivingEntity entity, int amplifier) { // 26.1.2-port: server-only, gets the level
         if (!entity.level().isClientSide()) {
             AttributeInstance attribute = entity.getAttributes().getInstance(Attributes.ATTACK_DAMAGE);
             MobEffectInstance effect = entity.getEffect(EnigmaticEffects.BLOOD_CHALICE);

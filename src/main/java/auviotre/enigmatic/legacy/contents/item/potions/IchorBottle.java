@@ -10,7 +10,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
@@ -24,16 +23,17 @@ import java.util.function.Consumer;
 import net.minecraft.world.item.component.TooltipDisplay;
 
 public class IchorBottle extends BaseDrinkableItem {
-    public static final FoodProperties FOOD_PROPERTIES = new FoodProperties.Builder()
-            .effect(() -> new MobEffectInstance(MobEffects.ABSORPTION, 1200, 4), 1.0F)
-            .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 600, 2), 1.0F)
-            .effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 3200), 1.0F)
-            .effect(() -> new MobEffectInstance(EnigmaticEffects.PURE_RESISTANCE, 1200, 2), 1.0F)
-            .alwaysEdible().build();
+    // 26.1.2-port: was FoodProperties with effects (applied by the removed Player.eat).
+    public static final List<DrinkEffect> EFFECTS = List.of(
+            new DrinkEffect(() -> new MobEffectInstance(MobEffects.ABSORPTION, 1200, 4), 1.0F),
+            new DrinkEffect(() -> new MobEffectInstance(MobEffects.REGENERATION, 600, 2), 1.0F),
+            new DrinkEffect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 3200), 1.0F),
+            new DrinkEffect(() -> new MobEffectInstance(EnigmaticEffects.PURE_RESISTANCE, 1200, 2), 1.0F)
+    );
     private final boolean enchanted;
 
     public IchorBottle(boolean enchanted) {
-        super(IItemHelper.singleProperties().craftRemainder(Items.GLASS_BOTTLE).food(FOOD_PROPERTIES).rarity(enchanted ? Rarity.EPIC : Rarity.RARE)
+        super(IItemHelper.singleProperties().craftRemainder(Items.GLASS_BOTTLE).rarity(enchanted ? Rarity.EPIC : Rarity.RARE)
                 .component(EnigmaticComponents.CURSED, enchanted).component(EnigmaticComponents.BLESSED, enchanted));
         this.enchanted = enchanted;
     }
@@ -54,7 +54,7 @@ public class IchorBottle extends BaseDrinkableItem {
         if (this.enchanted) {
             EnigmaticHandler.unlockSpecialSlot("charm", player, IItemHelper.getLocation(this));
         }
-        player.eat(level, stack);
+        applyDrinkEffects(level, player, EFFECTS);
     }
 
     @Override

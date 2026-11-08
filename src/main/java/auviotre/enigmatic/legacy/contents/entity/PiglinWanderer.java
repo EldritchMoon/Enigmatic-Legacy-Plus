@@ -56,6 +56,7 @@ import java.util.Optional;
 import net.minecraft.tags.ItemTags;
 import auviotre.enigmatic.legacy.handlers.SaveDataHelper;
 import net.minecraft.util.profiling.Profiler;
+import net.minecraft.world.entity.EntitySpawnReason;
 
 public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
     protected static final ImmutableList<SensorType<? extends Sensor<? super PiglinWanderer>>> SENSOR_TYPES = ImmutableList.of(
@@ -372,7 +373,7 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
             if (event.getEntity().getType().equals(EntityType.PIGLIN) && (event.getSpawnType() == EntitySpawnReason.NATURAL || event.getSpawnType() == EntitySpawnReason.CHUNK_GENERATION)) {
                 ServerLevelAccessor level = event.getLevel();
                 if (level.getRandom().nextFloat() > 0.1F) return;
-                PiglinWanderer piglinWanderer = EnigmaticEntities.PIGLIN_WANDERER.get().create(level.getLevel());
+                PiglinWanderer piglinWanderer = EnigmaticEntities.PIGLIN_WANDERER.get().create(level.getLevel(), event.getSpawnType());
                 SpawnGroupData spawnData = event.getSpawnData();
                 if (piglinWanderer != null) {
                     event.setSpawnCancelled(true);

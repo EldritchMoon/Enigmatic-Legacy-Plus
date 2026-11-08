@@ -95,6 +95,7 @@ import top.theillusivec4.curios.api.common.DropRule;
 import java.util.function.Consumer;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EntitySpawnReason;
 
 public class CursedRing extends CursedCurioItem {
     public static final Multimap<Player, ItemLike> POSSESSIONS = ArrayListMultimap.create();
@@ -373,7 +374,7 @@ public class CursedRing extends CursedCurioItem {
                         POSSESSIONS.put(player, EnigmaticItems.BLESS_STONE);
                         stack.shrink(1);
                         flag = true;
-                        LightningBolt lightningbolt = EntityType.LIGHTNING_BOLT.create(player.level());
+                        LightningBolt lightningbolt = EntityType.LIGHTNING_BOLT.create(player.level(), EntitySpawnReason.TRIGGERED);
                         if (lightningbolt != null) {
                             lightningbolt.snapTo(Vec3.atBottomCenterOf(player.blockPosition()));
                             lightningbolt.setCause(player instanceof ServerPlayer ? player : null);

@@ -57,6 +57,7 @@ import top.theillusivec4.curios.api.event.CurioCanEquipEvent;
 
 import java.util.function.Predicate;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.EntitySpawnReason;
 
 @Mod(value = EnigmaticLegacy.MODID)
 @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
@@ -181,7 +182,7 @@ public class EnigmaticEventHandler {
         }
         if (entity instanceof Creeper creeper && entity.getRandom().nextInt(100) <= 5) {
             if (!creeper.isPowered()) {
-                LightningBolt lightningbolt = EntityType.LIGHTNING_BOLT.create(creeper.level());
+                LightningBolt lightningbolt = EntityType.LIGHTNING_BOLT.create(creeper.level(), EntitySpawnReason.TRIGGERED);
                 if (lightningbolt != null) {
                     lightningbolt.snapTo(Vec3.atBottomCenterOf(creeper.blockPosition()));
                     lightningbolt.setSilent(creeper.getRandom().nextBoolean());

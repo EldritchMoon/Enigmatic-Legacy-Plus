@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
+import net.minecraft.server.level.ServerLevel;
 
 public class AbyssCorruption extends MobEffect {
     public AbyssCorruption() {
@@ -30,7 +31,7 @@ public class AbyssCorruption extends MobEffect {
     }
 
     @Override
-    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(ServerLevel level, LivingEntity entity, int amplifier) { // 26.1.2-port: server-only, gets the level
         entity.hurt(EnigmaticDamageTypes.source(entity.level(), EnigmaticDamageTypes.ABYSS), 2.0F * (float) Math.pow(2, (double) amplifier / 2));
 //        entity.invulnerableTime = 1;
         return true;
