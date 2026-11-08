@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.block;
 
+import auviotre.enigmatic.legacy.registries.RegistryIds;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticSounds;
 import net.minecraft.core.BlockPos;
@@ -32,7 +33,7 @@ public class AstralGlass extends TransparentBlock {
     public static final IntegerProperty STYLE = IntegerProperty.create("style", 0, 3);
 
     public AstralGlass() {
-        super(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).strength(1.6F, 6.0F).requiresCorrectToolForDrops().lightLevel(state -> 10));
+        super(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).strength(1.6F, 6.0F).requiresCorrectToolForDrops().lightLevel(state -> 10).setId(RegistryIds.currentBlock()));
         this.registerDefaultState(this.defaultBlockState().setValue(STYLE, 0).setValue(FACING, Direction.NORTH).setValue(COLORFUL, false));
     }
 

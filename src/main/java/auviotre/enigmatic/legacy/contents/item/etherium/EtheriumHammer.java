@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.etherium;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import net.minecraft.world.InteractionResult;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -45,7 +46,7 @@ import java.util.function.Predicate;
 
 public class EtheriumHammer extends DiggerItem {
     public EtheriumHammer() {
-        super(EtheriumProperties.TIER, EnigmaticTags.Blocks.ALL_MINEABLE, new Item.Properties().fireResistant().attributes(EtheriumProperties.createAttributes(9.0F, -3.0F, 0.03F)));
+        super(EtheriumProperties.TIER, EnigmaticTags.Blocks.ALL_MINEABLE, IItemHelper.properties().fireResistant().attributes(EtheriumProperties.createAttributes(9.0F, -3.0F, 0.03F)));
     }
 
     @OnlyIn(Dist.CLIENT)

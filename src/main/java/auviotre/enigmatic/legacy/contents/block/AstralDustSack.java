@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.block;
 
+import auviotre.enigmatic.legacy.registries.RegistryIds;
 import auviotre.enigmatic.legacy.registries.EnigmaticParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -12,7 +13,7 @@ import net.minecraft.world.level.material.MapColor;
 
 public class AstralDustSack extends Block {
     public AstralDustSack() {
-        super(BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_WOOL).mapColor(MapColor.COLOR_PINK));
+        super(BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_WOOL).mapColor(MapColor.COLOR_PINK).setId(RegistryIds.currentBlock()));
     }
 
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {

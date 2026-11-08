@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.etherium;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import net.minecraft.world.InteractionResult;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
@@ -37,7 +38,7 @@ import java.util.List;
 
 public class EtheriumSword extends SwordItem {
     public EtheriumSword() {
-        super(EtheriumProperties.TIER, new Item.Properties().fireResistant().attributes(EtheriumProperties.createAttributes(6.0F, -2.6F, 0.04F)
+        super(EtheriumProperties.TIER, IItemHelper.properties().fireResistant().attributes(EtheriumProperties.createAttributes(6.0F, -2.6F, 0.04F)
                 .withModifierAdded(Attributes.ENTITY_INTERACTION_RANGE, new AttributeModifier(AttributeUtil.BASE_ENTITY_REACH_ID, 1, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
         ));
     }

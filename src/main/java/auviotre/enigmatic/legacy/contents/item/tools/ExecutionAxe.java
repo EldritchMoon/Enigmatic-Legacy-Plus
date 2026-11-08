@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.tools;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
@@ -61,7 +62,7 @@ public class ExecutionAxe extends SwordItem {
     public static ModConfigSpec.IntValue beheadingBonus;
 
     public ExecutionAxe() {
-        super(Tiers.NETHERITE, new Item.Properties().fireResistant().rarity(Rarity.UNCOMMON).attributes(createAttributes(Tiers.NETHERITE, 5.0F, -2.4F)));
+        super(Tiers.NETHERITE, IItemHelper.properties().fireResistant().rarity(Rarity.UNCOMMON).attributes(createAttributes(Tiers.NETHERITE, 5.0F, -2.4F)));
     }
 
     @SubscribeConfig

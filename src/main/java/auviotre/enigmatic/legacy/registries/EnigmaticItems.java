@@ -202,11 +202,11 @@ public class EnigmaticItems {
     public static final DeferredItem<AnnihilatingSword> ANNIHILATING_SWORD = registerWithCTab("annihilating_sword", AnnihilatingSword::new);
     public static final DeferredItem<Item> SOUL_DUST = registerWithTab("soul_dust", BaseItem::Unknown);
     public static final DeferredItem<SoulCrystal> SOUL_CRYSTAL = registerWithTab("soul_crystal", SoulCrystal::new);
-    public static final DeferredItem<StorageCrystal> STORAGE_CRYSTAL = ITEMS.register("storage_crystal", StorageCrystal::new);
-    public static final DeferredItem<TheJudgement> THE_JUDGEMENT = ITEMS.register("the_judgement", TheJudgement::new);
-    public static final DeferredItem<LootGenerator> LOOT_GENERATOR = ITEMS.register("loot_generator", LootGenerator::new);
-    public static final DeferredItem<QuotePlayer> QUOTE_PLAYER = ITEMS.register("quote_player", QuotePlayer::new);
-    public static final DeferredItem<BaseItem> UNKNOWN = ITEMS.register("unknown", BaseItem::Unknown);
+    public static final DeferredItem<StorageCrystal> STORAGE_CRYSTAL = register("storage_crystal", StorageCrystal::new);
+    public static final DeferredItem<TheJudgement> THE_JUDGEMENT = register("the_judgement", TheJudgement::new);
+    public static final DeferredItem<LootGenerator> LOOT_GENERATOR = register("loot_generator", LootGenerator::new);
+    public static final DeferredItem<QuotePlayer> QUOTE_PLAYER = register("quote_player", QuotePlayer::new);
+    public static final DeferredItem<BaseItem> UNKNOWN = register("unknown", BaseItem::Unknown);
 
     static {
         IItemHelper.UNKNOWN_ITEMS.add(EXTRA_SCROLL);
@@ -216,14 +216,19 @@ public class EnigmaticItems {
         IItemHelper.UNKNOWN_ITEMS.add(UNKNOWN);
     }
 
+    // 26.1.2-port: every item goes through here so its Properties get the item ID (see RegistryIds).
+    protected static <T extends Item> @NotNull DeferredItem<T> register(String id, Supplier<T> reg) {
+        return ITEMS.register(id, key -> RegistryIds.buildItem(key, reg));
+    }
+
     protected static <T extends Item> @NotNull DeferredItem<T> registerWithTab(String id, Supplier<T> reg) {
-        DeferredItem<T> register = ITEMS.register(id, reg);
+        DeferredItem<T> register = register(id, reg);
         TAB_ACCEPT_LIST.add(register);
         return register;
     }
 
     protected static <T extends Item> @NotNull DeferredItem<T> registerWithCTab(String id, Supplier<T> reg) {
-        DeferredItem<T> register = ITEMS.register(id, reg);
+        DeferredItem<T> register = register(id, reg);
         CTAB_ACCEPT_LIST.add(register);
         return register;
     }

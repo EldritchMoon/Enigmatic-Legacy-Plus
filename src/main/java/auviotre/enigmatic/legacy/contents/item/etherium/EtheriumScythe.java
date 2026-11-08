@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.etherium;
 
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticEnchantments;
@@ -45,7 +46,7 @@ import java.util.function.Predicate;
 
 public class EtheriumScythe extends HoeItem {
     public EtheriumScythe() {
-        super(EtheriumProperties.TIER, new Item.Properties().fireResistant().attributes(EtheriumProperties.createAttributes(3.0F, -2.0F, 0.04F)));
+        super(EtheriumProperties.TIER, IItemHelper.properties().fireResistant().attributes(EtheriumProperties.createAttributes(3.0F, -2.0F, 0.04F)));
     }
 
     public static Consumer<UseOnContext> changeIntoState(BlockState state, BlockPos pos) {

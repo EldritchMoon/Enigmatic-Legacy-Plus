@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.api.item;
 
+import auviotre.enigmatic.legacy.registries.RegistryIds;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -16,16 +17,22 @@ import java.util.List;
 public interface IItemHelper {
     List<ItemLike> UNKNOWN_ITEMS = new ArrayList<>();
 
+    // 26.1.2-port: Properties must carry the item ID before the item is built (see RegistryIds).
     static Item.Properties properties() {
-        return new Item.Properties();
+        return new Item.Properties().setId(RegistryIds.currentItem());
     }
 
     static Item.Properties properties(int size) {
-        return new Item.Properties().stacksTo(size);
+        return properties().stacksTo(size);
     }
 
     static Item.Properties singleProperties() {
-        return new Item.Properties().stacksTo(1);
+        return properties().stacksTo(1);
+    }
+
+    /** 26.1.2-port: block items keep the old "block.modid.name" translation key. */
+    static Item.Properties blockItemProperties() {
+        return properties().useBlockDescriptionPrefix();
     }
 
     static @NotNull ItemAttributeModifiers createAttributes(float attackDamage, float attackSpeed) {

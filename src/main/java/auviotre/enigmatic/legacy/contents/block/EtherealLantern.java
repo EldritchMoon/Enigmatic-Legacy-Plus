@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.block;
 
+import auviotre.enigmatic.legacy.registries.RegistryIds;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.block.entity.EtherealLanternEntity;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -54,7 +55,7 @@ public class EtherealLantern extends BaseEntityBlock implements SimpleWaterlogge
     );
 
     public EtherealLantern() {
-        super(Properties.ofFullCopy(Blocks.LANTERN).strength(9.5F));
+        super(Properties.ofFullCopy(Blocks.LANTERN).strength(9.5F).setId(RegistryIds.currentBlock()));
         this.registerDefaultState(this.stateDefinition.any().setValue(BlockStateProperties.WATERLOGGED, false).setValue(BlockStateProperties.HANGING, false));
     }
 
@@ -121,7 +122,7 @@ public class EtherealLantern extends BaseEntityBlock implements SimpleWaterlogge
 
     public static class Item extends BlockItem {
         public Item(Block block) {
-            super(block, IItemHelper.properties(16).fireResistant());
+            super(block, IItemHelper.blockItemProperties().stacksTo(16).fireResistant());
         }
 
         @OnlyIn(Dist.CLIENT)

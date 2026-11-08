@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.block;
 
+import auviotre.enigmatic.legacy.registries.RegistryIds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
@@ -11,7 +12,7 @@ import net.minecraft.world.level.material.MapColor;
 
 public class InfernalCinderSack extends Block {
     public InfernalCinderSack() {
-        super(Properties.ofFullCopy(Blocks.WHITE_WOOL).mapColor(MapColor.COLOR_GRAY));
+        super(Properties.ofFullCopy(Blocks.WHITE_WOOL).mapColor(MapColor.COLOR_GRAY).setId(RegistryIds.currentBlock()));
     }
 
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {

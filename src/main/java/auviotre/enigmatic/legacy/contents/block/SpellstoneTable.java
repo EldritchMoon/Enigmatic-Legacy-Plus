@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.block;
 
+import auviotre.enigmatic.legacy.registries.RegistryIds;
 import auviotre.enigmatic.legacy.contents.block.entity.SpellstoneTableEntity;
 import auviotre.enigmatic.legacy.contents.gui.SpellstoneTableMenu;
 import auviotre.enigmatic.legacy.registries.EnigmaticBlockEntities;
@@ -34,7 +35,7 @@ public class SpellstoneTable extends BaseEntityBlock {
     protected static final VoxelShape SHAPE = Block.box(0.0, 0.0, 0.0, 16.0, 12.0, 16.0);
 
     public SpellstoneTable() {
-        super(Properties.ofFullCopy(Blocks.ENCHANTING_TABLE));
+        super(Properties.ofFullCopy(Blocks.ENCHANTING_TABLE).setId(RegistryIds.currentBlock()));
     }
 
     public SpellstoneTable(BlockBehaviour.Properties properties) {
