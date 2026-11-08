@@ -118,7 +118,7 @@ public class LoreInscriber extends BaseItem {
             if (event.getLeft().getCount() == 1) {
                 ItemStack lore = event.getRight();
                 if (lore.is(EnigmaticItems.LORE_FRAGMENT) && lore.has(DataComponents.ITEM_NAME)) {
-                    event.setCost(4);
+                    event.setXpCost(4);
                     event.setMaterialCost(1);
                     event.setOutput(Helper.mergeDisplayData(lore, event.getLeft().copy()));
                 }

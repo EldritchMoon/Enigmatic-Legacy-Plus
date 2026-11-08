@@ -130,7 +130,7 @@ public class ForgerCrystal extends CursedCurioItem {
                         if (event.getName() != null && !event.getName().isEmpty())
                             copy.set(DataComponents.CUSTOM_NAME, Component.literal(event.getName()));
                         event.setOutput(copy);
-                        event.setCost(50);
+                        event.setXpCost(50);
                     }
                 }
             }

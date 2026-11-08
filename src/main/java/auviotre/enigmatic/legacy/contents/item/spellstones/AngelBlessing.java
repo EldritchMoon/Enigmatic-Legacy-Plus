@@ -165,11 +165,11 @@ public class AngelBlessing extends SpellstoneItem {
         if (redirected instanceof WitherSkull) return;
         if ((redirected instanceof AbstractArrow arrow && arrow.getOwner() == bearer)
                 || (redirected instanceof ThrowableItemProjectile projectile && projectile.getOwner() == bearer)) {
-            if (redirected.getTags().contains("AngelBlessingAccelerated")) {
+            if (redirected.entityTags().contains("AngelBlessingAccelerated")) {
                 return;
             }
 
-            if (redirected.getTags().stream().anyMatch(tag -> tag.startsWith("ProjectileDeflected")))
+            if (redirected.entityTags().stream().anyMatch(tag -> tag.startsWith("ProjectileDeflected")))
                 return;
 
             if (redirected instanceof ThrownTrident trident) {

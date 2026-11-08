@@ -20,7 +20,7 @@ public class CompatHandler {
     }
 
     public void register(IEventBus modEventBus) {
-        if (isLoaded("appleskin") && FMLEnvironment.dist.isClient()) {
+        if (isLoaded("appleskin") && FMLEnvironment.getDist().isClient()) {
             EnigmaticLegacy.LOGGER.info("Appleskin Compat.");
             NeoForge.EVENT_BUS.register(new AppleSkinCompatHandler());
         }

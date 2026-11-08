@@ -62,7 +62,7 @@ public class TwistedPotion extends BaseDrinkableItem {
         BlockPos respawnPos = new BlockPos(deathLoc.getInt("x"), deathLoc.getInt("y") + 2, deathLoc.getInt("z"));
         Vec3 vec3 = respawnPos.getBottomCenter();
         if (!player.level().equals(destLevel))
-            player.changeDimension(new TeleportTransition(destLevel, vec3, player.getDeltaMovement(), player.getYRot(), player.getXRot(), TeleportTransition.DO_NOTHING));
+            player.teleport(new TeleportTransition(destLevel, vec3, player.getDeltaMovement(), player.getYRot(), player.getXRot(), TeleportTransition.DO_NOTHING));
         player.teleportTo(vec3.x, vec3.y, vec3.z);
         vec3 = player.adjustSpawnLocation(destLevel, respawnPos).getBottomCenter();
         player.teleportTo(vec3.x, vec3.y, vec3.z);
@@ -106,7 +106,7 @@ public class TwistedPotion extends BaseDrinkableItem {
                 deathLocation.putInt("x", pos.getX());
                 deathLocation.putInt("y", pos.getY());
                 deathLocation.putInt("z", pos.getZ());
-                deathLocation.putString("dimension", player.level().dimension().location().toString());
+                deathLocation.putString("dimension", player.level().dimension().identifier().toString());
                 CompoundTag persistedData = EnigmaticHandler.getPersistedData(player);
                 persistedData.put("LastDeathLoc", deathLocation);
             }

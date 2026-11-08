@@ -55,6 +55,7 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 import net.minecraft.tags.ItemTags;
 import auviotre.enigmatic.legacy.handlers.SaveDataHelper;
+import net.minecraft.util.profiling.Profiler;
 
 public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
     protected static final ImmutableList<SensorType<? extends Sensor<? super PiglinWanderer>>> SENSOR_TYPES = ImmutableList.of(
@@ -117,9 +118,9 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
     @Override
     protected void customServerAiStep() {
         this.timeInOverworld = 0;
-        this.level().getProfiler().push("piglinWandererBrain");
+        Profiler.get().push("piglinWandererBrain");
         this.getBrain().tick((ServerLevel) this.level(), this);
-        this.level().getProfiler().pop();
+        Profiler.get().pop();
         Ai.updateActivity(this);
         super.customServerAiStep();
     }

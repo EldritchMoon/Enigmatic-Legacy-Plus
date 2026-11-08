@@ -92,6 +92,9 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import net.minecraft.util.Mth;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.core.particles.ParticleTypes;
 
 public interface EnigmaticHandler {
     List<Holder<MobEffect>> DEBUFF_LIST = new ArrayList<>();
@@ -269,7 +272,7 @@ public interface EnigmaticHandler {
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         if (server == null) return Optional.empty();
         if (server.getSingleplayerProfile() == null) return Optional.empty();
-        if (server.isSingleplayer() && Objects.equals(server.getSingleplayerProfile().getName(), EnigmaticLegacy.PROXY.getClientUsername()))
+        if (server.isSingleplayer() && Objects.equals(server.getSingleplayerProfile().name(), EnigmaticLegacy.PROXY.getClientUsername()))
             return Optional.of(server);
         return Optional.empty();
     }
@@ -464,6 +467,14 @@ public interface EnigmaticHandler {
             }
         }
         return DEBUFF_LIST.get(entity.getRandom().nextInt(DEBUFF_LIST.size()));
+    }
+
+    /** 26.1.2-port: replaces Player.sweepAttack(), which only spawned the sweep particle in front of the player. */
+    static void sweepParticles(Player player) {
+        double dx = -Mth.sin(player.getYRot() * ((float) Math.PI / 180F));
+        double dz = Mth.cos(player.getYRot() * ((float) Math.PI / 180F));
+        if (player.level() instanceof ServerLevel server)
+            server.sendParticles(ParticleTypes.SWEEP_ATTACK, player.getX() + dx, player.getY(0.5), player.getZ() + dz, 0, dx, 0.0, dz, 0.0);
     }
 
     /** 26.1.2-port: replaces LivingEntity.getArmorSlots(), which was removed (feet, legs, chest, head order). */

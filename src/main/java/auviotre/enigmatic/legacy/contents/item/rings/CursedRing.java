@@ -375,7 +375,7 @@ public class CursedRing extends CursedCurioItem {
                         flag = true;
                         LightningBolt lightningbolt = EntityType.LIGHTNING_BOLT.create(player.level());
                         if (lightningbolt != null) {
-                            lightningbolt.moveTo(Vec3.atBottomCenterOf(player.blockPosition()));
+                            lightningbolt.snapTo(Vec3.atBottomCenterOf(player.blockPosition()));
                             lightningbolt.setCause(player instanceof ServerPlayer ? player : null);
                             player.level().addFreshEntity(lightningbolt);
                         }
@@ -433,7 +433,7 @@ public class CursedRing extends CursedCurioItem {
                     entity.setRestoreMap(RESTORE_MAP.get(player));
                     dimPoint.world.addFreshEntity(entity);
                     event.getDrops().clear();
-                    EnigmaticLegacy.LOGGER.info("Teared Extradimensional Storage Crystal from {} at X: {}, Y: {}, Z: {}", player.getGameProfile().getName(), dimPoint.getPosX(), dimPoint.getPosY(), dimPoint.getPosZ());
+                    EnigmaticLegacy.LOGGER.info("Teared Extradimensional Storage Crystal from {} at X: {}, Y: {}, Z: {}", player.getGameProfile().name(), dimPoint.getPosX(), dimPoint.getPosY(), dimPoint.getPosZ());
                     SoulArchive.getInstance().addItem(entity);
                     RESTORE_MAP.remove(player);
                 } else if (dropSoulCrystal) {
@@ -442,7 +442,7 @@ public class CursedRing extends CursedCurioItem {
                     entity.setThrowerId(player.getUUID());
                     entity.setOwnerId(player.getUUID());
                     dimPoint.world.addFreshEntity(entity);
-                    EnigmaticLegacy.LOGGER.info("Teared Soul Crystal from {} at X: {}, Y: {}, Z: {}", player.getGameProfile().getName(), dimPoint.getPosX(), dimPoint.getPosY(), dimPoint.getPosZ());
+                    EnigmaticLegacy.LOGGER.info("Teared Soul Crystal from {} at X: {}, Y: {}, Z: {}", player.getGameProfile().name(), dimPoint.getPosX(), dimPoint.getPosY(), dimPoint.getPosZ());
                     SoulArchive.getInstance().addItem(entity);
                 }
                 if (SoulCrystal.isPermanentlyDead(player)) {
@@ -567,7 +567,7 @@ public class CursedRing extends CursedCurioItem {
             if (!giveStarterGear.get()) return;
             try {
                 if (!ModList.get().isLoaded("customstartinggear")) {
-                    EnigmaticLegacy.LOGGER.info("Granting starter gear to {}", player.getGameProfile().getName());
+                    EnigmaticLegacy.LOGGER.info("Granting starter gear to {}", player.getGameProfile().name());
                     CompoundTag data = EnigmaticHandler.getPersistedData(player);
 
                     if (!data.getBooleanOr("UnwitnessedAmuletGift", false)) {

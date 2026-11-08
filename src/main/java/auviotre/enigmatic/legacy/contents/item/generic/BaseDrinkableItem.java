@@ -16,6 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.NotNull;
 import net.minecraft.util.Mth;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 
 public class BaseDrinkableItem extends BaseItem {
 
@@ -34,7 +35,7 @@ public class BaseDrinkableItem extends BaseItem {
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         if (entity instanceof Player player) {
-            ItemStack remainingItem = stack.getCraftingRemainingItem();
+            ItemStack remainingItem = IItemHelper.getCraftingRemainder(stack);
             this.onConsumed(level, player, stack);
 
             if (player instanceof ServerPlayer serverPlayer) CriteriaTriggers.CONSUME_ITEM.trigger(serverPlayer, stack);

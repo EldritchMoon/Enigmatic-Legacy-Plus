@@ -183,7 +183,7 @@ public class EnigmaticEventHandler {
             if (!creeper.isPowered()) {
                 LightningBolt lightningbolt = EntityType.LIGHTNING_BOLT.create(creeper.level());
                 if (lightningbolt != null) {
-                    lightningbolt.moveTo(Vec3.atBottomCenterOf(creeper.blockPosition()));
+                    lightningbolt.snapTo(Vec3.atBottomCenterOf(creeper.blockPosition()));
                     lightningbolt.setSilent(creeper.getRandom().nextBoolean());
                     lightningbolt.setDamage(0.0F);
                     creeper.level().addFreshEntity(lightningbolt);
@@ -304,7 +304,7 @@ public class EnigmaticEventHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     private static void onDamaged(LivingDamageEvent.@NotNull Post event) {
         LivingEntity victim = event.getEntity();
-        float damage = event.getNewDamage();
+        float damage = event.getHealthDamage();
         if (event.getSource().getEntity() instanceof LivingEntity attacker) {
             if (attacker instanceof Stray && victim.canFreeze() && EnigmaticHandler.isCurseBoosted(attacker))
                 victim.setTicksFrozen(victim.getTicksFrozen() + 65 + Mth.floor(damage * 10));

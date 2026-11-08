@@ -16,6 +16,7 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 
 public record EmptyLeftClickPacket(boolean clicked) implements CustomPacketPayload {
     public static final Type<EmptyLeftClickPacket> TYPE = new Type<>(EnigmaticLegacy.location("empty_left_click"));
@@ -41,7 +42,7 @@ public record EmptyLeftClickPacket(boolean clicked) implements CustomPacketPaylo
                         }
                     }
                     server.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, player.getSoundSource(), 1.0F, 1.0F);
-                    player.sweepAttack();
+                    EnigmaticHandler.sweepParticles(player);
                     player.causeFoodExhaustion(0.1F);
                     player.getCooldowns().addCooldown(EnigmaticItems.THUNDER_SCROLL.get().getDefaultInstance(), (int) (16 / player.getAttributeValue(Attributes.ATTACK_SPEED)));
                 }

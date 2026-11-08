@@ -43,7 +43,7 @@ public class RecallPotion extends BaseDrinkableItem {
         ServerLevel destLevel = dimPoint.getWorld();
         Vec3 vec3 = dimPoint.getBlockPos().getBottomCenter();
         if (!player.level().equals(destLevel))
-            player.changeDimension(new TeleportTransition(destLevel, vec3, player.getDeltaMovement(), player.getYRot(), player.getXRot(), TeleportTransition.DO_NOTHING));
+            player.teleport(new TeleportTransition(destLevel, vec3, player.getDeltaMovement(), player.getYRot(), player.getXRot(), TeleportTransition.DO_NOTHING));
         vec3 = player.adjustSpawnLocation(destLevel, dimPoint.getBlockPos()).getBottomCenter();
         player.teleportTo(vec3.x, vec3.y, vec3.z);
 

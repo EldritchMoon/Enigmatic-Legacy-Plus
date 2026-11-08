@@ -31,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import auviotre.enigmatic.legacy.api.item.IItemHelper;
 
 public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input> {
     final ItemStack result;
@@ -77,7 +78,7 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
         for (int i = 2; i < nonnulllist.size(); ++i) {
             ItemStack item = input.getItem(i);
             if (item.hasCraftingRemainingItem()) {
-                nonnulllist.set(i, item.getCraftingRemainingItem());
+                nonnulllist.set(i, IItemHelper.getCraftingRemainder(item));
             }
         }
 

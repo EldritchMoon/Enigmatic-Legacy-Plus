@@ -54,7 +54,7 @@ public class EngineHook extends Projectile {
         double x = player.getX() - f3 * 0.3;
         double y = player.getEyeY() - 0.05;
         double z = player.getZ() - f2 * 0.3;
-        this.moveTo(x, y, z, yRot, xRot);
+        this.snapTo(x, y, z, yRot, xRot);
         Vec3 move = player.getLookAngle().scale(2.75);
         this.setDeltaMovement(move);
         this.setYRot((float) Math.toDegrees(Mth.atan2(move.x, move.z)));

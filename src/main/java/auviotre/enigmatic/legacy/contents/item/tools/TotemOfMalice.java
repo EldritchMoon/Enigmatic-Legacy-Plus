@@ -150,7 +150,7 @@ public class TotemOfMalice extends BaseCurioItem {
                     if (TotemOfMalice.getDurability(left) < maxDurability) {
                         TotemOfMalice.setDurability(copy, maxDurability);
                         event.setOutput(copy);
-                        event.setCost(maxDurability + copy.getOrDefault(DataComponents.REPAIR_COST, 0));
+                        event.setXpCost(maxDurability + copy.getOrDefault(DataComponents.REPAIR_COST, 0));
                         event.setMaterialCost(1);
                     }
                 }

@@ -114,7 +114,7 @@ public class AnnihilatingSword extends Item {
                 if (entity == blocker) continue;
                 double xRatio = blocker.getX() - entity.getX();
                 double zRatio = blocker.getZ() - entity.getZ();
-                entity.hasImpulse = true;
+                entity.needsSync = true;
                 Vec3 vec = entity.getDeltaMovement();
                 Vec3 add = new Vec3(xRatio, 0.0, zRatio).normalize().scale(tick < 25 ? 1.2F : 0.55F).scale(1.0 - 0.5 * entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
                 if (tick <= 8) entity.hurt(entity.damageSources().mobAttack(blocker), dmg * 0.5F);
@@ -159,7 +159,7 @@ public class AnnihilatingSword extends Item {
         player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, player.getSoundSource(), 1.2F, 0.2F);
         player.swing(InteractionHand.MAIN_HAND);
         player.resetAttackStrengthTicker();
-        player.sweepAttack();
+        EnigmaticHandler.sweepParticles(player);
         player.getData(EnigmaticAttachments.ENIGMATIC_DATA).setAnnihilationSweepData((int) damage, 5, level);
     }
 
@@ -175,7 +175,7 @@ public class AnnihilatingSword extends Item {
         player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, player.getSoundSource(), 1.2F, 0.2F);
         player.swing(InteractionHand.MAIN_HAND);
         player.resetAttackStrengthTicker();
-        player.sweepAttack();
+        EnigmaticHandler.sweepParticles(player);
     }
 
     public static int getMaxEnergy(LivingEntity entity) {

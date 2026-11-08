@@ -67,7 +67,7 @@ public class ProjectileDeflectAttribute extends PercentageAttribute {
                             arrow.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                         }
 
-                        projectile.getTags().removeIf(tag -> tag.startsWith("ProjectileDeflected"));
+                        projectile.entityTags().removeIf(tag -> tag.startsWith("ProjectileDeflected"));
                         projectile.addTag("ProjectileDeflected:" + projectile.tickCount);
 
                         Vec3 movement = projectile.getDeltaMovement();

@@ -35,12 +35,12 @@ public class SpecialLootModifier extends LootModifier {
     );
 
     public static final List<Identifier> SUSPICIOUS_TABLES = ImmutableList.of(
-            BuiltInLootTables.DESERT_PYRAMID_ARCHAEOLOGY.location(),
-            BuiltInLootTables.DESERT_WELL_ARCHAEOLOGY.location(),
-            BuiltInLootTables.OCEAN_RUIN_COLD_ARCHAEOLOGY.location(),
-            BuiltInLootTables.OCEAN_RUIN_WARM_ARCHAEOLOGY.location(),
-            BuiltInLootTables.TRAIL_RUINS_ARCHAEOLOGY_COMMON.location(),
-            BuiltInLootTables.TRAIL_RUINS_ARCHAEOLOGY_RARE.location()
+            BuiltInLootTables.DESERT_PYRAMID_ARCHAEOLOGY.identifier(),
+            BuiltInLootTables.DESERT_WELL_ARCHAEOLOGY.identifier(),
+            BuiltInLootTables.OCEAN_RUIN_COLD_ARCHAEOLOGY.identifier(),
+            BuiltInLootTables.OCEAN_RUIN_WARM_ARCHAEOLOGY.identifier(),
+            BuiltInLootTables.TRAIL_RUINS_ARCHAEOLOGY_COMMON.identifier(),
+            BuiltInLootTables.TRAIL_RUINS_ARCHAEOLOGY_RARE.identifier()
     );
 
     public SpecialLootModifier(LootItemCondition[] conditionsIn) {
@@ -77,7 +77,7 @@ public class SpecialLootModifier extends LootModifier {
                 data.putBoolean("LootedVoidTome", true);
             }
 
-            if (BuiltInLootTables.END_CITY_TREASURE.location().equals(context.getQueriedLootTableId()) && EnigmaticHandler.isTheCursedOne(player)) {
+            if (BuiltInLootTables.END_CITY_TREASURE.identifier().equals(context.getQueriedLootTableId()) && EnigmaticHandler.isTheCursedOne(player)) {
                 if (level.dimension().equals(Level.END) && !data.contains("LootedFirstEndCityChest") && list.stream().anyMatch(stack -> stack.is(EnigmaticItems.ASTRAL_FRUIT))) {
                     data.putBoolean("LootedFirstEndCityChest", true);
                     list.removeIf(stack -> stack.is(EnigmaticItems.ASTRAL_FRUIT));

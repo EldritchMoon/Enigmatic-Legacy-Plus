@@ -19,6 +19,8 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.ItemStack;
 
 public interface IItemHelper {
     List<ItemLike> UNKNOWN_ITEMS = new ArrayList<>();
@@ -39,6 +41,12 @@ public interface IItemHelper {
     /** 26.1.2-port: block items keep the old "block.modid.name" translation key. */
     static Item.Properties blockItemProperties() {
         return properties().useBlockDescriptionPrefix();
+    }
+
+    /** 26.1.2-port: replaces ItemStack.getCraftingRemainingItem(); remainders are ItemStackTemplates now. */
+    static ItemStack getCraftingRemainder(ItemStack stack) {
+        ItemStackTemplate remainder = stack.getItem().getCraftingRemainder(stack);
+        return remainder == null ? ItemStack.EMPTY : remainder.create();
     }
 
     /**

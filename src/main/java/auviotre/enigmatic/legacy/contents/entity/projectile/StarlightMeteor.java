@@ -84,7 +84,7 @@ public class StarlightMeteor extends ThrowableItemProjectile {
         this.level().broadcastEntityEvent(this, (byte) 3);
         Entity owner = this.getOwner();
         boolean flag = owner instanceof LivingEntity livingEntity && livingEntity.hasInfiniteMaterials();
-        if (!this.level().isClientSide && !flag) {
+        if (!this.level().isClientSide() && !flag) {
             ItemEntity item = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), this.getItem(), 0, 0, 0);
             item.setDefaultPickUpDelay();
             item.lifespan = 400;

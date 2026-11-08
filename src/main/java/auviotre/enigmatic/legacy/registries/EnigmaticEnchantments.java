@@ -178,7 +178,7 @@ public class EnigmaticEnchantments {
     }
 
     private static void register(BootstrapContext<Enchantment> context, ResourceKey<Enchantment> key, Enchantment.Builder builder) {
-        context.register(key, builder.build(key.location()));
+        context.register(key, builder.build(key.identifier()));
     }
 
     private static ResourceKey<Enchantment> key(String name) {
@@ -250,7 +250,7 @@ public class EnigmaticEnchantments {
         private static void onDamaged(LivingDamageEvent.@NotNull Post event) {
             DamageSource source = event.getSource();
             LivingEntity entity = event.getEntity();
-            float damage = event.getNewDamage();
+            float damage = event.getHealthDamage();
             if (source.getEntity() instanceof LivingEntity attacker) {
                 var nemesis = EnigmaticHandler.get(attacker.level(), Registries.ENCHANTMENT, NEMESIS_CURSE);
                 if (EnchantmentHelper.getEnchantmentLevel(nemesis, attacker) > 0) {

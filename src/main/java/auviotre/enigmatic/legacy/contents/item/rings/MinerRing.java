@@ -92,7 +92,7 @@ public class MinerRing extends BaseCurioItem {
         if (action != ClickAction.PRIMARY && slot.mayPickup(player) && slot.hasItem()) {
             if (other.getBurnTime(RecipeType.BLASTING) > 200 && getPoint(stack) < MAX_POINT) {
                 setPoint(stack, getPoint(stack) + other.getBurnTime(RecipeType.BLASTING) / 200);
-                ItemStack remain = other.getCraftingRemainingItem();
+                ItemStack remain = IItemHelper.getCraftingRemainder(other);
                 if (remain.isEmpty()) other.consume(1, player);
                 else access.set(remain);
                 player.playSound(SoundEvents.GENERIC_BURN, 1.0F, 0.9F + 0.5F * player.getRandom().nextFloat());

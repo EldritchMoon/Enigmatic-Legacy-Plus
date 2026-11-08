@@ -55,7 +55,7 @@ public class StarlightSpawner implements CustomSpawner {
                 StarlightMeteor starlightMeteor = type.create(level);
                 if (NaturalSpawner.isValidEmptySpawnBlock(level, spawnPos, level.getBlockState(spawnPos), level.getFluidState(blockPos), type)) {
                     if (starlightMeteor != null) {
-                        starlightMeteor.moveTo(spawnPos, 0.0F, 0.0F);
+                        starlightMeteor.snapTo(spawnPos, 0.0F, 0.0F);
                         starlightMeteor.setDeltaMovement(offsetX, 1.6F, offsetZ);
                         level.addFreshEntityWithPassengers(starlightMeteor);
                         ++count;

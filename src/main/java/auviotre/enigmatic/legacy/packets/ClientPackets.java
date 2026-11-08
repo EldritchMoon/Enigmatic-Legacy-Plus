@@ -47,7 +47,7 @@ public class ClientPackets {
             Entity entity = level.getEntity(packet.entityID);
             if (entity != null) {
                 entity.addTag("enigmaticlegacy.redirected");
-                entity.moveTo(packet.posX, packet.posY, packet.posZ);
+                entity.snapTo(packet.posX, packet.posY, packet.posZ);
                 entity.setDeltaMovement(packet.motionX, packet.motionY, packet.motionZ);
                 entity.setYRot(packet.rotationYaw);
                 entity.yRotO = packet.rotationYaw;

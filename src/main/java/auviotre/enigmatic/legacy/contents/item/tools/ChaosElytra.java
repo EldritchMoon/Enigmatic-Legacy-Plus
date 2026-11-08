@@ -204,9 +204,9 @@ public class ChaosElytra extends BaseElytraItem {
                     if (player.canAttack(entity)) {
                         chaosDescending(player, entity);
                         Vec3 vec = entity.position().subtract(player.position()).normalize();
-                        entity.hasImpulse = true;
+                        entity.needsSync = true;
                         entity.knockback(movement.length(), vec.x, vec.z);
-                        player.hasImpulse = true;
+                        player.needsSync = true;
                         player.setDeltaMovement(player.getDeltaMovement().scale(0.5F));
                     }
                 }

@@ -380,7 +380,7 @@ public class SpellstoneSword extends Item {
                     if (stack.getOrDefault(INT, 0) > 0) return ItemUtils.startUsingInstantly(level, player, hand);
                     break;
                 case 3:
-                    if (player.isInWaterRainOrBubble() || stack.getOrDefault(INT, 0) > 7)
+                    if (player.isInWaterOrRain() || stack.getOrDefault(INT, 0) > 7)
                         return ItemUtils.startUsingInstantly(level, player, hand);
                     break;
                 case 6, 8:
@@ -526,7 +526,7 @@ public class SpellstoneSword extends Item {
             if (isResonatingWith(stack, EnigmaticItems.BLAZING_CORE) && stack.getOrDefault(INT, 0) > 0) {
                 if (user instanceof Player player) {
                     player.playSound(SoundEvents.PLAYER_ATTACK_SWEEP, 1.0F, 1.0F);
-                    player.sweepAttack();
+                    EnigmaticHandler.sweepParticles(player);
                     player.getCooldowns().addCooldown(this.getDefaultInstance(), 20);
                 }
                 user.swing(InteractionHand.MAIN_HAND);
@@ -543,7 +543,7 @@ public class SpellstoneSword extends Item {
                 y *= f / len;
                 z *= f / len;
                 player.push(x, y, z);
-                if (!player.isInWaterRainOrBubble()) stack.set(INT, Math.max(0, stack.getOrDefault(INT, 0) - 4));
+                if (!player.isInWaterOrRain()) stack.set(INT, Math.max(0, stack.getOrDefault(INT, 0) - 4));
                 float modifier = sLevel * 0.2F + 0.8F;
                 player.startAutoSpinAttack(20, (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE) * modifier, stack);
                 if (player.onGround()) player.move(MoverType.SELF, new Vec3(0.0F, 1.2F, 0.0F));
@@ -573,7 +573,7 @@ public class SpellstoneSword extends Item {
                     entity.teleportTo(vec3.x, vec3.y, vec3.z);
                     user.teleportTo(position.x, position.y, position.z);
                     user.lookAt(EntityAnchorArgument.Anchor.EYES, vec3);
-                    if (user instanceof Player player) player.sweepAttack();
+                    if (user instanceof Player player) EnigmaticHandler.sweepParticles(player);
                     user.swing(hand);
                     double len = position.distanceTo(vec3) / 1.25;
                     List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, user.getBoundingBox().inflate(3), living -> living.isAlive() && living != user && user.canAttack(living));
@@ -911,7 +911,7 @@ public class SpellstoneSword extends Item {
                         event.setNewDamage(event.getNewDamage() * 0.8F);
                     }
                 } else if (isResonatingWith(stack, EnigmaticItems.OCEAN_STONE)) {
-                    if (entity.isInWaterRainOrBubble()) event.setNewDamage(event.getNewDamage() * 0.6F);
+                    if (entity.isInWaterOrRain()) event.setNewDamage(event.getNewDamage() * 0.6F);
                 } else if (isResonatingWith(stack, EnigmaticItems.FORGOTTEN_ICE)) {
                     int shield = stack.getOrDefault(INT, 0);
                     if (event.getNewDamage() <= shield) {
@@ -931,7 +931,7 @@ public class SpellstoneSword extends Item {
                     int time = (int) Math.pow((double) attacker.getRemainingFireTicks() / 100, 0.9);
                     event.setNewDamage(event.getNewDamage() * (1.0F + time * 0.05F));
                 } else if (isResonatingWith(stack, EnigmaticItems.OCEAN_STONE)) {
-                    if (attacker.isInWaterRainOrBubble()) event.setNewDamage(event.getNewDamage() * 1.25F);
+                    if (attacker.isInWaterOrRain()) event.setNewDamage(event.getNewDamage() * 1.25F);
                 } else if (isResonatingWith(stack, EnigmaticItems.ANGEL_BLESSING)) {
                     if (!attacker.onGround() && attacker.level().getBlockState(attacker.blockPosition()).isAir()) {
                         event.setNewDamage(event.getNewDamage() * 1.6F);
@@ -980,7 +980,7 @@ public class SpellstoneSword extends Item {
         @SubscribeEvent
         private static void onDamaged(LivingDamageEvent.@NotNull Post event) {
             LivingEntity entity = event.getEntity();
-            if (event.getNewDamage() >= Float.MAX_VALUE) return;
+            if (event.getHealthDamage() >= Float.MAX_VALUE) return;
             if (event.getSource().getDirectEntity() instanceof LivingEntity attacker) {
                 ItemStack stack = attacker.getWeaponItem();
                 if (stack.is(EnigmaticItems.SPELLSTONE_SWORD) && event.getSource().is(DamageTypeTags.IS_PLAYER_ATTACK)) {
@@ -1016,8 +1016,8 @@ public class SpellstoneSword extends Item {
                             }
                             if (level > 4) {
                                 if (entity.isInvertedHealAndHarm())
-                                    entity.hurt(EnigmaticDamageTypes.source(attacker.level(), DamageTypes.MAGIC, attacker), event.getNewDamage() * 0.4F);
-                                else entity.heal(event.getNewDamage() * 0.4F);
+                                    entity.hurt(EnigmaticDamageTypes.source(attacker.level(), DamageTypes.MAGIC, attacker), event.getHealthDamage() * 0.4F);
+                                else entity.heal(event.getHealthDamage() * 0.4F);
                             }
                         }
                     } else if (isResonatingWith(stack, EnigmaticItems.ANGEL_BLESSING)) {
@@ -1030,7 +1030,7 @@ public class SpellstoneSword extends Item {
                         entity.getPersistentData().putInt("IllusionSoulLevel", soulLevel + (level + 1) / 2);
                     } else if (isResonatingWith(stack, EnigmaticItems.VOID_PEARL)) {
                         entity.invulnerableTime = 0;
-                        entity.hurt(EnigmaticDamageTypes.source(entity.level(), EnigmaticDamageTypes.DARKNESS, attacker), event.getNewDamage() * (0.2F + level * 0.05F));
+                        entity.hurt(EnigmaticDamageTypes.source(entity.level(), EnigmaticDamageTypes.DARKNESS, attacker), event.getHealthDamage() * (0.2F + level * 0.05F));
                         if (level > 4) {
                             List<MobEffectInstance> instances = new ArrayList<>(entity.getActiveEffects());
                             int count = 0;
@@ -1040,7 +1040,7 @@ public class SpellstoneSword extends Item {
                             }
                             if (count > 0) {
                                 entity.invulnerableTime = 0;
-                                entity.hurt(EnigmaticDamageTypes.source(entity.level(), EnigmaticDamageTypes.DARKNESS, attacker), event.getNewDamage() * (count * 0.05F));
+                                entity.hurt(EnigmaticDamageTypes.source(entity.level(), EnigmaticDamageTypes.DARKNESS, attacker), event.getHealthDamage() * (count * 0.05F));
                             }
                         }
                     }

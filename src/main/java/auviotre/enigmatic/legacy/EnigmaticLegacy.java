@@ -60,7 +60,7 @@ import java.util.Optional;
 public class EnigmaticLegacy {
     public static final String MODID = "enigmaticlegacyplus";
     public static final Logger LOGGER = LoggerFactory.getLogger("EnigmaticLegacy");
-    public static final CommonProxy PROXY = FMLEnvironment.dist.isClient() ? new ClientProxy() : new CommonProxy();
+    public static final CommonProxy PROXY = FMLEnvironment.getDist().isClient() ? new ClientProxy() : new CommonProxy();
 
     public EnigmaticLegacy(IEventBus eventBus, @NotNull ModContainer container) {
         EnigmaticItems.ITEMS.register(eventBus);
@@ -92,7 +92,7 @@ public class EnigmaticLegacy {
         eventBus.addListener(this::addCreative);
 
         container.registerConfig(ModConfig.Type.SERVER, ELConfig.SPEC);
-        if (FMLEnvironment.dist.isClient()) {
+        if (FMLEnvironment.getDist().isClient()) {
             eventBus.addListener(this::onClientSetup);
             eventBus.addListener(this::addPackFinders);
             NeoForge.EVENT_BUS.register(QuoteHandler.INSTANCE);

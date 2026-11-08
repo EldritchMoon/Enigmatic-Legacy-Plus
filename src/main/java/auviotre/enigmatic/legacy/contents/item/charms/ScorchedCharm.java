@@ -130,7 +130,7 @@ public class ScorchedCharm extends CursedCurioItem {
             DamageSource source = event.getSource();
             if (source.getEntity() instanceof LivingEntity entity && EnigmaticHandler.hasCurio(entity, EnigmaticItems.SCORCHED_CHARM)) {
                 if (event.getEntity().isOnFire()) {
-                    entity.heal(event.getNewDamage() * lifestealModifier.get() / 100.0F);
+                    entity.heal(event.getHealthDamage() * lifestealModifier.get() / 100.0F);
                 }
             }
         }

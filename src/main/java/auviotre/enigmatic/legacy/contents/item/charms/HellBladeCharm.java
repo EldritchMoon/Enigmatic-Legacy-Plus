@@ -223,7 +223,7 @@ public class HellBladeCharm extends BaseCurioItem {
 
         @SubscribeEvent
         private static void onDamaged(LivingDamageEvent.@NotNull Post event) {
-            if (event.getNewDamage() > Float.MAX_VALUE / 10) return;
+            if (event.getHealthDamage() > Float.MAX_VALUE / 10) return;
             if (event.getSource().getEntity() instanceof Player player) {
                 CompoundTag data = EnigmaticHandler.getPersistedData(player);
                 if (player.level().dimension().equals(Level.NETHER) && !data.getBooleanOr("LootedHellBladeCharm", false)) {
@@ -232,7 +232,7 @@ public class HellBladeCharm extends BaseCurioItem {
                     float healthFactor = 1 - player.getHealth() / player.getMaxHealth();
                     healthFactor = healthFactor * healthFactor;
                     if (healthFactor < (hardcore ? 0.16F : 0.2F)) return;
-                    float damageFactor = Math.min(event.getOriginalDamage(), event.getNewDamage()) / player.getMaxHealth() * (hardcore ? 9.0F : 8.0F);
+                    float damageFactor = Math.min(event.getOriginalDamage(), event.getHealthDamage()) / player.getMaxHealth() * (hardcore ? 9.0F : 8.0F);
                     data.putFloat("HellPoint", point + Math.min(100.0F, healthFactor * damageFactor));
                 }
             }

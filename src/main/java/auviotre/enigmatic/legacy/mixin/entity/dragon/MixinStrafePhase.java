@@ -81,13 +81,13 @@ public abstract class MixinStrafePhase extends AbstractDragonPhaseInstance {
                 double z = (random.nextFloat() - 0.5F) * delta.length() / 8.0F + vec3.z;
                 AbstractHurtingProjectile copy;
                 copy = new DragonFireball(this.dragon.level(), this.dragon, delta.add(x, y, z).normalize());
-                copy.moveTo(tx + x, ty + y, tz + z, 0.0F, 0.0F);
+                copy.snapTo(tx + x, ty + y, tz + z, 0.0F, 0.0F);
                 copy.setDeltaMovement(delta.normalize());
                 copy.accelerationPower *= 1.6F;
                 this.dragon.level().addFreshEntity(copy);
             }
             DragonFireball fireball = new DragonFireball(this.dragon.level(), this.dragon, delta.normalize());
-            fireball.moveTo(tx, ty, tz, 0.0F, 0.0F);
+            fireball.snapTo(tx, ty, tz, 0.0F, 0.0F);
             fireball.setDeltaMovement(delta.normalize());
             fireball.accelerationPower *= 1.8F;
             return fireball;

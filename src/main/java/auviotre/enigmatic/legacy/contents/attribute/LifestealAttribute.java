@@ -24,7 +24,7 @@ public class LifestealAttribute extends PercentageAttribute {
             if (event.getSource().getDirectEntity() instanceof LivingEntity attacker && !attacker.level().isClientSide()) {
                 AttributeInstance attribute = attacker.getAttribute(EnigmaticAttributes.LIFESTEAL);
                 float lifesteal = attribute == null ? 0.0F : (float) attribute.getValue();
-                attacker.heal(event.getNewDamage() * lifesteal);
+                attacker.heal(event.getHealthDamage() * lifesteal);
             }
         }
     }

@@ -96,7 +96,7 @@ public class UltimateWitherSkull extends AbstractHurtingProjectile {
             }
         }
 
-        if (this.level().isClientSide || this.getOwner() == null) return;
+        if (this.level().isClientSide() || this.getOwner() == null) return;
 
         if (this.tickCount <= 10) {
             this.setPos(this.getX(), this.getY(), this.getZ());

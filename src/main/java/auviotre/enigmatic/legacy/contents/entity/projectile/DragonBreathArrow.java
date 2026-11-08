@@ -25,12 +25,12 @@ public class DragonBreathArrow extends AbstractArrow {
 
     public DragonBreathArrow(EntityType<? extends AbstractArrow> type, Level world) {
         super(type, world);
-        this.setBaseDamage(this.getBaseDamage() * 1.8);
+        this.setBaseDamage(this.baseDamage * 1.8 /* 26.1.2-port: getBaseDamage() removed; field opened by access transformer */);
     }
 
     public DragonBreathArrow(double x, double y, double z, Level level, @Nullable ItemStack bow) {
         super(EnigmaticEntities.DRAGON_BREATH_ARROW.get(), x, y, z, level, ItemStack.EMPTY, bow);
-        this.setBaseDamage(this.getBaseDamage() * 1.8);
+        this.setBaseDamage(this.baseDamage * 1.8 /* 26.1.2-port: getBaseDamage() removed; field opened by access transformer */);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class DragonBreathArrow extends AbstractArrow {
         if (!this.isNoGravity() && !this.isNoPhysics()) this.setDeltaMovement(this.getDeltaMovement().scale(1.01));
         super.tick();
         Vec3 movement = this.getDeltaMovement();
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
             double dx = movement.x;
             double dy = movement.y;
             double dz = movement.z;
@@ -46,13 +46,13 @@ public class DragonBreathArrow extends AbstractArrow {
             for (int i = 0; i < length; ++i) {
                 this.level().addParticle(ParticleTypes.DRAGON_BREATH, this.getRandomX(0.0F) + dx * (double) i / length, this.getRandomY() + dy * (double) i / length, this.getRandomZ(0.0F) + dz * (double) i / length, -dx * 0.1, -dy * 0.1, -dz * 0.1);
             }
-        } else if (this.inGround) this.summonAreaEffect();
+        } else if (this.isInGround()) this.summonAreaEffect();
     }
 
     @Override
     protected void onHit(HitResult hitResult) {
         super.onHit(hitResult);
-        if (!this.level().isClientSide && hitResult.getType() == HitResult.Type.ENTITY && !this.ownedBy(((EntityHitResult) hitResult).getEntity())) {
+        if (!this.level().isClientSide() && hitResult.getType() == HitResult.Type.ENTITY && !this.ownedBy(((EntityHitResult) hitResult).getEntity())) {
             this.setPos(this.getPosition(0.0F).add(this.getDeltaMovement().scale(0.5F)));
             this.summonAreaEffect();
         }
@@ -66,7 +66,7 @@ public class DragonBreathArrow extends AbstractArrow {
 
     private void summonAreaEffect() {
         float speed = (float) this.getDeltaMovement().length();
-        float dmg = Mth.ceil(Mth.clamp(Math.sqrt(speed) * this.getBaseDamage(), 0.0, 2.147483647E9)) / 4.5F;
+        float dmg = Mth.ceil(Mth.clamp(Math.sqrt(speed) * this.baseDamage, 0.0, 2.147483647E9)) / 4.5F;
         List<LivingEntity> entities = this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(4.0, 2.0, 4.0));
         AreaEffectCloud effectCloud = new AreaEffectCloud(this.level(), this.getX(), this.getY(), this.getZ());
         if (this.getOwner() instanceof LivingEntity owner) effectCloud.setOwner(owner);

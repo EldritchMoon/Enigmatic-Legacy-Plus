@@ -189,7 +189,7 @@ public class ForgottenIce extends SpellstoneItem {
                 if (data.getBooleanOr("ForgottenFrozenHard", false)) {
                     Vec3 movement = entity.getDeltaMovement();
                     entity.setDeltaMovement(new Vec3(0, movement.y, 0));
-                    entity.hasImpulse = true;
+                    entity.needsSync = true;
                     entity.getAttributes().addTransientAttributeModifiers(ForgottenIce.getFrozenAttributes());
                     if (!entity.isFullyFrozen()) {
                         data.remove("ForgottenFrozenHard");

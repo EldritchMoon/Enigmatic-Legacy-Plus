@@ -48,6 +48,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
+import net.minecraft.util.profiling.Profiler;
 
 public class IchorSprite extends PathfinderMob implements TraceableEntity {
     public static final int BEAM_RANGE = 8;
@@ -226,12 +227,12 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
 
     @Override
     protected void customServerAiStep() {
-        this.level().getProfiler().push("ichorSpriteBrain");
+        Profiler.get().push("ichorSpriteBrain");
         this.getBrain().tick((ServerLevel) this.level(), this);
-        this.level().getProfiler().pop();
-        this.level().getProfiler().push("ichorSpriteActivityUpdate");
+        Profiler.get().pop();
+        Profiler.get().push("ichorSpriteActivityUpdate");
         Ai.updateActivity(this);
-        this.level().getProfiler().pop();
+        Profiler.get().pop();
         super.customServerAiStep();
     }
 
@@ -425,14 +426,14 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
             LivingEntity target = getAttackTarget(sprite);
             if (target != null)
                 sprite.getBrain().setMemory(MemoryModuleType.LOOK_TARGET, new EntityTracker(target, true));
-            sprite.hasImpulse = true;
+            sprite.needsSync = true;
         }
 
         @Override
         protected void stop(ServerLevel level, IchorSprite sprite, long gameTime) {
             sprite.setActiveAttackTarget(0);
             sprite.setTarget(null);
-            sprite.hasImpulse = true;
+            sprite.needsSync = true;
         }
 
         @Override

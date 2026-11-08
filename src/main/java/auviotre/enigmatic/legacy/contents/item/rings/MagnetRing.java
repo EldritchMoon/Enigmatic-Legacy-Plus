@@ -78,7 +78,7 @@ public class MagnetRing extends BaseCurioItem {
                 Vec3 delta = item.position().subtract(x, y, z);
                 if (delta.length() > 1.0) delta = delta.normalize();
                 item.setDeltaMovement(delta.scale(-1.2F));
-                item.hasImpulse = true;
+                item.needsSync = true;
                 pulled++;
             }
     }

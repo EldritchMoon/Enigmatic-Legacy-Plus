@@ -56,7 +56,7 @@ public class ExtradimensionalEye extends BaseItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.extradimensionalEyeLocation");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.extradimensionalEyePos", ChatFormatting.GOLD, pos.getX(), pos.getY(), pos.getZ());
             ResourceKey<Level> dimension = globalPos.dimension();
-            MutableComponent component = Component.translatable(dimension.location().toLanguageKey("dimension"));
+            MutableComponent component = Component.translatable(dimension.identifier().toLanguageKey("dimension"));
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.extradimensionalEyeDimension", ChatFormatting.GOLD, component);
         }
     }

@@ -77,7 +77,7 @@ public class PermanentItemEntity extends Entity {
 
     public PermanentItemEntity(Level world, double x, double y, double z) {
         this(EnigmaticEntities.PERMANENT_ITEM_ENTITY.get(), world);
-        y = y <= world.getMinBuildHeight() ? world.getMinBuildHeight() + 8 : y;
+        y = y <= world.getMinY() ? world.getMinY() + 8 : y;
 
         this.setPos(x, y, z);
         this.setYRot(this.random.nextFloat() * 360.0F);
@@ -177,7 +177,7 @@ public class PermanentItemEntity extends Entity {
             if (!this.level().isClientSide()) {
                 double d0 = this.getDeltaMovement().subtract(vec3d).lengthSqr();
                 if (d0 > 0.01D) {
-                    this.hasImpulse = true;
+                    this.needsSync = true;
                 }
             }
 
@@ -315,7 +315,7 @@ public class PermanentItemEntity extends Entity {
                     if (player.getInventory().add(copy)) {
                         acceptors.remove(player.getUUID());
                         level.sendParticles((ServerPlayer) player, ParticleTypes.DRAGON_BREATH, false, this.getX(), this.getY(0.5), this.getZ(), 48, 0, 0, 0, 0.03);
-                        EnigmaticLegacy.LOGGER.info("Player {} picking up (share: {}): {}", player.getGameProfile().getName(), stack, this);
+                        EnigmaticLegacy.LOGGER.info("Player {} picking up (share: {}): {}", player.getGameProfile().name(), stack, this);
                         player.awardStat(Stats.ITEM_PICKED_UP.get(item), count);
                         if (acceptors.isEmpty()) this.discard();
                         else PacketDistributor.sendToAllPlayers(new AcceptorSyncPacket(this.getId(), this.acceptors));
@@ -338,12 +338,12 @@ public class PermanentItemEntity extends Entity {
                 }
                 level.sendParticles(ParticleTypes.DRAGON_BREATH, this.getX(), this.getY(0.5), this.getZ(), 48, 0, 0, 0, 0.03);
                 player.take(this, count);
-                EnigmaticLegacy.LOGGER.info("Player {} picking up (crystal): {}", player.getGameProfile().getName(), this);
+                EnigmaticLegacy.LOGGER.info("Player {} picking up (crystal): {}", player.getGameProfile().name(), this);
                 this.discard();
                 stack.setCount(0);
             } else if (this.pickupDelay == 0 && (this.owner == null || this.owner.equals(player.getUUID())) && (count <= 0 || player.getInventory().add(stack))) {
                 copy.setCount(copy.getCount() - this.getItem().getCount());
-                EnigmaticLegacy.LOGGER.info("Player {} picking up (item: {}): {}", player.getGameProfile().getName(), copy, this);
+                EnigmaticLegacy.LOGGER.info("Player {} picking up (item: {}): {}", player.getGameProfile().name(), copy, this);
                 if (stack.isEmpty()) {
                     this.discard();
                     stack.setCount(count);
