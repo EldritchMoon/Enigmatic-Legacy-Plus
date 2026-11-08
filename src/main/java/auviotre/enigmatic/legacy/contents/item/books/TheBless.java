@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.books;
 
+import net.minecraft.world.InteractionResult;
 import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
@@ -18,7 +19,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -102,11 +102,11 @@ public class TheBless extends TheAcknowledgment {
         return super.hurtEnemy(stack, target, attacker);
     }
 
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (!EnigmaticHandler.canUse(player, stack)) return InteractionResultHolder.pass(stack);
+        if (!EnigmaticHandler.canUse(player, stack)) return InteractionResult.PASS;
         if (hand == InteractionHand.MAIN_HAND && !player.getOffhandItem().isEmpty())
-            return InteractionResultHolder.pass(stack);
+            return InteractionResult.PASS;
         return super.use(level, player, hand);
     }
 

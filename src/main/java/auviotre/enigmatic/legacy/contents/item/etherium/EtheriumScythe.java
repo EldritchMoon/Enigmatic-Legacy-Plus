@@ -100,7 +100,7 @@ public class EtheriumScythe extends HoeItem {
                 for (BlockPos offset : BlockPos.betweenClosed(pos.offset(1, 1, 1), pos.offset(-1, -1, -1))) {
                     if (!offset.equals(pos)) tryHarvest(context, level, offset);
                 }
-                return InteractionResult.sidedSuccess(level.isClientSide());
+                return InteractionResult.SUCCESS;
             }
         }
         InteractionResult result = super.useOn(context);

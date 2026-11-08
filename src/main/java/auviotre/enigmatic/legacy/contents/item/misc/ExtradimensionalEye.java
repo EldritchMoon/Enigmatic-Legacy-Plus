@@ -16,7 +16,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -63,13 +62,13 @@ public class ExtradimensionalEye extends BaseItem {
         return stack.has(EnigmaticComponents.DIMENSIONAL_POS);
     }
 
-    public InteractionResultHolder<ItemStack> use(Level level, @NotNull Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, @NotNull Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (player.isCrouching()) {
             GlobalPos globalPos = new GlobalPos(player.level().dimension(), player.blockPosition());
             stack.set(EnigmaticComponents.DIMENSIONAL_POS, globalPos);
             player.playSound(EnigmaticSounds.CHARGED_ON.get(), 1.0F, player.getRandom().nextFloat() * 0.2F + 0.9F);
-            return InteractionResultHolder.success(stack);
+            return InteractionResult.SUCCESS;
         }
         return super.use(level, player, hand);
     }

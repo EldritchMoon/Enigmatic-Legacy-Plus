@@ -15,7 +15,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -77,7 +76,7 @@ public class LootGenerator extends BaseItem {
         return stack.getOrDefault(EnigmaticComponents.LOOT_TABLE_ID.get(), 0);
     }
 
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         int id = getLootTableIndex(stack);
         int size = LOOT_LIST.size();
@@ -87,7 +86,7 @@ public class LootGenerator extends BaseItem {
 
         if (player instanceof ServerPlayer)
             player.displayClientMessage(Component.literal("Table: " + LOOT_LIST.get(getLootTableIndex(stack)).location()), true);
-        return InteractionResultHolder.success(stack);
+        return InteractionResult.SUCCESS;
     }
 
     public InteractionResult useOn(UseOnContext context) {

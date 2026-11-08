@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.books;
 
+import net.minecraft.world.InteractionResult;
 import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
@@ -16,7 +17,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -90,11 +90,11 @@ public class TheTwist extends TheAcknowledgment {
         return list;
     }
 
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+    public InteractionResult use(Level world, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (!EnigmaticHandler.canUse(player, stack)) return InteractionResultHolder.pass(stack);
+        if (!EnigmaticHandler.canUse(player, stack)) return InteractionResult.PASS;
         if (hand == InteractionHand.MAIN_HAND && !player.getOffhandItem().isEmpty())
-            return InteractionResultHolder.pass(stack);
+            return InteractionResult.PASS;
         return super.use(world, player, hand);
     }
 

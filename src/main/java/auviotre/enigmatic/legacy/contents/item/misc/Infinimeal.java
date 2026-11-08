@@ -236,7 +236,7 @@ public class Infinimeal extends BaseItem {
         if (tryApply(stack, world, pos, Optional.ofNullable(context.getPlayer()), Optional.of(context.getClickedFace()))) {
             if (!world.isClientSide())
                 context.getPlayer().gameEvent(GameEvent.ITEM_INTERACT_FINISH);
-            return InteractionResult.sidedSuccess(world.isClientSide());
+            return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
     }

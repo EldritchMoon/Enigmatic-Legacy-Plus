@@ -17,7 +17,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
@@ -79,14 +78,14 @@ public class StarlightBucket extends Item {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.starlightBucket2", ChatFormatting.LIGHT_PURPLE, component);
     }
 
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         Item content = getContent(stack);
         if (content instanceof MilkBucketItem) return ItemUtils.startUsingInstantly(level, player, hand);
         if (content instanceof BucketItem bucket) {
             BlockHitResult result = getPlayerPOVHitResult(level, player, bucket.content == Fluids.EMPTY ? ClipContext.Fluid.SOURCE_ONLY : ClipContext.Fluid.NONE);
-            if (result.getType() == HitResult.Type.MISS) return InteractionResultHolder.pass(stack);
-            if (result.getType() != HitResult.Type.BLOCK) return InteractionResultHolder.pass(stack);
+            if (result.getType() == HitResult.Type.MISS) return InteractionResult.PASS;
+            if (result.getType() != HitResult.Type.BLOCK) return InteractionResult.PASS;
             BlockPos blockPos = result.getBlockPos();
             Direction direction = result.getDirection();
             BlockPos relative = blockPos.relative(direction);
@@ -99,7 +98,7 @@ public class StarlightBucket extends Item {
                             player.awardStat(Stats.ITEM_USED.get(this));
                             pickup.getPickupSound(blockState).ifPresent((event) -> player.playSound(event, 1.0F, 1.0F));
                             level.gameEvent(player, GameEvent.FLUID_PICKUP, blockPos);
-                            return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+                            return InteractionResult.SUCCESS;
                         }
                     }
                 } else {
@@ -109,12 +108,12 @@ public class StarlightBucket extends Item {
                         if (player instanceof ServerPlayer serverPlayer)
                             CriteriaTriggers.PLACED_BLOCK.trigger(serverPlayer, place, stack);
                         player.awardStat(Stats.ITEM_USED.get(this));
-                        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+                        return InteractionResult.SUCCESS;
                     }
                 }
             }
         }
-        return InteractionResultHolder.fail(stack);
+        return InteractionResult.FAIL;
     }
 
     public InteractionResult useOn(UseOnContext context) {

@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.books;
 
+import net.minecraft.world.InteractionResult;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
@@ -15,7 +16,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -52,9 +52,9 @@ public class VoidTome extends BaseItem {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.voidTome2", ChatFormatting.GOLD, "8%");
     }
 
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+    public InteractionResult use(Level world, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (stack.getOrDefault(EnigmaticComponents.BOOLEAN, false)) return InteractionResultHolder.pass(stack);
+        if (stack.getOrDefault(EnigmaticComponents.BOOLEAN, false)) return InteractionResult.PASS;
         if (world.isClientSide()) {
             float width = player.getBbWidth() * 1.25F;
             for (int i = 0; i < 24; i++)
@@ -66,7 +66,7 @@ public class VoidTome extends BaseItem {
         player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 400, 0, false, true));
         player.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 400, 0, false, true));
         player.awardStat(Stats.ITEM_USED.get(this));
-        return InteractionResultHolder.sidedSuccess(stack, world.isClientSide());
+        return InteractionResult.SUCCESS;
     }
 
     @Mod(value = EnigmaticLegacy.MODID)

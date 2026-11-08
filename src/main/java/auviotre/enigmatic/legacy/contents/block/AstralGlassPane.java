@@ -8,7 +8,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -79,16 +79,16 @@ public class AstralGlassPane extends IronBarsBlock {
         super.attack(state, level, pos, player);
     }
 
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-        if (state.getValue(COLORFUL)) return ItemInteractionResult.CONSUME;
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if (state.getValue(COLORFUL)) return InteractionResult.CONSUME;
         if (stack.is(EnigmaticItems.ASTRAL_DUST)) {
             stack.consume(1, player);
             level.playSound(null, pos, EnigmaticSounds.ASTRAL_GLASS_CHANGE.get(), SoundSource.BLOCKS, 0.25F, 1.8F + 0.2F * level.getRandom().nextFloat());
             level.setBlock(pos, state.setValue(COLORFUL, true), 3);
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        ItemInteractionResult result = stack.getItem() instanceof BlockItem && new BlockPlaceContext(player, hand, stack, hitResult).canPlace() ? ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION : ItemInteractionResult.SUCCESS;
-        if (result == ItemInteractionResult.SUCCESS) {
+        InteractionResult result = stack.getItem() instanceof BlockItem && new BlockPlaceContext(player, hand, stack, hitResult).canPlace() ? InteractionResult.PASS : InteractionResult.SUCCESS;
+        if (result == InteractionResult.SUCCESS) {
             if (level.isClientSide()) spawnParticles(level, pos);
             else interact(state, level, pos);
         }

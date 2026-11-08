@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.misc;
 
+import net.minecraft.world.InteractionResult;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.entity.misc.PermanentItemEntity;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCursedItem;
@@ -16,7 +17,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
@@ -52,7 +52,7 @@ public class BlessStone extends BaseCursedItem {
         list.add(Component.translatable("tooltip.enigmaticlegacy.cursedOnesOnly2").withStyle(color));
     }
 
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack item = player.getItemInHand(hand);
         if (level.getLevelData().isHardcore() && EnigmaticHandler.isTheCursedOne(player)) {
             player.level().playSound(null, player.blockPosition(), SoundEvents.WITHER_DEATH, SoundSource.PLAYERS, 1.0F, 0.5F);
@@ -85,8 +85,8 @@ public class BlessStone extends BaseCursedItem {
                 serverLevel.sendParticles(ParticleTypes.END_ROD, player.getX(), player.getY(0.75), player.getZ(), 24, 0.0, 0.0, 0.0, 0.1D);
                 serverLevel.sendParticles(ParticleTypes.WITCH, player.getX(), player.getY(0.75), player.getZ(), 24, 0.0, 0.0, 0.0, 0.05D);
             }
-            return InteractionResultHolder.success(item);
+            return InteractionResult.SUCCESS;
         }
-        return InteractionResultHolder.pass(item);
+        return InteractionResult.PASS;
     }
 }

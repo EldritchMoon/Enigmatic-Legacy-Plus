@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.tools;
 
+import net.minecraft.world.InteractionResult;
 import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
@@ -30,7 +31,6 @@ import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -240,9 +240,9 @@ public class AnnihilatingSword extends SwordItem {
         }
     }
 
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (!EnigmaticHandler.canUse(player, stack)) return InteractionResultHolder.pass(stack);
+        if (!EnigmaticHandler.canUse(player, stack)) return InteractionResult.PASS;
         if (hand.equals(InteractionHand.OFF_HAND) && player.getMainHandItem().isEmpty()) {
             return ItemUtils.startUsingInstantly(level, player, hand);
         } else if (hand.equals(InteractionHand.MAIN_HAND) && player.getOffhandItem().isEmpty()) {
@@ -250,7 +250,7 @@ public class AnnihilatingSword extends SwordItem {
                 return ItemUtils.startUsingInstantly(level, player, hand);
             }
         }
-        return InteractionResultHolder.pass(stack);
+        return InteractionResult.PASS;
     }
 
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int tick) {

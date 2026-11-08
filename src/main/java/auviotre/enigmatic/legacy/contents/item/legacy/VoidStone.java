@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.legacy;
 
+import net.minecraft.world.InteractionResult;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
@@ -17,7 +18,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -94,22 +94,22 @@ public class VoidStone extends BaseItem {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.voidStoneShift");
     }
 
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         TempStorage storage = stack.get(EnigmaticComponents.TEMPORARY_STORAGE);
         Boolean flag = stack.getOrDefault(EnigmaticComponents.BOOLEAN, false);
         if (player.isShiftKeyDown()) {
             stack.set(EnigmaticComponents.BOOLEAN, !flag);
-            return InteractionResultHolder.success(stack);
+            return InteractionResult.SUCCESS;
         } else if (storage != null) {
-            if (flag) return InteractionResultHolder.pass(stack);
+            if (flag) return InteractionResult.PASS;
             ItemEntity entity = new ItemEntity(player.level(), player.getX(), player.getY(), player.getZ(), storage.stack());
             entity.setThrower(player);
             entity.setNoPickUpDelay();
             player.level().addFreshEntity(entity);
             removeBlackList(stack, storage.stack());
             stack.remove(EnigmaticComponents.TEMPORARY_STORAGE);
-            return InteractionResultHolder.success(stack);
+            return InteractionResult.SUCCESS;
         }
         return super.use(level, player, hand);
     }

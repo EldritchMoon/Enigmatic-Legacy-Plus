@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.tools;
 
+import net.minecraft.world.InteractionResult;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.entity.projectile.DragonBreathArrow;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -10,7 +11,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
@@ -59,14 +59,14 @@ public class DragonBreathBow extends ProjectileWeaponItem {
         if (stack.isEnchanted()) TooltipHandler.line(list);
     }
 
-    public InteractionResultHolder<ItemStack> use(Level level, @NotNull Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, @NotNull Player player, InteractionHand hand) {
         ItemStack bow = player.getItemInHand(hand);
-        InteractionResultHolder<ItemStack> ret = EventHooks.onArrowNock(bow, level, player, hand, true);
+        InteractionResult ret = EventHooks.onArrowNock(bow, level, player, hand, true);
         if (ret != null) {
             return ret;
         } else {
             player.startUsingItem(hand);
-            return InteractionResultHolder.consume(bow);
+            return InteractionResult.CONSUME;
         }
     }
 

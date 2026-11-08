@@ -11,7 +11,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -44,7 +43,7 @@ public class QuotePlayer extends Item {
         return stack.getOrDefault(EnigmaticComponents.QUOTE_ID.get(), 0);
     }
 
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (player.isCrouching()) {
             player.startUsingItem(hand);
@@ -56,7 +55,7 @@ public class QuotePlayer extends Item {
         } else if (player instanceof ServerPlayer splayer) {
             Quote.getAllQuotes().get(getQuoteIndex(stack)).play(splayer, Quote.PlayOptions.defaultPlay().delay(10));
         }
-        return InteractionResultHolder.success(stack);
+        return InteractionResult.SUCCESS;
     }
 
     public InteractionResult useOn(UseOnContext context) {
