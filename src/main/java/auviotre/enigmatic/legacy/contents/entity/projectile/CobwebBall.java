@@ -87,7 +87,7 @@ public class CobwebBall extends Projectile implements ItemSupplier {
     }
 
     private ItemParticleOption getParticle() {
-        return new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Blocks.COBWEB));
+        return new ItemParticleOption(ParticleTypes.ITEM, Blocks.COBWEB.asItem());
     }
 
     @Override

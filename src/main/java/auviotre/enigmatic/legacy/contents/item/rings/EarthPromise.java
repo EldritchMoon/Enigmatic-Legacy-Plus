@@ -48,6 +48,7 @@ import top.theillusivec4.curios.api.SlotContext;
 import java.util.List;
 import java.util.function.Consumer;
 import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.core.particles.ColorParticleOption;
 
 public class EarthPromise extends CursedCurioItem {
     public static ModConfigSpec.IntValue cooldown;
@@ -124,7 +125,7 @@ public class EarthPromise extends CursedCurioItem {
                         int tick = RedemptionRing.Helper.canUseRelic(player) ? cooldown.get() * 4 / 5 : cooldown.get();
                         player.getCooldowns().addCooldown(EnigmaticItems.EARTH_PROMISE.get().getDefaultInstance(), tick);
                         if (player.level() instanceof ServerLevel level) {
-                            level.sendParticles(ParticleTypes.FLASH, player.getX(), player.getY(), player.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
+                            level.sendParticles(ColorParticleOption.create(ParticleTypes.FLASH, -1), player.getX(), player.getY(), player.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
                             level.sendParticles(EnigmaticParticles.ICHOR.get(), player.getX(), player.getY(0.5F), player.getZ(), 36, 0.1D, 0.1D, 0.1D, 0.2D);
                             player.level().playSound(null, player, SoundEvents.ENDER_EYE_DEATH, SoundSource.PLAYERS, 5.0F, 1.5F);
                         }

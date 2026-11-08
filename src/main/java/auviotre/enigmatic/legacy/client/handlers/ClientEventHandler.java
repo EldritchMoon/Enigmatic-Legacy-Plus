@@ -48,8 +48,8 @@ import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 
 @Mod(value = EnigmaticLegacy.MODID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = EnigmaticLegacy.MODID, value = Dist.CLIENT)
@@ -149,11 +149,11 @@ public class ClientEventHandler {
         if (Minecraft.getInstance().getConnection() == null) return;
 
         if (!ISpellstone.get(player).isEmpty() && KeyHandler.SPELLSTONE.get().consumeClick())
-            PacketDistributor.sendToServer(new SpellstoneKeyPacket());
+            ClientPacketDistributor.sendToServer(new SpellstoneKeyPacket());
         if (KeyHandler.SCROLL.get().consumeClick())
-            PacketDistributor.sendToServer(new ScrollKeyPacket());
+            ClientPacketDistributor.sendToServer(new ScrollKeyPacket());
         if (KeyHandler.ENDER_RING.get().consumeClick())
-            PacketDistributor.sendToServer(new EnderRingKeyPacket(ItemStack.EMPTY));
+            ClientPacketDistributor.sendToServer(new EnderRingKeyPacket(ItemStack.EMPTY));
 
         boolean down = Minecraft.getInstance().options.keyJump.isDown();
         boolean jumpClicked = false;
@@ -165,7 +165,7 @@ public class ClientEventHandler {
         if (jumpClicked) {
             if (ISpellstone.get(player).is(EnigmaticItems.ANGEL_BLESSING) && player != null) {
                 if (!player.isInWater() && !player.onGround() && !player.isSpectator()) {
-                    PacketDistributor.sendToServer(new SpellstoneKeyPacket());
+                    ClientPacketDistributor.sendToServer(new SpellstoneKeyPacket());
                 }
             }
         }

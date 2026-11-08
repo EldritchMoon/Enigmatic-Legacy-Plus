@@ -65,7 +65,7 @@ public class CosmicCake extends CakeBlock {
             level.gameEvent(player, GameEvent.EAT, pos);
             level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
             level.setBlock(pos, state.setValue(BITES, i + 1), UPDATE_ALL);
-            level.playSound(null, player.blockPosition(), SoundEvents.GENERIC_EAT, SoundSource.BLOCKS, 1.0F, 0.5F + player.getRandom().nextFloat() * 0.5F);
+            level.playSound(null, player.blockPosition(), SoundEvents.GENERIC_EAT.value(), SoundSource.BLOCKS, 1.0F, 0.5F + player.getRandom().nextFloat() * 0.5F);
             return InteractionResult.SUCCESS;
         }
     }

@@ -21,7 +21,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
@@ -33,6 +32,7 @@ import java.util.Optional;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.Unit;
 import net.minecraft.world.item.equipment.Equippable;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 
 // 26.1.2-port: the Equipable interface, ElytraItem and Caelus are gone. Chest-slot gliding comes from the vanilla
 // GLIDER + EQUIPPABLE components (vanilla also handles flight durability and glide events for the chest slot).
@@ -73,8 +73,8 @@ public abstract class BaseElytraItem extends BaseCurioItem {
     public void handleBoosting(Player player) {
         if (Minecraft.getInstance().player != player) return;
         if (Minecraft.getInstance().options.keyJump.isDown() && flyingBoost(player)) {
-            if (!isBoosting) PacketDistributor.sendToServer(new UpdateElytraBoostPacket(isBoosting = true));
-        } else if (isBoosting) PacketDistributor.sendToServer(new UpdateElytraBoostPacket(isBoosting = false));
+            if (!isBoosting) ClientPacketDistributor.sendToServer(new UpdateElytraBoostPacket(isBoosting = true));
+        } else if (isBoosting) ClientPacketDistributor.sendToServer(new UpdateElytraBoostPacket(isBoosting = false));
     }
 
     // 26.1.2-port: no longer a NeoForge hook; only called from curioTick for the Curios back slot.

@@ -56,6 +56,7 @@ import net.minecraft.core.UUIDUtil;
 import com.mojang.serialization.Codec;
 import java.util.HashMap;
 import java.util.Optional;
+import net.minecraft.core.particles.PowerParticleOption;
 
 public class PermanentItemEntity extends Entity {
     private static final EntityDataAccessor<ItemStack> ITEM = SynchedEntityData.defineId(PermanentItemEntity.class, EntityDataSerializers.ITEM_STACK);
@@ -314,7 +315,7 @@ public class PermanentItemEntity extends Entity {
                 if (acceptors != null && acceptors.contains(player.getUUID())) {
                     if (player.getInventory().add(copy)) {
                         acceptors.remove(player.getUUID());
-                        level.sendParticles((ServerPlayer) player, ParticleTypes.DRAGON_BREATH, false, this.getX(), this.getY(0.5), this.getZ(), 48, 0, 0, 0, 0.03);
+                        level.sendParticles((ServerPlayer) player, PowerParticleOption.create(ParticleTypes.DRAGON_BREATH, 1.0F), false, false /* 26.1.2-port: new alwaysShow flag */, this.getX(), this.getY(0.5), this.getZ(), 48, 0, 0, 0, 0.03);
                         EnigmaticLegacy.LOGGER.info("Player {} picking up (share: {}): {}", player.getGameProfile().name(), stack, this);
                         player.awardStat(Stats.ITEM_PICKED_UP.get(item), count);
                         if (acceptors.isEmpty()) this.discard();
@@ -336,7 +337,7 @@ public class PermanentItemEntity extends Entity {
                     if (!SoulCrystal.retrieveSoulFromCrystal(player)) return;
                     else SoulArchive.getInstance().removeItem(this);
                 }
-                level.sendParticles(ParticleTypes.DRAGON_BREATH, this.getX(), this.getY(0.5), this.getZ(), 48, 0, 0, 0, 0.03);
+                level.sendParticles(PowerParticleOption.create(ParticleTypes.DRAGON_BREATH, 1.0F), this.getX(), this.getY(0.5), this.getZ(), 48, 0, 0, 0, 0.03);
                 player.take(this, count);
                 EnigmaticLegacy.LOGGER.info("Player {} picking up (crystal): {}", player.getGameProfile().name(), this);
                 this.discard();
@@ -369,7 +370,7 @@ public class PermanentItemEntity extends Entity {
             if (flag && player.getUUID().equals(this.getOwnerId())) {
                 if (player.addItem(stack.copy())) {
                     this.discard();
-                    level.sendParticles(ParticleTypes.DRAGON_BREATH, this.getX(), this.getY(0.5), this.getZ(), 48, 0, 0, 0, 0.03);
+                    level.sendParticles(PowerParticleOption.create(ParticleTypes.DRAGON_BREATH, 1.0F), this.getX(), this.getY(0.5), this.getZ(), 48, 0, 0, 0, 0.03);
                     return InteractionResult.CONSUME;
                 }
             }

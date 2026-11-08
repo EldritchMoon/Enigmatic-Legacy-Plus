@@ -21,11 +21,11 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.client.ICuriosScreen;
 
 import javax.annotation.Nonnull;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 
 @OnlyIn(Dist.CLIENT)
 public class EnderChestInventoryButton extends ImageButton {
@@ -52,7 +52,7 @@ public class EnderChestInventoryButton extends ImageButton {
                     RecipeBookComponent recipeBookGui = inventory.getRecipeBookComponent();
                     if (recipeBookGui.isVisible()) recipeBookGui.toggleVisibility();
                 }
-                PacketDistributor.sendToServer(new EnderRingKeyPacket(stack));
+                ClientPacketDistributor.sendToServer(new EnderRingKeyPacket(stack));
             }
         });
 

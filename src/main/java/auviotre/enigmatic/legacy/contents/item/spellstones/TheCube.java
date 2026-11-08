@@ -347,7 +347,7 @@ public class TheCube extends SpellstoneItem {
             if (event.getSource().getEntity() != null) {
                 if (event.getNewDamage() > getDamageLimit(victim)) {
                     event.setNewDamage(1.0F);
-                    victim.level().playSound(null, victim.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1F, 1F);
+                    victim.level().playSound(null, victim.blockPosition(), SoundEvents.ITEM_BREAK.value(), SoundSource.PLAYERS, 1F, 1F);
                     if (event.getSource().getDirectEntity() instanceof LivingEntity attacker) {
                         Vec3 vec = victim.position().subtract(attacker.position()).normalize();
                         attacker.knockback(0.75F, vec.x, vec.z);

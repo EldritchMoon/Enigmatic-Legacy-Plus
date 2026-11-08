@@ -267,7 +267,7 @@ public class ClientPackets {
                     double range = Math.random() * 0.2 + 0.2;
                     level.addParticle(ParticleTypes.SNOWFLAKE, packet.x, packet.y + 0.2 * Math.random(), packet.z, range * Math.sin(Math.PI / amount * i), 0.05, range * Math.cos(Math.PI / amount * i));
                 }
-                ItemParticleOption option = new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Blocks.BLUE_ICE));
+                ItemParticleOption option = new ItemParticleOption(ParticleTypes.ITEM, Blocks.BLUE_ICE.asItem());
                 for (int i = 0; i < amount * 3; i++) {
                     level.addParticle(option, packet.x, packet.y, packet.z, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1);
                 }
@@ -287,7 +287,7 @@ public class ClientPackets {
                 break;
             case 100:
                 amount = 16;
-                level.playLocalSound(packet.x, packet.y, packet.z, SoundEvents.SHIELD_BLOCK, SoundSource.PLAYERS, 1.0F, 1.0F, true);
+                level.playLocalSound(packet.x, packet.y, packet.z, SoundEvents.SHIELD_BLOCK.value(), SoundSource.PLAYERS, 1.0F, 1.0F, true);
                 level.playLocalSound(packet.x, packet.y, packet.z, SoundEvents.IRON_GOLEM_REPAIR, SoundSource.PLAYERS, 1.2F, 1.25F, true);
                 for (int i = 0; i < amount * 2; i++) {
                     double range = Math.random() * 0.3 + 0.1;

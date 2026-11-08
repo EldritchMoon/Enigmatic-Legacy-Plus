@@ -33,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.WeakHashMap;
+import net.minecraft.core.particles.PowerParticleOption;
 
 public class SoulCrystal extends BaseItem implements IPermanentCrystal {
     public static final Map<Player, Multimap<Holder<Attribute>, AttributeModifier>> ATTRIBUTE_DISPATCHER = new WeakHashMap<>();
@@ -104,7 +105,7 @@ public class SoulCrystal extends BaseItem implements IPermanentCrystal {
         if (retrieveSoulFromCrystal(player)) {
             updatePlayerSoulMap(player);
             if (level instanceof ServerLevel serverLevel) {
-                serverLevel.sendParticles(ParticleTypes.DRAGON_BREATH, player.getX(), player.getY(0.5), player.getZ(), 48, 0, 0, 0, 0.03);
+                serverLevel.sendParticles(PowerParticleOption.create(ParticleTypes.DRAGON_BREATH, 1.0F), player.getX(), player.getY(0.5), player.getZ(), 48, 0, 0, 0, 0.03);
             }
             player.swing(hand);
             stack.consume(1, player);

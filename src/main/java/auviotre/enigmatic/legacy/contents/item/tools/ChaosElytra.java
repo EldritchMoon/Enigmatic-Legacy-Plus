@@ -59,6 +59,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.function.Consumer;
 import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.core.particles.PowerParticleOption;
 
 public class ChaosElytra extends BaseElytraItem {
     public static ModConfigSpec.IntValue specialDamageResistance;
@@ -131,8 +132,8 @@ public class ChaosElytra extends BaseElytraItem {
         for (int counter = 0; counter <= amount; counter++) {
             Vec3 pos = player.position();
             pos = pos.add(Math.random() - 0.5, -1.0 + Math.random() - 0.5, Math.random() - 0.5);
-//            player.level().addParticle(ParticleTypes.DRAGON_BREATH, true, pos.x, pos.y, pos.z, ((Math.random() - 0.5D) * 2.0D) * rangeModifier, ((Math.random() - 0.5D) * 2.0D) * rangeModifier, ((Math.random() - 0.5D) * 2.0D) * rangeModifier);
-            player.level().addParticle(ParticleTypes.DRAGON_BREATH, true, pos.x, pos.y, pos.z, ((Math.random() - 0.5D) * 2.0D) * rangeModifier, ((Math.random() - 0.5D) * 2.0D) * rangeModifier, ((Math.random() - 0.5D) * 2.0D) * rangeModifier);
+//            player.level().addParticle(PowerParticleOption.create(ParticleTypes.DRAGON_BREATH, 1.0F), true, pos.x, pos.y, pos.z, ((Math.random() - 0.5D) * 2.0D) * rangeModifier, ((Math.random() - 0.5D) * 2.0D) * rangeModifier, ((Math.random() - 0.5D) * 2.0D) * rangeModifier);
+            player.level().addParticle(PowerParticleOption.create(ParticleTypes.DRAGON_BREATH, 1.0F), true, false, pos.x, pos.y, pos.z, ((Math.random() - 0.5D) * 2.0D) * rangeModifier, ((Math.random() - 0.5D) * 2.0D) * rangeModifier, ((Math.random() - 0.5D) * 2.0D) * rangeModifier);
         }
     }
 

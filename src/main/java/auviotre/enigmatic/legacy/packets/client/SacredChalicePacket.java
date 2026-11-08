@@ -17,7 +17,7 @@ public class SacredChalicePacket implements CustomPacketPayload {
         this.x = buf.readDouble();
         this.y = buf.readDouble();
         this.z = buf.readDouble();
-        this.center = buf.readVec3();
+        this.center = Vec3.STREAM_CODEC.decode(buf);
     }
 
     public SacredChalicePacket(AABB box) {
@@ -31,7 +31,7 @@ public class SacredChalicePacket implements CustomPacketPayload {
         buf.writeDouble(this.x);
         buf.writeDouble(this.y);
         buf.writeDouble(this.z);
-        buf.writeVec3(this.center);
+        Vec3.STREAM_CODEC.encode(buf, this.center);
     }
 
     @Override

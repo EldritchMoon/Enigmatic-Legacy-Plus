@@ -11,24 +11,19 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.trading.VillagerTrades;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.trading.ItemCost;
-import net.minecraft.world.item.trading.MerchantOffer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.client.event.RegisterRecipeBookCategoriesEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 import net.neoforged.neoforge.event.level.ModifyCustomSpawnersEvent;
-import net.neoforged.neoforge.event.village.WandererTradesEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -42,18 +37,9 @@ public class EnigmaticSetupHandler {
         event.registerEntity(EnigmaticCapability.ANTIQUE_BAG_INVENTORY, EntityType.PLAYER, (entity, context) -> new AntiqueBagCapability(entity));
     }
 
-    @SubscribeEvent
-    private static void onWandererTradesEvent(@NotNull WandererTradesEvent event) {
-        List<VillagerTrades.ItemListing> genericTrades = event.getGenericTrades();
-        List<VillagerTrades.ItemListing> rareTrades = event.getRareTrades();
-        rareTrades.add((trader, rand) -> new MerchantOffer(new ItemCost(EnigmaticItems.EARTH_HEART_FRAGMENT, 2), Optional.of(new ItemCost(Items.EMERALD, 20)), EnigmaticItems.EARTH_HEART.toStack(), 1, 5, 0.2F));
-        genericTrades.add((trader, rand) -> new MerchantOffer(new ItemCost(Items.EMERALD, 4), EnigmaticItems.EARTH_HEART_FRAGMENT.toStack(), 2, 5, 0.25F));
-    }
-
-    @SubscribeEvent
-    private static void onRecipeCategoriesRegistry(@NotNull RegisterRecipeBookCategoriesEvent event) {
-        // To Be Done.
-    }
+    // 26.1.2-port: WandererTradesEvent is gone; trades are data-driven now. The two Earth Heart trades live in
+    // data/enigmaticlegacyplus/villager_trade/wandering_trader/ and are added to the minecraft wandering_trader
+    // trade tags. The empty RegisterRecipeBookCategoriesEvent listener was removed (the event no longer exists).
 
     @SubscribeEvent
     private static void onCustomSpawnersRegistry(@NotNull ModifyCustomSpawnersEvent event) {

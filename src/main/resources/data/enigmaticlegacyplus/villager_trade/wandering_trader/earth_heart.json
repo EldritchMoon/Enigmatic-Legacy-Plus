@@ -1,0 +1,16 @@
+{
+  "additional_wants": {
+    "count": 20.0,
+    "id": "minecraft:emerald"
+  },
+  "gives": {
+    "id": "enigmaticlegacyplus:earth_heart"
+  },
+  "max_uses": 1.0,
+  "reputation_discount": 0.2,
+  "wants": {
+    "count": 2.0,
+    "id": "enigmaticlegacyplus:earth_heart_fragment"
+  },
+  "xp": 5.0
+}

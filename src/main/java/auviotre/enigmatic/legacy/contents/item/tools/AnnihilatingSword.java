@@ -102,7 +102,7 @@ public class AnnihilatingSword extends Item {
         blocker.getData(EnigmaticAttachments.ENIGMATIC_DATA).setAnnihilatingTick(16);
         if (source.getEntity() != null) {
             RandomSource random = blocker.getRandom();
-            level.playSound(null, blocker.blockPosition(), SoundEvents.SHIELD_BLOCK, SoundSource.PLAYERS, 0.5F, 1.1F + 0.2F * random.nextFloat());
+            level.playSound(null, blocker.blockPosition(), SoundEvents.SHIELD_BLOCK.value(), SoundSource.PLAYERS, 0.5F, 1.1F + 0.2F * random.nextFloat());
             if (tick <= 8)
                 level.playSound(null, blocker.blockPosition(), SoundEvents.ANVIL_LAND, SoundSource.PLAYERS, 0.5F, 1.2F + 0.3F * random.nextFloat());
         }

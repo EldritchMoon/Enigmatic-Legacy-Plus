@@ -31,7 +31,6 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
-import net.neoforged.neoforge.event.entity.player.AnvilRepairEvent;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
@@ -98,13 +97,15 @@ public class ForgerCrystal extends CursedCurioItem {
     @Mod(value = EnigmaticLegacy.MODID)
     @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
     public static class Events {
-        @SubscribeEvent
-        private static void onAnvilRepair(@NotNull AnvilRepairEvent event) {
-            Player player = event.getEntity();
-            if (EnigmaticHandler.hasCurio(player, EnigmaticItems.FORGER_CRYSTAL)) {
-                event.setBreakChance(0.0F);
-            }
-        }
+        // TODO(port): NeoForge 26.1 removed AnvilRepairEvent and its break-chance hook. Restore this with a
+        // mixin on AnvilMenu.onTake (the 0.12F break chance) in phase 6.
+        // @SubscribeEvent
+        // private static void onAnvilRepair(@NotNull AnvilRepairEvent event) {
+        //     Player player = event.getEntity();
+        //     if (EnigmaticHandler.hasCurio(player, EnigmaticItems.FORGER_CRYSTAL)) {
+        //         event.setBreakChance(0.0F);
+        //     }
+        // }
 
         private static boolean isToolOrArmor(ItemStack stack) {
             return stack.is(ItemTags.SWORDS) || stack.is(ItemTags.AXES) || stack.is(ItemTags.PICKAXES) || stack.is(ItemTags.SHOVELS) || stack.is(ItemTags.HOES)

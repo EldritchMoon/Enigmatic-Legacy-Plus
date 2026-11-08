@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import net.minecraft.core.particles.PowerParticleOption;
 
 @Mixin(DragonChargePlayerPhase.class)
 public abstract class MixinChargePhase extends AbstractDragonPhaseInstance {
@@ -51,7 +52,7 @@ public abstract class MixinChargePhase extends AbstractDragonPhaseInstance {
                 flame.setOwner(this.dragon);
                 flame.setRadius(4.0F);
                 flame.setDuration(160);
-                flame.setParticle(ParticleTypes.DRAGON_BREATH);
+                flame.setParticle(PowerParticleOption.create(ParticleTypes.DRAGON_BREATH, 1.0F));
                 flame.addEffect(new MobEffectInstance(MobEffects.INSTANT_DAMAGE));
                 ++this.flameAmount;
                 this.dragon.level().addFreshEntity(flame);

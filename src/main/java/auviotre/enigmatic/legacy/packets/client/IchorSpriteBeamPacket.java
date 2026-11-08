@@ -12,8 +12,8 @@ public class IchorSpriteBeamPacket implements CustomPacketPayload {
     public final Vec3 self, tarPos;
 
     public IchorSpriteBeamPacket(RegistryFriendlyByteBuf buf) {
-        this.self = buf.readVec3();
-        this.tarPos = buf.readVec3();
+        this.self = Vec3.STREAM_CODEC.decode(buf);
+        this.tarPos = Vec3.STREAM_CODEC.decode(buf);
     }
 
     public IchorSpriteBeamPacket(Vec3 pos, Vec3 tarPos) {
@@ -22,8 +22,8 @@ public class IchorSpriteBeamPacket implements CustomPacketPayload {
     }
 
     public void write(RegistryFriendlyByteBuf buf) {
-        buf.writeVec3(this.self);
-        buf.writeVec3(this.tarPos);
+        Vec3.STREAM_CODEC.encode(buf, this.self);
+        Vec3.STREAM_CODEC.encode(buf, this.tarPos);
     }
 
     @Override

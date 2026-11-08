@@ -42,7 +42,6 @@ import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
@@ -50,6 +49,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 
 public class ThunderScroll extends CursedCurioItem {
     public static final String TAG_ID = "ElectricPoint";
@@ -151,7 +151,7 @@ public class ThunderScroll extends CursedCurioItem {
             Player player = event.getEntity();
             boolean flag = player.onGround() && EnigmaticHandler.hasCurio(player, EnigmaticItems.THUNDER_SCROLL);
             if (flag && player.getWeaponItem().canPerformAction(ItemAbilities.SWORD_SWEEP) && !player.getCooldowns().isOnCooldown(EnigmaticItems.THUNDER_SCROLL.get().getDefaultInstance())) {
-                PacketDistributor.sendToServer(new EmptyLeftClickPacket(true));
+                ClientPacketDistributor.sendToServer(new EmptyLeftClickPacket(true));
             }
         }
 
