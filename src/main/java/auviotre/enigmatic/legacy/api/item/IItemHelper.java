@@ -13,6 +13,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderSet;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.component.Tool;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 public interface IItemHelper {
     List<ItemLike> UNKNOWN_ITEMS = new ArrayList<>();
@@ -33,6 +39,18 @@ public interface IItemHelper {
     /** 26.1.2-port: block items keep the old "block.modid.name" translation key. */
     static Item.Properties blockItemProperties() {
         return properties().useBlockDescriptionPrefix();
+    }
+
+    /**
+     * 26.1.2-port: the old SwordItem.createToolProperties() for items that are not full swords:
+     * mines cobwebs fast, sword-efficient blocks at 1.5x, 2 durability per block.
+     */
+    static Tool swordTool() {
+        HolderGetter<Block> blocks = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
+        return new Tool(List.of(
+                Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.builtInRegistryHolder()), 15.0F),
+                Tool.Rule.overrideSpeed(blocks.getOrThrow(BlockTags.SWORD_EFFICIENT), 1.5F)
+        ), 1.0F, 2, false);
     }
 
     static @NotNull ItemAttributeModifiers createAttributes(float attackDamage, float attackSpeed) {

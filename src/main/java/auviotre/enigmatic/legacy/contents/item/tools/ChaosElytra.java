@@ -30,12 +30,10 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -68,7 +66,7 @@ public class ChaosElytra extends BaseElytraItem {
 
     public ChaosElytra() {
         super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.EPIC).durability(3248).component(EnigmaticComponents.ELDRITCH, true));
-        DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
+        // 26.1.2-port: dispensers equip items with an equippable component automatically (was ArmorItem.DISPENSE_ITEM_BEHAVIOR).
     }
 
     @SubscribeConfig
@@ -148,22 +146,17 @@ public class ChaosElytra extends BaseElytraItem {
         if (context.entity() instanceof Player player && player.level().isClientSide()) handleBoosting(player);
         LivingEntity livingEntity = context.entity();
         int ticks = livingEntity.getFallFlyingTicks();
-        if (ticks > 0 && livingEntity.isFallFlying()) stack.elytraFlightTick(livingEntity, ticks);
+        if (ticks > 0 && livingEntity.isFallFlying()) this.elytraFlightTick(stack, livingEntity, ticks);
     }
 
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
-        if (entity instanceof LivingEntity livingEntity && !level.isClientSide()) {
+    // 26.1.2-port: inventoryTick is server-only and gets the equipment slot instead of slotId/isSelected
+    // (MAINHAND = selected hotbar item). The chest-slot flight tick is vanilla now (GLIDER component).
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
+        if (entity instanceof LivingEntity livingEntity) {
             float timer = stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F);
-            ItemStack itemBySlot = livingEntity.getItemBySlot(getEquipmentSlot());
-            if ((isSelected || itemBySlot.equals(stack)) && EnigmaticHandler.isTheWorthyOne(livingEntity))
+            if ((slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.CHEST) && EnigmaticHandler.isTheWorthyOne(livingEntity))
                 stack.set(EnigmaticComponents.ELDRITCH_TIMER, Math.min(1.0F, timer + 0.3F));
             else stack.set(EnigmaticComponents.ELDRITCH_TIMER, Math.max(0.0F, timer - 0.3F));
-
-            if (livingEntity.getItemBySlot(EquipmentSlot.CHEST).is(this)) {
-                if (livingEntity instanceof Player player && player.level().isClientSide()) handleBoosting(player);
-                int ticks = livingEntity.getFallFlyingTicks();
-                if (ticks > 0 && livingEntity.isFallFlying()) stack.elytraFlightTick(livingEntity, ticks);
-            }
         }
         if (entity instanceof LivingEntity living && !EnigmaticHandler.isTheWorthyOne(living)) {
             if (!living.hasEffect(EnigmaticEffects.ABYSS_CORRUPTION) && !living.hasInfiniteMaterials())

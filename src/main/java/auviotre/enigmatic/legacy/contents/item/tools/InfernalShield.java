@@ -17,7 +17,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -31,11 +30,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import net.minecraft.world.item.ToolMaterial;
 
 public class InfernalShield extends BaseCursedItem {
     public InfernalShield() {
-        super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.RARE).durability(Tiers.NETHERITE.getUses()));
-        DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
+        // 26.1.2-port: Tiers -> ToolMaterial. Off-hand equippable like the vanilla shield; dispensers equip
+        // items with an equippable component automatically, replacing ArmorItem.DISPENSE_ITEM_BEHAVIOR.
+        super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.RARE).durability(ToolMaterial.NETHERITE.durability())
+                .equippableUnswappable(EquipmentSlot.OFFHAND));
     }
 
     @OnlyIn(Dist.CLIENT)

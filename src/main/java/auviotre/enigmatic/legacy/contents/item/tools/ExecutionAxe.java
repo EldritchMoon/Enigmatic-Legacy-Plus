@@ -46,8 +46,10 @@ import top.theillusivec4.curios.api.CuriosApi;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.Item;
 
-public class ExecutionAxe extends SwordItem {
+public class ExecutionAxe extends Item {
     public static final Map<Class<? extends LivingEntity>, ItemLike> SKULL_MAP = Map.of(
             Zombie.class, Items.ZOMBIE_HEAD,
             Skeleton.class, Items.SKELETON_SKULL,
@@ -62,7 +64,9 @@ public class ExecutionAxe extends SwordItem {
     public static ModConfigSpec.IntValue beheadingBonus;
 
     public ExecutionAxe() {
-        super(Tiers.NETHERITE, IItemHelper.properties().fireResistant().rarity(Rarity.UNCOMMON).attributes(createAttributes(Tiers.NETHERITE, 5.0F, -2.4F)));
+    // 26.1.2-port: SwordItem/Tier were removed; sword behaviour (tool rules, durability, repair,
+    // enchantability, 1 damage per hit) now comes from Item.Properties.sword(ToolMaterial, ...).
+        super(IItemHelper.properties().fireResistant().rarity(Rarity.UNCOMMON).sword(ToolMaterial.NETHERITE, 5.0F, -2.4F));
     }
 
     @SubscribeConfig

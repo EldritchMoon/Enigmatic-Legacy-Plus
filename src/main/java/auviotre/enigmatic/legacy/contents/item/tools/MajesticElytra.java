@@ -27,12 +27,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -53,7 +51,7 @@ public class MajesticElytra extends BaseElytraItem {
 
     public MajesticElytra() {
         super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.RARE).durability(3476));
-        DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
+        // 26.1.2-port: dispensers equip items with an equippable component automatically (was ArmorItem.DISPENSE_ITEM_BEHAVIOR).
     }
 
     @SubscribeConfig
@@ -112,22 +110,13 @@ public class MajesticElytra extends BaseElytraItem {
         if (context.entity() instanceof Player player && player.level().isClientSide()) handleBoosting(player);
         LivingEntity livingEntity = context.entity();
         int ticks = livingEntity.getFallFlyingTicks();
-        if (ticks > 0 && livingEntity.isFallFlying()) stack.elytraFlightTick(livingEntity, ticks);
+        if (ticks > 0 && livingEntity.isFallFlying()) this.elytraFlightTick(stack, livingEntity, ticks);
     }
 
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
-        if (entity instanceof LivingEntity livingEntity && !level.isClientSide()) {
-            if (livingEntity.getItemBySlot(EquipmentSlot.CHEST).is(this)) {
-                if (livingEntity instanceof Player player && player.level().isClientSide()) handleBoosting(player);
-                int ticks = livingEntity.getFallFlyingTicks();
-                if (ticks > 0 && livingEntity.isFallFlying()) stack.elytraFlightTick(livingEntity, ticks);
-            }
-        }
-    }
+    // 26.1.2-port: removed inventoryTick. It only ran the chest-slot flight tick, which vanilla now does
+    // through the GLIDER component (client boosting is checked in BaseElytraItem.Events).
 
-    public InteractionResult use(Level level, Player player, InteractionHand hand) {
-        return this.swapWithEquipmentSlot(this, level, player, hand);
-    }
+    // 26.1.2-port: removed use(); Item.use swaps items that have an equippable component.
 
     public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
         return repair.is(EnigmaticItems.ETHERIUM_INGOT);

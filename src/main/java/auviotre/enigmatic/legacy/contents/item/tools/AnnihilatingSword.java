@@ -45,7 +45,6 @@ import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
@@ -59,7 +58,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.IItemDecorator;
-import net.neoforged.neoforge.common.SimpleTier;
 import net.neoforged.neoforge.common.util.AttributeUtil;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
@@ -68,13 +66,21 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ToolMaterial;
+import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 
-public class AnnihilatingSword extends SwordItem {
-    private static final Tier TIER = new SimpleTier(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 3268, 10.8F, 8.0F, 64, () -> Ingredient.EMPTY);
+public class AnnihilatingSword extends Item {
+    // 26.1.2-port: SwordItem/Tier were removed; sword behaviour (tool rules, durability, repair,
+    // enchantability, 1 damage per hit) now comes from Item.Properties.sword(ToolMaterial, ...).
+    // The old tier repaired with Ingredient.EMPTY (nothing), so the repair tag is empty.
+    private static final ToolMaterial TIER = new ToolMaterial(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 3268, 10.8F, 8.0F, 64, EnigmaticTags.Items.NOT_REPAIRABLE);
 
     public AnnihilatingSword() {
-        super(TIER, IItemHelper.singleProperties().fireResistant().rarity(Rarity.EPIC).component(EnigmaticComponents.CURSED, true)
-                .component(EnigmaticComponents.ELDRITCH, true).component(EnigmaticComponents.ANNI_ENERGY, 0.0F));
+        super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.EPIC).component(EnigmaticComponents.CURSED, true)
+                .component(EnigmaticComponents.ELDRITCH, true).component(EnigmaticComponents.ANNI_ENERGY, 0.0F)
+                // Empty attribute component so getDefaultAttributeModifiers(ItemStack) below is still used (energy scaling).
+                .sword(TIER, 0.0F, 0.0F).attributes(ItemAttributeModifiers.EMPTY));
     }
 
     private static void parry(Level level, ItemStack stack, Player blocker, DamageSource source, float damage) {
@@ -253,10 +259,12 @@ public class AnnihilatingSword extends SwordItem {
         return InteractionResult.PASS;
     }
 
-    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int tick) {
+    // 26.1.2-port: releaseUsing returns whether the item was used (applies use-cooldown/remainder components).
+    public boolean releaseUsing(ItemStack stack, Level level, LivingEntity entity, int tick) {
         if (entity instanceof Player player && player.getOffhandItem().is(this)) {
             player.getCooldowns().addCooldown(this.getDefaultInstance(), 8);
         }
+        return false;
     }
 
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {

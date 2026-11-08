@@ -5,20 +5,14 @@ import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.packets.server.UpdateElytraBoostPacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
-import com.illusivesoulworks.caelus.api.CaelusApi;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ElytraItem;
-import net.minecraft.world.item.Equipable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.neoforged.api.distmarker.Dist;
@@ -36,15 +30,28 @@ import top.theillusivec4.curios.api.type.capability.ICurio;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
 import java.util.Optional;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.util.Unit;
+import net.minecraft.world.item.equipment.Equippable;
 
-public abstract class BaseElytraItem extends BaseCurioItem implements Equipable {
+// 26.1.2-port: the Equipable interface, ElytraItem and Caelus are gone. Chest-slot gliding comes from the vanilla
+// GLIDER + EQUIPPABLE components (vanilla also handles flight durability and glide events for the chest slot).
+// TODO(port): gliding from the Curios back slot needs a LivingEntity.canGlide mixin (phase 6).
+public abstract class BaseElytraItem extends BaseCurioItem {
     protected static final Identifier LOCATION = EnigmaticLegacy.location("elytra");
     protected static final AttributeModifier ELYTRA_MODIFIER = new AttributeModifier(LOCATION, 1.0, AttributeModifier.Operation.ADD_VALUE);
     @OnlyIn(Dist.CLIENT)
     private boolean isBoosting;
 
     public BaseElytraItem(Properties properties) {
-        super(properties);
+        super(properties.component(DataComponents.GLIDER, Unit.INSTANCE)
+                .component(DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.CHEST)
+                        .setEquipSound(SoundEvents.ARMOR_EQUIP_ELYTRA).setDamageOnHurt(false).build()));
+    }
+
+    /** 26.1.2-port: replaces ElytraItem.isFlyEnabled. */
+    public static boolean isFlyEnabled(ItemStack stack) {
+        return !stack.nextDamageWillBreak();
     }
 
     public static ItemStack getElytra(LivingEntity entity) {
@@ -70,6 +77,7 @@ public abstract class BaseElytraItem extends BaseCurioItem implements Equipable 
         } else if (isBoosting) PacketDistributor.sendToServer(new UpdateElytraBoostPacket(isBoosting = false));
     }
 
+    // 26.1.2-port: no longer a NeoForge hook; only called from curioTick for the Curios back slot.
     public boolean elytraFlightTick(ItemStack stack, @NotNull LivingEntity entity, int flightTicks) {
         if (!entity.level().isClientSide()) {
             int nextFlightTick = flightTicks + 1;
@@ -82,24 +90,12 @@ public abstract class BaseElytraItem extends BaseCurioItem implements Equipable 
         return true;
     }
 
-    public Holder<SoundEvent> getEquipSound() {
-        return SoundEvents.ARMOR_EQUIP_ELYTRA;
-    }
-
-    public EquipmentSlot getEquipmentSlot() {
-        return EquipmentSlot.CHEST;
-    }
-
     public EquipmentSlot getEquipmentSlot(ItemStack stack) {
         return EquipmentSlot.CHEST;
     }
 
     public ICurio.SoundInfo getEquipSound(SlotContext slotContext, ItemStack stack) {
         return new ICurio.SoundInfo(SoundEvents.ARMOR_EQUIP_ELYTRA.value(), 1F, 1F);
-    }
-
-    public boolean canElytraFly(ItemStack stack, LivingEntity entity) {
-        return true;
     }
 
     public boolean canEquip(SlotContext context, ItemStack stack) {
@@ -117,18 +113,9 @@ public abstract class BaseElytraItem extends BaseCurioItem implements Equipable 
         private static void onTick(PlayerTickEvent.@NotNull Pre event) {
             Player player = event.getEntity();
             EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);
-            ItemStack stack = ItemStack.EMPTY;
-            AttributeInstance attribute = player.getAttribute(CaelusApi.getInstance().getFallFlyingAttribute());
-            if (attribute != null) {
-                attribute.removeModifier(ELYTRA_MODIFIER);
-                if (!attribute.hasModifier(LOCATION)) {
-                    stack = getElytra(player);
-                    if (!stack.isEmpty() && ElytraItem.isFlyEnabled(stack)) {
-                        attribute.addTransientModifier(ELYTRA_MODIFIER);
-                    }
-                }
-            }
-            if (stack.isEmpty()) return;
+            // 26.1.2-port: the Caelus fall-flying attribute is gone; only the boost logic remains here.
+            ItemStack stack = getElytra(player);
+            if (stack.isEmpty() || !isFlyEnabled(stack)) return;
             BaseElytraItem elytra = (BaseElytraItem) stack.getItem();
             if (player instanceof ServerPlayer && data.isElytraBoosting()) {
                 elytra.flyingBoost(player);
@@ -144,6 +131,9 @@ public abstract class BaseElytraItem extends BaseCurioItem implements Equipable 
             Player player = event.getEntity();
             EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);
             ItemStack stack = getElytra(player);
+            // 26.1.2-port: elytraFlightTick no longer runs on the client for the chest slot, so check the jump key here.
+            if (player.level().isClientSide() && player.isFallFlying() && player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof BaseElytraItem chest)
+                chest.handleBoosting(player);
             if (player.level().isClientSide() && data.isElytraBoosting()) {
                 if (!player.isFallFlying()) {
                     if (player == Minecraft.getInstance().player)

@@ -39,6 +39,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.Brain;
@@ -465,8 +466,16 @@ public interface EnigmaticHandler {
         return DEBUFF_LIST.get(entity.getRandom().nextInt(DEBUFF_LIST.size()));
     }
 
+    /** 26.1.2-port: replaces LivingEntity.getArmorSlots(), which was removed (feet, legs, chest, head order). */
+    static List<ItemStack> getArmorSlots(LivingEntity entity) {
+        List<ItemStack> armor = new ArrayList<>(4);
+        for (EquipmentSlot slot : EquipmentSlot.VALUES)
+            if (slot.getType() == EquipmentSlot.Type.HUMANOID_ARMOR) armor.add(entity.getItemBySlot(slot));
+        return armor;
+    }
+
     static boolean hasNoArmor(LivingEntity entity) {
-        for (ItemStack armor : entity.getArmorSlots()) {
+        for (ItemStack armor : getArmorSlots(entity)) {
             if (!armor.isEmpty() && !armor.is(EnigmaticTags.Items.ARMOR_CHECK_EXCLUSION)) return false;
         }
         return true;

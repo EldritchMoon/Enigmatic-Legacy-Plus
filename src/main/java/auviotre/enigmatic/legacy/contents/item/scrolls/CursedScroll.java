@@ -63,7 +63,7 @@ public class CursedScroll extends CursedCurioItem {
 
     public static float getCurseAmount(LivingEntity entity) {
         AtomicInteger amount = new AtomicInteger();
-        for (ItemStack armor : entity.getArmorSlots()) amount.addAndGet(getItemCurseLevel(armor));
+        for (ItemStack armor : EnigmaticHandler.getArmorSlots(entity)) amount.addAndGet(getItemCurseLevel(armor));
         for (ItemStack hand : entity.getHandSlots()) amount.addAndGet(getItemCurseLevel(hand));
         CuriosApi.getCuriosInventory(entity).ifPresent(handler -> {
             IItemHandlerModifiable curios = handler.getEquippedCurios();

@@ -86,12 +86,12 @@ import org.spongepowered.include.com.google.common.collect.ImmutableMap;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.event.DropRulesEvent;
-import top.theillusivec4.curios.api.type.capability.ICurio;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import top.theillusivec4.curios.api.common.DropRule;
 
 public class CursedRing extends CursedCurioItem {
     public static final Multimap<Player, ItemLike> POSSESSIONS = ArrayListMultimap.create();
@@ -262,8 +262,8 @@ public class CursedRing extends CursedCurioItem {
         return builder.build();
     }
 
-    public ICurio.DropRule getDropRule(SlotContext context, DamageSource source, boolean recentlyHit, ItemStack stack) {
-        return ICurio.DropRule.ALWAYS_KEEP;
+    public DropRule getDropRule(SlotContext context, DamageSource source, boolean recentlyHit, ItemStack stack) {
+        return DropRule.ALWAYS_KEEP;
     }
 
     public boolean canEquip(SlotContext context, ItemStack stack) {
@@ -640,7 +640,7 @@ public class CursedRing extends CursedCurioItem {
                         }
 
                         if (confirmLavaPool) {
-                            event.addOverride(stack -> stack != null && stack.is(EnigmaticItems.CURSED_RING), ICurio.DropRule.DESTROY);
+                            event.addOverride(stack -> stack != null && stack.is(EnigmaticItems.CURSED_RING), DropRule.DESTROY);
                             SoulCrystal.setLostCrystals(player, SoulCrystal.getLostCrystals(player) + 1);
                             EnigmaticHandler.destroyCurio(player, EnigmaticItems.CURSED_RING);
                             player.level().playSound(null, player.blockPosition(), SoundEvents.WITHER_DEATH, SoundSource.PLAYERS, 1.0F, 0.5F);
@@ -652,7 +652,7 @@ public class CursedRing extends CursedCurioItem {
                 }
 
                 if (POSSESSIONS.containsEntry(player, EnigmaticItems.BLESS_STONE)) {
-                    event.addOverride(stack -> stack != null && stack.is(EnigmaticItems.CURSED_RING), ICurio.DropRule.DESTROY);
+                    event.addOverride(stack -> stack != null && stack.is(EnigmaticItems.CURSED_RING), DropRule.DESTROY);
                     player.level().playSound(null, player.blockPosition(), SoundEvents.WITHER_DEATH, SoundSource.PLAYERS, 1.0F, 0.5F);
                     EnigmaticHandler.getPersistedData(player).putBoolean("DestroyedCursedRing", true);
                     CuriosApi.getCuriosInventory(player).ifPresent(handler -> {

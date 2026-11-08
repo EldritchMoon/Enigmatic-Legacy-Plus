@@ -10,7 +10,6 @@ import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttributes;
 import auviotre.enigmatic.legacy.registries.EnigmaticEnchantments;
 import auviotre.enigmatic.legacy.registries.EnigmaticSounds;
-import com.google.common.base.Suppliers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -24,8 +23,9 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.entity.projectile.hurtingprojectile.AbstractHurtingProjectile;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
@@ -44,29 +44,31 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.function.Supplier;
 
-public class EtheriumArmor extends ArmorItem {
+// 26.1.2-port: ArmorItem was removed. Armor is a plain Item whose properties (humanoidArmor) add the
+// equippable, durability, repair and enchantability components.
+public class EtheriumArmor extends Item {
     public static ModConfigSpec.BooleanValue etheriumShieldRenderLayer;
     public static ModConfigSpec.BooleanValue etheriumShieldIcon;
     public static ModConfigSpec.IntValue iconOffsetX;
     public static ModConfigSpec.IntValue iconOffsetY;
-    private final Supplier<ItemAttributeModifiers> defaultModifiers;
 
-    public EtheriumArmor(Type type) {
-        super(EtheriumProperties.MATERIAL, type, IItemHelper.properties().fireResistant().durability(type.getDurability(132)));
-        this.defaultModifiers = Suppliers.memoize(() -> {
-            ArmorMaterial material = EtheriumProperties.MATERIAL.value();
-            int i = material.getDefense(type);
-            float f = material.toughness();
-            ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
-            EquipmentSlotGroup group = EquipmentSlotGroup.bySlot(type.getSlot());
-            Identifier location = Identifier.withDefaultNamespace("armor." + type.getName());
-            builder.add(Attributes.ARMOR, new AttributeModifier(location, i, AttributeModifier.Operation.ADD_VALUE), group);
-            builder.add(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(location, f, AttributeModifier.Operation.ADD_VALUE), group);
-            builder.add(EnigmaticAttributes.ETHERIUM_SHIELD, new AttributeModifier(location, 0.08F, AttributeModifier.Operation.ADD_VALUE), group);
-            return builder.build();
-        });
+    public EtheriumArmor(ArmorType type) {
+        super(IItemHelper.properties().fireResistant().humanoidArmor(EtheriumProperties.MATERIAL, type).attributes(createAttributes(type)));
+    }
+
+    // 26.1.2-port: was the memoized getDefaultAttributeModifiers(); now set once as the item's attribute component.
+    private static ItemAttributeModifiers createAttributes(ArmorType type) {
+        ArmorMaterial material = EtheriumProperties.MATERIAL;
+        int i = material.defense().getOrDefault(type, 0);
+        float f = material.toughness();
+        ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
+        EquipmentSlotGroup group = EquipmentSlotGroup.bySlot(type.getSlot());
+        Identifier location = Identifier.withDefaultNamespace("armor." + type.getName());
+        builder.add(Attributes.ARMOR, new AttributeModifier(location, i, AttributeModifier.Operation.ADD_VALUE), group);
+        builder.add(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(location, f, AttributeModifier.Operation.ADD_VALUE), group);
+        builder.add(EnigmaticAttributes.ETHERIUM_SHIELD, new AttributeModifier(location, 0.08F, AttributeModifier.Operation.ADD_VALUE), group);
+        return builder.build();
     }
 
     @SubscribeConfig(receiveClient = true)
@@ -90,10 +92,6 @@ public class EtheriumArmor extends ArmorItem {
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumArmorBuff");
         }
         if (stack.isEnchanted()) TooltipHandler.line(list);
-    }
-
-    public ItemAttributeModifiers getDefaultAttributeModifiers() {
-        return this.defaultModifiers.get();
     }
 
     @Mod(value = EnigmaticLegacy.MODID)
@@ -141,7 +139,7 @@ public class EtheriumArmor extends ArmorItem {
                     float modifier = (float) (0.9F - 0.4F * Math.sqrt(EtheriumProperties.getShieldThreshold(entity)));
 
                     int piece = 0, level = 0;
-                    for (ItemStack armor : entity.getArmorSlots()) {
+                    for (ItemStack armor : EnigmaticHandler.getArmorSlots(entity)) {
                         if (armor.getItem() instanceof EtheriumArmor) piece++;
                         var holder = EnigmaticHandler.get(entity.level(), Registries.ENCHANTMENT, EnigmaticEnchantments.ETHERIC_RESONANCE);
                         if (armor.getEnchantmentLevel(holder) > 0) level++;

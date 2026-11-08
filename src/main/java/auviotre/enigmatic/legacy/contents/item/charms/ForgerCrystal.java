@@ -37,6 +37,7 @@ import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
+import net.minecraft.tags.ItemTags;
 
 public class ForgerCrystal extends CursedCurioItem {
     public static ModConfigSpec.BooleanValue unbreakableRestriction;
@@ -99,6 +100,11 @@ public class ForgerCrystal extends CursedCurioItem {
             }
         }
 
+        private static boolean isToolOrArmor(ItemStack stack) {
+            return stack.is(ItemTags.SWORDS) || stack.is(ItemTags.AXES) || stack.is(ItemTags.PICKAXES) || stack.is(ItemTags.SHOVELS) || stack.is(ItemTags.HOES)
+                    || stack.is(ItemTags.HEAD_ARMOR) || stack.is(ItemTags.CHEST_ARMOR) || stack.is(ItemTags.LEG_ARMOR) || stack.is(ItemTags.FOOT_ARMOR);
+        }
+
         @SubscribeEvent
         private static void onAnvilUse(@NotNull AnvilUpdateEvent event) {
             Player player = event.getPlayer();
@@ -108,7 +114,8 @@ public class ForgerCrystal extends CursedCurioItem {
                 if (!left.isEmpty() && !right.isEmpty()) {
                     boolean check = left.isDamageableItem() && !left.has(DataComponents.UNBREAKABLE) && !right.has(DataComponents.UNBREAKABLE) && left.isRepairable();
                     if (check && unbreakableRestriction.get())
-                        check = (left.getItem() instanceof TieredItem || left.getItem() instanceof ArmorItem);
+                        // 26.1.2-port: TieredItem/ArmorItem were removed; tools, swords and armor are identified by tag.
+                        check = isToolOrArmor(left);
                     if (player.getAbilities().instabuild && left.isDamageableItem()) check = true;
                     if (left.is(right.getItem()) && check && left.getDamageValue() == 0 && right.getDamageValue() == 0 && !left.isEnchanted() && !right.isEnchanted()) {
                         ItemStack copy = left.copy();

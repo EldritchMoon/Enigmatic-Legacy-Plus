@@ -42,7 +42,6 @@ import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
@@ -54,6 +53,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
+import net.minecraft.tags.ItemTags;
 
 public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
     protected static final ImmutableList<SensorType<? extends Sensor<? super PiglinWanderer>>> SENSOR_TYPES = ImmutableList.of(
@@ -217,8 +217,8 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
                 piglin.getPersistentData().put("BackupItem", copy.save(piglin.registryAccess()));
                 piglin.setCharging(false);
             }
-            if (!target.closerThan(piglin, 9) && piglin.isHolding(is -> is.getItem() instanceof SwordItem)) {
-                InteractionHand hand = piglin.getMainHandItem().getItem() instanceof SwordItem ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+            if (!target.closerThan(piglin, 9) && piglin.isHolding(is -> is.is(ItemTags.SWORDS))) {
+                InteractionHand hand = piglin.getMainHandItem().is(ItemTags.SWORDS) ? /* 26.1.2-port: SwordItem -> swords tag */ InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
                 ItemStack copy = piglin.getItemInHand(hand).copy();
                 if (backup.isEmpty())
                     piglin.setItemSlot(EquipmentSlot.MAINHAND, EnigmaticItems.ICHOR_SPEAR.toStack());

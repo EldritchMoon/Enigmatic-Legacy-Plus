@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "enigmaticlegacyplus:etherium"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "enigmaticlegacyplus:etherium"
+      }
+    ]
+  }
+}

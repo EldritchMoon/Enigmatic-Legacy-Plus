@@ -35,10 +35,13 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import net.minecraft.world.item.Item;
 
-public class EtheriumSword extends SwordItem {
+public class EtheriumSword extends Item {
+    // 26.1.2-port: SwordItem/Tier were removed; sword behaviour (tool rules, durability, repair,
+    // enchantability, 1 damage per hit) now comes from Item.Properties.sword(ToolMaterial, ...).
     public EtheriumSword() {
-        super(EtheriumProperties.TIER, IItemHelper.properties().fireResistant().attributes(EtheriumProperties.createAttributes(6.0F, -2.6F, 0.04F)
+        super(IItemHelper.properties().fireResistant().sword(EtheriumProperties.TIER, 6.0F, -2.6F).attributes(EtheriumProperties.createAttributes(6.0F, -2.6F, 0.04F)
                 .withModifierAdded(Attributes.ENTITY_INTERACTION_RANGE, new AttributeModifier(AttributeUtil.BASE_ENTITY_REACH_ID, 1, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
         ));
     }

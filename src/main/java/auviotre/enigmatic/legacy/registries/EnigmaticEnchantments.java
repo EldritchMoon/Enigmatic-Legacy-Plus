@@ -51,7 +51,7 @@ import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.event.CurioAttributeModifierEvent;
 import top.theillusivec4.curios.api.event.CurioCanUnequipEvent;
 import top.theillusivec4.curios.api.event.DropRulesEvent;
-import top.theillusivec4.curios.api.type.capability.ICurio;
+import top.theillusivec4.curios.api.common.DropRule;
 
 public class EnigmaticEnchantments {
     public static final ResourceKey<Enchantment> SLAYER = key("slayer");
@@ -202,14 +202,14 @@ public class EnigmaticEnchantments {
                         Holder<Enchantment> holder = event.getEntity().registryAccess().holderOrThrow(ETERNAL_BINDING_CURSE);
                         return stack.is(EnigmaticItems.CURSED_RING) || stack.is(EnigmaticItems.REDEMPTION_RING) || stack.is(EnigmaticTags.Items.AMULETS)
                                 || EnchantmentHelper.getTagEnchantmentLevel(holder, stack) > 0;
-                    }, ICurio.DropRule.ALWAYS_KEEP
+                    }, DropRule.ALWAYS_KEEP
             );
             if (event.getEntity() instanceof Player player) {
                 if (CursedRing.POSSESSIONS.containsEntry(player, EnigmaticItems.ELDRITCH_AMULET) && EldritchAmulet.keepInventory.get()) {
                     event.addOverride(stack -> {
                         Holder<Enchantment> holder = event.getEntity().registryAccess().holderOrThrow(Enchantments.VANISHING_CURSE);
                         return EnchantmentHelper.getTagEnchantmentLevel(holder, stack) <= 0;
-                    }, ICurio.DropRule.ALWAYS_KEEP);
+                    }, DropRule.ALWAYS_KEEP);
                 }
             }
         }

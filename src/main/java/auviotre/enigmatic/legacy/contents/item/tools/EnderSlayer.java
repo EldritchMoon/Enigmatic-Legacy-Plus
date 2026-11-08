@@ -23,9 +23,7 @@ import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.EventPriority;
@@ -34,7 +32,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.neoforge.common.SimpleTier;
 import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
@@ -42,13 +39,19 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ToolMaterial;
+import net.neoforged.neoforge.common.Tags;
 
-public class EnderSlayer extends SwordItem {
-    public static final Tier TIER = new SimpleTier(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 1876, 8.5F, 3.5F, 12, () -> Ingredient.of(Blocks.OBSIDIAN));
+public class EnderSlayer extends Item {
+    // 26.1.2-port: SwordItem/Tier were removed; sword behaviour (tool rules, durability, repair,
+    // enchantability, 1 damage per hit) now comes from Item.Properties.sword(ToolMaterial, ...).
+    // Repair: c:obsidians/normal is plain obsidian, same as the old Ingredient.of(Blocks.OBSIDIAN).
+    public static final ToolMaterial TIER = new ToolMaterial(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 1876, 8.5F, 3.5F, 12, Tags.Items.OBSIDIANS_NORMAL);
     public static ModConfigSpec.IntValue specialDamageBoost;
 
     public EnderSlayer() {
-        super(TIER, IItemHelper.singleProperties().fireResistant().rarity(Rarity.RARE).component(EnigmaticComponents.CURSED, true).attributes(createAttributes(TIER, 3.5F, -2.6F)));
+        super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.RARE).component(EnigmaticComponents.CURSED, true).sword(TIER, 3.5F, -2.6F));
     }
 
     @SubscribeConfig

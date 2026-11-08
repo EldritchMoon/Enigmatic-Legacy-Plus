@@ -39,7 +39,6 @@ import net.minecraft.world.entity.projectile.hurtingprojectile.SmallFireball;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -57,6 +56,7 @@ import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.event.CurioCanEquipEvent;
 
 import java.util.function.Predicate;
+import net.minecraft.tags.ItemTags;
 
 @Mod(value = EnigmaticLegacy.MODID)
 @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
@@ -90,7 +90,7 @@ public class EnigmaticEventHandler {
                         skeleton.getPersistentData().put("BackupItem", copy.save(skeleton.registryAccess()));
                     }
                 } else {
-                    if (mainHandItem.getItem() instanceof SwordItem) {
+                    if (mainHandItem.is(ItemTags.SWORDS)) { // 26.1.2-port: SwordItem was removed; swords are identified by tag
                         ItemStack copy = skeleton.getMainHandItem().copy();
                         if (backup.isEmpty())
                             skeleton.setItemSlot(EquipmentSlot.MAINHAND, Items.BOW.getDefaultInstance());

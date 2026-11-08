@@ -20,7 +20,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -44,9 +43,10 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
-public class EtheriumHammer extends DiggerItem {
+// 26.1.2-port: DiggerItem was removed; Item.Properties.tool(...) adds the same tool/weapon components.
+public class EtheriumHammer extends Item {
     public EtheriumHammer() {
-        super(EtheriumProperties.TIER, EnigmaticTags.Blocks.ALL_MINEABLE, IItemHelper.properties().fireResistant().attributes(EtheriumProperties.createAttributes(9.0F, -3.0F, 0.03F)));
+        super(IItemHelper.properties().fireResistant().tool(EtheriumProperties.TIER, EnigmaticTags.Blocks.ALL_MINEABLE, 9.0F, -3.0F, 0.0F).attributes(EtheriumProperties.createAttributes(9.0F, -3.0F, 0.03F)));
     }
 
     @OnlyIn(Dist.CLIENT)

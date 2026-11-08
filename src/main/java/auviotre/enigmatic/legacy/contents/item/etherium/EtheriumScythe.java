@@ -12,13 +12,13 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -44,9 +44,11 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class EtheriumScythe extends HoeItem {
+// 26.1.2-port: extends Item instead of HoeItem. HoeItem's constructor applies Properties.hoe() last,
+// which would overwrite the Etherium attributes, so the hoe properties and tilling are done here.
+public class EtheriumScythe extends Item {
     public EtheriumScythe() {
-        super(EtheriumProperties.TIER, IItemHelper.properties().fireResistant().attributes(EtheriumProperties.createAttributes(3.0F, -2.0F, 0.04F)));
+        super(IItemHelper.properties().fireResistant().hoe(EtheriumProperties.TIER, 3.0F, -2.0F).attributes(EtheriumProperties.createAttributes(3.0F, -2.0F, 0.04F)));
     }
 
     public static Consumer<UseOnContext> changeIntoState(BlockState state, BlockPos pos) {
@@ -69,7 +71,7 @@ public class EtheriumScythe extends HoeItem {
     }
 
     public float getDestroySpeed(ItemStack stack, @NotNull BlockState state) {
-        if (state.is(BlockTags.SWORD_EFFICIENT)) return this.getTier().getSpeed();
+        if (state.is(BlockTags.SWORD_EFFICIENT)) return EtheriumProperties.TIER.speed();
         return super.getDestroySpeed(stack, state);
     }
 
@@ -104,7 +106,7 @@ public class EtheriumScythe extends HoeItem {
                 return InteractionResult.SUCCESS;
             }
         }
-        InteractionResult result = super.useOn(context);
+        InteractionResult result = till(context);
         if (result.consumesAction()) {
             for (BlockPos offset : BlockPos.betweenClosed(pos.offset(1, 1, 1), pos.offset(-1, -1, -1))) {
                 if (offset.equals(pos)) continue;
@@ -124,6 +126,21 @@ public class EtheriumScythe extends HoeItem {
             }
         }
         return result;
+    }
+
+    // 26.1.2-port: copy of HoeItem.useOn (tilling via the HOE_TILL tool action).
+    private static InteractionResult till(UseOnContext context) {
+        Level level = context.getLevel();
+        BlockPos pos = context.getClickedPos();
+        BlockState modifiedState = level.getBlockState(pos).getToolModifiedState(context, ItemAbilities.HOE_TILL, false);
+        if (modifiedState == null) return InteractionResult.PASS;
+        Player player = context.getPlayer();
+        level.playSound(player, pos, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 1.0F);
+        if (!level.isClientSide()) {
+            changeIntoState(modifiedState, pos).accept(context);
+            if (player != null) context.getItemInHand().hurtAndBreak(1, player, context.getHand().asEquipmentSlot());
+        }
+        return InteractionResult.SUCCESS;
     }
 
     private boolean tryHarvest(UseOnContext context, Level level, BlockPos pos) {

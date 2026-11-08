@@ -49,11 +49,13 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import net.minecraft.world.item.ToolMaterial;
 
 public class InfernalSpear extends BaseItem {
     public InfernalSpear() {
-        super(IItemHelper.singleProperties().fireResistant().durability(Tiers.NETHERITE.getUses())
-                .component(DataComponents.TOOL, SwordItem.createToolProperties())
+        // 26.1.2-port: Tiers -> ToolMaterial, SwordItem.createToolProperties() -> IItemHelper.swordTool().
+        super(IItemHelper.singleProperties().fireResistant().durability(ToolMaterial.NETHERITE.durability())
+                .component(DataComponents.TOOL, IItemHelper.swordTool())
                 .attributes(ItemAttributeModifiers.builder()
                         .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_ID, 5, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
                         .add(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_ID, -1.6, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)

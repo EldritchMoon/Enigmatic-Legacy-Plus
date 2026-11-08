@@ -25,6 +25,9 @@ public interface EnigmaticTags {
         TagKey<Item> ETERNAL_BINDING_ENCHANTABLE = register("enchantable/eternal_binding");
         TagKey<Item> ETHERIC_RESONANCE_ENCHANTABLE = register("enchantable/etheric_resonance");
         TagKey<Item> ABYSSAL_ITEMS = register("abyssal_items");
+        // 26.1.2-port: tool and armor materials take a repair tag instead of an Ingredient.
+        TagKey<Item> REPAIRS_ETHERIUM = register("repairs_etherium");
+        TagKey<Item> NOT_REPAIRABLE = register("not_repairable");
 
         private static TagKey<Item> register(String name) {
             return register(EnigmaticLegacy.MODID, name);

@@ -37,7 +37,6 @@ import net.minecraft.world.phys.HitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.neoforge.common.EffectCures;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -58,6 +57,11 @@ public class StarlightBucket extends Item {
         builder.pop(2);
     }
 
+    // 26.1.2-port: MilkBucketItem was removed (milk is a plain item with a consumable component).
+    private static boolean isMilk(Item content) {
+        return content.getDefaultInstance().is(Tags.Items.BUCKETS_MILK);
+    }
+
     private Item getContent(ItemStack stack) {
         return BuiltInRegistries.ITEM.getValue(Identifier.parse(stack.getOrDefault(EnigmaticComponents.CONTENT, "minecraft:air")));
     }
@@ -67,7 +71,7 @@ public class StarlightBucket extends Item {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.starlightBucket1");
         Component component = Component.translatable("tooltip.enigmaticlegacy.starlightBucketEmpty");
         Item content = getContent(stack);
-        if (content instanceof MilkBucketItem) {
+        if (isMilk(content)) {
             component = Component.translatable("fluid_type.minecraft.milk");
         } else if (content instanceof BucketItem bucket) {
             if (bucket.content != Fluids.EMPTY)
@@ -81,7 +85,7 @@ public class StarlightBucket extends Item {
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         Item content = getContent(stack);
-        if (content instanceof MilkBucketItem) return ItemUtils.startUsingInstantly(level, player, hand);
+        if (isMilk(content)) return ItemUtils.startUsingInstantly(level, player, hand);
         if (content instanceof BucketItem bucket) {
             BlockHitResult result = getPlayerPOVHitResult(level, player, bucket.content == Fluids.EMPTY ? ClipContext.Fluid.SOURCE_ONLY : ClipContext.Fluid.NONE);
             if (result.getType() == HitResult.Type.MISS) return InteractionResult.PASS;
@@ -136,21 +140,25 @@ public class StarlightBucket extends Item {
     }
 
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
-        if (getContent(stack) instanceof MilkBucketItem) {
+        if (isMilk(getContent(stack))) {
             if (entity instanceof ServerPlayer player) {
                 CriteriaTriggers.CONSUME_ITEM.trigger(player, stack);
                 player.awardStat(Stats.ITEM_USED.get(this));
             }
-            if (!level.isClientSide()) entity.removeEffectsCuredBy(EffectCures.MILK);
+            // 26.1.2-port: NeoForge removed EffectCures; vanilla milk now clears all effects.
+            if (!level.isClientSide()) entity.removeAllEffects();
         }
         return stack;
     }
 
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
-        return getContent(stack).getUseDuration(stack, entity);
+        // 26.1.2-port: use time comes from the content's consumable component, so ask with the content's own stack.
+        Item content = getContent(stack);
+        return content.getUseDuration(content.getDefaultInstance(), entity);
     }
 
     public ItemUseAnimation getUseAnimation(ItemStack stack) {
-        return getContent(stack).getUseAnimation(stack);
+        Item content = getContent(stack);
+        return content.getUseAnimation(content.getDefaultInstance());
     }
 }
