@@ -69,6 +69,12 @@ import java.util.List;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.entity.EquipmentSlot;
+import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.item.component.Weapon;
+import net.minecraft.core.component.DataComponents;
 
 public class AnnihilatingSword extends Item {
     // 26.1.2-port: SwordItem/Tier were removed; sword behaviour (tool rules, durability, repair,
@@ -80,7 +86,9 @@ public class AnnihilatingSword extends Item {
         super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.EPIC).component(EnigmaticComponents.CURSED, true)
                 .component(EnigmaticComponents.ELDRITCH, true).component(EnigmaticComponents.ANNI_ENERGY, 0.0F)
                 // Empty attribute component so getDefaultAttributeModifiers(ItemStack) below is still used (energy scaling).
-                .sword(TIER, 0.0F, 0.0F).attributes(ItemAttributeModifiers.EMPTY));
+                .sword(TIER, 0.0F, 0.0F).attributes(ItemAttributeModifiers.EMPTY)
+                // 26.1.2-port: canDisableShield -> weapon component; 5 s is the old shield-disable time.
+                .component(DataComponents.WEAPON, new Weapon(1, 5.0F)));
     }
 
     private static void parry(Level level, ItemStack stack, Player blocker, DamageSource source, float damage) {
@@ -203,7 +211,7 @@ public class AnnihilatingSword extends Item {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
             LocalPlayer player = Minecraft.getInstance().player;
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.annihilatingSword1");
@@ -236,7 +244,9 @@ public class AnnihilatingSword extends Item {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
+        // 26.1.2-port: inventoryTick is server-only and gets the equipment slot; MAINHAND = selected hotbar stack.
+        boolean isSelected = slot == EquipmentSlot.MAINHAND;
         if (entity instanceof LivingEntity livingEntity && !level.isClientSide()) {
             float timer = stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F);
             if ((isSelected || livingEntity.getOffhandItem().is(this)) && EnigmaticHandler.isTheWorthyOne(livingEntity))
@@ -318,11 +328,6 @@ public class AnnihilatingSword extends Item {
     @Override
     public ItemUseAnimation getUseAnimation(ItemStack stack) {
         return ItemUseAnimation.BLOCK;
-    }
-
-    @Override
-    public boolean canDisableShield(ItemStack stack, ItemStack shield, LivingEntity entity, LivingEntity attacker) {
-        return true;
     }
 
     @OnlyIn(Dist.CLIENT)

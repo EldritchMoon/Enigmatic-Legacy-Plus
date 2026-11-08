@@ -54,6 +54,11 @@ import top.theillusivec4.curios.api.SlotContext;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EquipmentSlot;
+import org.jetbrains.annotations.Nullable;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class EldritchAmulet extends BaseCurioItem {
     public static ModConfigSpec.IntValue attackDamage;
@@ -126,7 +131,7 @@ public class EldritchAmulet extends BaseCurioItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(@NotNull ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(@NotNull ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
         if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.eldritchAmulet1");
@@ -183,7 +188,9 @@ public class EldritchAmulet extends BaseCurioItem {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
+        // 26.1.2-port: inventoryTick is server-only and gets the equipment slot; MAINHAND = selected hotbar stack.
+        boolean isSelected = slot == EquipmentSlot.MAINHAND;
         if (entity instanceof LivingEntity livingEntity && !level.isClientSide()) {
             float timer = stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F);
             if (isSelected && EnigmaticHandler.isTheWorthyOne(livingEntity))

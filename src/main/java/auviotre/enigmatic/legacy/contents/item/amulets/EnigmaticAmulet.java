@@ -48,6 +48,8 @@ import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.event.CurioCanEquipEvent;
 
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class EnigmaticAmulet extends BaseCurioItem implements IAmulet {
     public static ModConfigSpec.DoubleValue attackDamage;
@@ -107,7 +109,7 @@ public class EnigmaticAmulet extends BaseCurioItem implements IAmulet {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(@NotNull ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(@NotNull ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
         if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticAmuletShift1");
@@ -134,7 +136,7 @@ public class EnigmaticAmulet extends BaseCurioItem implements IAmulet {
     }
 
     @OnlyIn(Dist.CLIENT)
-    protected void addAttributes(List<Component> list, ItemStack stack) {
+    protected void addAttributes(Consumer<Component> list, ItemStack stack) {
         TooltipHandler.line(list, "curios.modifiers.charm", ChatFormatting.GOLD);
         Color color = IAmulet.getAmulet(stack);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticAmuletModifier" + color, ChatFormatting.GOLD, IAmulet.getAttributeVar(color));

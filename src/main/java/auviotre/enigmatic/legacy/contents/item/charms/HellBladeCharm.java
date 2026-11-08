@@ -53,6 +53,10 @@ import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.entity.EquipmentSlot;
+import org.jetbrains.annotations.Nullable;
 
 public class HellBladeCharm extends BaseCurioItem {
     public static ModConfigSpec.IntValue attackDamage;
@@ -93,7 +97,7 @@ public class HellBladeCharm extends BaseCurioItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
         ItemStack curio = EnigmaticHandler.getCurio(Minecraft.getInstance().player, EnigmaticItems.HELL_BLADE_CHARM);
         if (curio == stack && !stack.getOrDefault(EnigmaticComponents.BOOLEAN, false)) {
@@ -110,18 +114,18 @@ public class HellBladeCharm extends BaseCurioItem {
     @Override
     @OnlyIn(Dist.CLIENT)
     public List<Component> getAttributesTooltip(List<Component> list, TooltipContext context, ItemStack stack) {
-        TooltipHandler.line(list);
-        TooltipHandler.line(list, "curios.modifiers.charm", ChatFormatting.GOLD);
+        TooltipHandler.line(list::add);
+        TooltipHandler.line(list::add, "curios.modifiers.charm", ChatFormatting.GOLD);
         float modifier = (int) (getModifier(Minecraft.getInstance().player) * 10) * 0.1F;
-        TooltipHandler.line(list, "attribute.modifier.plus.0", ChatFormatting.BLUE, modifier, Component.translatable("attribute.name.generic.attack_damage"));
-        TooltipHandler.line(list, "attribute.modifier.plus.1", ChatFormatting.BLUE, attackDamage.get(), Component.translatable("attribute.name.generic.attack_damage"));
-        TooltipHandler.line(list, "attribute.modifier.take.1", ChatFormatting.RED, armorDebuff.get(), Component.translatable("attribute.name.generic.armor"));
-        TooltipHandler.line(list, "attribute.modifier.take.1", ChatFormatting.RED, armorDebuff.get(), Component.translatable("attribute.name.generic.armor_toughness"));
+        TooltipHandler.line(list::add, "attribute.modifier.plus.0", ChatFormatting.BLUE, modifier, Component.translatable("attribute.name.generic.attack_damage"));
+        TooltipHandler.line(list::add, "attribute.modifier.plus.1", ChatFormatting.BLUE, attackDamage.get(), Component.translatable("attribute.name.generic.attack_damage"));
+        TooltipHandler.line(list::add, "attribute.modifier.take.1", ChatFormatting.RED, armorDebuff.get(), Component.translatable("attribute.name.generic.armor"));
+        TooltipHandler.line(list::add, "attribute.modifier.take.1", ChatFormatting.RED, armorDebuff.get(), Component.translatable("attribute.name.generic.armor_toughness"));
         return list;
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
         if (entity instanceof LivingEntity owner && stack.getOrDefault(EnigmaticComponents.BOOLEAN, false)) {
             if (stack != EnigmaticHandler.getCurio(owner, this)) stack.set(EnigmaticComponents.BOOLEAN, false);
         }

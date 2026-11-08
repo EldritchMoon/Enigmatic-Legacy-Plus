@@ -47,6 +47,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class AntiqueBag extends BaseItem {
     public static ModConfigSpec.ConfigValue<List<? extends String>> extraBookList;
@@ -85,7 +87,7 @@ public class AntiqueBag extends BaseItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.antiqueBag1");
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.antiqueBag2");
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.antiqueBag3");

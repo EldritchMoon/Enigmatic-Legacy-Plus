@@ -32,6 +32,8 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class IchorSpear extends BaseItem implements ProjectileItem {
     public static ModConfigSpec.IntValue baseDamage;
@@ -53,7 +55,7 @@ public class IchorSpear extends BaseItem implements ProjectileItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.ichorSpear");
             if (stack.getCount() == stack.getMaxStackSize())
@@ -62,7 +64,8 @@ public class IchorSpear extends BaseItem implements ProjectileItem {
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int tickCount) {
+    // 26.1.2-port: releaseUsing returns boolean (true applies use-cooldown/remainder components; EL+ has none).
+    public boolean releaseUsing(ItemStack stack, Level level, LivingEntity entity, int tickCount) {
         int duration = this.getUseDuration(stack, entity) - tickCount;
         if (duration >= 8) {
             if (!level.isClientSide()) {
@@ -85,6 +88,7 @@ public class IchorSpear extends BaseItem implements ProjectileItem {
                 player.swing(player.getUsedItemHand());
             }
         }
+        return false;
     }
 
     @Override
@@ -95,8 +99,8 @@ public class IchorSpear extends BaseItem implements ProjectileItem {
     }
 
     @Override
-    public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) {
-        return !player.isCreative();
+    public boolean canDestroyBlock(ItemStack stack, BlockState state, Level level, BlockPos pos, LivingEntity user) { // 26.1.2-port: was canAttackBlock
+        return !(user instanceof Player player && player.isCreative());
     }
 
     @Override

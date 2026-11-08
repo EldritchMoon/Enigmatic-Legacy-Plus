@@ -29,6 +29,8 @@ import net.neoforged.neoforge.event.ItemStackedOnOtherEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class BlessAmplifier extends BaseCursedItem {
     public BlessAmplifier() {
@@ -37,7 +39,7 @@ public class BlessAmplifier extends BaseCursedItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.blessAmplifier1");
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.blessAmplifier2");
         if (RedemptionRing.Helper.canUseRelic(Minecraft.getInstance().player)) {

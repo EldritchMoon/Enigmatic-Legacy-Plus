@@ -41,6 +41,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class VoidStone extends BaseItem {
     private static final List<String> DEFAULT_LIST = List.of(
@@ -79,7 +81,7 @@ public class VoidStone extends BaseItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.voidStone1");
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.voidStone2");
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.voidStone3");

@@ -30,6 +30,9 @@ import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
 
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.ItemInstance;
 
 public class TheJudgement extends Item {
     public static final double ATTACK_RADIUS = 64.0;
@@ -40,7 +43,7 @@ public class TheJudgement extends Item {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
             int mode = this.noDrops(stack) ? 1 : 0;
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theJudgement1");
@@ -55,8 +58,8 @@ public class TheJudgement extends Item {
     }
 
     @Override
-    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        if (attacker.level().isClientSide()) return false;
+    public void hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) { // 26.1.2-port: returns void now
+        if (attacker.level().isClientSide()) return;
         boolean player = attacker instanceof Player;
         AABB box = target.getBoundingBox().inflate(ATTACK_RADIUS);
         List<LivingEntity> targets = target.level().getEntitiesOfClass(LivingEntity.class, box, entity -> entity != attacker && entity != target && entity.distanceToSqr(target) < ATTACK_RADIUS * ATTACK_RADIUS);
@@ -66,12 +69,11 @@ public class TheJudgement extends Item {
             List<Entity> drops = target.level().getEntitiesOfClass(Entity.class, box, entity -> (entity instanceof ItemEntity || entity instanceof ExperienceOrb) && entity.distanceToSqr(target) < ATTACK_RADIUS * ATTACK_RADIUS);
             drops.forEach(Entity::kill);
         }
-        return false;
     }
 
     @Override
-    public boolean canPerformAction(ItemStack stack, ItemAbility itemAbility) {
-        return ItemAbilities.DEFAULT_SWORD_ACTIONS.contains(itemAbility);
+    public boolean canPerformAction(ItemInstance stack, ItemAbility itemAbility) { // 26.1.2-port: ItemStack -> ItemInstance
+        return itemAbility == ItemAbilities.SWORD_SWEEP; // 26.1.2-port: DEFAULT_SWORD_ACTIONS was just SWORD_SWEEP
     }
 
     @Override
@@ -86,8 +88,8 @@ public class TheJudgement extends Item {
     }
 
     @Override
-    public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) {
-        return !player.isCreative();
+    public boolean canDestroyBlock(ItemStack stack, BlockState state, Level level, BlockPos pos, LivingEntity user) { // 26.1.2-port: was canAttackBlock
+        return !(user instanceof Player player && player.isCreative());
     }
 
     @Override

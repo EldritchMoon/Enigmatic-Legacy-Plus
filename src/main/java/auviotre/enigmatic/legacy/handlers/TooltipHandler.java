@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public interface TooltipHandler {
     char[] UPPERCASE_LETTERS = "ABCDEFGHJKLMNOPQRSTUVWXYZ".toCharArray();
@@ -24,51 +25,51 @@ public interface TooltipHandler {
     char[] NUMBERS = "0123456789".toCharArray();
     char[] NORMAL_LETTERS = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdeghjmnopqrsuvwxyz+/\\-=$%^_".toCharArray();
 
-    static void line(List<Component> list) {
-        list.add(Component.empty());
+    static void line(Consumer<Component> list) {
+        list.accept(Component.empty());
     }
 
-    static void line(List<Component> list, String location) {
-        list.add(Component.translatable(location));
+    static void line(Consumer<Component> list, String location) {
+        list.accept(Component.translatable(location));
     }
 
-    static void line(List<Component> list, String location, Object... value) {
-        list.add(Component.translatable(location, value));
+    static void line(Consumer<Component> list, String location, Object... value) {
+        list.accept(Component.translatable(location, value));
     }
 
-    static void line(List<Component> list, String location, ChatFormatting format, Object... value) {
-        list.add(Component.translatable(location, value).withStyle(format));
+    static void line(Consumer<Component> list, String location, ChatFormatting format, Object... value) {
+        list.accept(Component.translatable(location, value).withStyle(format));
     }
 
-    static void holdShift(List<Component> list) {
-        list.add(Component.translatable("tooltip.enigmaticlegacy.holdShift"));
+    static void holdShift(Consumer<Component> list) {
+        list.accept(Component.translatable("tooltip.enigmaticlegacy.holdShift"));
     }
 
-    static void cursedOnly(List<Component> list, ItemStack stack) {
+    static void cursedOnly(Consumer<Component> list, ItemStack stack) {
         if (EnigmaticHandler.isBlessedItem(stack) && RedemptionRing.Helper.canUseRelic(Minecraft.getInstance().player) && RedemptionRing.uniqueLegacy.get()) {
-            list.add(Component.translatable("tooltip.enigmaticlegacy.blessOneAvailable1").withStyle(ChatFormatting.GOLD));
-            list.add(Component.translatable("tooltip.enigmaticlegacy.blessOneAvailable2").withStyle(ChatFormatting.GOLD));
+            list.accept(Component.translatable("tooltip.enigmaticlegacy.blessOneAvailable1").withStyle(ChatFormatting.GOLD));
+            list.accept(Component.translatable("tooltip.enigmaticlegacy.blessOneAvailable2").withStyle(ChatFormatting.GOLD));
         } else {
             ChatFormatting color = EnigmaticHandler.isTheCursedOne(Minecraft.getInstance().player) && CursedRing.uniqueLegacy.get() ? ChatFormatting.GOLD : ChatFormatting.DARK_RED;
-            list.add(Component.translatable("tooltip.enigmaticlegacy.cursedOnesOnly1").withStyle(color));
-            list.add(Component.translatable("tooltip.enigmaticlegacy.cursedOnesOnly2").withStyle(color));
+            list.accept(Component.translatable("tooltip.enigmaticlegacy.cursedOnesOnly1").withStyle(color));
+            list.accept(Component.translatable("tooltip.enigmaticlegacy.cursedOnesOnly2").withStyle(color));
         }
-        if (stack.isEnchanted()) list.add(Component.empty());
+        if (stack.isEnchanted()) list.accept(Component.empty());
     }
 
-    static void worthyOnly(List<Component> list, ItemStack stack) {
+    static void worthyOnly(Consumer<Component> list, ItemStack stack) {
         if (ClientHelper.hasShiftDown()) {
             Player player = Minecraft.getInstance().player;
             ChatFormatting color = player != null && EnigmaticHandler.isTheWorthyOne(player) ? ChatFormatting.GOLD : ChatFormatting.DARK_RED;
             double threshold = AbyssalHeart.abyssThreshold.get();
             if (!EnigmaticHandler.getCurio(player, EnigmaticItems.DIMNESS_CHARM).isEmpty() || stack.is(EnigmaticItems.DIMNESS_CHARM)) threshold = Math.clamp(2 * threshold - 1, 0, 0.999);
             Component percent = Component.literal(String.format("%.01f%%", 100 * threshold)).withStyle(ChatFormatting.GOLD);
-            list.add(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly1"));
-            list.add(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly2", percent));
-            list.add(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly3", percent));
-            list.add(Component.empty());
-            list.add(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly4").withStyle(color).append(Component.literal(EnigmaticHandler.getSufferingTime(player)).withStyle(ChatFormatting.LIGHT_PURPLE)));
-            if (stack.isEnchanted()) list.add(Component.empty());
+            list.accept(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly1"));
+            list.accept(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly2", percent));
+            list.accept(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly3", percent));
+            list.accept(Component.empty());
+            list.accept(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly4").withStyle(color).append(Component.literal(EnigmaticHandler.getSufferingTime(player)).withStyle(ChatFormatting.LIGHT_PURPLE)));
+            if (stack.isEnchanted()) list.accept(Component.empty());
         } else cursedOnly(list, stack);
     }
 
@@ -108,14 +109,14 @@ public interface TooltipHandler {
         return new String(newArray);
     }
 
-    static void obscure(List<Component> list, String location, RandomSource random) {
+    static void obscure(Consumer<Component> list, String location, RandomSource random) {
         MutableComponent component = Component.translatable(location);
-        list.add(Component.literal(obscureString(component.getString(), random)).withStyle(component.getStyle()));
+        list.accept(Component.literal(obscureString(component.getString(), random)).withStyle(component.getStyle()));
     }
 
-    static void obscure(List<Component> list, String location, RandomSource random, ChatFormatting format, Object... value) {
+    static void obscure(Consumer<Component> list, String location, RandomSource random, ChatFormatting format, Object... value) {
         MutableComponent component = Component.translatable(location, value).withStyle(format);
-        list.add(Component.literal(obscureString(component.getString(), random)).withStyle(component.getStyle()));
+        list.accept(Component.literal(obscureString(component.getString(), random)).withStyle(component.getStyle()));
     }
 
     private static boolean contains(char[] array, char ch) {

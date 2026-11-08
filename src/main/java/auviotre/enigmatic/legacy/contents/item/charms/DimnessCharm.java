@@ -20,6 +20,8 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class DimnessCharm extends CursedCurioItem {
     public DimnessCharm() {
@@ -32,7 +34,7 @@ public class DimnessCharm extends CursedCurioItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
         if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.curseAlteration", ChatFormatting.GOLD, Component.translatable("tooltip.enigmaticlegacy.thirdCurse"));
@@ -50,12 +52,12 @@ public class DimnessCharm extends CursedCurioItem {
             ChatFormatting color = player != null && canEquip(player) ? ChatFormatting.GOLD : ChatFormatting.DARK_RED;
             double rate = 200 * AbyssalHeart.abyssThreshold.get() - 100;
             Component percent = Component.literal(String.format("%.01f%%", Math.clamp(rate, 0.05, 99.9))).withStyle(ChatFormatting.GOLD);
-            list.add(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly1"));
-            list.add(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly2", percent));
-            list.add(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly3", percent));
-            list.add(Component.empty());
-            list.add(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly4").withStyle(color).append(Component.literal(EnigmaticHandler.getSufferingTime(player)).withStyle(ChatFormatting.LIGHT_PURPLE)));
-            if (stack.isEnchanted()) list.add(Component.empty());
+            list.accept(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly1"));
+            list.accept(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly2", percent));
+            list.accept(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly3", percent));
+            list.accept(Component.empty());
+            list.accept(Component.translatable("tooltip.enigmaticlegacy.worthyOnesOnly4").withStyle(color).append(Component.literal(EnigmaticHandler.getSufferingTime(player)).withStyle(ChatFormatting.LIGHT_PURPLE)));
+            if (stack.isEnchanted()) list.accept(Component.empty());
         } else TooltipHandler.cursedOnly(list, stack);
     }
 }

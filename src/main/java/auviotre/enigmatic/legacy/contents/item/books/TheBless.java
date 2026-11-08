@@ -41,6 +41,8 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class TheBless extends TheAcknowledgment {
     public static ModConfigSpec.DoubleValue damageBoostByFire;
@@ -59,7 +61,7 @@ public class TheBless extends TheAcknowledgment {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (ClientHelper.hasShiftDown()) {
             if (EnigmaticHandler.isTheCursedOne(player)) {
@@ -92,7 +94,7 @@ public class TheBless extends TheAcknowledgment {
     }
 
     @Override
-    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+    public void hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) { // 26.1.2-port: returns void now
         target.igniteForTicks(target.getRemainingFireTicks() + 80);
         if (attacker.getRandom().nextInt(5) == 0) {
             target.addEffect(new MobEffectInstance(EnigmaticEffects.ICHOR_CORROSION, 100), attacker);
@@ -102,7 +104,7 @@ public class TheBless extends TheAcknowledgment {
         for (MobEffectInstance effect : effects) {
             if (effect.getEffect().value().isBeneficial()) target.removeEffect(effect.getEffect());
         }
-        return super.hurtEnemy(stack, target, attacker);
+        super.hurtEnemy(stack, target, attacker);
     }
 
     @Override

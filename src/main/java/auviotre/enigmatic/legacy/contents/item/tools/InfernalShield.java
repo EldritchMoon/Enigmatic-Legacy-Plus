@@ -31,18 +31,38 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import net.minecraft.world.item.ToolMaterial;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.BlocksAttacks;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.sounds.SoundEvents;
+import java.util.Optional;
 
 public class InfernalShield extends BaseCursedItem {
     public InfernalShield() {
         // 26.1.2-port: Tiers -> ToolMaterial. Off-hand equippable like the vanilla shield; dispensers equip
         // items with an equippable component automatically, replacing ArmorItem.DISPENSE_ITEM_BEHAVIOR.
         super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.RARE).durability(ToolMaterial.NETHERITE.durability())
-                .equippableUnswappable(EquipmentSlot.OFFHAND));
+                .equippableUnswappable(EquipmentSlot.OFFHAND)
+                .repairable(Items.OBSIDIAN).enchantable(16) // 26.1.2-port: were isValidRepairItem/getEnchantmentValue
+                // 26.1.2-port: blocking is the blocks_attacks component now (was the SHIELD_BLOCK ability);
+                // these are the vanilla shield's values, matching 1.21.1 shield behaviour.
+                .delayedComponent(DataComponents.BLOCKS_ATTACKS, context -> new BlocksAttacks(
+                        0.25F, 1.0F,
+                        List.of(new BlocksAttacks.DamageReduction(90.0F, Optional.empty(), 0.0F, 1.0F)),
+                        new BlocksAttacks.ItemDamageFunction(3.0F, 1.0F, 1.0F),
+                        Optional.of(context.getOrThrow(DamageTypeTags.BYPASSES_SHIELD)),
+                        Optional.of(SoundEvents.SHIELD_BLOCK),
+                        Optional.of(SoundEvents.SHIELD_BREAK)))
+                .component(DataComponents.BREAK_SOUND, SoundEvents.SHIELD_BREAK));
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.infernalShield1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.infernalShield2");
@@ -60,7 +80,7 @@ public class InfernalShield extends BaseCursedItem {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
         if (entity instanceof LivingEntity living && living.isHolding(this)) entity.clearFire();
     }
 
@@ -74,15 +94,7 @@ public class InfernalShield extends BaseCursedItem {
         return InteractionResult.PASS;
     }
 
-    @Override
-    public boolean canPerformAction(ItemStack stack, ItemAbility itemAbility) {
-        return ItemAbilities.DEFAULT_SHIELD_ACTIONS.contains(itemAbility);
-    }
 
-    @Override
-    public boolean isValidRepairItem(ItemStack stack, ItemStack repairCandidate) {
-        return super.isValidRepairItem(stack, repairCandidate) || repairCandidate.is(Blocks.OBSIDIAN.asItem());
-    }
 
     public @Nullable EquipmentSlot getEquipmentSlot(ItemStack stack) {
         return EquipmentSlot.OFFHAND;
@@ -98,10 +110,6 @@ public class InfernalShield extends BaseCursedItem {
         return 32000;
     }
 
-    @Override
-    public int getEnchantmentValue(ItemStack stack) {
-        return 16;
-    }
 
     @Mod(value = EnigmaticLegacy.MODID)
     @EventBusSubscriber(modid = EnigmaticLegacy.MODID)

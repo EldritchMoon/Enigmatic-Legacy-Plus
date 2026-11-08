@@ -33,10 +33,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class DragonBreathBow extends ProjectileWeaponItem {
     public DragonBreathBow() {
-        super(IItemHelper.singleProperties().rarity(Rarity.RARE).durability(1574));
+        super(IItemHelper.singleProperties().rarity(Rarity.RARE).durability(1574).enchantable(16)); // 26.1.2-port: was getEnchantmentValue
     }
 
     public static float getPowerForTime(int tick) {
@@ -47,12 +49,13 @@ public class DragonBreathBow extends ProjectileWeaponItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(@NotNull ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(@NotNull ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
 //      TooltipHandler.line(list, "tooltip.enigmaticlegacy.dragonBreathBowAmmo", ChatFormatting.LIGHT_PURPLE, Items.DRAGON_BREATH.getDescription());
         PotionContents potioncontents = stack.get(DataComponents.POTION_CONTENTS);
         if (potioncontents != null) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.dragonBreathBowEffects");
-            potioncontents.addPotionTooltip(list::add, 1.0F, context.tickRate());
+            // 26.1.2-port: addPotionTooltip is static now and takes the effect list.
+            PotionContents.addPotionTooltip(potioncontents.getAllEffects(), list, 1.0F, context.tickRate());
         } else {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.dragonBreathBowNoEffects1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.dragonBreathBowNoEffects2");
@@ -72,18 +75,15 @@ public class DragonBreathBow extends ProjectileWeaponItem {
         }
     }
 
-    @Override
-    public int getEnchantmentValue(ItemStack stack) {
-        return 16;
-    }
 
     @Override
-    public void releaseUsing(ItemStack stack, Level level, LivingEntity entityLiving, int timeLeft) {
+    // 26.1.2-port: releaseUsing returns boolean (true applies use-cooldown/remainder components; EL+ has none).
+    public boolean releaseUsing(ItemStack stack, Level level, LivingEntity entityLiving, int timeLeft) {
         if (entityLiving instanceof Player player) {
             ItemStack projectile = Items.DRAGON_BREATH.getDefaultInstance();
             int tick = this.getUseDuration(stack, entityLiving) - timeLeft;
             tick = EventHooks.onArrowLoose(stack, level, player, tick, true);
-            if (tick < 0) return;
+            if (tick < 0) return false;
             float f = getPowerForTime(tick);
             if (f > 0.1F) {
                 List<ItemStack> list = List.of(projectile);
@@ -94,6 +94,7 @@ public class DragonBreathBow extends ProjectileWeaponItem {
                 player.awardStat(Stats.ITEM_USED.get(this));
             }
         }
+        return false;
     }
 
     @Override

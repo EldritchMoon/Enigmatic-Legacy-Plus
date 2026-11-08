@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class LootGenerator extends BaseItem {
     public static final List<ResourceKey<LootTable>> LOOT_LIST = new ArrayList<>();
@@ -53,7 +55,7 @@ public class LootGenerator extends BaseItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.lootGenerator1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.lootGenerator2");
@@ -70,7 +72,7 @@ public class LootGenerator extends BaseItem {
         TooltipHandler.line(list);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.lootGeneratorCurrent");
         ResourceKey<LootTable> key = LOOT_LIST.get(getLootTableIndex(stack));
-        list.add(Component.literal(key.location().toString()).withStyle(ChatFormatting.GOLD));
+        list.accept(Component.literal(key.location().toString()).withStyle(ChatFormatting.GOLD));
     }
 
     private int getLootTableIndex(ItemStack stack) {

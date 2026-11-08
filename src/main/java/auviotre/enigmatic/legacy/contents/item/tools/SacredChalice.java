@@ -25,6 +25,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class SacredChalice extends BaseCursedItem {
     public SacredChalice() {
@@ -34,7 +36,7 @@ public class SacredChalice extends BaseCursedItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         if (!stack.getOrDefault(EnigmaticComponents.BOOLEAN, false)) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.sacredChalice1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.sacredChalice2");

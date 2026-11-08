@@ -11,6 +11,8 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class CursedStone extends BaseCursedItem {
     public CursedStone() {
@@ -19,7 +21,7 @@ public class CursedStone extends BaseCursedItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedStone1");
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedStone2");
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedStone3");

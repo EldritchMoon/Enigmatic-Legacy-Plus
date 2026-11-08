@@ -48,6 +48,8 @@ import java.util.List;
 import java.util.Map;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.Item;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class ExecutionAxe extends Item {
     public static final Map<Class<? extends LivingEntity>, ItemLike> SKULL_MAP = Map.of(
@@ -87,7 +89,7 @@ public class ExecutionAxe extends Item {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.executionAxe1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.executionAxe2", ChatFormatting.GOLD, beheadingBonus.get() + "%");

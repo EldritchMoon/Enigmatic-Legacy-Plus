@@ -48,6 +48,8 @@ import top.theillusivec4.curios.api.SlotContext;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class BlazingCore extends SpellstoneItem {
     public static ModConfigSpec.DoubleValue damageFeedback;
@@ -69,7 +71,7 @@ public class BlazingCore extends SpellstoneItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
         if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneSkill");
@@ -92,7 +94,7 @@ public class BlazingCore extends SpellstoneItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addTuneTooltip(List<Component> list) {
+    public void addTuneTooltip(Consumer<Component> list) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.blazingCore1");
     }
 

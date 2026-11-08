@@ -44,6 +44,10 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EquipmentSlot;
 
 public class GuardianHeart extends BaseCursedItem {
     public static ModConfigSpec.IntValue cooldown;
@@ -89,7 +93,7 @@ public class GuardianHeart extends BaseCursedItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
         if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.guardianHeart1", ChatFormatting.GOLD, String.format("%.0f", effectiveRange.get()));
@@ -111,11 +115,18 @@ public class GuardianHeart extends BaseCursedItem {
         TooltipHandler.cursedOnly(list, stack);
     }
 
+    // 26.1.2-port: inventoryTick no longer gets the slot index, so look for this exact stack in the hotbar.
+    private static boolean isInHotbar(Player player, ItemStack stack) {
+        for (int i = 0; i < Inventory.getSelectionSize(); i++)
+            if (player.getInventory().getItem(i) == stack) return true;
+        return false;
+    }
+
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
         if (entity instanceof Player player && !level.isClientSide()) {
             List<Monster> monsters = player.level().getEntitiesOfClass(Monster.class, player.getBoundingBox().inflate(effectiveRange.get()));
-            if (EnigmaticHandler.isTheCursedOne(player) && Inventory.isHotbarSlot(slotId) && !player.getCooldowns().isOnCooldown(this.getDefaultInstance())) {
+            if (EnigmaticHandler.isTheCursedOne(player) && isInHotbar(player, stack) && !player.getCooldowns().isOnCooldown(this.getDefaultInstance())) {
                 Monster oneWatched = null;
                 for (Monster monster : monsters) {
                     if (doesObserveEntity(player, monster) && !monster.is(EnigmaticTags.EntityTypes.GUARDIAN_HEART_EXCLUDED)) {

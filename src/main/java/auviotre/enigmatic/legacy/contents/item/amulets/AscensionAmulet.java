@@ -21,6 +21,7 @@ import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class AscensionAmulet extends EnigmaticAmulet {
     public AscensionAmulet() {
@@ -29,7 +30,7 @@ public class AscensionAmulet extends EnigmaticAmulet {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    protected void addAttributes(List<Component> list, ItemStack stack) {
+    protected void addAttributes(Consumer<Component> list, ItemStack stack) {
         TooltipHandler.line(list, "curios.modifiers.amulet", ChatFormatting.GOLD);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.enchantersPearl1", ChatFormatting.GOLD, 1);
         for (Color color : Color.values()) {

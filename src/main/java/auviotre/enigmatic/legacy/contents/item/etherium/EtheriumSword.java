@@ -36,6 +36,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import net.minecraft.world.item.Item;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class EtheriumSword extends Item {
     // 26.1.2-port: SwordItem/Tier were removed; sword behaviour (tool rules, durability, repair,
@@ -48,7 +50,7 @@ public class EtheriumSword extends Item {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         double power = 10;
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {

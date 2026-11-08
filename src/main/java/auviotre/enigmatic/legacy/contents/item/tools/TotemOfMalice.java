@@ -39,6 +39,8 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class TotemOfMalice extends BaseCurioItem {
     public static ModConfigSpec.IntValue specialDamageBoost;
@@ -88,7 +90,7 @@ public class TotemOfMalice extends BaseCurioItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice2", ChatFormatting.GOLD, specialDamageBoost.get() + "%");

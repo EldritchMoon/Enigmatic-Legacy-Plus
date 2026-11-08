@@ -42,6 +42,8 @@ import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class StarlightBucket extends Item {
     public static ModConfigSpec.BooleanValue checkExtraContent;
@@ -68,7 +70,7 @@ public class StarlightBucket extends Item {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.starlightBucket1");
         Component component = Component.translatable("tooltip.enigmaticlegacy.starlightBucketEmpty");
         Item content = getContent(stack);

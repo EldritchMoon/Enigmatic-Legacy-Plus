@@ -78,7 +78,6 @@ public abstract class BaseElytraItem extends BaseCurioItem {
     }
 
     // 26.1.2-port: no longer a NeoForge hook; only called from curioTick for the Curios back slot.
-    @Override
     public boolean elytraFlightTick(ItemStack stack, @NotNull LivingEntity entity, int flightTicks) {
         if (!entity.level().isClientSide()) {
             int nextFlightTick = flightTicks + 1;

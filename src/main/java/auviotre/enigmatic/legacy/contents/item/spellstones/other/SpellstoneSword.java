@@ -93,12 +93,19 @@ import java.util.UUID;
 
 import static auviotre.enigmatic.legacy.registries.EnigmaticComponents.INT;
 import static auviotre.enigmatic.legacy.registries.EnigmaticComponents.SPELL_LEVEL;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemInstance;
+import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 
 public class SpellstoneSword extends Item {
     private static final float BASE_DAMAGE = 6.0F;
 
     public SpellstoneSword() {
-        super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.RARE).durability(999).component(SPELL_LEVEL, 0).component(INT, 0));
+        // 26.1.2-port: enchantability and repair item are components now (were getEnchantmentValue/isValidRepairItem).
+        super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.RARE).durability(999).component(SPELL_LEVEL, 0).component(INT, 0)
+                .enchantable(64).repairable(EnigmaticTags.Items.REPAIRS_SPELLSTONE_SWORD));
     }
 
     public static void parry(Level level, LivingEntity blocker, DamageSource source, float damage) {
@@ -285,7 +292,7 @@ public class SpellstoneSword extends Item {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         ItemStack resonance = getResonance(stack);
         int level = stack.getOrDefault(SPELL_LEVEL, 0);
         if (ClientHelper.hasShiftDown()) {
@@ -312,21 +319,18 @@ public class SpellstoneSword extends Item {
     }
 
     @Override
-    public String getDescriptionId(ItemStack stack) {
+    public Component getName(ItemStack stack) { // 26.1.2-port: getDescriptionId(ItemStack) was removed
         ItemStack resonance = getResonance(stack);
-        if (resonance.isEmpty()) return super.getDescriptionId();
-        return super.getDescriptionId() + "." + IItemHelper.getLocation(resonance.getItem()).getPath();
+        if (resonance.isEmpty()) return super.getName(stack);
+        return Component.translatable(this.getDescriptionId() + "." + IItemHelper.getLocation(resonance.getItem()).getPath());
     }
 
     @Override
-    public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) {
-        return !player.isCreative();
+    public boolean canDestroyBlock(ItemStack stack, BlockState state, Level level, BlockPos pos, LivingEntity user) { // 26.1.2-port: was canAttackBlock
+        return !(user instanceof Player player && player.isCreative());
     }
 
-    @Override
-    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        return true;
-    }
+    // 26.1.2-port: removed hurtEnemy (it only returned true; it returns void now).
 
     @Override
     public void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
@@ -352,7 +356,9 @@ public class SpellstoneSword extends Item {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
+        // 26.1.2-port: inventoryTick is server-only and gets the equipment slot; MAINHAND = selected hotbar stack.
+        boolean isSelected = slot == EquipmentSlot.MAINHAND;
         if (isSelected && entity.getInBlockState().is(Blocks.BUBBLE_COLUMN) && isResonatingWith(stack, EnigmaticItems.OCEAN_STONE) && entity.tickCount % 4 == 0 && stack.getOrDefault(SPELL_LEVEL, 0) > 4) {
             stack.set(INT, Math.min(getMaxEnergy(stack), stack.getOrDefault(INT, 0) + 2));
         }
@@ -511,7 +517,8 @@ public class SpellstoneSword extends Item {
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, Level level, LivingEntity user, int remainingDuration) {
+    // 26.1.2-port: releaseUsing returns boolean (true applies use-cooldown/remainder components; EL+ has none).
+    public boolean releaseUsing(ItemStack stack, Level level, LivingEntity user, int remainingDuration) {
         InteractionHand hand = user.getUsedItemHand();
         int tick = stack.getUseDuration(user) - remainingDuration;
         if (hand == InteractionHand.MAIN_HAND && stack.is(this)) {
@@ -592,6 +599,7 @@ public class SpellstoneSword extends Item {
                     level.playSound(user, user.blockPosition(), SoundEvents.PLAYER_TELEPORT, SoundSource.PLAYERS, 0.6F, 0.25F);
             }
         }
+        return false;
     }
 
     @Override
@@ -677,22 +685,12 @@ public class SpellstoneSword extends Item {
     }
 
     @Override
-    public boolean canPerformAction(ItemStack stack, ItemAbility ability) {
-        if (ItemAbilities.DEFAULT_SWORD_ACTIONS.contains(ability)) return true;
-        if (isResonatingWith(stack, EnigmaticItems.VOID_PEARL))
-            return ItemAbilities.DEFAULT_SHIELD_ACTIONS.contains(ability);
-        return false;
+    public boolean canPerformAction(ItemInstance stack, ItemAbility ability) { // 26.1.2-port: ItemStack -> ItemInstance
+        // TODO(port): blocking with the Void Pearl resonance needs the blocks_attacks component (SHIELD_BLOCK is gone).
+        return ability == ItemAbilities.SWORD_SWEEP;
     }
 
-    @Override
-    public int getEnchantmentValue(ItemStack stack) {
-        return 64;
-    }
 
-    @Override
-    public boolean isValidRepairItem(ItemStack stack, ItemStack repairCandidate) {
-        return repairCandidate.is(EnigmaticItems.SPELLSTONE_DEBRIS);
-    }
 
     @Override
     public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access) {

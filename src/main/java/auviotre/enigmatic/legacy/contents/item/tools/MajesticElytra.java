@@ -45,12 +45,16 @@ import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
+import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 
 public class MajesticElytra extends BaseElytraItem {
     public static ModConfigSpec.IntValue resistanceModifier;
 
     public MajesticElytra() {
-        super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.RARE).durability(3476));
+        super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.RARE).durability(3476)
+                .repairable(EnigmaticTags.Items.REPAIRS_ETHERIUM).enchantable(24)); // 26.1.2-port: were isValidRepairItem/getEnchantmentValue
         // 26.1.2-port: dispensers equip items with an equippable component automatically (was ArmorItem.DISPENSE_ITEM_BEHAVIOR).
     }
 
@@ -63,7 +67,7 @@ public class MajesticElytra extends BaseElytraItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.majesticElytra1");
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.majesticElytra2");
@@ -106,10 +110,6 @@ public class MajesticElytra extends BaseElytraItem {
         }
     }
 
-    @Override
-    public int getEnchantmentValue(ItemStack stack) {
-        return 24;
-    }
 
     @Override
     public void curioTick(@NotNull SlotContext context, ItemStack stack) {
@@ -124,10 +124,6 @@ public class MajesticElytra extends BaseElytraItem {
 
     // 26.1.2-port: removed use(); Item.use swaps items that have an equippable component.
 
-    @Override
-    public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
-        return repair.is(EnigmaticItems.ETHERIUM_INGOT);
-    }
 
     @Mod(value = EnigmaticLegacy.MODID)
     @EventBusSubscriber(modid = EnigmaticLegacy.MODID)

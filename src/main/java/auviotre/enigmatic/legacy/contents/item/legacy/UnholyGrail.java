@@ -28,6 +28,9 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
+import auviotre.enigmatic.legacy.contents.item.generic.BaseDrinkableItem;
 
 public class UnholyGrail extends BaseItem {
     public UnholyGrail() {
@@ -36,7 +39,7 @@ public class UnholyGrail extends BaseItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.unholyGrail");
         } else TooltipHandler.holdShift(list);
@@ -75,14 +78,10 @@ public class UnholyGrail extends BaseItem {
         return InteractionResult.CONSUME;
     }
 
+    // 26.1.2-port: replaces getDrinkingSound/getEatingSound (see BaseDrinkableItem.onUseTick).
     @Override
-    public SoundEvent getDrinkingSound() {
-        return SoundEvents.HONEY_DRINK;
-    }
-
-    @Override
-    public SoundEvent getEatingSound() {
-        return SoundEvents.HONEY_DRINK;
+    public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingTicks) {
+        BaseDrinkableItem.playDrinkSound(entity, remainingTicks, this.getUseDuration(stack, entity), SoundEvents.HONEY_DRINK);
     }
 
     @Override

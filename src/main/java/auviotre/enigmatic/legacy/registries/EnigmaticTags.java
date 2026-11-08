@@ -28,6 +28,7 @@ public interface EnigmaticTags {
         // 26.1.2-port: tool and armor materials take a repair tag instead of an Ingredient.
         TagKey<Item> REPAIRS_ETHERIUM = register("repairs_etherium");
         TagKey<Item> NOT_REPAIRABLE = register("not_repairable");
+        TagKey<Item> REPAIRS_SPELLSTONE_SWORD = register("repairs_spellstone_sword");
 
         private static TagKey<Item> register(String name) {
             return register(EnigmaticLegacy.MODID, name);

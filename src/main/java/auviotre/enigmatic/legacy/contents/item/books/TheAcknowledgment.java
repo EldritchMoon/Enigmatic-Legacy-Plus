@@ -27,12 +27,15 @@ import vazkii.patchouli.common.item.PatchouliDataComponents;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class TheAcknowledgment extends Item implements IBagContent {
     private static final Identifier BOOK_ID = EnigmaticLegacy.location("the_acknowledgment");
 
     protected TheAcknowledgment(@NotNull Properties properties, float attackDamage, float attackSpeed) {
-        super(properties.attributes(IItemHelper.createAttributes(attackDamage, attackSpeed)).component(PatchouliDataComponents.BOOK, BOOK_ID));
+        // 26.1.2-port: enchantability is the enchantable component (was getEnchantmentValue/isEnchantable).
+        super(properties.attributes(IItemHelper.createAttributes(attackDamage, attackSpeed)).component(PatchouliDataComponents.BOOK, BOOK_ID).enchantable(24));
     }
 
     public TheAcknowledgment() {
@@ -49,7 +52,7 @@ public class TheAcknowledgment extends Item implements IBagContent {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.curseAlteration", ChatFormatting.GOLD, Component.translatable("tooltip.enigmaticlegacy.fourthCurse"));
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.fourthCurseAlteration2", ChatFormatting.GOLD, "20%");
@@ -64,9 +67,9 @@ public class TheAcknowledgment extends Item implements IBagContent {
 
     @Override
     public List<Component> getTooltipInBag(List<Component> list) {
-        TooltipHandler.line(list);
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.antiqueBagSlot");
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.theAcknowledgmentBag", ChatFormatting.GOLD, "8%");
+        TooltipHandler.line(list::add);
+        TooltipHandler.line(list::add, "tooltip.enigmaticlegacy.antiqueBagSlot");
+        TooltipHandler.line(list::add, "tooltip.enigmaticlegacy.theAcknowledgmentBag", ChatFormatting.GOLD, "8%");
         return list;
     }
 
@@ -79,18 +82,9 @@ public class TheAcknowledgment extends Item implements IBagContent {
     }
 
     @Override
-    public boolean hurtEnemy(ItemStack stack, @NotNull LivingEntity target, LivingEntity attacker) {
+    public void hurtEnemy(ItemStack stack, @NotNull LivingEntity target, LivingEntity attacker) { // 26.1.2-port: returns void now
         target.igniteForSeconds(4);
-        return super.hurtEnemy(stack, target, attacker);
+        super.hurtEnemy(stack, target, attacker);
     }
 
-    @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return true;
-    }
-
-    @Override
-    public int getEnchantmentValue(ItemStack stack) {
-        return 24;
-    }
 }

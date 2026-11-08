@@ -31,6 +31,8 @@ import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class XpScroll extends BaseCurioItem {
     public static ModConfigSpec.DoubleValue magneticRange;
@@ -83,7 +85,7 @@ public class XpScroll extends BaseCurioItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         MutableComponent modeComponent;
         if (!stack.getOrDefault(EnigmaticComponents.XP_SCROLL_ACTIVE, false))
             modeComponent = Component.translatable("tooltip.enigmaticlegacy.xpScrollDeactivated");

@@ -14,6 +14,8 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class EnderRing extends BaseCurioItem {
     public static ModConfigSpec.IntValue buttonOffsetX;
@@ -35,7 +37,7 @@ public class EnderRing extends BaseCurioItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.enderRing1");
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.enderRing2");

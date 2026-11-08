@@ -30,6 +30,8 @@ import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class BlessStone extends BaseCursedItem {
     public BlessStone() {
@@ -38,7 +40,7 @@ public class BlessStone extends BaseCursedItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.blessStone1");
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.blessStone2");
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.blessStone3");
@@ -49,8 +51,8 @@ public class BlessStone extends BaseCursedItem {
         }
         TooltipHandler.line(list);
         ChatFormatting color = EnigmaticHandler.isTheCursedOne(Minecraft.getInstance().player) ? ChatFormatting.GOLD : ChatFormatting.DARK_RED;
-        list.add(Component.translatable("tooltip.enigmaticlegacy.cursedOnesOnly1").withStyle(color));
-        list.add(Component.translatable("tooltip.enigmaticlegacy.cursedOnesOnly2").withStyle(color));
+        list.accept(Component.translatable("tooltip.enigmaticlegacy.cursedOnesOnly1").withStyle(color));
+        list.accept(Component.translatable("tooltip.enigmaticlegacy.cursedOnesOnly2").withStyle(color));
     }
 
     @Override

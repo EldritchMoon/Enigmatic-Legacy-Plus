@@ -35,6 +35,8 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class VoidTome extends BaseItem {
     public VoidTome() {
@@ -43,7 +45,7 @@ public class VoidTome extends BaseItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         if (!stack.getOrDefault(EnigmaticComponents.BOOLEAN, false)) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.voidTomeUse");
             TooltipHandler.line(list);

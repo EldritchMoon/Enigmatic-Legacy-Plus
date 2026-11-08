@@ -11,6 +11,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public abstract class SpellstoneItem extends BaseCurioItem implements ISpellstone {
     private final int tunerColor;
@@ -25,7 +26,7 @@ public abstract class SpellstoneItem extends BaseCurioItem implements ISpellston
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void addKeyText(List<Component> list) {
+    public void addKeyText(Consumer<Component> list) {
         try {
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.currentKeybind", ChatFormatting.LIGHT_PURPLE, KeyMapping.createNameSupplier("key.spellstoneAbility").get().getString().toUpperCase());
@@ -34,12 +35,9 @@ public abstract class SpellstoneItem extends BaseCurioItem implements ISpellston
     }
 
     @OnlyIn(Dist.CLIENT)
-    abstract public void addTuneTooltip(List<Component> list);
+    abstract public void addTuneTooltip(Consumer<Component> list);
 
-    @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return false;
-    }
+    // 26.1.2-port: removed isEnchantable() -> false; items without an enchantable component can't be enchanted.
 
     @Override
     public boolean canEquip(SlotContext context, ItemStack stack) {

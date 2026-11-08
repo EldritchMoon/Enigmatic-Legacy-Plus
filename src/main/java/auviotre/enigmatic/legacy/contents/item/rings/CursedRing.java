@@ -92,6 +92,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import top.theillusivec4.curios.api.common.DropRule;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.entity.EquipmentSlot;
 
 public class CursedRing extends CursedCurioItem {
     public static final Multimap<Player, ItemLike> POSSESSIONS = ArrayListMultimap.create();
@@ -155,7 +158,7 @@ public class CursedRing extends CursedCurioItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
         if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurses");
@@ -198,7 +201,7 @@ public class CursedRing extends CursedCurioItem {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
         if (entity instanceof LivingEntity livingEntity && autoEquip.get()) {
             if (livingEntity instanceof Player player && (player.isCreative() || player.isSpectator())) return;
             if (!EnigmaticHandler.hasCurio(livingEntity, this)) {

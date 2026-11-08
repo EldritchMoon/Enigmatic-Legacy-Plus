@@ -43,6 +43,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.ItemInstance;
 
 // 26.1.2-port: extends Item instead of HoeItem. HoeItem's constructor applies Properties.hoe() last,
 // which would overwrite the Etherium attributes, so the hoe properties and tilling are done here.
@@ -60,7 +62,7 @@ public class EtheriumScythe extends Item {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumScythe", ChatFormatting.GOLD, 3, 3);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumDisable");
         if (Minecraft.getInstance().level != null) {
@@ -174,7 +176,7 @@ public class EtheriumScythe extends Item {
     }
 
     @Override
-    public boolean canPerformAction(ItemStack stack, ItemAbility ability) {
+    public boolean canPerformAction(ItemInstance stack, ItemAbility ability) { // 26.1.2-port: ItemStack -> ItemInstance
         return ItemAbilities.DEFAULT_HOE_ACTIONS.contains(ability) || ability == ItemAbilities.SWORD_SWEEP;
     }
 }

@@ -57,6 +57,8 @@ import top.theillusivec4.curios.api.SlotContext;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class ChaosElytra extends BaseElytraItem {
     public static ModConfigSpec.IntValue specialDamageResistance;
@@ -65,7 +67,8 @@ public class ChaosElytra extends BaseElytraItem {
     public static ModConfigSpec.IntValue descendingCooldown;
 
     public ChaosElytra() {
-        super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.EPIC).durability(3248).component(EnigmaticComponents.ELDRITCH, true));
+        super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.EPIC).durability(3248).component(EnigmaticComponents.ELDRITCH, true)
+                .enchantable(21)); // 26.1.2-port: was getEnchantmentValue
         // 26.1.2-port: dispensers equip items with an equippable component automatically (was ArmorItem.DISPENSE_ITEM_BEHAVIOR).
     }
 
@@ -81,7 +84,7 @@ public class ChaosElytra extends BaseElytraItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
         if (ClientHelper.hasShiftDown()) {
             boolean boosted = EnigmaticHandler.isAbyssBoosted(Minecraft.getInstance().player);
@@ -108,10 +111,6 @@ public class ChaosElytra extends BaseElytraItem {
         return oldStack.getItem() != newStack.getItem();
     }
 
-    @Override
-    public int getEnchantmentValue(ItemStack stack) {
-        return 21;
-    }
 
     @Override
     protected boolean flyingBoost(@NotNull Player player) {

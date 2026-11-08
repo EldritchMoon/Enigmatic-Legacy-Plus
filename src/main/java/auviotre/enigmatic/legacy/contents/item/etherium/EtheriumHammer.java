@@ -42,6 +42,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 // 26.1.2-port: DiggerItem was removed; Item.Properties.tool(...) adds the same tool/weapon components.
 public class EtheriumHammer extends Item {
@@ -51,7 +53,7 @@ public class EtheriumHammer extends Item {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         if (!stack.getOrDefault(EnigmaticComponents.BOOLEAN, false)) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumHammer", ChatFormatting.GOLD, 3, 1);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumDisable");
@@ -76,11 +78,8 @@ public class EtheriumHammer extends Item {
         return super.use(level, player, hand);
     }
 
-    @Override
-    public boolean canPerformAction(ItemStack stack, ItemAbility ability) {
-        return ItemAbilities.DEFAULT_PICKAXE_ACTIONS.contains(ability) || ability == ItemAbilities.AXE_DIG
-                || ability == ItemAbilities.SHOVEL_DIG || ability == ItemAbilities.HOE_DIG || ability == ItemAbilities.SWORD_DIG;
-    }
+    // 26.1.2-port: removed canPerformAction. NeoForge dropped the *_DIG abilities; what the hammer can mine
+    // comes from its tool component (EnigmaticTags.Blocks.ALL_MINEABLE).
 
     @Override
     public void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {

@@ -17,6 +17,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class CurseTransposer extends EnchantmentTransposer {
     public CurseTransposer() {
@@ -25,7 +27,7 @@ public class CurseTransposer extends EnchantmentTransposer {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.curseTransposer1");
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.curseTransposer2");
         TooltipHandler.line(list);

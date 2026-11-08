@@ -15,6 +15,7 @@ import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.NotNull;
+import net.minecraft.util.Mth;
 
 public class BaseDrinkableItem extends BaseItem {
 
@@ -60,9 +61,16 @@ public class BaseDrinkableItem extends BaseItem {
         return ItemUseAnimation.DRINK;
     }
 
+    // 26.1.2-port: getEatingSound/getDrinkingSound were removed and vanilla only plays use sounds for items with a
+    // consumable component, so the drinking sound is played here on the same schedule as before.
     @Override
-    public SoundEvent getEatingSound() {
-        return SoundEvents.GENERIC_DRINK;
+    public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingTicks) {
+        playDrinkSound(entity, remainingTicks, this.getUseDuration(stack, entity), SoundEvents.GENERIC_DRINK);
+    }
+
+    public static void playDrinkSound(LivingEntity entity, int remainingTicks, int useDuration, SoundEvent sound) {
+        if (useDuration - remainingTicks > (int) (useDuration * 0.21875F) && remainingTicks % 4 == 0)
+            entity.playSound(sound, 0.5F, Mth.randomBetween(entity.getRandom(), 0.9F, 1.0F));
     }
 
     public boolean canDrink(Level level, Player player, ItemStack stack) {

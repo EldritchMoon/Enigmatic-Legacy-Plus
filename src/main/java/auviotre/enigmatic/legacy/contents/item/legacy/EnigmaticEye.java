@@ -58,6 +58,11 @@ import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EquipmentSlot;
+import org.jetbrains.annotations.Nullable;
 
 public class EnigmaticEye extends BaseCurioItem {
     public static ModConfigSpec.BooleanValue quoteSubtitles;
@@ -87,7 +92,7 @@ public class EnigmaticEye extends BaseCurioItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, @NotNull List<Component> list, @NotNull TooltipFlag flag) {
+    public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, TooltipDisplay display, Consumer<Component> list, @NotNull TooltipFlag flag) {
         if (!this.isDormant(stack)) TooltipHandler.line(list);
         if (ClientHelper.hasShiftDown()) {
             if (this.isDormant(stack)) {
@@ -132,7 +137,8 @@ public class EnigmaticEye extends BaseCurioItem {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, @NotNull Level level, @NotNull Entity entity, int slotId, boolean isSelected) {
+    // 26.1.2-port: inventoryTick is server-only now; the animation component still syncs to the client.
+    public void inventoryTick(ItemStack stack, @NotNull ServerLevel level, @NotNull Entity entity, @Nullable EquipmentSlot slot) {
         int animTicks = stack.getOrDefault(EnigmaticComponents.ACTIVATION_ANIMATION.get(), -1);
 
         if (animTicks > 0) {
@@ -150,7 +156,7 @@ public class EnigmaticEye extends BaseCurioItem {
             }
         }
 
-        super.inventoryTick(stack, level, entity, slotId, isSelected);
+        super.inventoryTick(stack, level, entity, slot);
     }
 
     @Override

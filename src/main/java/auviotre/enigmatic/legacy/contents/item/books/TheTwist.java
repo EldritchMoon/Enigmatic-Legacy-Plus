@@ -41,6 +41,8 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class TheTwist extends TheAcknowledgment {
     public static ModConfigSpec.IntValue specialDamageBoost;
@@ -67,7 +69,7 @@ public class TheTwist extends TheAcknowledgment {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.curseAlteration", ChatFormatting.GOLD, Component.translatable("tooltip.enigmaticlegacy.fourthCurse"));
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.fourthCurseAlteration");
@@ -86,9 +88,9 @@ public class TheTwist extends TheAcknowledgment {
 
     @Override
     public List<Component> getTooltipInBag(List<Component> list) {
-        TooltipHandler.line(list);
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.antiqueBagSlot");
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.theTwistBag1", ChatFormatting.GOLD, String.format("%d%%", specialDamageBoost.get() / 30));
+        TooltipHandler.line(list::add);
+        TooltipHandler.line(list::add, "tooltip.enigmaticlegacy.antiqueBagSlot");
+        TooltipHandler.line(list::add, "tooltip.enigmaticlegacy.theTwistBag1", ChatFormatting.GOLD, String.format("%d%%", specialDamageBoost.get() / 30));
         return list;
     }
 

@@ -28,6 +28,10 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.entity.EquipmentSlot;
+import org.jetbrains.annotations.Nullable;
 
 public class WormholePotion extends BaseDrinkableItem {
     public WormholePotion() {
@@ -57,7 +61,7 @@ public class WormholePotion extends BaseDrinkableItem {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
         if (stack.is(this)) {
             if (!stack.has(EnigmaticComponents.WORMHOLE_UUID))
                 stack.set(EnigmaticComponents.WORMHOLE_UUID, entity.getUUID().toString());
@@ -75,7 +79,7 @@ public class WormholePotion extends BaseDrinkableItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         if (stack.has(EnigmaticComponents.WORMHOLE_UUID)) {
             String string = stack.get(EnigmaticComponents.WORMHOLE_UUID);
             if (string == null) {

@@ -52,6 +52,11 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EquipmentSlot;
+import org.jetbrains.annotations.Nullable;
 
 public class TheInfinitum extends TheAcknowledgment implements IBagContent {
     public static ModConfigSpec.IntValue specialDamageBoost;
@@ -82,7 +87,9 @@ public class TheInfinitum extends TheAcknowledgment implements IBagContent {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
+        // 26.1.2-port: inventoryTick is server-only and gets the equipment slot; MAINHAND = selected hotbar stack.
+        boolean isSelected = slot == EquipmentSlot.MAINHAND;
         if (entity instanceof LivingEntity livingEntity && !level.isClientSide()) {
             float timer = stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F);
             if (isSelected && EnigmaticHandler.isTheWorthyOne(livingEntity))
@@ -97,7 +104,7 @@ public class TheInfinitum extends TheAcknowledgment implements IBagContent {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.curseAlteration", ChatFormatting.GOLD, Component.translatable("tooltip.enigmaticlegacy.fourthCurse"));
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.fourthCurseAlteration");
@@ -127,11 +134,11 @@ public class TheInfinitum extends TheAcknowledgment implements IBagContent {
 
     @Override
     public List<Component> getTooltipInBag(List<Component> list) {
-        TooltipHandler.line(list);
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.antiqueBagSlot");
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitumBag1", ChatFormatting.GOLD, "20%");
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitumBag2", ChatFormatting.GOLD, lifeSteal.get() + "%");
-        TooltipHandler.line(list, "tooltip.enigmaticlegacy.theTwistBag1", ChatFormatting.GOLD, String.format("%d%%", specialDamageBoost.get() / 10));
+        TooltipHandler.line(list::add);
+        TooltipHandler.line(list::add, "tooltip.enigmaticlegacy.antiqueBagSlot");
+        TooltipHandler.line(list::add, "tooltip.enigmaticlegacy.theInfinitumBag1", ChatFormatting.GOLD, "20%");
+        TooltipHandler.line(list::add, "tooltip.enigmaticlegacy.theInfinitumBag2", ChatFormatting.GOLD, lifeSteal.get() + "%");
+        TooltipHandler.line(list::add, "tooltip.enigmaticlegacy.theTwistBag1", ChatFormatting.GOLD, String.format("%d%%", specialDamageBoost.get() / 10));
         return list;
     }
 

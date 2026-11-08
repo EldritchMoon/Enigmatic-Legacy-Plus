@@ -43,6 +43,8 @@ import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class EtheriumCore extends SpellstoneItem {
     private static final String TAG_ID = "EtheriumCounterattack";
@@ -70,7 +72,7 @@ public class EtheriumCore extends SpellstoneItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
         boolean boost = stack.getOrDefault(EnigmaticComponents.BOOLEAN, false);
         if (ClientHelper.hasShiftDown()) {
@@ -128,7 +130,7 @@ public class EtheriumCore extends SpellstoneItem {
     }
 
     @Override
-    public void addTuneTooltip(List<Component> list) {
+    public void addTuneTooltip(Consumer<Component> list) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumCore4", ChatFormatting.GOLD, damageConversion.get() / 2 + "%");
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumCore5");
     }

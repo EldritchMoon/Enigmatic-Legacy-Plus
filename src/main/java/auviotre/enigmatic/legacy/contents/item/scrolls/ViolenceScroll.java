@@ -70,6 +70,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EquipmentSlot;
+import org.jetbrains.annotations.Nullable;
 
 public class ViolenceScroll extends BaseCurioItem {
     public static ModConfigSpec.IntValue attackSpeed;
@@ -97,14 +102,14 @@ public class ViolenceScroll extends BaseCurioItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
         int count = AbsorbedEnchants.getCount(stack);
         if (Screen.hasAltDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.violenceScrollList");
             for (String enchantment : AbsorbedEnchants.getEnchantments(stack)) {
                 MutableComponent component = Component.translatable(Util.makeDescriptionId("enchantment", Identifier.parse(enchantment)));
-                list.add(CommonComponents.space().append(component).withStyle(ChatFormatting.DARK_RED));
+                list.accept(CommonComponents.space().append(component).withStyle(ChatFormatting.DARK_RED));
             }
         } else if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.violenceScroll1");
@@ -185,7 +190,9 @@ public class ViolenceScroll extends BaseCurioItem {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
+        // 26.1.2-port: inventoryTick is server-only and gets the equipment slot; MAINHAND = selected hotbar stack.
+        boolean isSelected = slot == EquipmentSlot.MAINHAND;
         if (entity instanceof LivingEntity livingEntity && !level.isClientSide()) {
             float timer = stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F);
             if (isSelected && EnigmaticHandler.isTheWorthyOne(livingEntity))

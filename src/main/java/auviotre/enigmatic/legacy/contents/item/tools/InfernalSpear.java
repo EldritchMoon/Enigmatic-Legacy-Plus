@@ -50,11 +50,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import net.minecraft.world.item.ToolMaterial;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.Items;
 
 public class InfernalSpear extends BaseItem {
     public InfernalSpear() {
         // 26.1.2-port: Tiers -> ToolMaterial, SwordItem.createToolProperties() -> IItemHelper.swordTool().
         super(IItemHelper.singleProperties().fireResistant().durability(ToolMaterial.NETHERITE.durability())
+                .repairable(Items.NETHERITE_SCRAP).enchantable(24) // 26.1.2-port: were isValidRepairItem/getEnchantmentValue
                 .component(DataComponents.TOOL, IItemHelper.swordTool())
                 .attributes(ItemAttributeModifiers.builder()
                         .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_ID, 5, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
@@ -75,7 +79,7 @@ public class InfernalSpear extends BaseItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.infernalSpear1");
             TooltipHandler.line(list);
@@ -124,15 +128,7 @@ public class InfernalSpear extends BaseItem {
         return super.getAttackDamageBonus(target, damage, source);
     }
 
-    @Override
-    public boolean isValidRepairItem(ItemStack stack, ItemStack repairCandidate) {
-        return super.isValidRepairItem(stack, repairCandidate) || repairCandidate.is(Items.NETHERITE_SCRAP);
-    }
 
-    @Override
-    public int getEnchantmentValue(ItemStack stack) {
-        return 24;
-    }
 
     @Mod(value = EnigmaticLegacy.MODID)
     @EventBusSubscriber(modid = EnigmaticLegacy.MODID)

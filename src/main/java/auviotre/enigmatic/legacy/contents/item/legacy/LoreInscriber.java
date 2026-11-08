@@ -29,6 +29,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class LoreInscriber extends BaseItem {
     public LoreInscriber() {
@@ -37,7 +39,7 @@ public class LoreInscriber extends BaseItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.loreInscriber1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.loreInscriber2", ChatFormatting.GOLD, Component.translatable("item.enigmaticlegacyplus.lore_fragment"));
@@ -131,7 +133,7 @@ public class LoreInscriber extends BaseItem {
 
         @Override
         @OnlyIn(Dist.CLIENT)
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.loreFragment1", ChatFormatting.GOLD, Component.translatable("item.enigmaticlegacyplus.lore_inscriber"));
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.loreFragment2");

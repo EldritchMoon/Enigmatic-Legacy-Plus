@@ -25,6 +25,8 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
 
 public class AnimalGuidebook extends BaseItem {
     public AnimalGuidebook() {
@@ -33,7 +35,7 @@ public class AnimalGuidebook extends BaseItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.inInventory", ChatFormatting.GOLD);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.animalGuidebook1");
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.animalGuidebook2");

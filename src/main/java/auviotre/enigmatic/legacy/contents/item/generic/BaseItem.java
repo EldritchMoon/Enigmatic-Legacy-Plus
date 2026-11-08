@@ -20,6 +20,11 @@ import net.neoforged.neoforge.client.IItemDecorator;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EquipmentSlot;
+import org.jetbrains.annotations.Nullable;
 
 public class BaseItem extends Item {
     public BaseItem() {
@@ -39,12 +44,12 @@ public class BaseItem extends Item {
 
             @Override
             @OnlyIn(Dist.CLIENT)
-            public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-                list.add(Component.literal("Coming soon...").withStyle(ChatFormatting.GRAY));
+            public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
+                list.accept(Component.literal("Coming soon...").withStyle(ChatFormatting.GRAY));
             }
 
             @Override
-            public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+            public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
                 stack.shrink(1);
             }
         };
