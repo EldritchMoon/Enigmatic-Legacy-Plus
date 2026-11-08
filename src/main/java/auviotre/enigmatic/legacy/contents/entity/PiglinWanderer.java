@@ -54,6 +54,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 import net.minecraft.tags.ItemTags;
+import auviotre.enigmatic.legacy.handlers.SaveDataHelper;
 
 public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
     protected static final ImmutableList<SensorType<? extends Sensor<? super PiglinWanderer>>> SENSOR_TYPES = ImmutableList.of(
@@ -223,15 +224,15 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
             LivingEntity target = getAttackTarget(piglin);
             if (target == null) return;
             ItemStack backup = ItemStack.EMPTY;
-            if (!piglin.getPersistentData().getCompound("BackupItem").isEmpty())
-                backup = ItemStack.parseOptional(piglin.registryAccess(), piglin.getPersistentData().getCompound("BackupItem"));
+            if (!piglin.getPersistentData().getCompoundOrEmpty("BackupItem").isEmpty())
+                backup = SaveDataHelper.parseItem(piglin.registryAccess(), piglin.getPersistentData().getCompoundOrEmpty("BackupItem"));
             if (target.closerThan(piglin, 5) && piglin.isHolding(is -> is.getItem() instanceof IchorSpear)) {
                 InteractionHand hand = piglin.getMainHandItem().getItem() instanceof IchorSpear ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
                 ItemStack copy = piglin.getItemInHand(hand).copy();
                 if (backup.isEmpty())
                     piglin.setItemSlot(EquipmentSlot.MAINHAND, Items.GOLDEN_SWORD.getDefaultInstance());
                 else piglin.setItemSlot(EquipmentSlot.MAINHAND, backup.copy());
-                piglin.getPersistentData().put("BackupItem", copy.save(piglin.registryAccess()));
+                piglin.getPersistentData().put("BackupItem", SaveDataHelper.saveItem(piglin.registryAccess(), copy));
                 piglin.setCharging(false);
             }
             if (!target.closerThan(piglin, 9) && piglin.isHolding(is -> is.is(ItemTags.SWORDS))) {
@@ -240,7 +241,7 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
                 if (backup.isEmpty())
                     piglin.setItemSlot(EquipmentSlot.MAINHAND, EnigmaticItems.ICHOR_SPEAR.toStack());
                 else piglin.setItemSlot(EquipmentSlot.MAINHAND, backup.copy());
-                piglin.getPersistentData().put("BackupItem", copy.save(piglin.registryAccess()));
+                piglin.getPersistentData().put("BackupItem", SaveDataHelper.saveItem(piglin.registryAccess(), copy));
                 piglin.setCharging(false);
             }
             doStop(level, piglin, gameTime);

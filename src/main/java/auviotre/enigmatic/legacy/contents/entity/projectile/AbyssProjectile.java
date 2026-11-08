@@ -27,6 +27,9 @@ import net.neoforged.neoforge.event.EventHooks;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.core.UUIDUtil;
 
 public class AbyssProjectile extends Projectile implements ItemSupplier {
     private static final EntityDataAccessor<Float> ID_DAMAGE = SynchedEntityData.defineId(AbyssProjectile.class, EntityDataSerializers.FLOAT);
@@ -164,17 +167,18 @@ public class AbyssProjectile extends Projectile implements ItemSupplier {
         }
     }
 
+    // 26.1.2-port: entity save data goes through ValueOutput/ValueInput instead of CompoundTag (same keys).
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
-        if (this.targetUUID != null) tag.putUUID("TargetUUID", this.targetUUID);
+    public void addAdditionalSaveData(ValueOutput output) {
+        output.storeNullable("TargetUUID", UUIDUtil.CODEC, this.targetUUID);
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
-        if (tag.hasUUID("TargetUUID")) {
-            this.targetUUID = tag.getUUID("TargetUUID");
+    public void readAdditionalSaveData(ValueInput input) {
+        input.read("TargetUUID", UUIDUtil.CODEC).ifPresent(uuid -> {
+            this.targetUUID = uuid;
             this.cachedTarget = null;
-        }
+        });
     }
 
     @Override

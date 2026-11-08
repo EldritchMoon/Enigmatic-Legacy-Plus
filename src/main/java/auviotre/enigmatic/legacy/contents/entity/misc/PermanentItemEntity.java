@@ -50,6 +50,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.core.UUIDUtil;
+import com.mojang.serialization.Codec;
+import java.util.HashMap;
+import java.util.Optional;
 
 public class PermanentItemEntity extends Entity {
     private static final EntityDataAccessor<ItemStack> ITEM = SynchedEntityData.defineId(PermanentItemEntity.class, EntityDataSerializers.ITEM_STACK);
@@ -218,77 +224,69 @@ public class PermanentItemEntity extends Entity {
         super.remove(reason);
     }
 
+    // 26.1.2-port: entity save data goes through ValueOutput/ValueInput instead of CompoundTag (same keys).
     @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        compound.putShort("Health", (short) this.health);
-        compound.putShort("Age", (short) this.age);
-        compound.putShort("PickupDelay", (short) this.pickupDelay);
-        if (this.getThrowerId() != null) compound.putUUID("Thrower", this.getThrowerId());
-        if (this.getOwnerId() != null) compound.putUUID("Owner", this.getOwnerId());
-        if (!this.getItem().isEmpty()) compound.put("Item", this.getItem().save(this.registryAccess()));
+    public void addAdditionalSaveData(ValueOutput output) {
+        output.putShort("Health", (short) this.health);
+        output.putShort("Age", (short) this.age);
+        output.putShort("PickupDelay", (short) this.pickupDelay);
+        output.storeNullable("Thrower", UUIDUtil.CODEC, this.getThrowerId());
+        output.storeNullable("Owner", UUIDUtil.CODEC, this.getOwnerId());
+        if (!this.getItem().isEmpty()) output.store("Item", ItemStack.CODEC, this.getItem());
         if (this.position != null) {
-            compound.putDouble("BoundX", this.position.x);
-            compound.putDouble("BoundY", this.position.y);
-            compound.putDouble("BoundZ", this.position.z);
+            output.putDouble("BoundX", this.position.x);
+            output.putDouble("BoundY", this.position.y);
+            output.putDouble("BoundZ", this.position.z);
         }
-        CompoundTag mapTag = new CompoundTag();
+        Map<String, ItemStack> map = new HashMap<>();
         if (restoreMap != null) {
             for (String key : restoreMap.keySet()) {
                 ItemStack item = restoreMap.get(key);
-                if (!item.isEmpty()) mapTag.put(key, item.save(this.registryAccess()));
+                if (!item.isEmpty()) map.put(key, item);
             }
         }
-        compound.put("restoreMap", mapTag);
+        output.store("restoreMap", RESTORE_MAP_CODEC, map);
 
-        CompoundTag acceptorTag = new CompoundTag();
+        Map<String, UUID> acceptorMap = new HashMap<>();
         int i = 0;
         if (acceptors != null) {
             for (UUID uuid : acceptors) {
-                if (uuid != null) acceptorTag.putUUID(String.valueOf(i++), uuid);
+                if (uuid != null) acceptorMap.put(String.valueOf(i++), uuid);
             }
         }
-        compound.put("acceptorSet", acceptorTag);
+        output.store("acceptorSet", ACCEPTORS_CODEC, acceptorMap);
     }
 
+    // Same NBT layout as the old CompoundTag code (a compound of key -> item / index -> UUID).
+    private static final Codec<Map<String, ItemStack>> RESTORE_MAP_CODEC = Codec.unboundedMap(Codec.STRING, ItemStack.CODEC);
+    private static final Codec<Map<String, UUID>> ACCEPTORS_CODEC = Codec.unboundedMap(Codec.STRING, UUIDUtil.CODEC);
+
     @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        this.health = compound.getShort("Health");
-        this.age = compound.getShort("Age");
-        if (compound.contains("PickupDelay")) this.pickupDelay = compound.getShort("PickupDelay");
+    public void readAdditionalSaveData(ValueInput input) {
+        this.health = input.getShortOr("Health", (short) 0);
+        this.age = input.getShortOr("Age", (short) 0);
+        input.read("PickupDelay", Codec.SHORT).ifPresent(delay -> this.pickupDelay = delay);
 
-        if (compound.contains("Owner")) this.owner = compound.getUUID("Owner");
+        input.read("Owner", UUIDUtil.CODEC).ifPresent(uuid -> this.owner = uuid);
 
-        if (compound.contains("Thrower")) this.thrower = compound.getUUID("Thrower");
+        input.read("Thrower", UUIDUtil.CODEC).ifPresent(uuid -> this.thrower = uuid);
 
-        if (compound.contains("BoundX") && compound.contains("BoundY") && compound.contains("BoundZ")) {
-            double x = compound.getDouble("BoundX");
-            double y = compound.getDouble("BoundY");
-            double z = compound.getDouble("BoundZ");
-            this.position = new Vec3(x, y, z);
-        }
+        Optional<Double> x = input.read("BoundX", Codec.DOUBLE);
+        Optional<Double> y = input.read("BoundY", Codec.DOUBLE);
+        Optional<Double> z = input.read("BoundZ", Codec.DOUBLE);
+        if (x.isPresent() && y.isPresent() && z.isPresent()) this.position = new Vec3(x.get(), y.get(), z.get());
 
         ImmutableMap.Builder<String, ItemStack> builder = ImmutableMap.builder();
-        CompoundTag mapTag = compound.getCompound("restoreMap");
-        for (String key : mapTag.getAllKeys()) {
-            ItemStack stack = ItemStack.parseOptional(this.registryAccess(), mapTag.getCompound(key));
+        input.read("restoreMap", RESTORE_MAP_CODEC).ifPresent(map -> map.forEach((key, stack) -> {
             if (!stack.isEmpty()) builder.put(key, stack);
-        }
+        }));
         this.restoreMap = builder.build();
 
-        Set<UUID> set = new HashSet<>();
-        CompoundTag acceptorTag = compound.getCompound("acceptorSet");
-        for (String key : acceptorTag.getAllKeys()) {
-            if (acceptorTag.hasUUID(key)) {
-                UUID tagUUID = acceptorTag.getUUID(key);
-                set.add(tagUUID);
-            }
-        }
-        this.acceptors = set;
+        this.acceptors = new HashSet<>(input.read("acceptorSet", ACCEPTORS_CODEC).map(Map::values).orElse(Set.of()));
 
-        if (compound.contains("Item", 10)) {
-            CompoundTag compoundtag = compound.getCompound("Item");
-            this.setItem(ItemStack.parseOptional(this.registryAccess(), compoundtag));
-        } else this.discard();
+        Optional<ItemStack> item = input.read("Item", ItemStack.CODEC);
+        if (item.isPresent()) this.setItem(item.get());
+        else this.discard();
         if (this.getItem().isEmpty()) this.discard();
     }
 

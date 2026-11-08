@@ -59,6 +59,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import org.jetbrains.annotations.Nullable;
 import java.util.function.Consumer;
 import net.minecraft.world.item.component.TooltipDisplay;
+import auviotre.enigmatic.legacy.handlers.SaveDataHelper;
 
 public class EldritchAmulet extends BaseCurioItem {
     public static ModConfigSpec.IntValue attackDamage;
@@ -95,7 +96,7 @@ public class EldritchAmulet extends BaseCurioItem {
                 ItemStack stack = value.get(i);
                 if (!stack.isEmpty() && !player.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) && EnchantmentHelper.has(stack, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP))
                     stack = ItemStack.EMPTY;
-                list.add(stack.saveOptional(player.registryAccess()));
+                list.add(SaveDataHelper.saveItem(player.registryAccess(), stack));
                 value.set(i, ItemStack.EMPTY);
             }
             tag.put("Inventory" + key, list);
@@ -115,7 +116,7 @@ public class EldritchAmulet extends BaseCurioItem {
                 if (maybeList instanceof ListTag list) {
                     for (int i = 0; i < value.size(); i++) {
                         CompoundTag stackTag = list.getCompoundOrEmpty(i);
-                        ItemStack stack = ItemStack.parseOptional(newPlayer.registryAccess(), stackTag);
+                        ItemStack stack = SaveDataHelper.parseItem(newPlayer.registryAccess(), stackTag);
                         value.set(i, stack);
                     }
                 }

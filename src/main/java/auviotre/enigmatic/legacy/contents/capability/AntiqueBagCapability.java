@@ -10,6 +10,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import auviotre.enigmatic.legacy.handlers.SaveDataHelper;
 
 public class AntiqueBagCapability implements IAntiqueBagHandler {
     public static final Identifier ID = EnigmaticLegacy.location("antique_bag_inventory");
@@ -63,11 +64,11 @@ public class AntiqueBagCapability implements IAntiqueBagHandler {
 
     @Override
     public Tag writeTag() {
-        return this.inventory.serializeNBT(this.owner.registryAccess());
+        return SaveDataHelper.toTag(this.owner.registryAccess(), this.inventory::serialize); // 26.1.2-port
     }
 
     @Override
     public void readTag(Tag nbt) {
-        this.inventory.deserializeNBT(this.owner.registryAccess(), (CompoundTag) nbt);
+        SaveDataHelper.fromTag(this.owner.registryAccess(), (CompoundTag) nbt, this.inventory::deserialize); // 26.1.2-port
     }
 }

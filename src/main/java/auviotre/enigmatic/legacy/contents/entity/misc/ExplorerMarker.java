@@ -17,6 +17,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.UUID;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.core.UUIDUtil;
 
 public class ExplorerMarker extends Entity implements OwnableEntity {
     protected static final EntityDataAccessor<Optional<UUID>> DATA_OWNER_UUID = SynchedEntityData.defineId(ExplorerMarker.class, EntityDataSerializers.OPTIONAL_UUID);
@@ -46,18 +49,14 @@ public class ExplorerMarker extends Entity implements OwnableEntity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag compoundTag) {
-        if (compoundTag.hasUUID("Owner")) {
-            UUID uuid = compoundTag.getUUID("Owner");
-            this.setOwnerUUID(uuid);
-        }
+    protected void readAdditionalSaveData(ValueInput input) {
+        input.read("Owner", UUIDUtil.CODEC).ifPresent(this::setOwnerUUID);
     }
 
+    // 26.1.2-port: entity save data goes through ValueOutput/ValueInput instead of CompoundTag (same keys).
     @Override
-    protected void addAdditionalSaveData(CompoundTag compoundTag) {
-        if (this.getOwnerUUID() != null) {
-            compoundTag.putUUID("Owner", this.getOwnerUUID());
-        }
+    protected void addAdditionalSaveData(ValueOutput output) {
+        output.storeNullable("Owner", UUIDUtil.CODEC, this.getOwnerUUID());
     }
 
     public @Nullable UUID getOwnerUUID() {

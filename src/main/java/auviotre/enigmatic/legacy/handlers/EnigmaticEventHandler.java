@@ -78,8 +78,8 @@ public class EnigmaticEventHandler {
             LivingEntity target = skeleton.getTarget();
             if (target != null) {
                 ItemStack backup = ItemStack.EMPTY;
-                if (!skeleton.getPersistentData().getCompound("BackupItem").isEmpty())
-                    backup = ItemStack.parseOptional(skeleton.registryAccess(), skeleton.getPersistentData().getCompound("BackupItem"));
+                if (!skeleton.getPersistentData().getCompoundOrEmpty("BackupItem").isEmpty())
+                    backup = SaveDataHelper.parseItem(skeleton.registryAccess(), skeleton.getPersistentData().getCompoundOrEmpty("BackupItem"));
                 ItemStack mainHandItem = skeleton.getMainHandItem();
                 if (skeleton.distanceToSqr(target.position().add(target.getDeltaMovement().scale(1.6))) <= 25) {
                     if (mainHandItem.getItem() instanceof BowItem) {
@@ -87,7 +87,7 @@ public class EnigmaticEventHandler {
                         if (backup.isEmpty())
                             skeleton.setItemSlot(EquipmentSlot.MAINHAND, Items.STONE_SWORD.getDefaultInstance());
                         else skeleton.setItemSlot(EquipmentSlot.MAINHAND, backup.copy());
-                        skeleton.getPersistentData().put("BackupItem", copy.save(skeleton.registryAccess()));
+                        skeleton.getPersistentData().put("BackupItem", SaveDataHelper.saveItem(skeleton.registryAccess(), copy));
                     }
                 } else {
                     if (mainHandItem.is(ItemTags.SWORDS)) { // 26.1.2-port: SwordItem was removed; swords are identified by tag
@@ -95,7 +95,7 @@ public class EnigmaticEventHandler {
                         if (backup.isEmpty())
                             skeleton.setItemSlot(EquipmentSlot.MAINHAND, Items.BOW.getDefaultInstance());
                         else skeleton.setItemSlot(EquipmentSlot.MAINHAND, backup.copy());
-                        skeleton.getPersistentData().put("BackupItem", copy.save(skeleton.registryAccess()));
+                        skeleton.getPersistentData().put("BackupItem", SaveDataHelper.saveItem(skeleton.registryAccess(), copy));
                     }
                 }
             }

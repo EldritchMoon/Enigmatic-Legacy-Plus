@@ -1,12 +1,10 @@
 package auviotre.enigmatic.legacy.contents.attachement;
 
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.neoforged.neoforge.common.util.INBTSerializable;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.UnknownNullability;
+import net.neoforged.neoforge.common.util.ValueIOSerializable;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
-public class IchorPermeation implements INBTSerializable<CompoundTag> {
+public class IchorPermeation implements ValueIOSerializable {
     private boolean infected = false;
 
     public boolean isInfected() {
@@ -17,22 +15,14 @@ public class IchorPermeation implements INBTSerializable<CompoundTag> {
         this.infected = infected;
     }
 
-    public CompoundTag save() {
-        CompoundTag tag = new CompoundTag();
-        tag.putBoolean("IchorPermeation", this.infected);
-        return tag;
-    }
-
-    public void load(@NotNull CompoundTag tag) {
-        this.infected = tag.getBoolean("IchorPermeation");
-    }
-
-    public @UnknownNullability CompoundTag serializeNBT(HolderLookup.Provider provider) {
-        return save();
+    // 26.1.2-port: ValueIOSerializable replaces INBTSerializable; same key as before.
+    @Override
+    public void serialize(ValueOutput output) {
+        output.putBoolean("IchorPermeation", this.infected);
     }
 
     @Override
-    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag tag) {
-        load(tag);
+    public void deserialize(ValueInput input) {
+        this.infected = input.getBooleanOr("IchorPermeation", false);
     }
 }

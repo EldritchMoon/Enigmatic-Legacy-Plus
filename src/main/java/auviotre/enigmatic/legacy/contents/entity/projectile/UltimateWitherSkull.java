@@ -30,6 +30,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 public class UltimateWitherSkull extends AbstractHurtingProjectile {
     private static final EntityDataAccessor<Boolean> DATA_DANGEROUS = SynchedEntityData.defineId(UltimateWitherSkull.class, EntityDataSerializers.BOOLEAN);
@@ -171,17 +173,18 @@ public class UltimateWitherSkull extends AbstractHurtingProjectile {
         return false;
     }
 
+    // 26.1.2-port: entity save data goes through ValueOutput/ValueInput instead of CompoundTag (same keys).
     @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putBoolean("dangerous", this.isDangerous());
-        compound.putInt("boundTargetID", this.entityData.get(UltimateWitherSkull.DATA_TARGET_ID));
+    public void addAdditionalSaveData(ValueOutput output) {
+        super.addAdditionalSaveData(output);
+        output.putBoolean("dangerous", this.isDangerous());
+        output.putInt("boundTargetID", this.entityData.get(UltimateWitherSkull.DATA_TARGET_ID));
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        this.setDangerous(compound.getBoolean("dangerous"));
-        this.entityData.set(UltimateWitherSkull.DATA_TARGET_ID, compound.getInt("boundTargetID"));
+    public void readAdditionalSaveData(ValueInput input) {
+        super.readAdditionalSaveData(input);
+        this.setDangerous(input.getBooleanOr("dangerous", false));
+        this.entityData.set(UltimateWitherSkull.DATA_TARGET_ID, input.getIntOr("boundTargetID", 0));
     }
 }

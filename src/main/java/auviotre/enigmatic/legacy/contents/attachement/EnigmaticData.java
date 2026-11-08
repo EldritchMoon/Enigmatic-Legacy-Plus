@@ -2,14 +2,17 @@ package auviotre.enigmatic.legacy.contents.attachement;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.common.util.ValueIOSerializable;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.core.UUIDUtil;
+import auviotre.enigmatic.legacy.handlers.SaveDataHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.UUID;
 
-public class EnigmaticData implements INBTSerializable<CompoundTag> {
+public class EnigmaticData implements ValueIOSerializable {
     private @Nullable UUID engineHook;
     private int spellstoneCooldown = 0;
     private boolean magnetRingEffect = false;
@@ -198,60 +201,59 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
         this.annihilationSweepData = new int[]{damage, tick, level};
     }
 
-    public CompoundTag save(HolderLookup.Provider provider) {
-        CompoundTag tag = new CompoundTag();
-        if (this.engineHook != null) {
-            tag.putUUID("EngineHook", engineHook);
-        }
-        tag.putBoolean("MagnetRingEffect", this.magnetRingEffect);
-        tag.putBoolean("UnlockedNarrator", this.unlockedNarrator);
-        tag.putBoolean("NebulaPower", this.nebulaPower);
-        tag.putBoolean("ElytraBoosting", this.isElytraBoosting);
-        tag.putBoolean("isForbiddenCursed", this.isForbiddenCursed);
-        tag.putBoolean("isThirstForbiddenCursed", this.isThirstForbiddenCursed);
-        tag.putInt("SpellstoneCooldown", this.spellstoneCooldown);
-        tag.putInt("FireImmunityTimer", this.fireImmunityTimer);
-        tag.putInt("FireImmunityTimerLast", this.fireImmunityTimerLast);
-        tag.putInt("InBeaconRangeTick", this.inBeaconRange);
-        tag.putInt("WitherKills", this.witherKills);
-        tag.putFloat("EtherealShield", this.etherealShield);
-        tag.putLong("EtheriumShieldTick", this.etheriumShieldTick);
-        tag.putLong("timeWithCurses", this.timeWithCurses);
-        tag.putLong("timeWithoutCurses", this.timeWithoutCurses);
-        tag.putInt("reviveCooldown", this.reviveCooldown);
-        tag.putInt("annihilatingTick", this.annihilatingTick);
-        tag.putIntArray("annihilationSweepData", this.annihilationSweepData);
-        return tag;
-    }
-
-    public void load(HolderLookup.Provider provider, @NotNull CompoundTag tag) {
-        if (tag.contains("EngineHook")) this.engineHook = tag.getUUID("EngineHook");
-        this.magnetRingEffect = tag.getBoolean("MagnetRingEffect");
-        this.unlockedNarrator = tag.getBoolean("UnlockedNarrator");
-        this.nebulaPower = tag.getBoolean("NebulaPower");
-        this.isElytraBoosting = tag.getBoolean("ElytraBoosting");
-        this.isForbiddenCursed = tag.getBoolean("isForbiddenCursed");
-        this.isThirstForbiddenCursed = tag.getBoolean("isThirstForbiddenCursed");
-        this.spellstoneCooldown = tag.getInt("SpellstoneCooldown");
-        this.fireImmunityTimer = tag.getInt("FireImmunityTimer");
-        this.fireImmunityTimerLast = tag.getInt("FireImmunityTimerLast");
-        this.inBeaconRange = tag.getInt("InBeaconRangeTick");
-        this.witherKills = tag.getInt("WitherKills");
-        this.etherealShield = tag.getFloat("EtherealShield");
-        this.etheriumShieldTick = tag.getLong("EtheriumShieldTick");
-        this.timeWithCurses = tag.getLong("timeWithCurses");
-        this.timeWithoutCurses = tag.getLong("timeWithoutCurses");
-        this.reviveCooldown = tag.getInt("reviveCooldown");
-        this.annihilatingTick = tag.getInt("annihilatingTick");
-        this.annihilationSweepData = tag.getIntArray("annihilationSweepData");
-    }
-
-    public @UnknownNullability CompoundTag serializeNBT(HolderLookup.Provider provider) {
-        return save(provider);
+    // 26.1.2-port: attachments serialize through ValueOutput/ValueInput (INBTSerializable was removed).
+    // Same keys as before. save/load keep a CompoundTag form for the sync packet.
+    @Override
+    public void serialize(ValueOutput output) {
+        output.storeNullable("EngineHook", UUIDUtil.CODEC, this.engineHook);
+        output.putBoolean("MagnetRingEffect", this.magnetRingEffect);
+        output.putBoolean("UnlockedNarrator", this.unlockedNarrator);
+        output.putBoolean("NebulaPower", this.nebulaPower);
+        output.putBoolean("ElytraBoosting", this.isElytraBoosting);
+        output.putBoolean("isForbiddenCursed", this.isForbiddenCursed);
+        output.putBoolean("isThirstForbiddenCursed", this.isThirstForbiddenCursed);
+        output.putInt("SpellstoneCooldown", this.spellstoneCooldown);
+        output.putInt("FireImmunityTimer", this.fireImmunityTimer);
+        output.putInt("FireImmunityTimerLast", this.fireImmunityTimerLast);
+        output.putInt("InBeaconRangeTick", this.inBeaconRange);
+        output.putInt("WitherKills", this.witherKills);
+        output.putFloat("EtherealShield", this.etherealShield);
+        output.putLong("EtheriumShieldTick", this.etheriumShieldTick);
+        output.putLong("timeWithCurses", this.timeWithCurses);
+        output.putLong("timeWithoutCurses", this.timeWithoutCurses);
+        output.putInt("reviveCooldown", this.reviveCooldown);
+        output.putInt("annihilatingTick", this.annihilatingTick);
+        output.putIntArray("annihilationSweepData", this.annihilationSweepData);
     }
 
     @Override
-    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag tag) {
-        load(provider, tag);
+    public void deserialize(ValueInput input) {
+        this.engineHook = input.read("EngineHook", UUIDUtil.CODEC).orElse(null);
+        this.magnetRingEffect = input.getBooleanOr("MagnetRingEffect", false);
+        this.unlockedNarrator = input.getBooleanOr("UnlockedNarrator", false);
+        this.nebulaPower = input.getBooleanOr("NebulaPower", false);
+        this.isElytraBoosting = input.getBooleanOr("ElytraBoosting", false);
+        this.isForbiddenCursed = input.getBooleanOr("isForbiddenCursed", false);
+        this.isThirstForbiddenCursed = input.getBooleanOr("isThirstForbiddenCursed", false);
+        this.spellstoneCooldown = input.getIntOr("SpellstoneCooldown", 0);
+        this.fireImmunityTimer = input.getIntOr("FireImmunityTimer", 0);
+        this.fireImmunityTimerLast = input.getIntOr("FireImmunityTimerLast", 0);
+        this.inBeaconRange = input.getIntOr("InBeaconRangeTick", 0);
+        this.witherKills = input.getIntOr("WitherKills", 0);
+        this.etherealShield = input.getFloatOr("EtherealShield", 0.0F);
+        this.etheriumShieldTick = input.getLongOr("EtheriumShieldTick", 0L);
+        this.timeWithCurses = input.getLongOr("timeWithCurses", 0L);
+        this.timeWithoutCurses = input.getLongOr("timeWithoutCurses", 0L);
+        this.reviveCooldown = input.getIntOr("reviveCooldown", 0);
+        this.annihilatingTick = input.getIntOr("annihilatingTick", 0);
+        this.annihilationSweepData = input.getIntArray("annihilationSweepData").orElse(new int[0]);
+    }
+
+    public CompoundTag save(HolderLookup.Provider provider) {
+        return SaveDataHelper.toTag(provider, this::serialize);
+    }
+
+    public void load(HolderLookup.Provider provider, @NotNull CompoundTag tag) {
+        SaveDataHelper.fromTag(provider, tag, this::deserialize);
     }
 }
