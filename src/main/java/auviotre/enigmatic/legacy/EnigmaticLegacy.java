@@ -19,7 +19,7 @@ import auviotre.enigmatic.legacy.proxy.ClientProxy;
 import auviotre.enigmatic.legacy.proxy.CommonProxy;
 import auviotre.enigmatic.legacy.registries.*;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.*;
 import net.minecraft.server.packs.repository.BuiltInPackSource;
 import net.minecraft.server.packs.repository.Pack;
@@ -103,8 +103,8 @@ public class EnigmaticLegacy {
         CompatHandler.getInstance().register(eventBus);
     }
 
-    public static ResourceLocation location(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MODID, path);
+    public static Identifier location(String path) {
+        return Identifier.fromNamespaceAndPath(MODID, path);
     }
 
     private void onClientSetup(final FMLClientSetupEvent event) {

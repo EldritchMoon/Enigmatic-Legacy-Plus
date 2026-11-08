@@ -121,7 +121,7 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
     public void aiStep() {
         if (this.isAlive()) {
             int attackTimer = this.getAttackTimer();
-            if (this.level().isClientSide) {
+            if (this.level().isClientSide()) {
                 this.clientAnimationTime0 = this.clientAnimationTime;
                 if (this.hasActiveAttackTarget()) {
                     if (this.clientAnimationTime < 30) this.clientAnimationTime += this.random.nextInt(3, 6);
@@ -138,7 +138,7 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
                 }
             }
             this.setAttackTimer(Math.min(64, attackTimer + 1));
-            if ((this.getOwner() == null || !this.getOwner().isAlive()) && !this.level().isClientSide) {
+            if ((this.getOwner() == null || !this.getOwner().isAlive()) && !this.level().isClientSide()) {
                 if (this.level() instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY(), this.getZ(), 1, 0, 0, 0, 0);
                 this.discard();
@@ -238,7 +238,7 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
     @Nullable
     public LivingEntity getActiveAttackTarget() {
         if (!this.hasActiveAttackTarget()) return null;
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
             if (this.clientSideCachedAttackTarget != null) {
                 return this.clientSideCachedAttackTarget;
             } else {

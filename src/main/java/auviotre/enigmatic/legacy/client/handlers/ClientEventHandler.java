@@ -26,13 +26,13 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.FogRenderer;
+import net.minecraft.client.renderer.fog.FogRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -46,7 +46,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
@@ -54,13 +54,13 @@ import org.jetbrains.annotations.NotNull;
 @Mod(value = EnigmaticLegacy.MODID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = EnigmaticLegacy.MODID, value = Dist.CLIENT)
 public class ClientEventHandler {
-    public static final ResourceLocation ETHEREAL_SHIELD_SPRITE = EnigmaticLegacy.location("hud/ethereal_shield");
-    public static final ResourceLocation ETHEREAL_SHIELD_HIGHLIGHT_SPRITE = EnigmaticLegacy.location("hud/ethereal_shield_highlight");
-    public static final ResourceLocation FORBIDDEN_FOOD_FULL_SPRITE = EnigmaticLegacy.location("hud/forbidden_food_full");
-    public static final ResourceLocation FORBIDDEN_FOOD_HALF_SPRITE = EnigmaticLegacy.location("hud/forbidden_food_half");
-    public static final ResourceLocation FORBIDDEN_FOOD_EMPTY_SPRITE = EnigmaticLegacy.location("hud/forbidden_food_empty");
-    public static final ResourceLocation LAVA_BAR_PROGRESS_SPRITE = EnigmaticLegacy.location("hud/lava_bar_progress");
-    public static final ResourceLocation LAVA_BAR_BACKGROUND_SPRITE = EnigmaticLegacy.location("hud/lava_bar_background");
+    public static final Identifier ETHEREAL_SHIELD_SPRITE = EnigmaticLegacy.location("hud/ethereal_shield");
+    public static final Identifier ETHEREAL_SHIELD_HIGHLIGHT_SPRITE = EnigmaticLegacy.location("hud/ethereal_shield_highlight");
+    public static final Identifier FORBIDDEN_FOOD_FULL_SPRITE = EnigmaticLegacy.location("hud/forbidden_food_full");
+    public static final Identifier FORBIDDEN_FOOD_HALF_SPRITE = EnigmaticLegacy.location("hud/forbidden_food_half");
+    public static final Identifier FORBIDDEN_FOOD_EMPTY_SPRITE = EnigmaticLegacy.location("hud/forbidden_food_empty");
+    public static final Identifier LAVA_BAR_PROGRESS_SPRITE = EnigmaticLegacy.location("hud/lava_bar_progress");
+    public static final Identifier LAVA_BAR_BACKGROUND_SPRITE = EnigmaticLegacy.location("hud/lava_bar_background");
     public static int darkenTick = 0;
     public static int darkenLastTick = 0;
     public static float violenceTimer = 0;
@@ -243,7 +243,7 @@ public class ClientEventHandler {
         Minecraft minecraft = Minecraft.getInstance();
         LocalPlayer player = minecraft.player;
         ItemStack spellstone = ISpellstone.get(player);
-        GuiGraphics guiGraphics = event.getGuiGraphics();
+        GuiGraphicsExtractor guiGraphics = event.getGuiGraphics();
         if (minecraft.options.hideGui) return;
         if (event.getName().equals(VanillaGuiLayers.AIR_LEVEL) && OceanStone.preventOxygenBarRender.get()) {
             if (Spelltuner.hasTune(player, EnigmaticItems.OCEAN_STONE) || spellstone.is(EnigmaticItems.OCEAN_STONE) || spellstone.is(EnigmaticItems.VOID_PEARL)) {

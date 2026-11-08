@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.charms;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.CursedCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
@@ -9,7 +10,7 @@ import com.google.common.collect.Multimap;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
@@ -31,7 +32,7 @@ public class EnchanterPearl extends CursedCurioItem {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.enchantersPearl1");
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.enchantersPearl2");
@@ -46,7 +47,7 @@ public class EnchanterPearl extends CursedCurioItem {
         TooltipHandler.cursedOnly(list, stack);
     }
 
-    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
+    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         if (EnigmaticHandler.canUse(context.entity(), stack))
             CuriosApi.addSlotModifier(attributes, "charm", IItemHelper.getLocation(this), 1.0, AttributeModifier.Operation.ADD_VALUE);

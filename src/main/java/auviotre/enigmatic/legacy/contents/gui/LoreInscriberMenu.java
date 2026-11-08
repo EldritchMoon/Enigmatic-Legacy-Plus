@@ -7,7 +7,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
@@ -43,7 +43,7 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
                 return 1;
             }
 
-            public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
+            public Pair<Identifier, Identifier> getNoItemIcon() {
                 return Pair.of(InventoryMenu.BLOCK_ATLAS, EnigmaticLegacy.location("slot/empty_lore_fragment_slot"));
             }
         });
@@ -59,7 +59,7 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
             public void onTake(Player thePlayer, ItemStack stack) {
                 this.setChanged();
                 LoreInscriberMenu.this.loreSlot.setItem(0, ItemStack.EMPTY);
-                if (!player.level().isClientSide)
+                if (!player.level().isClientSide())
                     player.level().playSound(null, player.blockPosition(), SoundEvents.ANVIL_USE, SoundSource.PLAYERS, 1.0F, 0.9F + player.getRandom().nextFloat() * 0.1F);
             }
         });

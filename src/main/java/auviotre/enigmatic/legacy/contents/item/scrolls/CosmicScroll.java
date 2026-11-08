@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.scrolls;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
@@ -17,7 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -66,7 +67,7 @@ public class CosmicScroll extends BaseCurioItem {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cosmicScroll1", ChatFormatting.GOLD, "100%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cosmicScroll2");
             TooltipHandler.line(list);
@@ -95,9 +96,9 @@ public class CosmicScroll extends BaseCurioItem {
         return super.canEquip(context, stack) && context.entity() instanceof Player;
     }
 
-    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
+    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
-        ResourceLocation location = IItemHelper.getLocation(this);
+        Identifier location = IItemHelper.getLocation(this);
         attributes.put(Attributes.LUCK, new AttributeModifier(location, 2.0, AttributeModifier.Operation.ADD_VALUE));
         attributes.put(EnigmaticAttributes.ETHERIUM_SHIELD, new AttributeModifier(location, 0.2, AttributeModifier.Operation.ADD_VALUE));
         return attributes;
@@ -115,9 +116,9 @@ public class CosmicScroll extends BaseCurioItem {
                 event.setCanceled(true);
                 entity.setHealth(entity.getMaxHealth() / 2);
                 entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 1200, 2));
-                entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 1200, 1));
+                entity.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 1200, 1));
                 entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 1200, 0));
-                entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 1200, 1));
+                entity.addEffect(new MobEffectInstance(MobEffects.STRENGTH, 1200, 1));
                 data.setReviveCooldown(cooldown.get());
             }
         }

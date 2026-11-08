@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
@@ -31,7 +31,7 @@ public class SoulFlameBallRenderer extends EntityRenderer<SoulFlameBall> {
         }
     }
 
-    public ResourceLocation getTextureLocation(SoulFlameBall entity) {
+    public Identifier getTextureLocation(SoulFlameBall entity) {
         return TextureAtlas.LOCATION_BLOCKS;
     }
 }

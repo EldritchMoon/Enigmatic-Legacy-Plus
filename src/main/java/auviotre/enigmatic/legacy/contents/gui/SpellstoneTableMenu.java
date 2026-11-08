@@ -7,7 +7,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
@@ -53,7 +53,7 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
                 return stack.is(EnigmaticItems.SPELLSTONE_DEBRIS);
             }
 
-            public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
+            public Pair<Identifier, Identifier> getNoItemIcon() {
                 return Pair.of(InventoryMenu.BLOCK_ATLAS, EnigmaticLegacy.location("slot/empty_spellstone_debris_slot"));
             }
         });
@@ -62,7 +62,7 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
                 return stack.is(EnigmaticTags.Items.SPELLSTONES);
             }
 
-            public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
+            public Pair<Identifier, Identifier> getNoItemIcon() {
                 return Pair.of(InventoryMenu.BLOCK_ATLAS, EnigmaticLegacy.location("slot/empty_spellstone_slot"));
             }
         });
@@ -71,7 +71,7 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
                 return stack.is(EnigmaticItems.SPELLCORE);
             }
 
-            public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
+            public Pair<Identifier, Identifier> getNoItemIcon() {
                 return Pair.of(InventoryMenu.BLOCK_ATLAS, EnigmaticLegacy.location("slot/empty_spellcore_slot"));
             }
         });

@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.amulets;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IAmulet;
@@ -19,7 +20,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.LivingEntity;
@@ -39,7 +40,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.NeoForgeMod;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.registries.DeferredItem;
 import org.jetbrains.annotations.NotNull;
@@ -105,7 +106,7 @@ public class EnigmaticAmulet extends BaseCurioItem implements IAmulet {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticAmuletShift1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticAmuletShift2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticAmuletShift3");
@@ -153,7 +154,7 @@ public class EnigmaticAmulet extends BaseCurioItem implements IAmulet {
 
     public Multimap<Holder<Attribute>, AttributeModifier> getModifiers(ItemStack amulet, LivingEntity entity) {
         Multimap<Holder<Attribute>, AttributeModifier> map = HashMultimap.create();
-        ResourceLocation location = IItemHelper.getLocation(this);
+        Identifier location = IItemHelper.getLocation(this);
         Color color = IAmulet.getAmulet(amulet);
         if (color == Color.RED) {
             map.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(location, attackDamage.get(), AttributeModifier.Operation.ADD_VALUE));
@@ -176,7 +177,7 @@ public class EnigmaticAmulet extends BaseCurioItem implements IAmulet {
 
     public Multimap<Holder<Attribute>, AttributeModifier> getAllModifiers(LivingEntity entity) {
         Multimap<Holder<Attribute>, AttributeModifier> map = HashMultimap.create();
-        ResourceLocation location = IItemHelper.getLocation(this);
+        Identifier location = IItemHelper.getLocation(this);
         map.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(location, attackDamage.get(), AttributeModifier.Operation.ADD_VALUE));
         map.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(location, entity.isSprinting() ? sprintingSpeed.get() * 0.01F : 0F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         map.put(EnigmaticAttributes.PROJECTILE_DEFLECT, new AttributeModifier(location, projectileDeflect.get() * 0.01F, AttributeModifier.Operation.ADD_VALUE));

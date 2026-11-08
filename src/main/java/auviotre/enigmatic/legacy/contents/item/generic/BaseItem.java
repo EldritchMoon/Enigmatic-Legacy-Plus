@@ -4,10 +4,10 @@ import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
@@ -49,9 +49,9 @@ public class BaseItem extends Item {
 
     @OnlyIn(Dist.CLIENT)
     public static class WIPDecorator implements IItemDecorator {
-        static final ResourceLocation SPRITE = EnigmaticLegacy.location("decorator/wip_warn");
+        static final Identifier SPRITE = EnigmaticLegacy.location("decorator/wip_warn");
 
-        public boolean render(@NotNull GuiGraphics graphics, Font font, @NotNull ItemStack stack, int x, int y) {
+        public boolean render(@NotNull GuiGraphicsExtractor graphics, Font font, @NotNull ItemStack stack, int x, int y) {
             graphics.pose().pushPose();
             graphics.blitSprite(SPRITE, x, y, 16, 16);
             graphics.pose().popPose();
@@ -61,9 +61,9 @@ public class BaseItem extends Item {
 
     @OnlyIn(Dist.CLIENT)
     public static class UnknownDecorator implements IItemDecorator {
-        static final ResourceLocation SPRITE = EnigmaticLegacy.location("decorator/unknown");
+        static final Identifier SPRITE = EnigmaticLegacy.location("decorator/unknown");
 
-        public boolean render(@NotNull GuiGraphics graphics, Font font, @NotNull ItemStack stack, int x, int y) {
+        public boolean render(@NotNull GuiGraphicsExtractor graphics, Font font, @NotNull ItemStack stack, int x, int y) {
             graphics.pose().pushPose();
             graphics.blitSprite(SPRITE, x, y, 16, 16);
             graphics.pose().popPose();

@@ -12,7 +12,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -69,7 +69,7 @@ public class SoulCompass extends BaseCursedItem {
     public void registerVariants() {
         this.wobble = new CompassWobble(0.1);
         this.wobbleRandom = new CompassWobble(0.6);
-        ItemProperties.register(this, ResourceLocation.withDefaultNamespace("angle"), new ClampedItemPropertyFunction() {
+        ItemProperties.register(this, Identifier.withDefaultNamespace("angle"), new ClampedItemPropertyFunction() {
             private final CompassWobble wobble = SoulCompass.this.wobble;
             private final CompassWobble wobbleRandom = SoulCompass.this.wobbleRandom;
 
@@ -194,7 +194,7 @@ public class SoulCompass extends BaseCursedItem {
 
         @SubscribeEvent
         private static void onPlayerRespawn(PlayerEvent.@NotNull PlayerRespawnEvent event) {
-            if (!event.getEntity().level().isClientSide) {
+            if (!event.getEntity().level().isClientSide()) {
                 LAST_SOUL_COMPASS_UPDATE.remove(event.getEntity());
             }
         }

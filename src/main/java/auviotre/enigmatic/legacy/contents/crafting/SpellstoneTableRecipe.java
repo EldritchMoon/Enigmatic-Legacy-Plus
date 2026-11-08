@@ -11,7 +11,7 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -19,7 +19,7 @@ import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -234,11 +234,11 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
         }
 
         public void save(RecipeOutput recipeOutput) {
-            ResourceLocation location = BuiltInRegistries.ITEM.getKey(this.getResult());
-            this.save(recipeOutput, ResourceLocation.fromNamespaceAndPath(location.getNamespace(), "spellstone/" + location.getPath()));
+            Identifier location = BuiltInRegistries.ITEM.getKey(this.getResult());
+            this.save(recipeOutput, Identifier.fromNamespaceAndPath(location.getNamespace(), "spellstone/" + location.getPath()));
         }
 
-        public void save(@NotNull RecipeOutput recipeOutput, ResourceLocation id) {
+        public void save(@NotNull RecipeOutput recipeOutput, Identifier id) {
             Advancement.Builder builder = recipeOutput.advancement().addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id)).rewards(AdvancementRewards.Builder.recipe(id)).requirements(AdvancementRequirements.Strategy.OR);
             Objects.requireNonNull(builder);
             this.criteria.forEach(builder::addCriterion);

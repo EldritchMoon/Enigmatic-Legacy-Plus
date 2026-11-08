@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.spellstones;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
@@ -19,7 +20,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
@@ -71,7 +72,7 @@ public class CreationHeart extends SpellstoneItem {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneSkill");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.creationHeartSkill");
             TooltipHandler.line(list);
@@ -107,7 +108,7 @@ public class CreationHeart extends SpellstoneItem {
 
         for (MobEffectInstance effect : effects) {
             MobEffect value = effect.getEffect().value();
-            if (Objects.equals(BuiltInRegistries.MOB_EFFECT.getKey(value), ResourceLocation.fromNamespaceAndPath("mana-and-artifice", "chrono-exhaustion"))) {
+            if (Objects.equals(BuiltInRegistries.MOB_EFFECT.getKey(value), Identifier.fromNamespaceAndPath("mana-and-artifice", "chrono-exhaustion"))) {
                 continue;
             }
 
@@ -115,7 +116,7 @@ public class CreationHeart extends SpellstoneItem {
         }
     }
 
-    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
+    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, Identifier id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         attributes.put(NeoForgeMod.CREATIVE_FLIGHT, new AttributeModifier(IItemHelper.getLocation(this), 1, AttributeModifier.Operation.ADD_VALUE));
         return attributes;

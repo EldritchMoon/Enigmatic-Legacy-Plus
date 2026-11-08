@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.scrolls;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
@@ -16,7 +17,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
@@ -26,7 +27,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -101,10 +102,10 @@ public class ViolenceScroll extends BaseCurioItem {
         if (Screen.hasAltDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.violenceScrollList");
             for (String enchantment : AbsorbedEnchants.getEnchantments(stack)) {
-                MutableComponent component = Component.translatable(Util.makeDescriptionId("enchantment", ResourceLocation.parse(enchantment)));
+                MutableComponent component = Component.translatable(Util.makeDescriptionId("enchantment", Identifier.parse(enchantment)));
                 list.add(CommonComponents.space().append(component).withStyle(ChatFormatting.DARK_RED));
             }
-        } else if (Screen.hasShiftDown()) {
+        } else if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.violenceScroll1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.violenceScroll2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.violenceScroll3");
@@ -208,7 +209,7 @@ public class ViolenceScroll extends BaseCurioItem {
 
     private Multimap<Holder<Attribute>, AttributeModifier> createAttributeMap(LivingEntity entity, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> multimap = HashMultimap.create();
-        ResourceLocation location = IItemHelper.getLocation(this);
+        Identifier location = IItemHelper.getLocation(this);
         int count = AbsorbedEnchants.getCount(stack);
         MobEffectInstance effect = entity.getEffect(EnigmaticEffects.VIOLENCE_CURSE);
         if (effect != null) count += (int) ((effect.getAmplifier() + 1) * (1 + count * 0.08));
@@ -232,7 +233,7 @@ public class ViolenceScroll extends BaseCurioItem {
             ItemStack other = slot.getItem();
             if (AbsorbedEnchants.canDisenchant(stack, other)) {
                 slot.set(AbsorbedEnchants.disenchant(stack, other));
-                if (player.level().isClientSide)
+                if (player.level().isClientSide())
                     player.level().playSound(player, player.blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 0.8F, 1.2F + (float) Math.random() * 0.4F);
                 return true;
             }
@@ -246,7 +247,7 @@ public class ViolenceScroll extends BaseCurioItem {
         if (action != ClickAction.PRIMARY && slot.mayPlace(stack) && slot.mayPickup(player) && !other.isEmpty()) {
             if (AbsorbedEnchants.canDisenchant(stack, other)) {
                 access.set(AbsorbedEnchants.disenchant(stack, other));
-                if (player.level().isClientSide)
+                if (player.level().isClientSide())
                     player.level().playSound(player, player.blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 0.8F, 1.2F + (float) Math.random() * 0.4F);
                 return true;
             }

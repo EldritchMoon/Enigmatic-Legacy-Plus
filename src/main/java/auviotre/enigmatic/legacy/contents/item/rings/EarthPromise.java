@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.rings;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
@@ -17,7 +18,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -67,7 +68,7 @@ public class EarthPromise extends CursedCurioItem {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             if (EnigmaticHandler.isTheCursedOne(Minecraft.getInstance().player)) {
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.curseAlteration", ChatFormatting.GOLD, Component.translatable("tooltip.enigmaticlegacy.firstCurse"));
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.firstCurseAlteration", ChatFormatting.GOLD, firstCurseModifier.get() + "%");
@@ -81,9 +82,9 @@ public class EarthPromise extends CursedCurioItem {
         TooltipHandler.cursedOnly(list, stack);
     }
 
-    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
+    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
-        ResourceLocation location = IItemHelper.getLocation(this);
+        Identifier location = IItemHelper.getLocation(this);
         builder.put(Attributes.ARMOR, new AttributeModifier(location, 5, AttributeModifier.Operation.ADD_VALUE));
         builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(location, 2, AttributeModifier.Operation.ADD_VALUE));
         builder.put(Attributes.MINING_EFFICIENCY, new AttributeModifier(location, 2, AttributeModifier.Operation.ADD_VALUE));

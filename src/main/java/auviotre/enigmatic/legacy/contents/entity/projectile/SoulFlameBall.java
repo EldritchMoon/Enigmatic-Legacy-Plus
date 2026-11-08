@@ -131,7 +131,7 @@ public class SoulFlameBall extends Projectile {
 
     protected void onHitBlock(BlockHitResult hitResult) {
         super.onHitBlock(hitResult);
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             ((ServerLevel) level()).sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY(), this.getZ(), 1, 0, 0, 0, 0);
             this.discard();
         }

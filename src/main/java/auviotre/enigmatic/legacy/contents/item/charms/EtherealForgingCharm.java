@@ -13,7 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
@@ -51,7 +51,7 @@ public class EtherealForgingCharm extends BaseCurioItem {
         if (stack.isEnchanted()) TooltipHandler.line(list);
     }
 
-    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
+    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         attributes.put(EnigmaticAttributes.ETHERIUM_SHIELD, new AttributeModifier(IItemHelper.getLocation(this), stack.getOrDefault(EnigmaticComponents.BOOLEAN, false) ? 0.05 : 0.03, AttributeModifier.Operation.ADD_VALUE));
         return attributes;

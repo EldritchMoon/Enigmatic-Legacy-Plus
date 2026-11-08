@@ -78,7 +78,7 @@ public class BlessStone extends BaseCursedItem {
             });
             player.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 200));
             player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 10));
-            player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200));
+            player.addEffect(new MobEffectInstance(MobEffects.NAUSEA, 200));
             player.swing(hand);
             player.getInventory().removeItem(item);
             if (level instanceof ServerLevel serverLevel) {

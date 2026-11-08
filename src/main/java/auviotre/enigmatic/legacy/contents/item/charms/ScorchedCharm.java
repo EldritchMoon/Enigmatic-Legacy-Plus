@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.charms;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
@@ -65,7 +66,7 @@ public class ScorchedCharm extends CursedCurioItem {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.scorchedCharm1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.scorchedCharm2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.scorchedCharm3");

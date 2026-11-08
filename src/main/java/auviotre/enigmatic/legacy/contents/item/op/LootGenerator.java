@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.op;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
@@ -53,7 +54,7 @@ public class LootGenerator extends BaseItem {
 
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.lootGenerator1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.lootGenerator2");
             TooltipHandler.line(list);

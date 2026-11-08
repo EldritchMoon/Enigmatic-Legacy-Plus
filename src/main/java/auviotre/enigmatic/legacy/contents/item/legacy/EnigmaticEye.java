@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.legacy;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.event.EndPortalActivatedEvent;
@@ -21,7 +22,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -31,7 +32,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.boss.EnderDragonPart;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragonPart;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.player.Player;
@@ -76,7 +77,7 @@ public class EnigmaticEye extends BaseCurioItem {
 
     @OnlyIn(Dist.CLIENT)
     public void registerVariants() {
-        ItemProperties.register(this, ResourceLocation.withDefaultNamespace("enigmatic_eye_activated"), (stack, world, entity, number) -> {
+        ItemProperties.register(this, Identifier.withDefaultNamespace("enigmatic_eye_activated"), (stack, world, entity, number) -> {
             if (!this.isDormant(stack)) return 1F;
             int animTicks = stack.getOrDefault(EnigmaticComponents.ACTIVATION_ANIMATION.get(), -1);
             if (animTicks > -1) return animTicks > 2 ? 0.4F : 0.8F;
@@ -87,7 +88,7 @@ public class EnigmaticEye extends BaseCurioItem {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, @NotNull List<Component> list, @NotNull TooltipFlag flag) {
         if (!this.isDormant(stack)) TooltipHandler.line(list);
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             if (this.isDormant(stack)) {
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticEye1");
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticEye2");
@@ -153,7 +154,7 @@ public class EnigmaticEye extends BaseCurioItem {
         if (this.isDormant(stack) && !stack.has(EnigmaticComponents.ACTIVATION_ANIMATION)) {
             this.activateWithAnimation(stack);
             EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 level.playSound(null, player.blockPosition(), EnigmaticSounds.CHARGED_ON.get(), SoundSource.PLAYERS, 1.0F, 0.95F + player.getRandom().nextFloat() * 0.1F);
                 if (!data.getUnlockedNarrator()) {
                     data.setUnlockedNarrator(true);
@@ -167,7 +168,7 @@ public class EnigmaticEye extends BaseCurioItem {
         return super.use(level, player, hand);
     }
 
-    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
+    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         if (this.isDormant(stack)) return attributes;
         if (!(context.entity() instanceof Player)) return attributes;
@@ -207,11 +208,11 @@ public class EnigmaticEye extends BaseCurioItem {
             AdvancementEvent.AdvancementProgressEvent.ProgressType progress = event.getProgressType();
             AdvancementHolder advancement = event.getAdvancement();
             if (progress == AdvancementEvent.AdvancementProgressEvent.ProgressType.GRANT) {
-                if (advancement.id().equals(ResourceLocation.withDefaultNamespace("end/enter_end_gateway"))) {
+                if (advancement.id().equals(Identifier.withDefaultNamespace("end/enter_end_gateway"))) {
                     Quote.I_WANDERED.play(player, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(160));
-                } else if (advancement.id().equals(ResourceLocation.withDefaultNamespace("end/respawn_dragon"))) {
+                } else if (advancement.id().equals(Identifier.withDefaultNamespace("end/respawn_dragon"))) {
                     Quote.HORRIBLE_EXISTENCE.play(player, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(100));
-                } else if (advancement.id().equals(ResourceLocation.withDefaultNamespace("nether/summon_wither"))) {
+                } else if (advancement.id().equals(Identifier.withDefaultNamespace("nether/summon_wither"))) {
                     Quote.COUNTLESS_DEAD.play(player, Quote.PlayOptions.defaultPlay().ifUnlocked().once().delay(20));
                 }
             }

@@ -14,7 +14,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.RelativeMovement;
+import net.minecraft.world.entity.Relative;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -34,7 +34,7 @@ public class WormholePotion extends BaseDrinkableItem {
         super(IItemHelper.singleProperties().craftRemainder(Items.GLASS_BOTTLE));
     }
 
-    private static void performTeleport(Player player, ServerLevel level, Player target, Set<RelativeMovement> relativeList) {
+    private static void performTeleport(Player player, ServerLevel level, Player target, Set<Relative> relativeList) {
         double hOffset = player.getBbWidth() / 6;
         double yOffset = player.getBbHeight() / 4;
         ColorParticleOption particle = ColorParticleOption.create(EnigmaticParticles.SPELL.get(), 0xF02CCDB1);
@@ -99,7 +99,7 @@ public class WormholePotion extends BaseDrinkableItem {
             UUID uuid = UUID.fromString(string);
             Player destination = player.level().getPlayerByUUID(uuid);
             if (destination != null && destination.level() instanceof ServerLevel server) {
-                performTeleport(player, server, destination, EnumSet.noneOf(RelativeMovement.class));
+                performTeleport(player, server, destination, EnumSet.noneOf(Relative.class));
             }
         }
     }

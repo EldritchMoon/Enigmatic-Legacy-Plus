@@ -6,8 +6,8 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Husk;
-import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.zombie.Husk;
+import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,7 +24,7 @@ public abstract class MixinHusk extends Zombie {
     public void doHurtTargetMix(Entity entity, CallbackInfoReturnable<Boolean> cir) {
         if (cir.getReturnValue() && EnigmaticHandler.isCurseBoosted(this) && this.getWeaponItem().isEmpty() && entity instanceof LivingEntity living) {
             float effectiveDifficulty = this.level().getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
-            living.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 100 * (int) effectiveDifficulty), this);
+            living.addEffect(new MobEffectInstance(MobEffects.NAUSEA, 100 * (int) effectiveDifficulty), this);
         }
     }
 }

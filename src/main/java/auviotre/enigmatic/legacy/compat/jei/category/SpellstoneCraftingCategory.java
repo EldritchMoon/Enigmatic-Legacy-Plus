@@ -15,10 +15,10 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -29,8 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SpellstoneCraftingCategory implements IRecipeCategory<RecipeHolder<SpellstoneTableRecipe>> {
-    private static final ResourceLocation SPRITE = EnigmaticLegacy.location("jei/spellstone_table_gui");
-    private static final ResourceLocation ICON = EnigmaticLegacy.location("jei/spellstone_table_icon");
+    private static final Identifier SPRITE = EnigmaticLegacy.location("jei/spellstone_table_gui");
+    private static final Identifier ICON = EnigmaticLegacy.location("jei/spellstone_table_icon");
     private static final List<Pair<Integer, Integer>> OFFSETS = List.of(
             new Pair<>(38, 52),
             new Pair<>(31, 32),
@@ -66,7 +66,7 @@ public class SpellstoneCraftingCategory implements IRecipeCategory<RecipeHolder<
         return 80;
     }
 
-    public void draw(RecipeHolder<SpellstoneTableRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(RecipeHolder<SpellstoneTableRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
         guiGraphics.blitSprite(SPRITE, 0, 0, getWidth(), getHeight());
         if (recipe.value().isAllDifferent()) guiGraphics.blitSprite(ICON, 124, 0, 8, 8);
     }

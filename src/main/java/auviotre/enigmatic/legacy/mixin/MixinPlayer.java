@@ -62,7 +62,7 @@ public abstract class MixinPlayer extends LivingEntity {
                 List<LivingEntity> entities = this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(5));
                 for (LivingEntity entity : entities) {
                     if (entity.is(this)) continue;
-                    entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 3));
+                    entity.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 100, 3));
                     entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 3));
                     entity.addDeltaMovement(new Vec3(0, -2, 0));
                 }

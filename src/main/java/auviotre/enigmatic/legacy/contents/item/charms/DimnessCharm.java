@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.charms;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.CursedCurioItem;
 import auviotre.enigmatic.legacy.contents.item.materials.AbyssalHeart;
@@ -32,7 +33,7 @@ public class DimnessCharm extends CursedCurioItem {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.curseAlteration", ChatFormatting.GOLD, Component.translatable("tooltip.enigmaticlegacy.thirdCurse"));
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.thirdCurseAlteration", ChatFormatting.GOLD, "40%");
             TooltipHandler.line(list);
@@ -43,7 +44,7 @@ public class DimnessCharm extends CursedCurioItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.dimnessCharm2");
         } else TooltipHandler.holdShift(list);
         TooltipHandler.line(list);
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             Player player = Minecraft.getInstance().player;
             ChatFormatting color = player != null && canEquip(player) ? ChatFormatting.GOLD : ChatFormatting.DARK_RED;
             double rate = 200 * AbyssalHeart.abyssThreshold.get() - 100;

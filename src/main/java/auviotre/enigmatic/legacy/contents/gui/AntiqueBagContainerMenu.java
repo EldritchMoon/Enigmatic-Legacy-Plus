@@ -10,7 +10,7 @@ import auviotre.enigmatic.legacy.registries.EnigmaticTriggers;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -129,7 +129,7 @@ public class AntiqueBagContainerMenu extends AbstractContainerMenu {
         }
 
         @Nullable
-        public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
+        public Pair<Identifier, Identifier> getNoItemIcon() {
             return Pair.of(InventoryMenu.BLOCK_ATLAS, EnigmaticLegacy.location("slot/empty_book_slot"));
         }
     }

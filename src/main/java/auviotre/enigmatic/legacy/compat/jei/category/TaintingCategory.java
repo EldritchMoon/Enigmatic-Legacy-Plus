@@ -13,16 +13,16 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class TaintingCategory implements IRecipeCategory<TaintingCategory.Recipe> {
-    private static final ResourceLocation SPRITE = EnigmaticLegacy.location("jei/tainting_gui");
+    private static final Identifier SPRITE = EnigmaticLegacy.location("jei/tainting_gui");
     private final IDrawable icon;
 
     public TaintingCategory(IGuiHelper guiHelper) {
@@ -54,7 +54,7 @@ public class TaintingCategory implements IRecipeCategory<TaintingCategory.Recipe
         return 42;
     }
 
-    public void draw(Recipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(Recipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
         guiGraphics.blitSprite(SPRITE, 0, 0, getWidth(), getHeight());
     }
 

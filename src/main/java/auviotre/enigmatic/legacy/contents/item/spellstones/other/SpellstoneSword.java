@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.spellstones.other;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.ELEnumExtensions;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
@@ -22,12 +23,12 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -109,7 +110,7 @@ public class SpellstoneSword extends Item {
         useItem.hurtAndBreak(Mth.floor(damage / 2), blocker, LivingEntity.getSlotForHand(blocker.getUsedItemHand()));
         if (blocker instanceof Player player) player.getCooldowns().removeCooldown(useItem.getItem());
         blocker.stopUsingItem();
-        blocker.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 2, 0, true, false));
+        blocker.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 2, 0, true, false));
         blocker.swing(blocker.getUsedItemHand());
         if (directEntity instanceof LivingEntity living && blocker != living) {
             List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, blocker.getBoundingBox().inflate(3.2));
@@ -286,7 +287,7 @@ public class SpellstoneSword extends Item {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         ItemStack resonance = getResonance(stack);
         int level = stack.getOrDefault(SPELL_LEVEL, 0);
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             if (resonance.isEmpty()) {
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneSword1");
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneSword2");
@@ -644,13 +645,13 @@ public class SpellstoneSword extends Item {
         return getResonance(stack).isEmpty() || entity.getOffhandItem().is(EnigmaticItems.SPELLCORE) ? 60 : 32000;
     }
 
-    public UseAnim getUseAnimation(ItemStack stack) {
-        if (isResonatingWith(stack, EnigmaticItems.BLAZING_CORE)) return UseAnim.BLOCK;
-        if (isResonatingWith(stack, EnigmaticItems.OCEAN_STONE)) return UseAnim.BOW;
-        if (isResonatingWith(stack, EnigmaticItems.LOST_ENGINE)) return UseAnim.BLOCK;
-        if (isResonatingWith(stack, EnigmaticItems.VOID_PEARL)) return UseAnim.BLOCK;
-        if (isResonatingWith(stack, EnigmaticItems.ILLUSION_LANTERN)) return UseAnim.BOW;
-        return UseAnim.CUSTOM;
+    public ItemUseAnimation getUseAnimation(ItemStack stack) {
+        if (isResonatingWith(stack, EnigmaticItems.BLAZING_CORE)) return ItemUseAnimation.BLOCK;
+        if (isResonatingWith(stack, EnigmaticItems.OCEAN_STONE)) return ItemUseAnimation.BOW;
+        if (isResonatingWith(stack, EnigmaticItems.LOST_ENGINE)) return ItemUseAnimation.BLOCK;
+        if (isResonatingWith(stack, EnigmaticItems.VOID_PEARL)) return ItemUseAnimation.BLOCK;
+        if (isResonatingWith(stack, EnigmaticItems.ILLUSION_LANTERN)) return ItemUseAnimation.BOW;
+        return ItemUseAnimation.CUSTOM;
     }
 
     public AABB getSweepHitBox(ItemStack stack, Player player, Entity target) {
@@ -860,7 +861,7 @@ public class SpellstoneSword extends Item {
 
     @OnlyIn(Dist.CLIENT)
     public static class Decorator implements IItemDecorator {
-        public boolean render(GuiGraphics graphics, Font font, @NotNull ItemStack stack, int x, int y) {
+        public boolean render(GuiGraphicsExtractor graphics, Font font, @NotNull ItemStack stack, int x, int y) {
             int energy = stack.getOrDefault(INT, 0);
             if (energy > 0 && getMaxEnergy(stack) > 0) {
                 graphics.pose().pushPose();

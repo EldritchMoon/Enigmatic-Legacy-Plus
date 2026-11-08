@@ -9,7 +9,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
@@ -73,7 +73,7 @@ public class DragonBreathArrow extends AbstractArrow {
         effectCloud.setRadiusOnUse(0.1F);
         effectCloud.setDurationOnUse(-1);
         effectCloud.setWaitTime(1);
-        effectCloud.addEffect(new MobEffectInstance(MobEffects.HARM, 1, Mth.floor(Mth.sqrt(dmg))));
+        effectCloud.addEffect(new MobEffectInstance(MobEffects.INSTANT_DAMAGE, 1, Mth.floor(Mth.sqrt(dmg))));
         ItemStack dragonBow = this.getWeaponItem();
         if (dragonBow != null) {
             PotionContents contents = dragonBow.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);

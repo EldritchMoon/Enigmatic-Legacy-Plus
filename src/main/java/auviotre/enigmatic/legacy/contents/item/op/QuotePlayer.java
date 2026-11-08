@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.op;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.client.Quote;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -30,7 +31,7 @@ public class QuotePlayer extends Item {
 
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.quotePlayer1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.quotePlayer2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.quotePlayer3");

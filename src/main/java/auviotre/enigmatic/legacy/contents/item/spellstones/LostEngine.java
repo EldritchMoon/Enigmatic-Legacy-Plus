@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.spellstones;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
@@ -17,7 +18,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
@@ -27,7 +28,7 @@ import net.minecraft.world.entity.Targeting;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.AbstractGolem;
+import net.minecraft.world.entity.animal.golem.AbstractGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
@@ -72,7 +73,7 @@ public class LostEngine extends SpellstoneItem {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneSkill");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneSkillAbsent");
             TooltipHandler.line(list);
@@ -99,9 +100,9 @@ public class LostEngine extends SpellstoneItem {
         return 0;
     }
 
-    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
+    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, Identifier id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
-        ResourceLocation location = IItemHelper.getLocation(this);
+        Identifier location = IItemHelper.getLocation(this);
         attributes.put(Attributes.GRAVITY, new AttributeModifier(location, 0.4, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         attributes.put(Attributes.JUMP_STRENGTH, new AttributeModifier(location, 0.3, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         attributes.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(location, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));

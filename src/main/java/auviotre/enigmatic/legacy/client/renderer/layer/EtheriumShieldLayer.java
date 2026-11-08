@@ -7,29 +7,29 @@ import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class EtheriumShieldLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
-    private static final ResourceLocation TEXTURE = EnigmaticLegacy.location("textures/models/misc/ultimate_wither_armor.png");
+    private static final Identifier TEXTURE = EnigmaticLegacy.location("textures/models/misc/ultimate_wither_armor.png");
     private final PlayerModel<AbstractClientPlayer> model;
 
     public EtheriumShieldLayer(RenderLayerParent<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> renderer, EntityModelSet modelSet) {
@@ -84,14 +84,14 @@ public class EtheriumShieldLayer extends RenderLayer<AbstractClientPlayer, Playe
         if (!itemstack.isEmpty()) {
             armPose = HumanoidModel.ArmPose.ITEM;
             if (player.getUseItemRemainingTicks() > 0) {
-                UseAnim useAnim = itemstack.getUseAnimation();
-                if (useAnim == UseAnim.BLOCK) {
+                ItemUseAnimation useAnim = itemstack.getUseAnimation();
+                if (useAnim == ItemUseAnimation.BLOCK) {
                     armPose = HumanoidModel.ArmPose.BLOCK;
-                } else if (useAnim == UseAnim.BOW) {
+                } else if (useAnim == ItemUseAnimation.BOW) {
                     armPose = HumanoidModel.ArmPose.BOW_AND_ARROW;
-                } else if (useAnim == UseAnim.SPEAR) {
+                } else if (useAnim == ItemUseAnimation.TRIDENT /* 26.1.2-port: old SPEAR = trident throw */) {
                     armPose = HumanoidModel.ArmPose.THROW_SPEAR;
-                } else if (useAnim == UseAnim.CROSSBOW && hand == player.getUsedItemHand()) {
+                } else if (useAnim == ItemUseAnimation.CROSSBOW && hand == player.getUsedItemHand()) {
                     armPose = HumanoidModel.ArmPose.CROSSBOW_CHARGE;
                 }
             } else {
@@ -103,7 +103,7 @@ public class EtheriumShieldLayer extends RenderLayer<AbstractClientPlayer, Playe
                     armPose = HumanoidModel.ArmPose.CROSSBOW_HOLD;
                 }
 
-                if (flag1 && flag2 && mainStack.getItem().getUseAnimation(mainStack) == UseAnim.NONE) {
+                if (flag1 && flag2 && mainStack.getItem().getUseAnimation(mainStack) == ItemUseAnimation.NONE) {
                     armPose = HumanoidModel.ArmPose.CROSSBOW_HOLD;
                 }
             }

@@ -5,7 +5,7 @@ import auviotre.enigmatic.legacy.contents.item.food.ForbiddenFruit;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.EventPriority;
@@ -21,7 +21,7 @@ public class AppleSkinCompatHandler {
     public void onTooltipRender(TooltipOverlayEvent.@NotNull Render event) {
         if (!ForbiddenFruit.isForbiddenCursed(Minecraft.getInstance().player)) return;
         event.setCanceled(true);
-        GuiGraphics graphics = event.guiGraphics;
+        GuiGraphicsExtractor graphics = event.guiGraphics;
         int x = event.x;
         int y = event.y;
         RenderSystem.enableDepthTest();

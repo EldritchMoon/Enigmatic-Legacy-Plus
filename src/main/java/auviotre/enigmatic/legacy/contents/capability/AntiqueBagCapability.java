@@ -5,14 +5,14 @@ import auviotre.enigmatic.legacy.contents.attachement.AntiqueBagInventory;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
 public class AntiqueBagCapability implements IAntiqueBagHandler {
-    public static final ResourceLocation ID = EnigmaticLegacy.location("antique_bag_inventory");
+    public static final Identifier ID = EnigmaticLegacy.location("antique_bag_inventory");
     AntiqueBagInventory inventory;
     LivingEntity owner;
 

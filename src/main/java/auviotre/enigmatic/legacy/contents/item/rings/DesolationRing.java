@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.rings;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
@@ -62,7 +63,7 @@ public class DesolationRing extends BaseCurioItem {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.desolationRing1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.desolationRing2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.desolationRing3");
@@ -129,7 +130,7 @@ public class DesolationRing extends BaseCurioItem {
 
         @SubscribeEvent
         private static void onEntitySpawn(@NotNull FinalizeSpawnEvent event) {
-            if (event.getSpawnType() == MobSpawnType.NATURAL || event.getSpawnType() == MobSpawnType.CHUNK_GENERATION) {
+            if (event.getSpawnType() == EntitySpawnReason.NATURAL || event.getSpawnType() == EntitySpawnReason.CHUNK_GENERATION) {
                 LivingEntity entity = event.getEntity();
                 if (entity instanceof NeutralMob) {
                     if (BOXES.values().stream().anyMatch(entity.getBoundingBox()::intersects)) {

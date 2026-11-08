@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.handlers;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.contents.item.materials.AbyssalHeart;
 import auviotre.enigmatic.legacy.contents.item.rings.CursedRing;
 import auviotre.enigmatic.legacy.contents.item.rings.RedemptionRing;
@@ -56,7 +57,7 @@ public interface TooltipHandler {
     }
 
     static void worthyOnly(List<Component> list, ItemStack stack) {
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             Player player = Minecraft.getInstance().player;
             ChatFormatting color = player != null && EnigmaticHandler.isTheWorthyOne(player) ? ChatFormatting.GOLD : ChatFormatting.DARK_RED;
             double threshold = AbyssalHeart.abyssThreshold.get();

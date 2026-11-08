@@ -7,8 +7,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import dev.ghen.thirst.foundation.common.capability.ModAttachment;
 import dev.ghen.thirst.foundation.common.event.RegisterThirstValueEvent;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -17,9 +17,9 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class ThirstCompatHandler {
-    public static final ResourceLocation FORBIDDEN_DRINK_FULL_SPRITE = EnigmaticLegacy.location("hud/forbidden_drink_full");
-    public static final ResourceLocation FORBIDDEN_DRINK_HALF_SPRITE = EnigmaticLegacy.location("hud/forbidden_drink_half");
-    public static final ResourceLocation FORBIDDEN_DRINK_EMPTY_SPRITE = EnigmaticLegacy.location("hud/forbidden_drink_empty");
+    public static final Identifier FORBIDDEN_DRINK_FULL_SPRITE = EnigmaticLegacy.location("hud/forbidden_drink_full");
+    public static final Identifier FORBIDDEN_DRINK_HALF_SPRITE = EnigmaticLegacy.location("hud/forbidden_drink_half");
+    public static final Identifier FORBIDDEN_DRINK_EMPTY_SPRITE = EnigmaticLegacy.location("hud/forbidden_drink_empty");
 
     public static void setHellBladeRecover(Player player) {
         var data = player.getData(ModAttachment.PLAYER_THIRST);
@@ -27,7 +27,7 @@ public class ThirstCompatHandler {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static void renderBar(int width, int height, GuiGraphics guiGraphics) {
+    public static void renderBar(int width, int height, GuiGraphicsExtractor guiGraphics) {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.player == null) return;
         minecraft.getProfiler().push("thirst");

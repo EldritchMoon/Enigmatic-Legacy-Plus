@@ -2,18 +2,18 @@ package auviotre.enigmatic.legacy.client.screen.toast;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.ToastComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class SlotUnlockedToast implements Toast {
-    private static final ResourceLocation BACKGROUND = EnigmaticLegacy.location("toast/slot_unlock");
+    private static final Identifier BACKGROUND = EnigmaticLegacy.location("toast/slot_unlock");
     private static final Component DESCRIPTION_TEXT = Component.translatable("toast.enigmaticlegacy.slot_unlock.description");
     private final ItemStack drawnStack;
     private final String identifier;
@@ -23,7 +23,7 @@ public class SlotUnlockedToast implements Toast {
         this.identifier = id;
     }
 
-    public Visibility render(GuiGraphics graphics, ToastComponent toast, long timeLastVisible) {
+    public Visibility render(GuiGraphicsExtractor graphics, ToastComponent toast, long timeLastVisible) {
         if (drawnStack.isEmpty()) return Visibility.HIDE;
         Font font = toast.getMinecraft().font;
         Component slot_id = Component.translatable("curios.identifier." + this.identifier);

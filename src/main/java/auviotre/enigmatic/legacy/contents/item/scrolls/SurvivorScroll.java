@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.scrolls;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
@@ -15,7 +16,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -24,7 +25,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -67,7 +68,7 @@ public class SurvivorScroll extends BaseCurioItem {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.suvivalScroll1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.suvivalScroll2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.suvivalScroll3");
@@ -99,7 +100,7 @@ public class SurvivorScroll extends BaseCurioItem {
         return map;
     }
 
-    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
+    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
         builder.put(Attributes.BLOCK_BREAK_SPEED, new AttributeModifier(IItemHelper.getLocation(this), 0.1, AttributeModifier.Operation.ADD_VALUE));
         builder.put(Attributes.BLOCK_INTERACTION_RANGE, new AttributeModifier(IItemHelper.getLocation(this), 1.2, AttributeModifier.Operation.ADD_VALUE));
@@ -114,7 +115,7 @@ public class SurvivorScroll extends BaseCurioItem {
             LivingEntity entity = event.getEntity();
             if (EnigmaticHandler.hasCurio(entity, EnigmaticItems.SURVIVOR_SCROLL) && entity.getHealth() < entity.getMaxHealth() * threshold.get() / 100F) {
                 ItemStack item = event.getItem();
-                if (item.has(DataComponents.FOOD) || item.getUseAnimation() == UseAnim.EAT || item.getUseAnimation() == UseAnim.DRINK) {
+                if (item.has(DataComponents.FOOD) || item.getUseAnimation() == ItemUseAnimation.EAT || item.getUseAnimation() == ItemUseAnimation.DRINK) {
                     event.setDuration(event.getDuration() * 3 / 4);
                 }
             }

@@ -10,7 +10,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.level.portal.TeleportTransition;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinPlayerList {
     @Inject(method = "respawn", at = @At("RETURN"))
     private void respawn(ServerPlayer player, boolean keepInventory, Entity.RemovalReason reason, CallbackInfoReturnable<ServerPlayer> info) {
-        DimensionTransition dimensiontransition = player.findRespawnPositionAndUseSpawnBlock(true, DimensionTransition.DO_NOTHING);
+        TeleportTransition dimensiontransition = player.findRespawnPositionAndUseSpawnBlock(true, TeleportTransition.DO_NOTHING);
         ServerLevel level = dimensiontransition.newLevel();
         if (!keepInventory) {
             BlockPos blockpos = BlockPos.containing(dimensiontransition.pos());

@@ -79,7 +79,7 @@ public class BlessAmplifier extends BaseCursedItem {
                     EnchantmentHelper.setEnchantments(target, enchantments.toImmutable());
                     int cost = target.getOrDefault(DataComponents.REPAIR_COST, 0);
                     target.set(DataComponents.REPAIR_COST, (int) (cost * 1.1 + 0.9));
-                    if (player.level().isClientSide)
+                    if (player.level().isClientSide())
                         player.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, 0.8F, 1.2F + player.getRandom().nextFloat() * 0.4F);
                     event.getCarriedSlotAccess().set(ItemStack.EMPTY);
                     event.setCanceled(true);

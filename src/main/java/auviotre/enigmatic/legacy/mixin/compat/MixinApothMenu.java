@@ -7,7 +7,7 @@ import dev.shadowsoffire.apothic_enchanting.table.EnchantmentTableStats;
 import dev.shadowsoffire.apothic_enchanting.table.infusion.InfusionRecipe;
 import dev.shadowsoffire.apothic_enchanting.util.MiscUtil;
 import dev.shadowsoffire.placebo.util.EnchantmentUtils;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;

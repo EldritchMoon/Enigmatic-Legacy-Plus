@@ -4,12 +4,12 @@ import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.client.renderer.model.PiglinWandererModel;
 import auviotre.enigmatic.legacy.contents.entity.PiglinWanderer;
 import net.minecraft.client.model.HumanoidArmorModel;
-import net.minecraft.client.model.PiglinModel;
+import net.minecraft.client.model.monster.piglin.PiglinModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
@@ -27,7 +27,7 @@ public class PiglinWandererRender extends HumanoidMobRenderer<PiglinWanderer, Pi
         );
     }
 
-    public ResourceLocation getTextureLocation(PiglinWanderer mob) {
+    public Identifier getTextureLocation(PiglinWanderer mob) {
         return EnigmaticLegacy.location("textures/entity/piglin_wanderer.png");
     }
 

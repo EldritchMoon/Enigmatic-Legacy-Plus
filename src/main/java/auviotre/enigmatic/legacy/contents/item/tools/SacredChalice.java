@@ -86,8 +86,8 @@ public class SacredChalice extends BaseCursedItem {
         return stack;
     }
 
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return stack.getOrDefault(EnigmaticComponents.BOOLEAN, false) ? UseAnim.DRINK : UseAnim.BLOCK;
+    public ItemUseAnimation getUseAnimation(ItemStack stack) {
+        return stack.getOrDefault(EnigmaticComponents.BOOLEAN, false) ? ItemUseAnimation.DRINK : ItemUseAnimation.BLOCK;
     }
 
     public int getUseDuration(ItemStack stack, LivingEntity entity) {

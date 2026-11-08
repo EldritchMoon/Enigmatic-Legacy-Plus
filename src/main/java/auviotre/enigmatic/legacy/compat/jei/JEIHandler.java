@@ -23,7 +23,7 @@ import mezz.jei.api.recipe.vanilla.IVanillaRecipeFactory;
 import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -38,14 +38,14 @@ import java.util.List;
 
 @JeiPlugin
 public class JEIHandler implements IModPlugin {
-    private static final ResourceLocation ID = EnigmaticLegacy.location("jei_plugin");
+    private static final Identifier ID = EnigmaticLegacy.location("jei_plugin");
 
     public static Level getLevel() {
         if (Minecraft.getInstance().level != null) return Minecraft.getInstance().level;
         else throw new NullPointerException("minecraft level must not be null.");
     }
 
-    public ResourceLocation getPluginUid() {
+    public Identifier getPluginUid() {
         return ID;
     }
 

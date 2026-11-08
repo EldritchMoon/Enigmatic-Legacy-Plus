@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.legacy;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.gui.LoreInscriberMenu;
@@ -36,7 +37,7 @@ public class LoreInscriber extends BaseItem {
 
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.loreInscriber1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.loreInscriber2", ChatFormatting.GOLD, Component.translatable("item.enigmaticlegacyplus.lore_fragment"));
             TooltipHandler.line(list);
@@ -57,7 +58,7 @@ public class LoreInscriber extends BaseItem {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         player.swing(hand);
-        if (!level.isClientSide)
+        if (!level.isClientSide())
             player.openMenu(new LoreInscriberMenu.Provider(Component.translatable("gui.enigmaticlegacy.lore_inscriber").withStyle(ChatFormatting.GRAY)));
         return InteractionResultHolder.success(stack);
     }

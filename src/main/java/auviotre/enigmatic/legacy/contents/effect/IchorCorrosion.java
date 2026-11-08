@@ -2,7 +2,7 @@ package auviotre.enigmatic.legacy.contents.effect;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 public class IchorCorrosion extends MobEffect {
     public IchorCorrosion() {
         super(MobEffectCategory.HARMFUL, 0xCE753D);
-        ResourceLocation location = EnigmaticLegacy.location("effect.ichor_corrosion");
+        Identifier location = EnigmaticLegacy.location("effect.ichor_corrosion");
         this.addAttributeModifier(Attributes.ARMOR, location, -0.2F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
         this.addAttributeModifier(Attributes.ARMOR_TOUGHNESS, location, -0.2F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
         this.addAttributeModifier(Attributes.KNOCKBACK_RESISTANCE, location, -0.2F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);

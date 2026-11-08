@@ -11,14 +11,14 @@ import auviotre.enigmatic.legacy.registries.EnigmaticParticles;
 import com.google.common.collect.ImmutableMultimap;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
@@ -35,7 +35,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 public class IchorCurse extends MobEffect {
-    private static final ResourceLocation EFFECT_ID = EnigmaticLegacy.location("ichor_curse_boost");
+    private static final Identifier EFFECT_ID = EnigmaticLegacy.location("ichor_curse_boost");
 
     public IchorCurse() {
         super(MobEffectCategory.NEUTRAL, 0xFFBF4B);
@@ -89,7 +89,7 @@ public class IchorCurse extends MobEffect {
             int amplifier = Objects.requireNonNull(attacker.getEffect(EnigmaticEffects.ICHOR_CURSE)).getAmplifier();
             if (event.getEntity() instanceof Monster monster && monster.getTarget() == attacker && monster.level() instanceof ServerLevel level) {
                 if (!monster.level().dimension().equals(Level.NETHER)) return;
-                if (monster.getSpawnType() == null || !monster.getSpawnType().equals(MobSpawnType.NATURAL)) return;
+                if (monster.getSpawnType() == null || !monster.getSpawnType().equals(EntitySpawnReason.NATURAL)) return;
                 IchorPermeation data = monster.getData(EnigmaticAttachments.ICHOR_PERMEATION);
                 if (!data.isInfected() && monster.hasLineOfSight(attacker)) {
                     data.setInfected(true);

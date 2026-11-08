@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.spellstones;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
@@ -16,7 +17,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -70,7 +71,7 @@ public class EtheriumCore extends SpellstoneItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
         boolean boost = stack.getOrDefault(EnigmaticComponents.BOOLEAN, false);
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneSkill");
             if (boost) TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumCoreSkill");
             else TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneSkillAbsent");
@@ -89,10 +90,10 @@ public class EtheriumCore extends SpellstoneItem {
         this.addKeyText(list);
     }
 
-    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
+    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
         boolean boost = stack.getOrDefault(EnigmaticComponents.BOOLEAN, false);
-        ResourceLocation location = IItemHelper.getLocation(this);
+        Identifier location = IItemHelper.getLocation(this);
         builder.put(Attributes.ARMOR, new AttributeModifier(location, boost ? 12 : 10, AttributeModifier.Operation.ADD_VALUE));
         builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(location, boost ? 10 : 8, AttributeModifier.Operation.ADD_VALUE));
         builder.put(Attributes.ARMOR, new AttributeModifier(EnigmaticLegacy.location("etherium_core_buff"), 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));

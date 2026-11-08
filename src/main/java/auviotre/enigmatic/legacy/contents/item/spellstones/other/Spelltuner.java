@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.spellstones.other;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
@@ -23,7 +24,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
@@ -84,7 +85,7 @@ public class Spelltuner extends BaseCurioItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         Context spellContext = stack.get(EnigmaticComponents.SPELLTUNER_CONTEXT);
         TooltipHandler.line(list);
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spelltuner1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spelltuner2");
             TooltipHandler.line(list);
@@ -141,7 +142,7 @@ public class Spelltuner extends BaseCurioItem {
         super.onUnequip(context, newStack, stack);
     }
 
-    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
+    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, Identifier id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
         builder.put(Attributes.LUCK, new AttributeModifier(IItemHelper.getLocation(this), 1, AttributeModifier.Operation.ADD_VALUE));
         Context context = stack.get(EnigmaticComponents.SPELLTUNER_CONTEXT);

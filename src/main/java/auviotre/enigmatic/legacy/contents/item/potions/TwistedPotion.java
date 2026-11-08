@@ -14,7 +14,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -25,7 +25,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -54,13 +54,13 @@ public class TwistedPotion extends BaseDrinkableItem {
         CompoundTag deathLoc = (CompoundTag) EnigmaticHandler.getPersistedData(player).get("LastDeathLoc");
         if (deathLoc == null) return;
 
-        ResourceKey<Level> deathDimension = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(deathLoc.getString("dimension")));
-        ServerLevel destLevel = player.server.getLevel(deathDimension);
+        ResourceKey<Level> deathDimension = ResourceKey.create(Registries.DIMENSION, Identifier.parse(deathLoc.getString("dimension")));
+        ServerLevel destLevel = player.level().getServer().getLevel(deathDimension);
         if (destLevel == null) return;
         BlockPos respawnPos = new BlockPos(deathLoc.getInt("x"), deathLoc.getInt("y") + 2, deathLoc.getInt("z"));
         Vec3 vec3 = respawnPos.getBottomCenter();
         if (!player.level().equals(destLevel))
-            player.changeDimension(new DimensionTransition(destLevel, vec3, player.getDeltaMovement(), player.getYRot(), player.getXRot(), DimensionTransition.DO_NOTHING));
+            player.changeDimension(new TeleportTransition(destLevel, vec3, player.getDeltaMovement(), player.getYRot(), player.getXRot(), TeleportTransition.DO_NOTHING));
         player.teleportTo(vec3.x, vec3.y, vec3.z);
         vec3 = player.adjustSpawnLocation(destLevel, respawnPos).getBottomCenter();
         player.teleportTo(vec3.x, vec3.y, vec3.z);

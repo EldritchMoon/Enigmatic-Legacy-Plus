@@ -8,7 +8,7 @@ import auviotre.enigmatic.legacy.packets.server.ToggleMagnetEffectKeyPacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -16,7 +16,7 @@ import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.gui.screens.recipebook.RecipeUpdateListener;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Tuple;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -58,7 +58,7 @@ public class MagnetRingInventoryButton extends ImageButton {
         return magnetButton;
     }
 
-    public void renderWidget(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+    public void renderWidget(@Nonnull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
         this.active = true;
         if (this.parentGui instanceof InventoryScreen || this.parentGui instanceof ICuriosScreen) {
             boolean lastVisible = this.isRecipeBookVisible;
@@ -77,7 +77,7 @@ public class MagnetRingInventoryButton extends ImageButton {
         if (player != null) {
             EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);
             if (EnigmaticHandler.hasCurio(player, EnigmaticItems.MAGNET_RING) || EnigmaticHandler.hasCurio(player, EnigmaticItems.DISLOCATION_RING)) {
-                ResourceLocation location = SPRITES.get(data.isMagnetRingEnable(), isHoveredOrFocused());
+                Identifier location = SPRITES.get(data.isMagnetRingEnable(), isHoveredOrFocused());
                 graphics.blitSprite(location, this.getX(), this.getY(), this.width, this.height);
             } else this.active = false;
         } else this.active = false;

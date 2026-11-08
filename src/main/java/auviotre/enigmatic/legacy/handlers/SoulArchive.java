@@ -14,7 +14,7 @@ import com.google.gson.reflect.TypeToken;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -72,8 +72,8 @@ public class SoulArchive {
 
     public static DimensionalPosition getRespawnPos(ServerPlayer player) {
         ResourceKey<Level> respawnDimension = player.getRespawnDimension();
-        ServerLevel destLevel = player.server.getLevel(respawnDimension);
-        if (destLevel == null) destLevel = player.server.overworld();
+        ServerLevel destLevel = player.level().getServer().getLevel(respawnDimension);
+        if (destLevel == null) destLevel = player.level().getServer().overworld();
         BlockPos respawnPos = player.getRespawnPosition();
         if (respawnPos == null) respawnPos = destLevel.getSharedSpawnPos();
         return new SoulArchive.DimensionalPosition(respawnPos.getX() + 0.5, respawnPos.getY() + 1.5, respawnPos.getZ() + 0.5, destLevel);
@@ -175,7 +175,7 @@ public class SoulArchive {
         }
     }
 
-    private record SoulData(ResourceLocation dimension, UUID id, UUID ownerID, BlockPos pos, int type) {
+    private record SoulData(Identifier dimension, UUID id, UUID ownerID, BlockPos pos, int type) {
 
         public boolean equals(Object obj) {
             if (this == obj) return true;

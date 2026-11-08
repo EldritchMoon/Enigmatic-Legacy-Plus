@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.spellstones;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
@@ -15,7 +16,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -79,7 +80,7 @@ public class OceanStone extends SpellstoneItem {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneSkill");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.oceanStoneSkill");
             TooltipHandler.line(list);
@@ -144,7 +145,7 @@ public class OceanStone extends SpellstoneItem {
         Multimap<Holder<Attribute>, AttributeModifier> map = HashMultimap.create();
         Holder.Reference<Enchantment> holder = EnigmaticHandler.get(entity.level(), Registries.ENCHANTMENT, Enchantments.AQUA_AFFINITY);
         boolean flag = EnchantmentHelper.getEnchantmentLevel(holder, entity) <= 0;
-        ResourceLocation location = IItemHelper.getLocation(this);
+        Identifier location = IItemHelper.getLocation(this);
         map.put(Attributes.GRAVITY, new AttributeModifier(location, entity.isEyeInFluidType(NeoForgeMod.WATER_TYPE.value()) ? -0.98F : 0F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         map.put(Attributes.SUBMERGED_MINING_SPEED, new AttributeModifier(location, flag ? 4.0F : 0F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         map.put(NeoForgeMod.SWIM_SPEED, new AttributeModifier(location, 1.5F, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));

@@ -17,7 +17,7 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
@@ -93,7 +93,7 @@ public class AntiqueBag extends BaseItem {
 
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         player.startUsingItem(hand);
-        if (!world.isClientSide) player.openMenu(new AntiqueBagContainerMenu.Provider());
+        if (!world.isClientSide()) player.openMenu(new AntiqueBagContainerMenu.Provider());
         return InteractionResultHolder.success(player.getItemInHand(hand));
     }
 
@@ -128,7 +128,7 @@ public class AntiqueBag extends BaseItem {
 
         private static Multimap<Holder<Attribute>, AttributeModifier> getModifier() {
             ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
-            ResourceLocation location = IItemHelper.getLocation(EnigmaticItems.THE_INFINITUM.get());
+            Identifier location = IItemHelper.getLocation(EnigmaticItems.THE_INFINITUM.get());
             builder.put(EnigmaticAttributes.LIFESTEAL, new AttributeModifier(location, 0.01 * TheInfinitum.lifeSteal.getAsInt(), AttributeModifier.Operation.ADD_VALUE));
             return builder.build();
         }

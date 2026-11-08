@@ -1,7 +1,7 @@
 package auviotre.enigmatic.legacy.api.item;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -35,7 +35,7 @@ public interface IItemHelper {
                 .build();
     }
 
-    static ResourceLocation getLocation(ItemLike item) {
+    static Identifier getLocation(ItemLike item) {
         return BuiltInRegistries.ITEM.getKey(item.asItem());
     }
 }

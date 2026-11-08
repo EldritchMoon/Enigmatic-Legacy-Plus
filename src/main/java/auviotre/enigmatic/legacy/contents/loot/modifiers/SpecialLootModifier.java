@@ -9,7 +9,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -34,7 +34,7 @@ public class SpecialLootModifier extends LootModifier {
             RecordCodecBuilder.mapCodec(inst -> codecStart(inst).apply(inst, SpecialLootModifier::new))
     );
 
-    public static final List<ResourceLocation> SUSPICIOUS_TABLES = ImmutableList.of(
+    public static final List<Identifier> SUSPICIOUS_TABLES = ImmutableList.of(
             BuiltInLootTables.DESERT_PYRAMID_ARCHAEOLOGY.location(),
             BuiltInLootTables.DESERT_WELL_ARCHAEOLOGY.location(),
             BuiltInLootTables.OCEAN_RUIN_COLD_ARCHAEOLOGY.location(),

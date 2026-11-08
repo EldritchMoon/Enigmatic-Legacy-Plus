@@ -12,7 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.PostChain;
 import net.minecraft.client.renderer.PostPass;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceProvider;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -39,7 +39,7 @@ public class MixinGameRenderer {
     @Final
     private Camera mainCamera;
     @Unique
-    private static final ResourceLocation DARKEN_LOCATION = EnigmaticLegacy.location("shaders/post/darken.json");
+    private static final Identifier DARKEN_LOCATION = EnigmaticLegacy.location("shaders/post/darken.json");
     @Unique
     private @Nullable PostChain darkenEffect;
 

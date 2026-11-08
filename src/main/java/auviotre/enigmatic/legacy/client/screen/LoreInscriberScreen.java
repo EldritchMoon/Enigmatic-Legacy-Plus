@@ -5,12 +5,12 @@ import auviotre.enigmatic.legacy.contents.gui.LoreInscriberMenu;
 import auviotre.enigmatic.legacy.packets.server.LoreInscriberRenamePacket;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerListener;
@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 public class LoreInscriberScreen extends AbstractContainerScreen<LoreInscriberMenu> implements ContainerListener {
-    private static final ResourceLocation TEXTURE = EnigmaticLegacy.location("textures/gui/lore_inscriber.png");
+    private static final Identifier TEXTURE = EnigmaticLegacy.location("textures/gui/lore_inscriber.png");
     private EditBox name;
 
     public LoreInscriberScreen(LoreInscriberMenu container, Inventory Inventory, Component title) {
@@ -52,14 +52,14 @@ public class LoreInscriberScreen extends AbstractContainerScreen<LoreInscriberMe
         this.menu.removeSlotListener(this);
     }
 
-    public void render(GuiGraphics graphics, int x, int y, float partialTick) {
+    public void render(GuiGraphicsExtractor graphics, int x, int y, float partialTick) {
         super.render(graphics, x, y, partialTick);
         RenderSystem.disableBlend();
         this.renderNameField(graphics, x, y, partialTick);
         this.renderTooltip(graphics, x, y);
     }
 
-    protected void renderBg(GuiGraphics graphics, float partialTicks, int x, int y) {
+    protected void renderBg(GuiGraphicsExtractor graphics, float partialTicks, int x, int y) {
         RenderSystem.clearColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, TEXTURE);
         int i = (this.width - this.imageWidth) / 2;
@@ -82,12 +82,12 @@ public class LoreInscriberScreen extends AbstractContainerScreen<LoreInscriberMe
         this.name.setValue(s);
     }
 
-    protected void renderLabels(GuiGraphics graphics, int x, int y) {
+    protected void renderLabels(GuiGraphicsExtractor graphics, int x, int y) {
         graphics.drawString(this.font, this.title, 52, 13, 4210752);
         RenderSystem.disableBlend();
     }
 
-    public void renderNameField(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+    public void renderNameField(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
         this.name.render(graphics, mouseX, mouseY, partialTicks);
     }
 

@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.materials;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.entity.AbyssalHeartBearer;
@@ -83,7 +84,7 @@ public class AbyssalHeart extends BaseCursedItem implements ITaintable, ISharabl
 
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-        if (!Screen.hasShiftDown()) {
+        if (!ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.abyssalHeart1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.abyssalHeart2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.abyssalHeart3");

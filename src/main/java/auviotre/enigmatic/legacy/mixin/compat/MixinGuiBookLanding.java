@@ -2,7 +2,7 @@ package auviotre.enigmatic.legacy.mixin.compat;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.client.renderer.AcknowledgmentNameRenderer;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.Mixin;
@@ -32,7 +32,7 @@ public abstract class MixinGuiBookLanding extends GuiBook {
     }
 
     @Inject(method = "drawHeader", at = @At("HEAD"), cancellable = true, require = 1, remap = false)
-    private void onDrawHeader(GuiGraphics graphics, CallbackInfo info) {
+    private void onDrawHeader(GuiGraphicsExtractor graphics, CallbackInfo info) {
         if (EnigmaticLegacy.MODID.equals(this.book.id.getNamespace())) {
             this.EL$renderer.drawHeader(graphics);
             info.cancel();

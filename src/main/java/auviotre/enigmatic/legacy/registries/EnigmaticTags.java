@@ -2,7 +2,7 @@ package auviotre.enigmatic.legacy.registries;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
@@ -31,7 +31,7 @@ public interface EnigmaticTags {
         }
 
         private static TagKey<Item> register(String modid, String name) {
-            return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(modid, name));
+            return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(modid, name));
         }
     }
 

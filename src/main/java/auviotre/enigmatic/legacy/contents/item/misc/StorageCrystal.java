@@ -106,7 +106,7 @@ public class StorageCrystal extends BaseItem implements IPermanentCrystal {
         }
         player.giveExperiencePoints(info.exp);
         if (retrieveSoul.is(EnigmaticItems.SOUL_CRYSTAL)) SoulCrystal.retrieveSoulFromCrystal(player);
-        else if (!player.level().isClientSide) player.playSound(SoundEvents.BEACON_ACTIVATE, 1.0f, 1.0f);
+        else if (!player.level().isClientSide()) player.playSound(SoundEvents.BEACON_ACTIVATE, 1.0f, 1.0f);
     }
 
     public boolean isFoil(ItemStack stack) {

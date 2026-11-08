@@ -17,7 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -41,7 +41,7 @@ public class RecallPotion extends BaseDrinkableItem {
         ServerLevel destLevel = dimPoint.getWorld();
         Vec3 vec3 = dimPoint.getBlockPos().getBottomCenter();
         if (!player.level().equals(destLevel))
-            player.changeDimension(new DimensionTransition(destLevel, vec3, player.getDeltaMovement(), player.getYRot(), player.getXRot(), DimensionTransition.DO_NOTHING));
+            player.changeDimension(new TeleportTransition(destLevel, vec3, player.getDeltaMovement(), player.getYRot(), player.getXRot(), TeleportTransition.DO_NOTHING));
         vec3 = player.adjustSpawnLocation(destLevel, dimPoint.getBlockPos()).getBottomCenter();
         player.teleportTo(vec3.x, vec3.y, vec3.z);
 

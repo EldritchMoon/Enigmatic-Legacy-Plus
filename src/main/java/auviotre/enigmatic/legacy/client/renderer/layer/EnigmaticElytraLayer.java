@@ -5,17 +5,17 @@ import auviotre.enigmatic.legacy.contents.item.generic.BaseElytraItem;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.ElytraModel;
+import net.minecraft.client.model.object.equipment.ElytraModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @OnlyIn(Dist.CLIENT)
 public class EnigmaticElytraLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
-    private static final Map<BaseElytraItem, ResourceLocation> TEXTURE_MAP = ImmutableMap.<BaseElytraItem, ResourceLocation>builder()
+    private static final Map<BaseElytraItem, Identifier> TEXTURE_MAP = ImmutableMap.<BaseElytraItem, Identifier>builder()
             .put(EnigmaticItems.MAJESTIC_ELYTRA.get(), EnigmaticLegacy.location("textures/models/misc/majestic_elytra.png"))
             .put(EnigmaticItems.CHAOS_ELYTRA.get(), EnigmaticLegacy.location("textures/models/misc/chaos_elytra.png"))
             .build();

@@ -4,7 +4,7 @@ import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticDamageTypes;
 import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,7 +23,7 @@ import java.util.Objects;
 public class AbyssCorruption extends MobEffect {
     public AbyssCorruption() {
         super(MobEffectCategory.HARMFUL, 0x382c4d);
-        ResourceLocation location = EnigmaticLegacy.location("effect.abyss_corruption");
+        Identifier location = EnigmaticLegacy.location("effect.abyss_corruption");
         this.addAttributeModifier(Attributes.ARMOR_TOUGHNESS, location, -1.0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
         this.addAttributeModifier(Attributes.MOVEMENT_SPEED, location, -0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
         NeoForge.EVENT_BUS.register(this);

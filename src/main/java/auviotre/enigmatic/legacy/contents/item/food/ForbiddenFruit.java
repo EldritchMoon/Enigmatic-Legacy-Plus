@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.food;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
@@ -38,9 +39,9 @@ import java.util.List;
 public class ForbiddenFruit extends BaseItem {
     public static final FoodProperties FOOD_PROPERTIES = new FoodProperties.Builder()
             .effect(() -> new MobEffectInstance(MobEffects.WITHER, 400, 3), 1.0F)
-            .effect(() -> new MobEffectInstance(MobEffects.CONFUSION, 400, 2), 1.0F)
+            .effect(() -> new MobEffectInstance(MobEffects.NAUSEA, 400, 2), 1.0F)
             .effect(() -> new MobEffectInstance(MobEffects.WEAKNESS, 480, 3), 1.0F)
-            .effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 640, 2), 1.0F)
+            .effect(() -> new MobEffectInstance(MobEffects.SLOWNESS, 640, 2), 1.0F)
             .nutrition(2).saturationModifier(0.5F).alwaysEdible().build();
 
     public ForbiddenFruit() {
@@ -53,7 +54,7 @@ public class ForbiddenFruit extends BaseItem {
 
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.forbiddenFruit1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.forbiddenFruit2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.forbiddenFruit3", ChatFormatting.GOLD, "80%");
@@ -90,7 +91,7 @@ public class ForbiddenFruit extends BaseItem {
         private static void onEffectApply(MobEffectEvent.@NotNull Applicable event) {
             if (isForbiddenCursed(event.getEntity())) {
                 MobEffectInstance effect = event.getEffectInstance();
-                if (effect != null && (effect.is(MobEffects.HUNGER) || effect.is(MobEffects.CONFUSION))) {
+                if (effect != null && (effect.is(MobEffects.HUNGER) || effect.is(MobEffects.NAUSEA))) {
                     event.setResult(MobEffectEvent.Applicable.Result.DO_NOT_APPLY);
                 }
             }

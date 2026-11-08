@@ -6,7 +6,7 @@ import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticParticles;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 public class ViolenceCurse extends MobEffect {
     public ViolenceCurse() {
         super(MobEffectCategory.NEUTRAL, 0x392E4D);
-        ResourceLocation location = EnigmaticLegacy.location("effect.violence_curse");
+        Identifier location = EnigmaticLegacy.location("effect.violence_curse");
         this.addAttributeModifier(Attributes.ATTACK_DAMAGE, location, 0.5, AttributeModifier.Operation.ADD_VALUE);
         this.addAttributeModifier(Attributes.ATTACK_SPEED, location, 0.01, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
         NeoForge.EVENT_BUS.register(this);

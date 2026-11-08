@@ -5,7 +5,7 @@ import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -42,7 +42,7 @@ public class AcknowledgmentNameRenderer {
         this.name = customName;
     }
 
-    public void drawHeader(GuiGraphics graphics) {
+    public void drawHeader(GuiGraphicsExtractor graphics) {
         RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
         GuiBook.drawFromTexture(graphics, this.gui.book, -8, 12, 0, 180, 140, 31);
 

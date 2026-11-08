@@ -4,7 +4,7 @@ import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.block.entity.DimensionalAnchorEntity;
 import auviotre.enigmatic.legacy.contents.block.entity.EtherealLanternEntity;
 import auviotre.enigmatic.legacy.contents.block.entity.SpellstoneTableEntity;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.level.block.entity.BlockEntity;

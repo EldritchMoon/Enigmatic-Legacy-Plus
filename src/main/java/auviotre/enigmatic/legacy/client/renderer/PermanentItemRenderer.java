@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -37,7 +37,7 @@ public class PermanentItemRenderer extends EntityRenderer<PermanentItemEntity> {
         this.shadowStrength = 0.75F;
     }
 
-    public ResourceLocation getTextureLocation(PermanentItemEntity entity) {
+    public Identifier getTextureLocation(PermanentItemEntity entity) {
         return TextureAtlas.LOCATION_BLOCKS;
     }
 

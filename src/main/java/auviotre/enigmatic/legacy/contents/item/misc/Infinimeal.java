@@ -83,11 +83,11 @@ public class Infinimeal extends BaseItem {
 
                 if (world.isClientSide()) spawnBoneMealParticles(world, topMostPos, 15);
 
-                age += world.random.nextInt(20);
+                age += world.getRandom().nextInt(20);
                 world.setBlock(topMostPos, topMostState.setValue(BlockStateProperties.AGE_15, Math.min(age, 15)), 4);
 
                 if (world instanceof ServerLevel server) {
-                    world.getBlockState(topMostPos).randomTick(server, topMostPos, world.random);
+                    world.getBlockState(topMostPos).randomTick(server, topMostPos, world.getRandom());
                 }
 
                 return true;
@@ -95,10 +95,10 @@ public class Infinimeal extends BaseItem {
         } else if (block instanceof VineBlock && state.isRandomlyTicking()) {
             if (world.isClientSide()) spawnBoneMealParticles(world, pos, 15);
 
-            int cycles = 7 + world.random.nextInt(7);
+            int cycles = 7 + world.getRandom().nextInt(7);
 
             if (world instanceof ServerLevel server) {
-                for (int i = 0; i <= cycles; i++) state.randomTick(server, pos, world.random);
+                for (int i = 0; i <= cycles; i++) state.randomTick(server, pos, world.getRandom());
                 state.updateNeighbourShapes(server, pos, 4);
             }
 
@@ -106,12 +106,12 @@ public class Infinimeal extends BaseItem {
         } else if (block instanceof NetherWartBlock && state.isRandomlyTicking()) {
             if (world.isClientSide()) spawnBoneMealParticles(world, pos, 15);
 
-            int cycles = 1 + world.random.nextInt(1);
+            int cycles = 1 + world.getRandom().nextInt(1);
             cycles *= 11;
 
             if (world instanceof ServerLevel server) {
                 for (int i = 0; i <= cycles; i++) {
-                    state.randomTick(server, pos, world.random);
+                    state.randomTick(server, pos, world.getRandom());
                 }
             }
 
@@ -122,12 +122,12 @@ public class Infinimeal extends BaseItem {
             if (world instanceof ServerLevel server) {
                 List<BlockPos> flowers = findChorusFlowers(world, pos);
                 flowers.forEach(flowerPos -> {
-                    int cycles = 1 + world.random.nextInt(2);
+                    int cycles = 1 + world.getRandom().nextInt(2);
                     cycles *= 11;
 
                     for (int i = 0; i <= cycles; i++) {
                         BlockState flowerState = world.getBlockState(flowerPos);
-                        flowerState.randomTick(server, flowerPos, world.random);
+                        flowerState.randomTick(server, flowerPos, world.getRandom());
                     }
                 });
             }
@@ -236,7 +236,7 @@ public class Infinimeal extends BaseItem {
         if (tryApply(stack, world, pos, Optional.ofNullable(context.getPlayer()), Optional.of(context.getClickedFace()))) {
             if (!world.isClientSide())
                 context.getPlayer().gameEvent(GameEvent.ITEM_INTERACT_FINISH);
-            return InteractionResult.sidedSuccess(world.isClientSide);
+            return InteractionResult.sidedSuccess(world.isClientSide());
         }
         return InteractionResult.PASS;
     }

@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.legacy;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.food.ForbiddenFruit;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
@@ -21,7 +22,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -35,7 +36,7 @@ public class UnholyGrail extends BaseItem {
 
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.unholyGrail");
         } else TooltipHandler.holdShift(list);
     }
@@ -46,16 +47,16 @@ public class UnholyGrail extends BaseItem {
             if (theWorthy) {
                 user.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 500, 2, false, true));
                 user.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 800, 1, false, true));
-                user.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 1200, 1, false, true));
-                user.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 1000, 1, false, true));
-                user.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 1200, 0, false, true));
+                user.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 1200, 1, false, true));
+                user.addEffect(new MobEffectInstance(MobEffects.STRENGTH, 1000, 1, false, true));
+                user.addEffect(new MobEffectInstance(MobEffects.SPEED, 1200, 0, false, true));
             } else {
                 user.addEffect(new MobEffectInstance(MobEffects.WITHER, 100, 2, false, true));
                 user.addEffect(new MobEffectInstance(MobEffects.POISON, 160, 1, false, true));
-                user.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 240, 0, false, true));
+                user.addEffect(new MobEffectInstance(MobEffects.NAUSEA, 240, 0, false, true));
                 user.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 200, 1, false, true));
                 user.addEffect(new MobEffectInstance(MobEffects.HUNGER, 160, 2, false, true));
-                user.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 240, 0, false, true));
+                user.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 240, 0, false, true));
             }
         }
         if (user instanceof Player player) {
@@ -83,7 +84,7 @@ public class UnholyGrail extends BaseItem {
         return 32;
     }
 
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.DRINK;
+    public ItemUseAnimation getUseAnimation(ItemStack stack) {
+        return ItemUseAnimation.DRINK;
     }
 }

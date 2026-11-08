@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.books;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.IBagContent;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
@@ -7,7 +8,7 @@ import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -28,7 +29,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 public class TheAcknowledgment extends Item implements IBagContent {
-    private static final ResourceLocation BOOK_ID = EnigmaticLegacy.location("the_acknowledgment");
+    private static final Identifier BOOK_ID = EnigmaticLegacy.location("the_acknowledgment");
 
     protected TheAcknowledgment(@NotNull Properties properties, float attackDamage, float attackSpeed) {
         super(properties.attributes(IItemHelper.createAttributes(attackDamage, attackSpeed)).component(PatchouliDataComponents.BOOK, BOOK_ID));
@@ -48,7 +49,7 @@ public class TheAcknowledgment extends Item implements IBagContent {
 
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.curseAlteration", ChatFormatting.GOLD, Component.translatable("tooltip.enigmaticlegacy.fourthCurse"));
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.fourthCurseAlteration2", ChatFormatting.GOLD, "20%");
         } else {

@@ -35,7 +35,7 @@ import net.minecraft.client.particle.EndRodParticle;
 import net.minecraft.client.particle.SpellParticle;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
-import net.minecraft.client.resources.PlayerSkin;
+import net.minecraft.world.entity.player.PlayerSkin;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.api.distmarker.Dist;

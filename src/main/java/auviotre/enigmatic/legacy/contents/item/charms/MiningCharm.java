@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.charms;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -11,7 +12,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -43,7 +44,7 @@ public class MiningCharm extends BaseCurioItem {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.miningCharm1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.miningCharm2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.miningCharm3");
@@ -86,7 +87,7 @@ public class MiningCharm extends BaseCurioItem {
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
     }
 
-    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
+    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
         builder.put(Attributes.MINING_EFFICIENCY, new AttributeModifier(IItemHelper.getLocation(this), 3, AttributeModifier.Operation.ADD_VALUE));
         builder.put(Attributes.BLOCK_INTERACTION_RANGE, new AttributeModifier(IItemHelper.getLocation(this), 2, AttributeModifier.Operation.ADD_VALUE));

@@ -8,21 +8,21 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 
 public class EngineHookRenderer extends EntityRenderer<EngineHook> {
-    private static final ResourceLocation CHAIN_TEXTURE = EnigmaticLegacy.location("textures/entity/projectiles/engine_chain.png");
-    private static final ResourceLocation TEXTURE = EnigmaticLegacy.location("textures/entity/projectiles/engine_hook.png");
+    private static final Identifier CHAIN_TEXTURE = EnigmaticLegacy.location("textures/entity/projectiles/engine_chain.png");
+    private static final Identifier TEXTURE = EnigmaticLegacy.location("textures/entity/projectiles/engine_hook.png");
     private final EngineHookModel model;
 
     public EngineHookRenderer(EntityRendererProvider.Context context) {
@@ -127,7 +127,7 @@ public class EngineHookRenderer extends EntityRenderer<EngineHook> {
         }
     }
 
-    public ResourceLocation getTextureLocation(EngineHook angelBeam) {
+    public Identifier getTextureLocation(EngineHook angelBeam) {
         return TEXTURE;
     }
 }

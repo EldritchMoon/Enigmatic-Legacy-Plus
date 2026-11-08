@@ -6,18 +6,18 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
 public class AngelBeamRenderer extends EntityRenderer<AngelBeam> {
-    private static final ResourceLocation TEXTURE = EnigmaticLegacy.location("textures/entity/projectiles/angel_beam.png");
+    private static final Identifier TEXTURE = EnigmaticLegacy.location("textures/entity/projectiles/angel_beam.png");
 
     public AngelBeamRenderer(EntityRendererProvider.Context context) {
         super(context);
@@ -102,7 +102,7 @@ public class AngelBeamRenderer extends EntityRenderer<AngelBeam> {
         poseStack.popPose();
     }
 
-    public ResourceLocation getTextureLocation(AngelBeam angelBeam) {
+    public Identifier getTextureLocation(AngelBeam angelBeam) {
         return TEXTURE;
     }
 }

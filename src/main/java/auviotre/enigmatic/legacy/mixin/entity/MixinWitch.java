@@ -60,9 +60,9 @@ public abstract class MixinWitch extends Raider implements RangedAttackMob {
             List<MobEffectInstance> effects = new ArrayList<>();
             effects.add(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 2400));
             effects.add(new MobEffectInstance(MobEffects.WATER_BREATHING, 2400));
-            effects.add(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 2400));
-            effects.add(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 1200, 1));
-            effects.add(new MobEffectInstance(MobEffects.HEAL, 10, 4));
+            effects.add(new MobEffectInstance(MobEffects.SPEED, 2400));
+            effects.add(new MobEffectInstance(MobEffects.RESISTANCE, 1200, 1));
+            effects.add(new MobEffectInstance(MobEffects.INSTANT_HEALTH, 10, 4));
             stack.set(DataComponents.POTION_CONTENTS, new PotionContents(Optional.empty(), Optional.empty(), effects));
         }
         return stack;

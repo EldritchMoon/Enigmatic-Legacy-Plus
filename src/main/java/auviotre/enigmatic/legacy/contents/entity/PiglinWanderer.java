@@ -37,7 +37,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
 import net.minecraft.world.entity.monster.piglin.PiglinAi;
 import net.minecraft.world.entity.monster.piglin.PiglinArmPose;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.item.ItemStack;
@@ -100,7 +100,7 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
     }
 
     @Nullable
-    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @Nullable SpawnGroupData spawnGroupData) {
         Ai.initMemories(this);
         this.populateDefaultEquipmentSlots(level.getRandom(), difficulty);
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
@@ -155,7 +155,7 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
 
     public boolean hurt(DamageSource source, float amount) {
         boolean flag = super.hurt(source, amount);
-        if (this.level().isClientSide) return false;
+        if (this.level().isClientSide()) return false;
         if (flag && source.getEntity() instanceof LivingEntity)
             Ai.wasHurtBy(this, (LivingEntity) source.getEntity());
         return flag;
@@ -350,7 +350,7 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
     public static class Events {
         @SubscribeEvent
         private static void onEntitySpawn(@NotNull FinalizeSpawnEvent event) {
-            if (event.getEntity().getType().equals(EntityType.PIGLIN) && (event.getSpawnType() == MobSpawnType.NATURAL || event.getSpawnType() == MobSpawnType.CHUNK_GENERATION)) {
+            if (event.getEntity().getType().equals(EntityType.PIGLIN) && (event.getSpawnType() == EntitySpawnReason.NATURAL || event.getSpawnType() == EntitySpawnReason.CHUNK_GENERATION)) {
                 ServerLevelAccessor level = event.getLevel();
                 if (level.getRandom().nextFloat() > 0.1F) return;
                 PiglinWanderer piglinWanderer = EnigmaticEntities.PIGLIN_WANDERER.get().create(level.getLevel());

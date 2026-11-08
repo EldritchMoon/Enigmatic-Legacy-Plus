@@ -10,7 +10,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.neoforged.api.distmarker.Dist;
@@ -27,7 +27,7 @@ public class Quote {
     private static final List<Quote> ALL_QUOTES = new ArrayList<>();
     private static final String HEARD_TAG = "HeardQuotes";
     private static Quote lastQuote = null;
-    private final ResourceLocation soundId;
+    private final Identifier soundId;
     private final String name;
     private final int id;
     private Subtitles subtitles;

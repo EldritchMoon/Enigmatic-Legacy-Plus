@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.tools;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
@@ -10,7 +11,7 @@ import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -87,7 +88,7 @@ public class TotemOfMalice extends BaseCurioItem {
 
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice2", ChatFormatting.GOLD, specialDamageBoost.get() + "%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.totemofMalice3", ChatFormatting.GOLD, specialDamageResistance.get() + "%");
@@ -114,7 +115,7 @@ public class TotemOfMalice extends BaseCurioItem {
 
     @OnlyIn(Dist.CLIENT)
     public static class Decorator implements IItemDecorator {
-        public boolean render(GuiGraphics graphics, Font font, @NotNull ItemStack stack, int x, int y) {
+        public boolean render(GuiGraphicsExtractor graphics, Font font, @NotNull ItemStack stack, int x, int y) {
             int durability = getDurability(stack);
             if (stack.getCount() == 1 && durability > 0) {
                 graphics.pose().pushPose();

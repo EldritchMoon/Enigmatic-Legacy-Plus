@@ -6,17 +6,17 @@ import auviotre.enigmatic.legacy.contents.entity.misc.ExplorerMarker;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class ExplorerMarkerRender extends EntityRenderer<ExplorerMarker> {
-    private static final ResourceLocation TEXTURE = EnigmaticLegacy.location("textures/models/misc/explorer_marker.png");
+    private static final Identifier TEXTURE = EnigmaticLegacy.location("textures/models/misc/explorer_marker.png");
     private final ExplorerMarkerModel model;
 
     public ExplorerMarkerRender(EntityRendererProvider.Context context) {
@@ -32,7 +32,7 @@ public class ExplorerMarkerRender extends EntityRenderer<ExplorerMarker> {
     }
 
 
-    public ResourceLocation getTextureLocation(ExplorerMarker entity) {
+    public Identifier getTextureLocation(ExplorerMarker entity) {
         return TEXTURE;
     }
 }

@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.spellstones;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
@@ -25,7 +26,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -43,7 +44,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
@@ -98,7 +99,7 @@ public class TheCube extends SpellstoneItem {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneSkill");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theCubeSkill");
             TooltipHandler.line(list);
@@ -138,9 +139,9 @@ public class TheCube extends SpellstoneItem {
         return attributes;
     }
 
-    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
+    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
-        ResourceLocation location = IItemHelper.getLocation(this);
+        Identifier location = IItemHelper.getLocation(this);
         builder.put(NeoForgeMod.SWIM_SPEED, new AttributeModifier(location, 0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         builder.put(Attributes.MINING_EFFICIENCY, new AttributeModifier(location, 0.6, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(location, 0.4, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
@@ -218,11 +219,11 @@ public class TheCube extends SpellstoneItem {
             server.sendParticles(ParticleTypes.WITCH, player.getX(), player.getY(0.5), player.getZ(), 48, hOffset, yOffset, hOffset, 0.03);
         }
 
-        ServerLevel destLevel = player.server.getLevel(location.dimension());
-        if (destLevel == null) destLevel = player.server.overworld();
+        ServerLevel destLevel = player.level().getServer().getLevel(location.dimension());
+        if (destLevel == null) destLevel = player.level().getServer().overworld();
         Vec3 vec3 = location.pos().getBottomCenter();
         if (!player.level().equals(destLevel))
-            player.changeDimension(new DimensionTransition(destLevel, vec3, player.getDeltaMovement(), player.getYRot(), player.getXRot(), DimensionTransition.DO_NOTHING));
+            player.changeDimension(new TeleportTransition(destLevel, vec3, player.getDeltaMovement(), player.getYRot(), player.getXRot(), TeleportTransition.DO_NOTHING));
         player.teleportTo(vec3.x, vec3.y, vec3.z);
 
         if (player.level() instanceof ServerLevel server) {
@@ -253,8 +254,8 @@ public class TheCube extends SpellstoneItem {
             list.add(world);
         }
         ResourceKey<Level> key = list.get(player.getRandom().nextInt(list.size()));
-        ServerLevel level = player.server.getLevel(key);
-        if (level == null) level = player.server.overworld();
+        ServerLevel level = player.level().getServer().getLevel(key);
+        if (level == null) level = player.level().getServer().overworld();
 
         RandomSource random = player.getRandom();
         int border = (int) level.getWorldBorder().getSize() / 2;
@@ -368,9 +369,9 @@ public class TheCube extends SpellstoneItem {
                         if (autoTrigger.get()) EnigmaticItems.THE_CUBE.get().triggerActiveAbility(level, player, cube);
 
                         player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 1200, 2));
-                        player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 1200, 1));
+                        player.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 1200, 1));
                         player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 1200, 0));
-                        player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 1200, 1));
+                        player.addEffect(new MobEffectInstance(MobEffects.STRENGTH, 1200, 1));
 
                         PacketDistributor.sendToPlayer(player, new TheCubeRevivePacket(player.position(), cube.copy()));
                     }

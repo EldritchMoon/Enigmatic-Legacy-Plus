@@ -6,7 +6,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 
 public class SpellstoneHut extends Structure {
-    private static final ResourceLocation LOCATION = EnigmaticLegacy.location("spellstone_hut");
+    private static final Identifier LOCATION = EnigmaticLegacy.location("spellstone_hut");
     private static final MapCodec<SpellstoneHut> CODEC = simpleCodec(SpellstoneHut::new);
 
     public SpellstoneHut(StructureSettings settings) {
@@ -62,7 +62,7 @@ public class SpellstoneHut extends Structure {
     }
 
     public static class Piece extends TemplateStructurePiece {
-        public Piece(StructureTemplateManager manager, ResourceLocation location, BlockPos pos, Rotation rotation) {
+        public Piece(StructureTemplateManager manager, Identifier location, BlockPos pos, Rotation rotation) {
             super(EnigmaticStructureTypes.SPELLSTONE_HUT_PIECE.get(), 0, manager, location, location.toString(), makeSettings(rotation), pos);
         }
 

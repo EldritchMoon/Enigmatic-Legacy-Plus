@@ -16,7 +16,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Spider;
+import net.minecraft.world.entity.monster.spider.Spider;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -99,7 +99,7 @@ public class CobwebBall extends Projectile implements ItemSupplier {
                     entity.level().playSound(null, target.blockPosition(), SoundEvents.HONEY_BLOCK_PLACE, SoundSource.BLOCKS);
                     int difficulty = this.level().getDifficulty().getId();
                     if (this.random.nextInt(5) > difficulty || !entity.level().getBlockState(target.blockPosition()).isAir()) {
-                        living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 80, 3), spider);
+                        living.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 80, 3), spider);
                         living.addEffect(new MobEffectInstance(MobEffects.WEAVING, 600), spider);
                     } else {
                         entity.level().setBlock(target.blockPosition(), Blocks.COBWEB.defaultBlockState(), Block.UPDATE_ALL);
@@ -111,7 +111,7 @@ public class CobwebBall extends Projectile implements ItemSupplier {
 
     protected void onHitBlock(BlockHitResult hitResult) {
         super.onHitBlock(hitResult);
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.discard();
         }
     }

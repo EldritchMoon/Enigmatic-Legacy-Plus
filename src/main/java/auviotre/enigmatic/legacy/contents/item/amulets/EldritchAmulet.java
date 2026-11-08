@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.amulets;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
@@ -20,7 +21,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -36,7 +37,7 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -125,7 +126,7 @@ public class EldritchAmulet extends BaseCurioItem {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.eldritchAmulet1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.eldritchAmulet2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.eldritchAmulet3");
@@ -169,8 +170,8 @@ public class EldritchAmulet extends BaseCurioItem {
             List<LivingEntity> entities = EnigmaticHandler.getObservedEntities(entity, entity.level(), 2.1F, 64, false);
             for (LivingEntity target : entities) {
                 if (EnigmaticHandler.hasCurio(target, this)) continue;
-                target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 1));
-                target.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 10, 1));
+                target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 10, 1));
+                target.addEffect(new MobEffectInstance(MobEffects.MINING_FATIGUE, 10, 1));
                 target.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 10, 1));
             }
         }
@@ -198,7 +199,7 @@ public class EldritchAmulet extends BaseCurioItem {
         return map;
     }
 
-    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, ResourceLocation id, ItemStack stack) {
+    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         CuriosApi.addSlotModifier(attributes, "charm", IItemHelper.getLocation(this), 1.0, AttributeModifier.Operation.ADD_VALUE);
         return attributes;

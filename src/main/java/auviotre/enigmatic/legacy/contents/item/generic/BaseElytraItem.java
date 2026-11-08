@@ -8,7 +8,7 @@ import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import com.illusivesoulworks.caelus.api.CaelusApi;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -38,7 +38,7 @@ import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import java.util.Optional;
 
 public abstract class BaseElytraItem extends BaseCurioItem implements Equipable {
-    protected static final ResourceLocation LOCATION = EnigmaticLegacy.location("elytra");
+    protected static final Identifier LOCATION = EnigmaticLegacy.location("elytra");
     protected static final AttributeModifier ELYTRA_MODIFIER = new AttributeModifier(LOCATION, 1.0, AttributeModifier.Operation.ADD_VALUE);
     @OnlyIn(Dist.CLIENT)
     private boolean isBoosting;
@@ -71,7 +71,7 @@ public abstract class BaseElytraItem extends BaseCurioItem implements Equipable 
     }
 
     public boolean elytraFlightTick(ItemStack stack, @NotNull LivingEntity entity, int flightTicks) {
-        if (!entity.level().isClientSide) {
+        if (!entity.level().isClientSide()) {
             int nextFlightTick = flightTicks + 1;
             if (nextFlightTick % 10 == 0) {
                 if (nextFlightTick % 20 == 0)

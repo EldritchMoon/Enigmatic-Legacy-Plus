@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.rings;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IAmulet;
@@ -30,7 +31,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -44,7 +45,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.golem.IronGolem;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.EnderMan;
@@ -56,7 +57,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.FluidState;
@@ -155,7 +156,7 @@ public class CursedRing extends CursedCurioItem {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurses");
             int multiplier = painMultiplier.getAsInt();
             if (multiplier == 200) TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurse1");
@@ -207,7 +208,7 @@ public class CursedRing extends CursedCurioItem {
     public void curioTick(@NotNull SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
         entity.getAttributes().addTransientAttributeModifiers(this.getArmorModifiers(entity));
-        if (entity.level().isClientSide || !(entity instanceof Player player)) return;
+        if (entity.level().isClientSide() || !(entity instanceof Player player)) return;
         if (player.isCreative() || player.isSpectator()) return;
 
         if (EnigmaticHandler.hasItem(player, EnigmaticItems.ODE_TO_LIVING)) return;
@@ -218,7 +219,7 @@ public class CursedRing extends CursedCurioItem {
             double noCheckDistance = Math.max(angerRange / 3.2, 5.4);
             double angerDistance = Math.max(angerRange * visibility, noCheckDistance);
             if (!player.hasLineOfSight(mob) && player.distanceTo(mob) > angerRange / 2) continue;
-            ResourceLocation key = BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType());
+            Identifier key = BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType());
             if (neutralWhiteList.get().contains(key.toString())) continue;
             if (mob.distanceToSqr(player.getX(), player.getY(), player.getZ()) <= angerDistance * angerDistance) {
                 if (mob instanceof Piglin piglin && !EnigmaticHandler.hasCurio(player, EnigmaticItems.AVARICE_SCROLL)) {
@@ -379,7 +380,7 @@ public class CursedRing extends CursedCurioItem {
 
                 if (EnigmaticHandler.hasCurio(player, EnigmaticItems.ESCAPE_SCROLL)) {
                     POSSESSIONS.put(player, EnigmaticItems.ESCAPE_SCROLL);
-                    if (!player.level().isClientSide) {
+                    if (!player.level().isClientSide()) {
                         EnigmaticTriggers.ENIGMATIC_TRIGGER.get().trigger(player, 5);
                         ItemStack curio = EnigmaticHandler.getCurio(player, EnigmaticItems.ESCAPE_SCROLL);
                         PermanentItemEntity itemEntity = new PermanentItemEntity(player.level(), player.getX(), player.getY(0.5), player.getZ(), curio.copy());

@@ -2,7 +2,7 @@ package auviotre.enigmatic.legacy.mixin.entity;
 
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
-import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.neoforged.neoforge.common.extensions.ILivingEntityExtension;

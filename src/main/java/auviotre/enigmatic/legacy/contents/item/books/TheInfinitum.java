@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.books;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IBagContent;
@@ -17,7 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -74,7 +75,7 @@ public class TheInfinitum extends TheAcknowledgment implements IBagContent {
 
     public static Multimap<Holder<Attribute>, AttributeModifier> getModifier() {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
-        ResourceLocation location = IItemHelper.getLocation(EnigmaticItems.THE_INFINITUM.get());
+        Identifier location = IItemHelper.getLocation(EnigmaticItems.THE_INFINITUM.get());
         builder.put(Attributes.ATTACK_KNOCKBACK, new AttributeModifier(location, 0.01 * knockbackModifier.getAsInt(), AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         builder.put(EnigmaticAttributes.LIFESTEAL, new AttributeModifier(location, 0.01 * lifeSteal.getAsInt(), AttributeModifier.Operation.ADD_VALUE));
         return builder.build();
@@ -95,7 +96,7 @@ public class TheInfinitum extends TheAcknowledgment implements IBagContent {
 
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.curseAlteration", ChatFormatting.GOLD, Component.translatable("tooltip.enigmaticlegacy.fourthCurse"));
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.fourthCurseAlteration");
             TooltipHandler.line(list);

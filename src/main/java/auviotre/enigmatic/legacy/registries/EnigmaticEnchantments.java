@@ -6,16 +6,16 @@ import auviotre.enigmatic.legacy.contents.item.etherium.EtheriumProperties;
 import auviotre.enigmatic.legacy.contents.item.rings.CursedRing;
 import auviotre.enigmatic.legacy.contents.loot.conditions.IsMonsterCondition;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
-import net.minecraft.advancements.critereon.DamageSourcePredicate;
-import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.criterion.DamageSourcePredicate;
+import net.minecraft.advancements.criterion.EntityPredicate;
+import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.ItemTags;
@@ -42,7 +42,7 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
@@ -82,7 +82,7 @@ public class EnigmaticEnchantments {
                                 EnchantmentTarget.ATTACKER,
                                 EnchantmentTarget.VICTIM,
                                 new ApplyMobEffect(
-                                        HolderSet.direct(MobEffects.MOVEMENT_SLOWDOWN),
+                                        HolderSet.direct(MobEffects.SLOWNESS),
                                         LevelBasedValue.constant(1.0F), LevelBasedValue.perLevel(1.0F, 0.5F),
                                         LevelBasedValue.constant(3.0F), LevelBasedValue.constant(3.0F)
                                 ),
@@ -273,7 +273,7 @@ public class EnigmaticEnchantments {
             SlotContext context = event.getSlotContext();
             if (context.entity() == null) return;
             ItemStack stack = event.getItemStack();
-            ResourceLocation location = EnigmaticLegacy.location("enchantment.etheric_resonance/" + context.identifier().replace(':','/') + "_" + context.index());
+            Identifier location = EnigmaticLegacy.location("enchantment.etheric_resonance/" + context.identifier().replace(':','/') + "_" + context.index());
             var ethereal = EnigmaticHandler.get(context.entity().level(), Registries.ENCHANTMENT, ETHERIC_RESONANCE);
             if (stack.getEnchantmentLevel(ethereal) > 0) {
                 event.addModifier(EnigmaticAttributes.ETHERIUM_SHIELD, new AttributeModifier(location, 0.01, AttributeModifier.Operation.ADD_VALUE));

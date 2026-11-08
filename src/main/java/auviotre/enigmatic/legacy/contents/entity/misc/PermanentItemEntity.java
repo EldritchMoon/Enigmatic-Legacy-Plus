@@ -37,7 +37,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -136,7 +136,7 @@ public class PermanentItemEntity extends Entity {
         if (this.getItem().isEmpty()) {
             this.discard();
         } else {
-            if (!this.level().isClientSide && this.position != null) {
+            if (!this.level().isClientSide() && this.position != null) {
                 if (!this.position().equals(this.position))
                     this.teleportTo(this.position.x, this.position.y, this.position.z);
             }
@@ -151,7 +151,7 @@ public class PermanentItemEntity extends Entity {
 
             if (!this.isNoGravity()) this.setDeltaMovement(this.getDeltaMovement().add(0.0D, -0.04D, 0.0D));
 
-            if (this.level().isClientSide) {
+            if (this.level().isClientSide()) {
                 this.noPhysics = false;
                 LocalPlayer player = Minecraft.getInstance().player;
                 if (this.acceptors == null || (player != null && this.acceptors.contains(player.getUUID()))) {
@@ -164,7 +164,7 @@ public class PermanentItemEntity extends Entity {
             }
 
             ++this.age;
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 double d0 = this.getDeltaMovement().subtract(vec3d).lengthSqr();
                 if (d0 > 0.01D) {
                     this.hasImpulse = true;
@@ -182,7 +182,7 @@ public class PermanentItemEntity extends Entity {
         return Short.MAX_VALUE;
     }
 
-    public Entity changeDimension(DimensionTransition transition) {
+    public Entity changeDimension(TeleportTransition transition) {
         return null;
     }
 
@@ -191,7 +191,7 @@ public class PermanentItemEntity extends Entity {
     }
 
     public boolean hurt(DamageSource source, float amount) {
-        if (this.level().isClientSide || !this.isAlive()) return false;
+        if (this.level().isClientSide() || !this.isAlive()) return false;
 
         if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             EnigmaticLegacy.LOGGER.warn("Attacked permanent item entity with absolute DamageSource: {}", source);
@@ -204,7 +204,7 @@ public class PermanentItemEntity extends Entity {
     public void remove(Entity.RemovalReason reason) {
         if (reason == RemovalReason.DISCARDED || reason == RemovalReason.KILLED) {
             EnigmaticLegacy.LOGGER.warn("Removing Permanent Item Entity: {}", this);
-            if (!this.level().isClientSide) SoulArchive.getInstance().removeItem(this);
+            if (!this.level().isClientSide()) SoulArchive.getInstance().removeItem(this);
         }
         super.remove(reason);
     }

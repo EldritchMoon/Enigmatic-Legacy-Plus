@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.op;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
@@ -39,7 +40,7 @@ public class TheJudgement extends Item {
 
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             int mode = this.noDrops(stack) ? 1 : 0;
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theJudgement1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theJudgement2", ChatFormatting.GOLD, (int) ATTACK_RADIUS);

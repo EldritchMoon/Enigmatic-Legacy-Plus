@@ -66,7 +66,7 @@ public class EtheriumSword extends SwordItem {
         if (stack.getEnchantmentLevel(holder) > 0) {
             if (hand == InteractionHand.MAIN_HAND) {
                 ItemStack offhandStack = player.getOffhandItem();
-                if (!offhandStack.isEmpty() && offhandStack.getItem().getUseAnimation(offhandStack) != UseAnim.NONE)
+                if (!offhandStack.isEmpty() && offhandStack.getItem().getUseAnimation(offhandStack) != ItemUseAnimation.NONE)
                     return InteractionResultHolder.pass(stack);
             }
             player.startUsingItem(hand);
@@ -79,8 +79,8 @@ public class EtheriumSword extends SwordItem {
         return 32000;
     }
 
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.BLOCK;
+    public ItemUseAnimation getUseAnimation(ItemStack stack) {
+        return ItemUseAnimation.BLOCK;
     }
 
     @Mod(value = EnigmaticLegacy.MODID)

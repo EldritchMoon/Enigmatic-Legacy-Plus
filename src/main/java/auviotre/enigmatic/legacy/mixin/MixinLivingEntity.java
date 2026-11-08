@@ -76,7 +76,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntityE
 
     @Inject(method = "tick", at = @At("TAIL"))
     public void tickMix(CallbackInfo info) {
-        if (this.level().isClientSide && ForgottenIce.freezingBoost.get() && this.isFullyFrozen() && Math.random() > 0.25D) {
+        if (this.level().isClientSide() && ForgottenIce.freezingBoost.get() && this.isFullyFrozen() && Math.random() > 0.25D) {
             this.level().addParticle(ParticleTypes.SNOWFLAKE, this.getRandomX(0.6D), this.getRandomY() + 0.1D, this.getRandomZ(0.6D), 0.0D, -0.05D, 0.0D);
         }
         if (!this.canFreeze() && this.getTicksFrozen() > 0) this.setTicksFrozen(0);

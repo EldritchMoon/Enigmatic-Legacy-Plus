@@ -8,7 +8,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.TooltipFlag;
@@ -18,14 +18,14 @@ import net.neoforged.neoforge.common.PercentageAttribute;
 import java.util.Locale;
 
 public class EtheriumShieldAttribute extends PercentageAttribute {
-    public static final ResourceLocation BASE_ID = EnigmaticLegacy.location("base_etherium_threshold");
+    public static final Identifier BASE_ID = EnigmaticLegacy.location("base_etherium_threshold");
 
     public EtheriumShieldAttribute() {
         super("attribute.name.etherium_shield", 0.0, 0.0, 1.0);
         this.setSyncable(true);
     }
 
-    public ResourceLocation getBaseId() {
+    public Identifier getBaseId() {
         return BASE_ID;
     }
 

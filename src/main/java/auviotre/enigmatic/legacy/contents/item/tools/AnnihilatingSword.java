@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.tools;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
@@ -12,7 +13,7 @@ import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Holder;
@@ -40,7 +41,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
@@ -195,7 +196,7 @@ public class AnnihilatingSword extends SwordItem {
 
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             LocalPlayer player = Minecraft.getInstance().player;
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.annihilatingSword1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.annihilatingSword2");
@@ -298,8 +299,8 @@ public class AnnihilatingSword extends SwordItem {
         return 32000;
     }
 
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.BLOCK;
+    public ItemUseAnimation getUseAnimation(ItemStack stack) {
+        return ItemUseAnimation.BLOCK;
     }
 
     public boolean canDisableShield(ItemStack stack, ItemStack shield, LivingEntity entity, LivingEntity attacker) {
@@ -308,7 +309,7 @@ public class AnnihilatingSword extends SwordItem {
 
     @OnlyIn(Dist.CLIENT)
     public static class Decorator implements IItemDecorator {
-        public boolean render(GuiGraphics graphics, Font font, @NotNull ItemStack stack, int x, int y) {
+        public boolean render(GuiGraphicsExtractor graphics, Font font, @NotNull ItemStack stack, int x, int y) {
             int energy = stack.getOrDefault(EnigmaticComponents.ANNI_ENERGY, 0.0F).intValue();
             if (stack.getCount() == 1 && energy > 0) {
                 graphics.pose().pushPose();

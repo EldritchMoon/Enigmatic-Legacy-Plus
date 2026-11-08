@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.charms;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
@@ -15,13 +16,13 @@ import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
@@ -98,7 +99,7 @@ public class HellBladeCharm extends BaseCurioItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.hellBladeCharmUnequip");
             TooltipHandler.line(list);
         }
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             int threshold = EnigmaticHandler.isTheCursedOne(Minecraft.getInstance().player) ? 80 : 64;
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.hellBladeCharm1", ChatFormatting.GOLD, threshold + "%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.hellBladeCharm2");
@@ -125,7 +126,7 @@ public class HellBladeCharm extends BaseCurioItem {
 
     public Multimap<Holder<Attribute>, AttributeModifier> createAttributeMap(LivingEntity entity) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
-        ResourceLocation location = IItemHelper.getLocation(this);
+        Identifier location = IItemHelper.getLocation(this);
         double armor = -armorDebuff.get() * 0.01;
         attributes.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(location, getModifier(entity), AttributeModifier.Operation.ADD_VALUE));
         attributes.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(EnigmaticLegacy.location("hell_blade_charm.boost"), attackDamage.get() * 0.01, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
@@ -149,9 +150,9 @@ public class HellBladeCharm extends BaseCurioItem {
 
     @OnlyIn(Dist.CLIENT)
     public static class Decorator implements IItemDecorator {
-        static final ResourceLocation SPRITE = EnigmaticLegacy.location("decorator/hell_blade_charm_slot");
+        static final Identifier SPRITE = EnigmaticLegacy.location("decorator/hell_blade_charm_slot");
 
-        public boolean render(GuiGraphics graphics, Font font, @NotNull ItemStack stack, int x, int y) {
+        public boolean render(GuiGraphicsExtractor graphics, Font font, @NotNull ItemStack stack, int x, int y) {
             ItemStack curio = EnigmaticHandler.getCurio(Minecraft.getInstance().player, EnigmaticItems.HELL_BLADE_CHARM);
             if (curio == stack && !stack.getOrDefault(EnigmaticComponents.BOOLEAN, false)) {
                 graphics.pose().pushPose();

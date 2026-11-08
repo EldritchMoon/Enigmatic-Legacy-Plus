@@ -7,20 +7,20 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 
 public class IchorSpriteRenderer extends MobRenderer<IchorSprite, IchorSpriteModel> {
-    private static final ResourceLocation TEXTURE = EnigmaticLegacy.location("textures/entity/ichor_sprite.png");
-    private static final ResourceLocation BEAM_LOCATION = EnigmaticLegacy.location("textures/entity/ichor_sprite_beam.png");
+    private static final Identifier TEXTURE = EnigmaticLegacy.location("textures/entity/ichor_sprite.png");
+    private static final Identifier BEAM_LOCATION = EnigmaticLegacy.location("textures/entity/ichor_sprite_beam.png");
     private static final RenderType BEAM_RENDER_TYPE = RenderType.entityTranslucentCull(BEAM_LOCATION);
 
     public IchorSpriteRenderer(EntityRendererProvider.Context context) {
@@ -98,7 +98,7 @@ public class IchorSpriteRenderer extends MobRenderer<IchorSprite, IchorSpriteMod
         return 15;
     }
 
-    public ResourceLocation getTextureLocation(IchorSprite entity) {
+    public Identifier getTextureLocation(IchorSprite entity) {
         return TEXTURE;
     }
 

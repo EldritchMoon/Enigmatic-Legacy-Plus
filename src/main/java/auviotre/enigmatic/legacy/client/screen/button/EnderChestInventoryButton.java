@@ -7,7 +7,7 @@ import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.packets.server.EnderRingKeyPacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.WidgetSprites;
@@ -64,7 +64,7 @@ public class EnderChestInventoryButton extends ImageButton {
         return enderButton;
     }
 
-    public void renderWidget(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+    public void renderWidget(@Nonnull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
         this.active = true;
         if (this.parentGui instanceof InventoryScreen || this.parentGui instanceof ICuriosScreen) {
             boolean lastVisible = this.isRecipeBookVisible;

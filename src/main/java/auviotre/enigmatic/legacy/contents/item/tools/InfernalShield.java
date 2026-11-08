@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.tools;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCursedItem;
@@ -39,7 +40,7 @@ public class InfernalShield extends BaseCursedItem {
 
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.infernalShield1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.infernalShield2");
             TooltipHandler.line(list);
@@ -80,8 +81,8 @@ public class InfernalShield extends BaseCursedItem {
         return EquipmentSlot.OFFHAND;
     }
 
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.BLOCK;
+    public ItemUseAnimation getUseAnimation(ItemStack stack) {
+        return ItemUseAnimation.BLOCK;
     }
 
     public int getUseDuration(ItemStack stack, LivingEntity entity) {

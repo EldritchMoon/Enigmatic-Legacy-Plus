@@ -20,9 +20,9 @@ import org.jetbrains.annotations.NotNull;
 public class ForbiddenJuice extends BaseDrinkableItem {
     public static final FoodProperties FOOD_PROPERTIES = new FoodProperties.Builder()
             .effect(() -> new MobEffectInstance(MobEffects.WITHER, 400, 3), 1.0F)
-            .effect(() -> new MobEffectInstance(MobEffects.CONFUSION, 400, 2), 1.0F)
+            .effect(() -> new MobEffectInstance(MobEffects.NAUSEA, 400, 2), 1.0F)
             .effect(() -> new MobEffectInstance(MobEffects.WEAKNESS, 480, 3), 1.0F)
-            .effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 640, 2), 1.0F)
+            .effect(() -> new MobEffectInstance(MobEffects.SLOWNESS, 640, 2), 1.0F)
             .alwaysEdible().build();
 
     public ForbiddenJuice() {

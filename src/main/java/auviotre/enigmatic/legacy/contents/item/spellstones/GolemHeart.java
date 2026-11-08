@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.spellstones;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
@@ -15,7 +16,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -69,7 +70,7 @@ public class GolemHeart extends SpellstoneItem {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneSkill");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneSkillAbsent");
             TooltipHandler.line(list);
@@ -126,7 +127,7 @@ public class GolemHeart extends SpellstoneItem {
 
     private Multimap<Holder<Attribute>, AttributeModifier> getFullArmorModifiers() {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
-        ResourceLocation noArmor = EnigmaticLegacy.location("golem_heart_without_armor");
+        Identifier noArmor = EnigmaticLegacy.location("golem_heart_without_armor");
         builder.put(Attributes.ARMOR, new AttributeModifier(noArmor, superArmorBonus.getAsDouble(), AttributeModifier.Operation.ADD_VALUE));
         builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(noArmor, superArmorToughnessBonus.getAsDouble(), AttributeModifier.Operation.ADD_VALUE));
         builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(noArmor, knockbackResistance.getAsDouble(), AttributeModifier.Operation.ADD_VALUE));

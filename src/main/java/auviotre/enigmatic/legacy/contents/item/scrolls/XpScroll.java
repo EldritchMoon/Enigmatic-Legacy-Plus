@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.scrolls;
 
+import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
@@ -90,7 +91,7 @@ public class XpScroll extends BaseCurioItem {
         else modeComponent = Component.translatable("tooltip.enigmaticlegacy.xpScrollExtraction");
 
         TooltipHandler.line(list);
-        if (Screen.hasShiftDown()) {
+        if (ClientHelper.hasShiftDown()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.xpScroll1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.xpScroll2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.xpScroll3");

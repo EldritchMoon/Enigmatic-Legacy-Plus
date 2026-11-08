@@ -107,7 +107,7 @@ public class DimensionalAnchor extends BaseEntityBlock {
         if (isRespawnFuel(stack) && canBeCharged(state)) {
             charge(player, level, pos, state);
             stack.consume(1, player);
-            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+            return ItemInteractionResult.sidedSuccess(level.isClientSide());
         } else {
             return hand == InteractionHand.MAIN_HAND && isRespawnFuel(player.getItemInHand(InteractionHand.OFF_HAND)) && canBeCharged(state) ? ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
@@ -117,12 +117,12 @@ public class DimensionalAnchor extends BaseEntityBlock {
         if (state.getValue(CHARGE) == 0) {
             return InteractionResult.PASS;
         } else if (!canSetSpawn(level)) {
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 this.explode(state, level, pos);
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.sidedSuccess(level.isClientSide());
         } else {
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 ServerPlayer serverplayer = (ServerPlayer) player;
                 if (serverplayer.getRespawnDimension() != level.dimension() || !pos.equals(serverplayer.getRespawnPosition())) {
                     serverplayer.setRespawnPosition(level.dimension(), pos, 0.0F, false, true);

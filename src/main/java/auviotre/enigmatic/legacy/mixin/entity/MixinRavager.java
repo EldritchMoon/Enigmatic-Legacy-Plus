@@ -26,7 +26,7 @@ public abstract class MixinRavager extends Raider {
         if (this.isAlive() && EnigmaticHandler.isCurseBoosted(this)) {
             List<Raider> entities = this.level().getEntitiesOfClass(Raider.class, this.getBoundingBox().inflate(4.0), LivingEntity::isAlive);
             for (Raider entity : entities) {
-                entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 900));
+                entity.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, 900));
             }
         }
     }

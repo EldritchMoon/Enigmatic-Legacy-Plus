@@ -5,15 +5,15 @@ import auviotre.enigmatic.legacy.contents.trigger.UnholyGrailTrigger;
 import auviotre.enigmatic.legacy.registries.*;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.advancements.*;
-import net.minecraft.advancements.critereon.BrewedPotionTrigger;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.advancements.critereon.LocationPredicate;
+import net.minecraft.advancements.criterion.BrewedPotionTrigger;
+import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.advancements.criterion.LocationPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
@@ -41,7 +41,7 @@ public class ELAdvancementProvider extends AdvancementProvider {
                             EnigmaticItems.THE_ACKNOWLEDGMENT,
                             Component.translatable("advancement.enigmaticlegacy.root.title"),
                             Component.translatable("advancement.enigmaticlegacy.root.desc"),
-                            ResourceLocation.withDefaultNamespace("textures/block/end_stone_bricks.png"),
+                            Identifier.withDefaultNamespace("textures/block/end_stone_bricks.png"),
                             AdvancementType.TASK, false, false, false
                     ).requirements(AdvancementRequirements.Strategy.OR)
                     .addCriterion("has_book", InventoryChangeTrigger.TriggerInstance.hasItems(EnigmaticItems.THE_ACKNOWLEDGMENT))

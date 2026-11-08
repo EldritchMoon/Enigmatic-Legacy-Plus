@@ -55,7 +55,7 @@ public class SoulCrystal extends BaseItem implements IPermanentCrystal {
         int lostCount = getLostCrystals(player);
         if (lostCount > 0) {
             setLostCrystals(player, lostCount - 1);
-            if (!player.level().isClientSide) player.playSound(SoundEvents.BEACON_ACTIVATE, 1.0f, 1.0f);
+            if (!player.level().isClientSide()) player.playSound(SoundEvents.BEACON_ACTIVATE, 1.0f, 1.0f);
             return true;
         }
         return false;

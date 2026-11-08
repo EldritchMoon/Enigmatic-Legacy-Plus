@@ -11,7 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
@@ -60,7 +60,7 @@ public class StarlightBucket extends Item {
     }
 
     private Item getContent(ItemStack stack) {
-        return BuiltInRegistries.ITEM.get(ResourceLocation.parse(stack.getOrDefault(EnigmaticComponents.CONTENT, "minecraft:air")));
+        return BuiltInRegistries.ITEM.get(Identifier.parse(stack.getOrDefault(EnigmaticComponents.CONTENT, "minecraft:air")));
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -142,7 +142,7 @@ public class StarlightBucket extends Item {
                 CriteriaTriggers.CONSUME_ITEM.trigger(player, stack);
                 player.awardStat(Stats.ITEM_USED.get(this));
             }
-            if (!level.isClientSide) entity.removeEffectsCuredBy(EffectCures.MILK);
+            if (!level.isClientSide()) entity.removeEffectsCuredBy(EffectCures.MILK);
         }
         return stack;
     }
@@ -151,7 +151,7 @@ public class StarlightBucket extends Item {
         return getContent(stack).getUseDuration(stack, entity);
     }
 
-    public UseAnim getUseAnimation(ItemStack stack) {
+    public ItemUseAnimation getUseAnimation(ItemStack stack) {
         return getContent(stack).getUseAnimation(stack);
     }
 }

@@ -34,7 +34,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -121,7 +121,7 @@ public class VoidStone extends BaseItem {
         addBlackList(stack, other);
         stack.set(EnigmaticComponents.TEMPORARY_STORAGE, TempStorage.of(other));
         other.setCount(0);
-        if (player.level().isClientSide) {
+        if (player.level().isClientSide()) {
             player.playSound(EnigmaticSounds.VOID_STONE_DEVOUR.get(), 0.25F, 0.7F + player.getRandom().nextFloat() * 0.25F);
         }
         return true;
@@ -134,7 +134,7 @@ public class VoidStone extends BaseItem {
         addBlackList(stack, slot.getItem());
         stack.set(EnigmaticComponents.TEMPORARY_STORAGE, TempStorage.of(slot.getItem()));
         slot.set(ItemStack.EMPTY);
-        if (player.level().isClientSide) {
+        if (player.level().isClientSide()) {
             player.playSound(EnigmaticSounds.VOID_STONE_DEVOUR.get(), 0.25F, 0.7F + player.getRandom().nextFloat() * 0.25F);
         }
         return true;

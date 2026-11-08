@@ -23,14 +23,14 @@ import java.util.List;
 public class AstralFruit extends BaseItem {
     public static final FoodProperties DEFAULT_PROPERTIES = new FoodProperties.Builder()
             .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 400, 2), 1.0F)
-            .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 3200, 2), 1.0F)
-            .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 3200, 1), 1.0F)
+            .effect(() -> new MobEffectInstance(MobEffects.STRENGTH, 3200, 2), 1.0F)
+            .effect(() -> new MobEffectInstance(MobEffects.RESISTANCE, 3200, 1), 1.0F)
             .effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 4800), 1.0F)
             .nutrition(6).saturationModifier(1.3F).alwaysEdible().build();
     public static final FoodProperties ENCHANTED_PROPERTIES = new FoodProperties.Builder()
             .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 1200, 2), 1.0F)
-            .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 3200, 3), 1.0F)
-            .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 3200, 2), 1.0F)
+            .effect(() -> new MobEffectInstance(MobEffects.STRENGTH, 3200, 3), 1.0F)
+            .effect(() -> new MobEffectInstance(MobEffects.RESISTANCE, 3200, 2), 1.0F)
             .effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 4800), 1.0F)
             .nutrition(6).saturationModifier(1.3F).alwaysEdible().build();
     private final boolean enchanted;

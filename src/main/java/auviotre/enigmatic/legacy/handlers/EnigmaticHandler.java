@@ -29,7 +29,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.PlainTextContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.EnchantmentTags;
@@ -56,7 +56,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -376,7 +376,7 @@ public interface EnigmaticHandler {
         MutableBoolean equipped = new MutableBoolean(false);
 
         CuriosApi.getCuriosInventory(entity).ifPresent(handler -> {
-            if (!entity.level().isClientSide) {
+            if (!entity.level().isClientSide()) {
                 Map<String, ICurioStacksHandler> curios = handler.getCurios();
 
                 loop:
@@ -409,7 +409,7 @@ public interface EnigmaticHandler {
         return unlockSpecialSlot(slot, player, EnigmaticLegacy.location(slot + "_slot"));
     }
 
-    static boolean unlockSpecialSlot(String slot, Player player, ResourceLocation id) {
+    static boolean unlockSpecialSlot(String slot, Player player, Identifier id) {
         if (!slot.equals("scroll") && !slot.equals("spellstone") && !slot.equals("ring") && !slot.equals("charm"))
             throw new IllegalArgumentException("Slot type '" + slot + "' is not supported!");
 
