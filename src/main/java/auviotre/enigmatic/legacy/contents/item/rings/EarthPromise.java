@@ -111,12 +111,12 @@ public class EarthPromise extends CursedCurioItem {
         private static void onDamage(@NotNull LivingIncomingDamageEvent event) {
             if (event.getAmount() >= Float.MAX_VALUE) return;
             LivingEntity victim = event.getEntity();
-            if (victim instanceof Player player && !player.getCooldowns().isOnCooldown(EnigmaticItems.EARTH_PROMISE.get())) {
+            if (victim instanceof Player player && !player.getCooldowns().isOnCooldown(EnigmaticItems.EARTH_PROMISE.get().getDefaultInstance())) {
                 if (EnigmaticHandler.hasCurio(victim, EnigmaticItems.EARTH_PROMISE)) {
                     float damage = event.getAmount();
                     if (player.isAlive() && !event.getSource().is(DamageTypeTags.BYPASSES_INVULNERABILITY) && damage >= player.getHealth() * healthThreshold.get() * 0.01F) {
                         int tick = RedemptionRing.Helper.canUseRelic(player) ? cooldown.get() * 4 / 5 : cooldown.get();
-                        player.getCooldowns().addCooldown(EnigmaticItems.EARTH_PROMISE.get(), tick);
+                        player.getCooldowns().addCooldown(EnigmaticItems.EARTH_PROMISE.get().getDefaultInstance(), tick);
                         if (player.level() instanceof ServerLevel level) {
                             level.sendParticles(ParticleTypes.FLASH, player.getX(), player.getY(), player.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
                             level.sendParticles(EnigmaticParticles.ICHOR.get(), player.getX(), player.getY(0.5F), player.getZ(), 36, 0.1D, 0.1D, 0.1D, 0.2D);

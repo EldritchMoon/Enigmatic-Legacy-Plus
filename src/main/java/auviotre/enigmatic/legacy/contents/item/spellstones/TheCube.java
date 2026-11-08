@@ -362,7 +362,7 @@ public class TheCube extends SpellstoneItem {
             if (event.getEntity() instanceof ServerPlayer player && player.level() instanceof ServerLevel level) {
                 if (event.getSource().is(DamageTypes.GENERIC_KILL)) return;
                 if (ISpellstone.get(player).is(EnigmaticItems.THE_CUBE)) {
-                    if (!player.getCooldowns().isOnCooldown(EnigmaticItems.THE_CUBE.get())) {
+                    if (!player.getCooldowns().isOnCooldown(EnigmaticItems.THE_CUBE.get().getDefaultInstance())) {
                         event.setCanceled(true);
                         player.setHealth(player.getMaxHealth() * 0.3F);
                         ItemStack cube = EnigmaticHandler.getCurio(player, EnigmaticItems.THE_CUBE);

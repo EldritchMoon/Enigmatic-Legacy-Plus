@@ -94,16 +94,16 @@ public class EnderSlayer extends SwordItem {
                 if (attacker.getWeaponItem().is(EnigmaticItems.ENDER_SLAYER) && EnigmaticHandler.canUse(attacker, attacker.getWeaponItem())) {
                     if (event.getEntity() instanceof ServerPlayer player) {
                         ItemCooldowns cooldowns = player.getCooldowns();
-                        cooldowns.addCooldown(Items.ENDER_PEARL, 400);
-                        cooldowns.addCooldown(EnigmaticItems.RECALL_POTION.get(), 400);
-                        cooldowns.addCooldown(EnigmaticItems.TWISTED_MIRROR.get(), 400);
-                        cooldowns.addCooldown(EnigmaticItems.EYE_OF_NEBULA.get(), 400);
-                        cooldowns.addCooldown(EnigmaticItems.THE_CUBE.get(), 400);
+                        cooldowns.addCooldown(Items.ENDER_PEARL.getDefaultInstance(), 400);
+                        cooldowns.addCooldown(EnigmaticItems.RECALL_POTION.get().getDefaultInstance(), 400);
+                        cooldowns.addCooldown(EnigmaticItems.TWISTED_MIRROR.get().getDefaultInstance(), 400);
+                        cooldowns.addCooldown(EnigmaticItems.EYE_OF_NEBULA.get().getDefaultInstance(), 400);
+                        cooldowns.addCooldown(EnigmaticItems.THE_CUBE.get().getDefaultInstance(), 400);
                     } else if (event.getEntity() instanceof EnderMan || event.getEntity() instanceof Shulker) {
                         event.getEntity().getPersistentData().putInt("EnderSlayerTeleportForbidden", 400);
                     }
 
-                    if (event.getEntity().getType().is(EnigmaticTags.EntityTypes.END_DWELLERS)) {
+                    if (event.getEntity().is(EnigmaticTags.EntityTypes.END_DWELLERS)) {
                         if (attacker.level().dimension().equals(Level.END)) {
                             if (event.getEntity() instanceof EnderMan man && attacker instanceof Player player) {
                                 float scale = player.getAttackStrengthScale(0.5F);

@@ -118,7 +118,7 @@ public class EtheriumScythe extends HoeItem {
                     if (!level.isClientSide()) {
                         consumer.accept(context);
                         if (player != null)
-                            stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(context.getHand()));
+                            stack.hurtAndBreak(1, player, context.getHand().asEquipmentSlot());
                     }
                 }
             }
@@ -145,7 +145,7 @@ public class EtheriumScythe extends HoeItem {
                 changeIntoState(modifiedState, pos).accept(context);
                 server.playSound(null, pos, state.getSoundType(level, pos, player).getBreakSound(), SoundSource.BLOCKS, 0.5F, 1.0F);
                 if (player != null)
-                    context.getItemInHand().hurtAndBreak(1, player, LivingEntity.getSlotForHand(context.getHand()));
+                    context.getItemInHand().hurtAndBreak(1, player, context.getHand().asEquipmentSlot());
                 return true;
             }
         }

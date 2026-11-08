@@ -105,10 +105,10 @@ public class IllusionLantern extends SpellstoneItem {
         if (context.entity() instanceof ServerPlayer entity) {
             int count = stack.getOrDefault(EnigmaticComponents.ILLUSION_COUNT, 0);
             if (count > 0 && checkAttack(entity, entity.level())) count--;
-            if (!entity.getCooldowns().isOnCooldown(this)) {
+            if (!entity.getCooldowns().isOnCooldown(this.getDefaultInstance())) {
                 if (count < 5) {
                     count++;
-                    entity.getCooldowns().addCooldown(this, cooldown.get());
+                    entity.getCooldowns().addCooldown(this.getDefaultInstance(), cooldown.get());
                 }
             }
             stack.set(EnigmaticComponents.ILLUSION_COUNT, Math.clamp(count, 0, 5));
@@ -170,7 +170,7 @@ public class IllusionLantern extends SpellstoneItem {
             LivingEntity target = event.getNewAboutToBeSetTarget();
             if (entity instanceof Targeting targetedEntity && ISpellstone.get(target).is(EnigmaticItems.ILLUSION_LANTERN)) {
                 if (entity.getLastHurtByMob() != target && (targetedEntity.getTarget() == null || !targetedEntity.getTarget().isAlive())) {
-                    if (entity.getType().is(EntityTypeTags.WITHER_FRIENDS)) {
+                    if (entity.is(EntityTypeTags.WITHER_FRIENDS)) {
                         event.setCanceled(true);
                     }
                 }

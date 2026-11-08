@@ -173,7 +173,7 @@ public class TheInfinitum extends TheAcknowledgment implements IBagContent {
         @SubscribeEvent
         private static void onDamage(@NotNull LivingIncomingDamageEvent event) {
             if (event.getAmount() >= Float.MAX_VALUE) return;
-            if (event.getEntity().getType().is(Tags.EntityTypes.BOSSES) || event.getEntity().getType().equals(EntityType.PLAYER)) {
+            if (event.getEntity().is(Tags.EntityTypes.BOSSES) || event.getEntity().getType().equals(EntityType.PLAYER)) {
                 DamageSource source = event.getSource();
                 if (source.getDirectEntity() instanceof LivingEntity attacker && source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
                     if (attacker.getWeaponItem().is(EnigmaticItems.THE_INFINITUM) && EnigmaticHandler.isTheWorthyOne(attacker)) {

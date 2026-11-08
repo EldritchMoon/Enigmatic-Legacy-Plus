@@ -189,7 +189,7 @@ public class LostEngine extends SpellstoneItem {
             LivingEntity target = event.getNewAboutToBeSetTarget();
             if (entity instanceof Targeting targetedEntity && ISpellstone.get(target).is(EnigmaticItems.LOST_ENGINE)) {
                 if (entity.getLastHurtByMob() != target && (targetedEntity.getTarget() == null || !targetedEntity.getTarget().isAlive())) {
-                    if (entity instanceof AbstractGolem || entity.getType().is(EnigmaticTags.EntityTypes.EXTRA_GOLEM)) {
+                    if (entity instanceof AbstractGolem || entity.is(EnigmaticTags.EntityTypes.EXTRA_GOLEM)) {
                         event.setCanceled(true);
                     }
                 }

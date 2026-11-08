@@ -42,7 +42,7 @@ public class TwistedMirror extends BaseCursedItem {
 
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (!EnigmaticHandler.canUse(player, stack) || player.getCooldowns().isOnCooldown(this))
+        if (!EnigmaticHandler.canUse(player, stack) || player.getCooldowns().isOnCooldown(this.getDefaultInstance()))
             return InteractionResult.PASS;
         player.startUsingItem(hand);
         return InteractionResult.SUCCESS;
@@ -51,7 +51,7 @@ public class TwistedMirror extends BaseCursedItem {
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         if (entity instanceof ServerPlayer player) {
             RecallPotion.teleportToRespawnPoint(player, ParticleTypes.WITCH);
-            player.getCooldowns().addCooldown(this, player.hasInfiniteMaterials() ? 20 : 250);
+            player.getCooldowns().addCooldown(this.getDefaultInstance(), player.hasInfiniteMaterials() ? 20 : 250);
         }
         return stack;
     }

@@ -144,7 +144,7 @@ public class ThunderScroll extends CursedCurioItem {
         private static void onLeftClick(PlayerInteractEvent.@NotNull LeftClickEmpty event) {
             Player player = event.getEntity();
             boolean flag = player.onGround() && EnigmaticHandler.hasCurio(player, EnigmaticItems.THUNDER_SCROLL);
-            if (flag && player.getWeaponItem().canPerformAction(ItemAbilities.SWORD_SWEEP) && !player.getCooldowns().isOnCooldown(EnigmaticItems.THUNDER_SCROLL.get())) {
+            if (flag && player.getWeaponItem().canPerformAction(ItemAbilities.SWORD_SWEEP) && !player.getCooldowns().isOnCooldown(EnigmaticItems.THUNDER_SCROLL.get().getDefaultInstance())) {
                 PacketDistributor.sendToServer(new EmptyLeftClickPacket(true));
             }
         }

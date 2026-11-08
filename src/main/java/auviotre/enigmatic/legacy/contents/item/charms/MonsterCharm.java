@@ -72,7 +72,7 @@ public class MonsterCharm extends BaseCurioItem {
         private static void onDamage(@NotNull LivingIncomingDamageEvent event) {
             if (event.getAmount() >= Float.MAX_VALUE) return;
             if (event.getSource().getEntity() instanceof LivingEntity attacker && EnigmaticHandler.hasCurio(attacker, EnigmaticItems.MONSTER_CHARM)) {
-                if (event.getEntity().getType().is(EntityTypeTags.UNDEAD)) {
+                if (event.getEntity().is(EntityTypeTags.UNDEAD)) {
                     event.setAmount(event.getAmount() * 1.25F);
                 }
             }

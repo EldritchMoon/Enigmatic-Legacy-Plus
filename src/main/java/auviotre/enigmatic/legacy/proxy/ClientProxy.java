@@ -52,7 +52,7 @@ public class ClientProxy extends CommonProxy {
             ItemProperties.register(EnigmaticItems.ETHEREAL_FORGING_CHARM.get(), Identifier.withDefaultNamespace("active"), (stack, level, entity, i) -> stack.getOrDefault(EnigmaticComponents.BOOLEAN, false) ? 1.0F : 0.0F);
             ItemProperties.register(EnigmaticItems.ETHERIUM_CORE.get(), Identifier.withDefaultNamespace("active"), (stack, level, entity, i) -> stack.getOrDefault(EnigmaticComponents.BOOLEAN, false) ? 1.0F : 0.0F);
             ItemProperties.register(EnigmaticItems.SACRED_CHALICE.get(), Identifier.withDefaultNamespace("filled"), (stack, level, entity, i) -> stack.getOrDefault(EnigmaticComponents.BOOLEAN, false) ? 1.0F : 0.0F);
-            ItemProperties.register(EnigmaticItems.EARTH_PROMISE.get(), Identifier.withDefaultNamespace("broken"), (stack, level, entity, i) -> entity instanceof Player player && player.getCooldowns().isOnCooldown(stack.getItem()) ? 1.0F : 0.0F);
+            ItemProperties.register(EnigmaticItems.EARTH_PROMISE.get(), Identifier.withDefaultNamespace("broken"), (stack, level, entity, i) -> entity instanceof Player player && player.getCooldowns().isOnCooldown(stack) ? 1.0F : 0.0F);
             ItemProperties.register(EnigmaticItems.ETHERIUM_SWORD.get(), Identifier.withDefaultNamespace("blocking"), (stack, level, entity, i) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
             ItemProperties.register(EnigmaticItems.INFERNAL_SHIELD.get(), Identifier.withDefaultNamespace("blocking"), (stack, level, entity, i) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
             EnigmaticItems.SOUL_COMPASS.get().registerVariants();

@@ -93,7 +93,7 @@ public class LivingOde extends BaseItem {
     }
 
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
-        if (!player.getCooldowns().isOnCooldown(this) && player.level() instanceof ServerLevel level) {
+        if (!player.getCooldowns().isOnCooldown(this.getDefaultInstance()) && player.level() instanceof ServerLevel level) {
             boolean noAction = true;
             if (containInList(stack, target)) {
                 removeFromList(stack, target);
@@ -105,7 +105,7 @@ public class LivingOde extends BaseItem {
             }
             if (noAction) return InteractionResult.PASS;
             level.sendParticles(ParticleTypes.HEART, target.getX(), target.getEyeY(), target.getZ(), 5, target.getBbWidth(), 0.1D, target.getBbWidth(), 0.1D);
-            if (player.hasInfiniteMaterials()) player.getCooldowns().addCooldown(this, cooldown.get());
+            if (player.hasInfiniteMaterials()) player.getCooldowns().addCooldown(this.getDefaultInstance(), cooldown.get());
             return InteractionResult.SUCCESS;
         } else return InteractionResult.PASS;
     }

@@ -84,7 +84,7 @@ public class IchorCurse extends MobEffect {
     public void onDeath(@NotNull LivingDeathEvent event) {
         if (event.isCanceled()) return;
         if (event.getSource().getEntity() instanceof LivingEntity attacker) {
-            if (!attacker.hasEffect(EnigmaticEffects.ICHOR_CURSE) || event.getEntity().getType().is(Tags.EntityTypes.BOSSES))
+            if (!attacker.hasEffect(EnigmaticEffects.ICHOR_CURSE) || event.getEntity().is(Tags.EntityTypes.BOSSES))
                 return;
             int amplifier = Objects.requireNonNull(attacker.getEffect(EnigmaticEffects.ICHOR_CURSE)).getAmplifier();
             if (event.getEntity() instanceof Monster monster && monster.getTarget() == attacker && monster.level() instanceof ServerLevel level) {

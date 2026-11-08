@@ -161,7 +161,7 @@ public class BlazingCore extends SpellstoneItem {
             if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.BLAZING_CORE)) {
                 Entity entity = event.getSource().getEntity();
                 if (entity == null) return;
-                if (entity.getType().is(EntityTypeTags.CAN_BREATHE_UNDER_WATER)) {
+                if (entity.is(EntityTypeTags.CAN_BREATHE_UNDER_WATER)) {
                     event.setNewDamage(event.getNewDamage() * (float) vulnerabilityModifier.getAsDouble());
                 }
             }

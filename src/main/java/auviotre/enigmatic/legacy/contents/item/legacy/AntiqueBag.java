@@ -105,7 +105,7 @@ public class AntiqueBag extends BaseItem {
             if (event.getAmount() >= Float.MAX_VALUE) return;
             DamageSource source = event.getSource();
             if (source.getDirectEntity() instanceof LivingEntity attacker && source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
-                if (event.getEntity().getType().is(Tags.EntityTypes.BOSSES)) {
+                if (event.getEntity().is(Tags.EntityTypes.BOSSES)) {
                     if (AntiqueBag.hasBook(EnigmaticItems.THE_TWIST.toStack(), attacker) && EnigmaticHandler.canUse(attacker, EnigmaticItems.THE_TWIST.toStack())) {
                         event.setAmount(event.getAmount() * (1 + 0.001F * TheTwist.specialDamageBoost.get() / 3));
                     }

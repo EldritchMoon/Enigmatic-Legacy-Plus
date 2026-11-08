@@ -164,7 +164,7 @@ public class DesolationRing extends BaseCurioItem {
         @SubscribeEvent(priority = EventPriority.LOWEST)
         private static void onLivingDrops(@NotNull LivingDeathEvent event) {
             LivingEntity entity = event.getEntity();
-            if (entity instanceof Player player && player.getCooldowns().isOnCooldown(EnigmaticItems.DESOLATION_RING.get()))
+            if (entity instanceof Player player && player.getCooldowns().isOnCooldown(EnigmaticItems.DESOLATION_RING.get().getDefaultInstance()))
                 return;
             if (EnigmaticHandler.hasCurio(entity, EnigmaticItems.DESOLATION_RING) && !event.getSource().is(Tags.DamageTypes.IS_TECHNICAL)) {
                 List<Mob> list = entity.level().getEntitiesOfClass(Mob.class, entity.getBoundingBox().inflate((double) effectiveRange.get() / 16), victim -> {
@@ -186,7 +186,7 @@ public class DesolationRing extends BaseCurioItem {
                 }
                 if (flag) {
                     if (entity instanceof Player player)
-                        player.getCooldowns().addCooldown(EnigmaticItems.DESOLATION_RING.get(), cooldown.get());
+                        player.getCooldowns().addCooldown(EnigmaticItems.DESOLATION_RING.get().getDefaultInstance(), cooldown.get());
                     entity.setHealth(Math.max(health * 2, entity.getHealth() + 1));
                     event.setCanceled(true);
                 }

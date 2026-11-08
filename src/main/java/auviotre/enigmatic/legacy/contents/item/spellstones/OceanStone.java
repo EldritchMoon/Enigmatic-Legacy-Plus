@@ -169,7 +169,7 @@ public class OceanStone extends SpellstoneItem {
             if (ISpellstone.get(event.getEntity()).is(EnigmaticItems.OCEAN_STONE)) {
                 Entity entity = event.getSource().getEntity();
                 if (entity == null) return;
-                if (entity.getType().is(EntityTypeTags.CAN_BREATHE_UNDER_WATER)) {
+                if (entity.is(EntityTypeTags.CAN_BREATHE_UNDER_WATER)) {
                     event.setNewDamage(event.getNewDamage() * (1.0F - 0.01F * underwaterCreaturesResistance.get()));
                 } else if (event.getSource().type().effects().equals(DamageEffects.BURNING)) {
                     event.setNewDamage((float) (event.getNewDamage() * OSVulnerabilityModifier.getAsDouble()));

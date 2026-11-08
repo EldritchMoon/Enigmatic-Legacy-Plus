@@ -60,7 +60,7 @@ public class SacredChalice extends BaseCursedItem {
         boolean filled = stack.getOrDefault(EnigmaticComponents.BOOLEAN, false);
         stack.set(EnigmaticComponents.BOOLEAN, !filled);
         if (entity instanceof Player player)
-            player.getCooldowns().addCooldown(this, player.hasInfiniteMaterials() ? 20 : (filled ? 1200 : 600));
+            player.getCooldowns().addCooldown(this.getDefaultInstance(), player.hasInfiniteMaterials() ? 20 : (filled ? 1200 : 600));
         if (filled) {
             int amount = stack.getOrDefault(EnigmaticComponents.INT, 0);
             entity.setHealth(entity.getMaxHealth());

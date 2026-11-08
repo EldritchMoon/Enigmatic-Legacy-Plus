@@ -80,8 +80,8 @@ public class AnnihilatingSword extends SwordItem {
     private static void parry(Level level, ItemStack stack, Player blocker, DamageSource source, float damage) {
         if (level.isClientSide()) return;
         int tick = stack.getUseDuration(blocker) - blocker.getUseItemRemainingTicks();
-        stack.hurtAndBreak(Mth.floor(damage / 2), blocker, LivingEntity.getSlotForHand(blocker.getUsedItemHand()));
-        blocker.getCooldowns().addCooldown(stack.getItem(), Mth.clamp(tick, 30, 50) - (tick <= 8 ? 5 : 0));
+        stack.hurtAndBreak(Mth.floor(damage / 2), blocker, blocker.getUsedItemHand().asEquipmentSlot());
+        blocker.getCooldowns().addCooldown(stack, Mth.clamp(tick, 30, 50) - (tick <= 8 ? 5 : 0));
         blocker.swing(blocker.getUsedItemHand());
         blocker.stopUsingItem();
         if (tick <= 8) addEnergy(stack, blocker);
@@ -255,7 +255,7 @@ public class AnnihilatingSword extends SwordItem {
 
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int tick) {
         if (entity instanceof Player player && player.getOffhandItem().is(this)) {
-            player.getCooldowns().addCooldown(this, 8);
+            player.getCooldowns().addCooldown(this.getDefaultInstance(), 8);
         }
     }
 
@@ -273,8 +273,8 @@ public class AnnihilatingSword extends SwordItem {
                 } else if (player.onGround() || player.level().getBlockState(player.blockPosition().below(2)).canOcclude()) {
                     sweepAttack(player, energy, damage);
                 } else rangeAttack(player, energy, damage);
-                player.getCooldowns().addCooldown(this, 100 - energy * 8);
-                stack.hurtAndBreak(energy * 3, player, LivingEntity.getSlotForHand(InteractionHand.MAIN_HAND));
+                player.getCooldowns().addCooldown(this.getDefaultInstance(), 100 - energy * 8);
+                stack.hurtAndBreak(energy * 3, player, InteractionHand.MAIN_HAND.asEquipmentSlot());
                 if (!player.hasInfiniteMaterials()) {
                     var holder = EnigmaticHandler.get(level, Registries.ENCHANTMENT, Enchantments.UNBREAKING);
                     int unbreak = stack.getEnchantmentLevel(holder);

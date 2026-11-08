@@ -113,10 +113,10 @@ public class GuardianHeart extends BaseCursedItem {
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         if (entity instanceof Player player && !level.isClientSide()) {
             List<Monster> monsters = player.level().getEntitiesOfClass(Monster.class, player.getBoundingBox().inflate(effectiveRange.get()));
-            if (EnigmaticHandler.isTheCursedOne(player) && Inventory.isHotbarSlot(slotId) && !player.getCooldowns().isOnCooldown(this)) {
+            if (EnigmaticHandler.isTheCursedOne(player) && Inventory.isHotbarSlot(slotId) && !player.getCooldowns().isOnCooldown(this.getDefaultInstance())) {
                 Monster oneWatched = null;
                 for (Monster monster : monsters) {
-                    if (doesObserveEntity(player, monster) && !monster.getType().is(EnigmaticTags.EntityTypes.GUARDIAN_HEART_EXCLUDED)) {
+                    if (doesObserveEntity(player, monster) && !monster.is(EnigmaticTags.EntityTypes.GUARDIAN_HEART_EXCLUDED)) {
                         oneWatched = monster;
                         break;
                     }
@@ -138,7 +138,7 @@ public class GuardianHeart extends BaseCursedItem {
                             this.setAttackTarget(otherMonster, theOne);
 
                         player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ELDER_GUARDIAN_CURSE, SoundSource.HOSTILE, 1.0F, 1.0F);
-                        player.getCooldowns().addCooldown(this, cooldown.get());
+                        player.getCooldowns().addCooldown(this.getDefaultInstance(), cooldown.get());
                     }
                 }
             }

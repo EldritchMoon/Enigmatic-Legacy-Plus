@@ -232,9 +232,9 @@ public class ChaosElytra extends BaseElytraItem {
         private static void chaosDescending(LivingEntity owner, @Nullable LivingEntity target) {
             if (spaceCheck(owner.blockPosition(), owner.level()) && TICK_MAP.get(owner) > (target == null ? 32 : 24)) {
                 if (owner instanceof Player player) {
-                    boolean cooldown = player.getCooldowns().isOnCooldown(EnigmaticItems.CHAOS_ELYTRA.get());
+                    boolean cooldown = player.getCooldowns().isOnCooldown(EnigmaticItems.CHAOS_ELYTRA.get().getDefaultInstance());
                     if (cooldown && !player.hasInfiniteMaterials()) return;
-                    player.getCooldowns().addCooldown(EnigmaticItems.CHAOS_ELYTRA.get(), target == null ? descendingCooldown.get() : 10);
+                    player.getCooldowns().addCooldown(EnigmaticItems.CHAOS_ELYTRA.get().getDefaultInstance(), target == null ? descendingCooldown.get() : 10);
                     CompoundTag data = EnigmaticHandler.getPersistedData(player);
                     data.putBoolean("ChaoAchievementCheck", true);
                 }

@@ -43,7 +43,7 @@ public record EmptyLeftClickPacket(boolean clicked) implements CustomPacketPaylo
                     server.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, player.getSoundSource(), 1.0F, 1.0F);
                     player.sweepAttack();
                     player.causeFoodExhaustion(0.1F);
-                    player.getCooldowns().addCooldown(EnigmaticItems.THUNDER_SCROLL.get(), (int) (16 / player.getAttributeValue(Attributes.ATTACK_SPEED)));
+                    player.getCooldowns().addCooldown(EnigmaticItems.THUNDER_SCROLL.get().getDefaultInstance(), (int) (16 / player.getAttributeValue(Attributes.ATTACK_SPEED)));
                 }
             });
         }
