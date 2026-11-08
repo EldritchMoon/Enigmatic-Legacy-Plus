@@ -3,52 +3,52 @@ package auviotre.enigmatic.legacy.contents.crafting;
 import auviotre.enigmatic.legacy.api.item.ITaintable;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticRecipes;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementRequirements;
-import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
-import net.minecraft.data.recipes.RecipeBuilder;
-import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.Identifier;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
-import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.level.Level;
 
-import javax.annotation.Nullable;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
+/**
+ * A shaped recipe whose taintable ingredients must be tainted when the result is a cursed or blessed item.
+ * 26.1.2-port: recipes take CommonInfo/CraftingBookInfo and an ItemStackTemplate result; the JSON format is the
+ * vanilla 26.1 shaped format. RecipeSerializer is a record now, so the codecs live here.
+ */
 public class CursedShapedRecipe extends ShapedRecipe {
-    private final String group;
-    private final ItemStack result;
-    private final CraftingBookCategory category;
-    private final boolean showNotification;
+    public static final MapCodec<CursedShapedRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Recipe.CommonInfo.MAP_CODEC.forGetter(recipe -> recipe.commonInfo),
+            CraftingRecipe.CraftingBookInfo.MAP_CODEC.forGetter(recipe -> recipe.bookInfo),
+            ShapedRecipePattern.MAP_CODEC.forGetter(recipe -> recipe.pattern),
+            ItemStackTemplate.CODEC.fieldOf("result").forGetter(recipe -> recipe.result)
+    ).apply(instance, CursedShapedRecipe::new));
+    public static final StreamCodec<RegistryFriendlyByteBuf, CursedShapedRecipe> STREAM_CODEC = StreamCodec.composite(
+            Recipe.CommonInfo.STREAM_CODEC, recipe -> recipe.commonInfo,
+            CraftingRecipe.CraftingBookInfo.STREAM_CODEC, recipe -> recipe.bookInfo,
+            ShapedRecipePattern.STREAM_CODEC, recipe -> recipe.pattern,
+            ItemStackTemplate.STREAM_CODEC, recipe -> recipe.result,
+            CursedShapedRecipe::new
+    );
+    public static final RecipeSerializer<CursedShapedRecipe> SERIALIZER = new RecipeSerializer<>(CODEC, STREAM_CODEC);
 
-    public CursedShapedRecipe(String group, CraftingBookCategory category, ShapedRecipePattern pattern, ItemStack result, boolean showNotification) {
-        super(group, category, pattern, result, showNotification);
-        this.group = group;
+    private final ItemStackTemplate result;
+
+    public CursedShapedRecipe(Recipe.CommonInfo commonInfo, CraftingRecipe.CraftingBookInfo bookInfo, ShapedRecipePattern pattern, ItemStackTemplate result) {
+        super(commonInfo, bookInfo, pattern, result);
         this.result = result;
-        this.category = category;
-        this.showNotification = showNotification;
     }
 
     @Override
     public boolean matches(CraftingInput input, Level level) {
-        if (EnigmaticHandler.isCursedItem(this.result) || EnigmaticHandler.isBlessedItem(this.result)) {
+        ItemStack result = this.result.create();
+        if (EnigmaticHandler.isCursedItem(result) || EnigmaticHandler.isBlessedItem(result)) {
             for (int i = 0; i < input.size(); i++) {
                 ItemStack stack = input.getItem(i);
                 if (stack.getItem() instanceof ITaintable && !ITaintable.isTainted(stack))
@@ -59,146 +59,12 @@ public class CursedShapedRecipe extends ShapedRecipe {
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
-        return EnigmaticRecipes.CURSED_SHAPED.get();
+    @SuppressWarnings("unchecked")
+    public RecipeSerializer<ShapedRecipe> getSerializer() {
+        // 26.1.2-port: ShapedRecipe.getSerializer() is typed RecipeSerializer<ShapedRecipe>; our serializer produces
+        // CursedShapedRecipe (a ShapedRecipe), so the cast is safe.
+        return (RecipeSerializer<ShapedRecipe>) (RecipeSerializer<?>) EnigmaticRecipes.CURSED_SHAPED.get();
     }
 
-    public static class Serializer implements RecipeSerializer<CursedShapedRecipe> {
-        public static final MapCodec<CursedShapedRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                Codec.STRING.optionalFieldOf("group", "").forGetter(recipe -> recipe.group), CraftingBookCategory.CODEC.fieldOf("category").orElse(CraftingBookCategory.MISC).forGetter((recipe) -> recipe.category),
-                ShapedRecipePattern.MAP_CODEC.forGetter(recipe -> recipe.pattern),
-                ItemStack.STRICT_CODEC.fieldOf("result").forGetter(recipe -> recipe.result),
-                Codec.BOOL.optionalFieldOf("show_notification", true).forGetter(recipe -> recipe.showNotification)
-        ).apply(instance, CursedShapedRecipe::new));
-        public static final StreamCodec<RegistryFriendlyByteBuf, CursedShapedRecipe> STREAM_CODEC = StreamCodec.of(CursedShapedRecipe.Serializer::toNetwork, CursedShapedRecipe.Serializer::fromNetwork);
-
-        private static CursedShapedRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
-            String group = buffer.readUtf();
-            CraftingBookCategory category = buffer.readEnum(CraftingBookCategory.class);
-            ShapedRecipePattern pattern = ShapedRecipePattern.STREAM_CODEC.decode(buffer);
-            ItemStack result = ItemStack.STREAM_CODEC.decode(buffer);
-            boolean flag = buffer.readBoolean();
-            return new CursedShapedRecipe(group, category, pattern, result, flag);
-        }
-
-        private static void toNetwork(RegistryFriendlyByteBuf buffer, CursedShapedRecipe recipe) {
-            ShapedRecipe.Serializer.STREAM_CODEC.encode(buffer, recipe);
-        }
-
-        @Override
-        public MapCodec<CursedShapedRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, CursedShapedRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
-    }
-
-    public static class Builder implements RecipeBuilder {
-        private final RecipeCategory category;
-        private final Item result;
-        private final ItemStack resultStack;
-        private final List<String> rows;
-        private final Map<Character, Ingredient> key;
-        private final Map<String, Criterion<?>> criteria;
-        @javax.annotation.Nullable
-        private String group;
-        private boolean showNotification;
-
-        public Builder(RecipeCategory category, ItemLike result, int count) {
-            this(category, new ItemStack(result, count));
-        }
-
-        public Builder(RecipeCategory p_249996_, ItemStack result) {
-            this.rows = Lists.newArrayList();
-            this.key = Maps.newLinkedHashMap();
-            this.criteria = new LinkedHashMap<>();
-            this.showNotification = true;
-            this.category = p_249996_;
-            this.result = result.getItem();
-            this.resultStack = result;
-        }
-
-        public static Builder shaped(RecipeCategory category, ItemLike result) {
-            return shaped(category, result, 1);
-        }
-
-        public static Builder shaped(RecipeCategory category, ItemLike result, int count) {
-            return new Builder(category, result, count);
-        }
-
-        public static Builder shaped(RecipeCategory p_251325_, ItemStack result) {
-            return new Builder(p_251325_, result);
-        }
-
-        public Builder define(Character symbol, TagKey<Item> tag) {
-            return this.define(symbol, Ingredient.of(tag));
-        }
-
-        public Builder define(Character symbol, ItemLike item) {
-            return this.define(symbol, Ingredient.of(item));
-        }
-
-        public Builder define(Character symbol, Ingredient ingredient) {
-            if (this.key.containsKey(symbol)) {
-                throw new IllegalArgumentException("Symbol '" + symbol + "' is already defined!");
-            } else if (symbol == ' ') {
-                throw new IllegalArgumentException("Symbol ' ' (whitespace) is reserved and cannot be defined");
-            } else {
-                this.key.put(symbol, ingredient);
-                return this;
-            }
-        }
-
-        public Builder pattern(String pattern) {
-            if (!this.rows.isEmpty() && pattern.length() != this.rows.getFirst().length()) {
-                throw new IllegalArgumentException("Pattern must be the same width on every line!");
-            } else {
-                this.rows.add(pattern);
-                return this;
-            }
-        }
-
-        @Override
-        public Builder unlockedBy(String name, Criterion<?> criterion) {
-            this.criteria.put(name, criterion);
-            return this;
-        }
-
-        @Override
-        public Builder group(@Nullable String groupName) {
-            this.group = groupName;
-            return this;
-        }
-
-        public Builder showNotification(boolean showNotification) {
-            this.showNotification = showNotification;
-            return this;
-        }
-
-        @Override
-        public Item getResult() {
-            return this.result;
-        }
-
-        @Override
-        public void save(RecipeOutput recipeOutput, Identifier id) {
-            ShapedRecipePattern shapedrecipepattern = this.ensureValid(id);
-            Advancement.Builder advancement$builder = recipeOutput.advancement().addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id)).rewards(AdvancementRewards.Builder.recipe(id)).requirements(AdvancementRequirements.Strategy.OR);
-            Objects.requireNonNull(advancement$builder);
-            this.criteria.forEach(advancement$builder::addCriterion);
-            CursedShapedRecipe recipe = new CursedShapedRecipe(Objects.requireNonNullElse(this.group, ""), RecipeBuilder.determineBookCategory(this.category), shapedrecipepattern, this.resultStack, this.showNotification);
-            recipeOutput.accept(id, recipe, advancement$builder.build(id.withPrefix("recipes/" + this.category.getFolderName() + "/")));
-        }
-
-        private ShapedRecipePattern ensureValid(Identifier location) {
-            if (this.criteria.isEmpty()) {
-                throw new IllegalStateException("No way of obtaining recipe " + location);
-            } else {
-                return ShapedRecipePattern.of(this.key, this.rows);
-            }
-        }
-    }
+    // 26.1.2-port: the datagen-only Builder moved to data/recipes/CursedShapedRecipeBuilder (parked until phase 9).
 }

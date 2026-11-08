@@ -3,7 +3,6 @@ package auviotre.enigmatic.legacy.contents.gui;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.crafting.SpellstoneTableRecipe;
 import auviotre.enigmatic.legacy.registries.*;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -21,6 +20,8 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 
 public class SpellstoneTableMenu extends AbstractContainerMenu {
     protected final Container coreSlot = new InputContainer(1) {
@@ -56,8 +57,8 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
             }
 
             @Override
-            public Pair<Identifier, Identifier> getNoItemIcon() {
-                return Pair.of(InventoryMenu.BLOCK_ATLAS, EnigmaticLegacy.location("slot/empty_spellstone_debris_slot"));
+            public Identifier getNoItemIcon() { // 26.1.2-port: a GUI sprite id now (textures/gui/sprites/)
+                return EnigmaticLegacy.location("container/slot/empty_spellstone_debris_slot");
             }
         });
         this.addSlot(new Slot(this.spellstoneSlot, 0, 133, 35) {
@@ -67,8 +68,8 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
             }
 
             @Override
-            public Pair<Identifier, Identifier> getNoItemIcon() {
-                return Pair.of(InventoryMenu.BLOCK_ATLAS, EnigmaticLegacy.location("slot/empty_spellstone_slot"));
+            public Identifier getNoItemIcon() { // 26.1.2-port: a GUI sprite id now (textures/gui/sprites/)
+                return EnigmaticLegacy.location("container/slot/empty_spellstone_slot");
             }
         });
         this.addSlot(new Slot(this.coreSlot, 0, 80, 35) {
@@ -78,8 +79,8 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
             }
 
             @Override
-            public Pair<Identifier, Identifier> getNoItemIcon() {
-                return Pair.of(InventoryMenu.BLOCK_ATLAS, EnigmaticLegacy.location("slot/empty_spellcore_slot"));
+            public Identifier getNoItemIcon() { // 26.1.2-port: a GUI sprite id now (textures/gui/sprites/)
+                return EnigmaticLegacy.location("container/slot/empty_spellcore_slot");
             }
         });
         this.addSlot(new Slot(this.ingredientSlot, 0, 60, 55));
@@ -104,7 +105,7 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
             public void onTake(Player thePlayer, ItemStack stack) {
                 this.setChanged();
                 SpellstoneTableRecipe.Input input = SpellstoneTableMenu.this.getInput();
-                NonNullList<ItemStack> remains = player.level().getRecipeManager().getRemainingItemsFor(EnigmaticRecipes.SPELLSTONE_CRAFTING.get(), input, player.level());
+                NonNullList<ItemStack> remains = SpellstoneTableMenu.getRemainingItems(player.level(), input);
                 debrisSlot.setItem(0, remains.getFirst());
                 coreSlot.clearContent();
                 spellstoneSlot.clearContent();
@@ -144,6 +145,18 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
         }
     }
 
+    // 26.1.2-port: RecipeManager.getRemainingItemsFor was removed, and only the server knows recipes now.
+    // Same result as the old method: the recipe's remainders, or the inputs themselves when nothing matches.
+    private static NonNullList<ItemStack> getRemainingItems(Level level, SpellstoneTableRecipe.Input input) {
+        if (level instanceof ServerLevel server) {
+            Optional<RecipeHolder<SpellstoneTableRecipe>> recipe = server.recipeAccess().getRecipeFor(EnigmaticRecipes.SPELLSTONE_CRAFTING.get(), input, server);
+            if (recipe.isPresent()) return recipe.get().value().getRemainingItems(input);
+        }
+        NonNullList<ItemStack> inputs = NonNullList.withSize(input.size(), ItemStack.EMPTY);
+        for (int i = 0; i < input.size(); i++) inputs.set(i, input.getItem(i));
+        return inputs;
+    }
+
     @Override
     public void slotsChanged(Container container) {
         this.access.execute((level, pos) -> {
@@ -156,10 +169,10 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
                     return;
                 }
                 SpellstoneTableRecipe.Input input = this.getInput();
-                Optional<RecipeHolder<SpellstoneTableRecipe>> optional = server.getRecipeManager().getRecipeFor(EnigmaticRecipes.SPELLSTONE_CRAFTING.get(), input, level, (RecipeHolder<SpellstoneTableRecipe>) null);
+                Optional<RecipeHolder<SpellstoneTableRecipe>> optional = server.getRecipeManager().getRecipeFor(EnigmaticRecipes.SPELLSTONE_CRAFTING.get(), input, level);
                 if (optional.isPresent()) {
                     SpellstoneTableRecipe recipe = optional.get().value();
-                    ItemStack result = recipe.assemble(input, level.registryAccess());
+                    ItemStack result = recipe.assemble(input);
                     if (result.isItemEnabled(level.enabledFeatures())) {
                         output = result;
                     }
@@ -177,7 +190,7 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
             ItemStack selected = slot.getItem();
             stack = selected.copy();
             if (id == 10) {
-                this.access.execute((level, pos) -> selected.getItem().onCraftedBy(selected, level, player));
+                this.access.execute((level, pos) -> selected.getItem().onCraftedBy(selected, player));
                 if (!this.moveItemStackTo(selected, 11, 47, true)) return ItemStack.EMPTY;
                 slot.onQuickCraft(selected, stack);
             } else if (id > 10 && id < 47) {

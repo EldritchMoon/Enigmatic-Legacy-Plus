@@ -3,7 +3,6 @@ package auviotre.enigmatic.legacy.contents.gui;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.item.legacy.LoreInscriber;
 import auviotre.enigmatic.legacy.registries.EnigmaticMenus;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -46,8 +45,8 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
             }
 
             @Override
-            public Pair<Identifier, Identifier> getNoItemIcon() {
-                return Pair.of(InventoryMenu.BLOCK_ATLAS, EnigmaticLegacy.location("slot/empty_lore_fragment_slot"));
+            public Identifier getNoItemIcon() { // 26.1.2-port: a GUI sprite id now (textures/gui/sprites/)
+                return EnigmaticLegacy.location("container/slot/empty_lore_fragment_slot");
             }
         });
         this.addSlot(new Slot(this.result, 1, 116, 51) {
@@ -77,7 +76,7 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
         }
 
         for (int k = 0; k < 9; ++k) {
-            if (k == this.player.getInventory().selected) {
+            if (k == this.player.getInventory().getSelectedSlot()) {
                 this.addSlot(new Slot(inventory, k, 8 + k * 18, 142) {
                     @Override
                     public boolean mayPickup(Player playerIn) {

@@ -2,49 +2,58 @@ package auviotre.enigmatic.legacy.contents.crafting;
 
 import auviotre.enigmatic.legacy.registries.EnigmaticRecipes;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementRequirements;
-import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.core.NonNullList;
-import net.minecraft.data.recipes.RecipeBuilder;
-import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.Identifier;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
-import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
 
-import javax.annotation.Nullable;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.List;
 
+/**
+ * A shapeless recipe that leaves no remainders (bottles, buckets) behind.
+ * 26.1.2-port: same structure as the 26.1 ShapelessRecipe (CommonInfo/CraftingBookInfo, ItemStackTemplate result,
+ * List<Ingredient>); RecipeSerializer is a record now, so the codecs live here.
+ */
 public class ShapelessNoRemainRecipe extends ShapelessRecipe {
-    private final String group;
-    private final ItemStack result;
-    private final CraftingBookCategory category;
-    private final NonNullList<Ingredient> ingredients;
+    public static final MapCodec<ShapelessNoRemainRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Recipe.CommonInfo.MAP_CODEC.forGetter(recipe -> recipe.commonInfo),
+            CraftingRecipe.CraftingBookInfo.MAP_CODEC.forGetter(recipe -> recipe.bookInfo),
+            ItemStackTemplate.CODEC.fieldOf("result").forGetter(recipe -> recipe.result),
+            Codec.lazyInitialized(() -> Ingredient.CODEC.listOf(1, 9)).fieldOf("ingredients").forGetter(recipe -> recipe.ingredients)
+    ).apply(instance, ShapelessNoRemainRecipe::new));
+    public static final StreamCodec<RegistryFriendlyByteBuf, ShapelessNoRemainRecipe> STREAM_CODEC = StreamCodec.composite(
+            Recipe.CommonInfo.STREAM_CODEC, recipe -> recipe.commonInfo,
+            CraftingRecipe.CraftingBookInfo.STREAM_CODEC, recipe -> recipe.bookInfo,
+            ItemStackTemplate.STREAM_CODEC, recipe -> recipe.result,
+            Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()), recipe -> recipe.ingredients,
+            ShapelessNoRemainRecipe::new
+    );
+    public static final RecipeSerializer<ShapelessNoRemainRecipe> SERIALIZER = new RecipeSerializer<>(CODEC, STREAM_CODEC);
 
-    public ShapelessNoRemainRecipe(String group, CraftingBookCategory category, ItemStack result, NonNullList<Ingredient> ingredients) {
-        super(group, category, result, ingredients);
-        this.group = group;
+    private final ItemStackTemplate result;
+    private final List<Ingredient> ingredients;
+
+    public ShapelessNoRemainRecipe(Recipe.CommonInfo commonInfo, CraftingRecipe.CraftingBookInfo bookInfo, ItemStackTemplate result, List<Ingredient> ingredients) {
+        super(commonInfo, bookInfo, result, ingredients);
         this.result = result;
-        this.category = category;
         this.ingredients = ingredients;
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
-        return EnigmaticRecipes.SHAPELESS_NO_REMAIN.get();
+    @SuppressWarnings("unchecked")
+    public RecipeSerializer<ShapelessRecipe> getSerializer() {
+        // 26.1.2-port: ShapelessRecipe.getSerializer() is typed RecipeSerializer<ShapelessRecipe>; the cast is safe.
+        return (RecipeSerializer<ShapelessRecipe>) (RecipeSerializer<?>) EnigmaticRecipes.SHAPELESS_NO_REMAIN.get();
     }
 
     @Override
@@ -52,132 +61,5 @@ public class ShapelessNoRemainRecipe extends ShapelessRecipe {
         return NonNullList.withSize(input.size(), ItemStack.EMPTY);
     }
 
-    public static class Serializer implements RecipeSerializer<ShapelessNoRemainRecipe> {
-        public static final StreamCodec<RegistryFriendlyByteBuf, ShapelessNoRemainRecipe> STREAM_CODEC = StreamCodec.of(ShapelessNoRemainRecipe.Serializer::toNetwork, ShapelessNoRemainRecipe.Serializer::fromNetwork);
-        private static final MapCodec<ShapelessNoRemainRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                Codec.STRING.optionalFieldOf("group", "").forGetter(recipe -> recipe.group),
-                CraftingBookCategory.CODEC.fieldOf("category").orElse(CraftingBookCategory.MISC).forGetter(recipe -> recipe.category),
-                ItemStack.STRICT_CODEC.fieldOf("result").forGetter(recipe -> recipe.result),
-                Ingredient.CODEC_NONEMPTY.listOf().fieldOf("ingredients").flatXmap(list -> {
-                    Ingredient[] aingredient = list.toArray(Ingredient[]::new);
-                    if (aingredient.length == 0) return DataResult.error(() -> "No ingredients for shapeless recipe");
-                    else if (aingredient.length > 9)
-                        return DataResult.error(() -> "Too many ingredients for shapeless recipe. The maximum is: %s".formatted(9));
-                    else return DataResult.success(NonNullList.of(Ingredient.EMPTY, aingredient));
-                }, DataResult::success).forGetter(recipe -> recipe.ingredients)
-        ).apply(instance, ShapelessNoRemainRecipe::new));
-
-        private static ShapelessNoRemainRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
-            String group = buffer.readUtf();
-            CraftingBookCategory category = buffer.readEnum(CraftingBookCategory.class);
-            int size = buffer.readVarInt();
-            NonNullList<Ingredient> list = NonNullList.withSize(size, Ingredient.EMPTY);
-            list.replaceAll((ingredient) -> Ingredient.CONTENTS_STREAM_CODEC.decode(buffer));
-            ItemStack itemstack = ItemStack.STREAM_CODEC.decode(buffer);
-            return new ShapelessNoRemainRecipe(group, category, itemstack, list);
-        }
-
-        private static void toNetwork(RegistryFriendlyByteBuf buffer, ShapelessNoRemainRecipe recipe) {
-            buffer.writeUtf(recipe.group);
-            buffer.writeEnum(recipe.category);
-            buffer.writeVarInt(recipe.ingredients.size());
-            for (Ingredient ingredient : recipe.ingredients) {
-                Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, ingredient);
-            }
-            ItemStack.STREAM_CODEC.encode(buffer, recipe.result);
-        }
-
-        @Override
-        public MapCodec<ShapelessNoRemainRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, ShapelessNoRemainRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
-    }
-
-    public static class Builder implements RecipeBuilder {
-        private final RecipeCategory category;
-        private final Item result;
-        private final ItemStack resultStack;
-        private final NonNullList<Ingredient> ingredients;
-        private final Map<String, Criterion<?>> criteria;
-        @Nullable
-        private String group;
-
-        public Builder(RecipeCategory category, ItemLike result, int count) {
-            this(category, new ItemStack(result, count));
-        }
-
-        public Builder(RecipeCategory category, ItemStack result) {
-            this.ingredients = NonNullList.create();
-            this.criteria = new LinkedHashMap<>();
-            this.category = category;
-            this.result = result.getItem();
-            this.resultStack = result;
-        }
-
-        public static Builder shapeless(RecipeCategory category, ItemLike result) {
-            return new Builder(category, result, 1);
-        }
-
-        public static Builder shapeless(RecipeCategory category, ItemLike result, int count) {
-            return new Builder(category, result, count);
-        }
-
-        public static Builder shapeless(RecipeCategory category, ItemStack result) {
-            return new Builder(category, result);
-        }
-
-        public Builder requires(TagKey<Item> tag) {
-            return this.requires(Ingredient.of(tag));
-        }
-
-        public Builder requires(ItemLike item) {
-            return this.requires(item, 1);
-        }
-
-        public Builder requires(ItemLike item, int quantity) {
-            for (int i = 0; i < quantity; ++i) this.requires(Ingredient.of(item));
-            return this;
-        }
-
-        public Builder requires(Ingredient ingredient) {
-            return this.requires(ingredient, 1);
-        }
-
-        public Builder requires(Ingredient ingredient, int quantity) {
-            for (int i = 0; i < quantity; ++i) this.ingredients.add(ingredient);
-            return this;
-        }
-
-        @Override
-        public Builder unlockedBy(String name, Criterion<?> criterion) {
-            this.criteria.put(name, criterion);
-            return this;
-        }
-
-        @Override
-        public Builder group(@Nullable String groupName) {
-            this.group = groupName;
-            return this;
-        }
-
-        @Override
-        public Item getResult() {
-            return this.result;
-        }
-
-        @Override
-        public void save(RecipeOutput recipeOutput, Identifier id) {
-            if (this.criteria.isEmpty()) throw new IllegalStateException("No way of obtaining recipe " + id);
-            Advancement.Builder advancement$builder = recipeOutput.advancement().addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id)).rewards(AdvancementRewards.Builder.recipe(id)).requirements(AdvancementRequirements.Strategy.OR);
-            Objects.requireNonNull(advancement$builder);
-            this.criteria.forEach(advancement$builder::addCriterion);
-            ShapelessNoRemainRecipe recipe = new ShapelessNoRemainRecipe(Objects.requireNonNullElse(this.group, ""), RecipeBuilder.determineBookCategory(this.category), this.resultStack, this.ingredients);
-            recipeOutput.accept(id, recipe, advancement$builder.build(id.withPrefix("recipes/" + this.category.getFolderName() + "/")));
-        }
-    }
+    // 26.1.2-port: the datagen-only Builder moved to data/recipes/ShapelessNoRemainRecipeBuilder (parked until phase 9).
 }

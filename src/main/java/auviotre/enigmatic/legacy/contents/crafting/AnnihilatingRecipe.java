@@ -16,11 +16,14 @@ import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.CommonHooks;
+import com.mojang.serialization.MapCodec;
+import net.minecraft.network.codec.StreamCodec;
 
 public class AnnihilatingRecipe extends CustomRecipe {
-    public AnnihilatingRecipe(CraftingBookCategory category) {
-        super(category);
-    }
+    // 26.1.2-port: CustomRecipe has no category any more and SimpleCraftingRecipeSerializer was removed;
+    // like vanilla's special recipes, this is a single instance with a unit codec.
+    public static final AnnihilatingRecipe INSTANCE = new AnnihilatingRecipe();
+    public static final RecipeSerializer<AnnihilatingRecipe> SERIALIZER = new RecipeSerializer<>(MapCodec.unit(INSTANCE), StreamCodec.unit(INSTANCE));
 
     @Override
     public boolean matches(CraftingInput input, Level level) {
@@ -38,7 +41,7 @@ public class AnnihilatingRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInput input, HolderLookup.Provider provider) {
+    public ItemStack assemble(CraftingInput input) {
         return EnigmaticItems.ANNIHILATING_SWORD.toStack();
     }
 
@@ -57,18 +60,12 @@ public class AnnihilatingRecipe extends CustomRecipe {
         return list;
     }
 
-    @Override
-    public ItemStack getResultItem(HolderLookup.Provider registries) {
-        return EnigmaticItems.ANNIHILATING_SWORD.toStack();
-    }
+
+    // 26.1.2-port: removed getResultItem and canCraftInDimensions (no longer part of Recipe); matches() already
+    // requires a full 3x3 grid.
 
     @Override
-    public boolean canCraftInDimensions(int w, int h) {
-        return w == 3 &&  h == 3;
-    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<AnnihilatingRecipe> getSerializer() {
         return EnigmaticRecipes.ANNIHILATING.get();
     }
 }

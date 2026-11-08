@@ -7,7 +7,6 @@ import auviotre.enigmatic.legacy.contents.item.legacy.AntiqueBag;
 import auviotre.enigmatic.legacy.registries.EnigmaticCapability;
 import auviotre.enigmatic.legacy.registries.EnigmaticMenus;
 import auviotre.enigmatic.legacy.registries.EnigmaticTriggers;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -55,7 +54,7 @@ public class AntiqueBagContainerMenu extends AbstractContainerMenu {
         }
 
         for (int k = 0; k < 9; ++k) {
-            if (k == this.player.getInventory().selected) {
+            if (k == this.player.getInventory().getSelectedSlot()) {
                 this.addSlot(new Slot(inventory, k, 8 + k * 18, 142) {
                     @Override
                     public boolean mayPickup(Player playerIn) {
@@ -138,8 +137,8 @@ public class AntiqueBagContainerMenu extends AbstractContainerMenu {
 
         @Override
         @Nullable
-        public Pair<Identifier, Identifier> getNoItemIcon() {
-            return Pair.of(InventoryMenu.BLOCK_ATLAS, EnigmaticLegacy.location("slot/empty_book_slot"));
+        public Identifier getNoItemIcon() { // 26.1.2-port: a GUI sprite id now (textures/gui/sprites/)
+            return EnigmaticLegacy.location("container/slot/empty_book_slot");
         }
     }
 }

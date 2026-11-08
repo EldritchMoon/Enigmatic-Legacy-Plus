@@ -32,14 +32,37 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.world.item.crafting.PlacementInfo;
+import net.minecraft.world.item.crafting.RecipeBookCategory;
+import net.minecraft.world.item.crafting.RecipeBookCategories;
+import java.util.List;
 
 public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input> {
-    final ItemStack result;
+    // 26.1.2-port: result is an ItemStackTemplate and ingredients a plain List (Ingredient.EMPTY is gone);
+    // RecipeSerializer is a record now, so the codecs live here. JSON fields are unchanged.
+    public static final MapCodec<SpellstoneTableRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            ItemStackTemplate.CODEC.fieldOf("result").forGetter(recipe -> recipe.result),
+            Codec.INT.optionalFieldOf("debris_count", 0).forGetter(recipe -> recipe.debrisCount),
+            Ingredient.CODEC.listOf(1, 7).fieldOf("ingredients").forGetter(recipe -> recipe.ingredients),
+            Codec.BOOL.optionalFieldOf("all_different", false).forGetter(recipe -> recipe.allDifferent)
+    ).apply(instance, SpellstoneTableRecipe::new));
+    public static final StreamCodec<RegistryFriendlyByteBuf, SpellstoneTableRecipe> STREAM_CODEC = StreamCodec.composite(
+            ItemStackTemplate.STREAM_CODEC, recipe -> recipe.result,
+            ByteBufCodecs.VAR_INT, recipe -> recipe.debrisCount,
+            Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()), recipe -> recipe.ingredients,
+            ByteBufCodecs.BOOL, recipe -> recipe.allDifferent,
+            SpellstoneTableRecipe::new
+    );
+    public static final RecipeSerializer<SpellstoneTableRecipe> SERIALIZER = new RecipeSerializer<>(CODEC, STREAM_CODEC);
+
+    final ItemStackTemplate result;
     final int debrisCount;
-    final NonNullList<Ingredient> ingredients;
+    final List<Ingredient> ingredients;
     final boolean allDifferent;
 
-    public SpellstoneTableRecipe(ItemStack result, int count, NonNullList<Ingredient> ingredients, boolean flag) {
+    public SpellstoneTableRecipe(ItemStackTemplate result, int count, List<Ingredient> ingredients, boolean flag) {
         this.result = result;
         this.debrisCount = count;
         this.ingredients = ingredients;
@@ -70,29 +93,23 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
         return RecipeMatcher.findMatches(items, this.ingredients) != null;
     }
 
-    @Override
+    // 26.1.2-port: no longer a Recipe method (only crafting recipes have it); SpellstoneTableMenu calls it directly.
     public NonNullList<ItemStack> getRemainingItems(Input input) {
         NonNullList<ItemStack> nonnulllist = NonNullList.withSize(input.size(), ItemStack.EMPTY);
         input.debris().shrink(this.debrisCount);
         nonnulllist.set(0, input.debris().copy());
         for (int i = 2; i < nonnulllist.size(); ++i) {
             ItemStack item = input.getItem(i);
-            if (item.hasCraftingRemainingItem()) {
-                nonnulllist.set(i, IItemHelper.getCraftingRemainder(item));
-            }
+            ItemStack remainder = IItemHelper.getCraftingRemainder(item); // 26.1.2-port: hasCraftingRemainingItem removed
+            if (!remainder.isEmpty()) nonnulllist.set(i, remainder);
         }
 
         return nonnulllist;
     }
 
     @Override
-    public ItemStack assemble(Input input, HolderLookup.Provider provider) {
-        return this.result.copy();
-    }
-
-    @Override
-    public boolean canCraftInDimensions(int i, int i1) {
-        return true;
+    public ItemStack assemble(Input input) {
+        return this.result.create();
     }
 
     public int getCount() {
@@ -103,28 +120,43 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
         return this.allDifferent;
     }
 
-    @Override
-    public NonNullList<Ingredient> getIngredients() {
+    public List<Ingredient> getIngredients() {
         return this.ingredients;
     }
 
+    public ItemStack getResultItem() {
+        return this.result.create();
+    }
+
+    // 26.1.2-port: methods every Recipe needs now. The Spellstone Table has no recipe book, so the recipe is not
+    // placeable; the category only satisfies the interface. getToastSymbol/canCraftInDimensions were removed.
     @Override
-    public ItemStack getResultItem(HolderLookup.Provider provider) {
-        return this.result;
+    public boolean showNotification() {
+        return true;
     }
 
     @Override
-    public ItemStack getToastSymbol() {
-        return EnigmaticBlocks.SPELLSTONE_TABLE.toStack();
+    public String group() {
+        return "";
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public PlacementInfo placementInfo() {
+        return PlacementInfo.NOT_PLACEABLE;
+    }
+
+    @Override
+    public RecipeBookCategory recipeBookCategory() {
+        return RecipeBookCategories.CRAFTING_MISC;
+    }
+
+    @Override
+    public RecipeSerializer<SpellstoneTableRecipe> getSerializer() {
         return EnigmaticRecipes.SPELLSTONE_TABLE.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<SpellstoneTableRecipe> getType() {
         return EnigmaticRecipes.SPELLSTONE_CRAFTING.get();
     }
 
@@ -144,125 +176,5 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
         }
     }
 
-    public static class Serializer implements RecipeSerializer<SpellstoneTableRecipe> {
-        public static final StreamCodec<RegistryFriendlyByteBuf, SpellstoneTableRecipe> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork, Serializer::fromNetwork);
-        private static final MapCodec<SpellstoneTableRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ItemStack.STRICT_CODEC.fieldOf("result").forGetter(recipe -> recipe.result),
-                Codec.INT.optionalFieldOf("debris_count", 0).forGetter(recipe -> recipe.debrisCount),
-                Ingredient.CODEC_NONEMPTY.listOf().fieldOf("ingredients").flatXmap(list -> {
-                    Ingredient[] aingredient = list.toArray(Ingredient[]::new);
-                    if (aingredient.length == 0) return DataResult.error(() -> "No ingredients for shapeless recipe");
-                    else if (aingredient.length > 7)
-                        return DataResult.error(() -> "Too many ingredients for shapeless recipe. The maximum is: %s".formatted(7));
-                    else return DataResult.success(NonNullList.of(Ingredient.EMPTY, aingredient));
-                }, DataResult::success).forGetter(recipe -> recipe.ingredients),
-                Codec.BOOL.optionalFieldOf("all_different", false).forGetter(recipe -> recipe.allDifferent)
-        ).apply(instance, SpellstoneTableRecipe::new));
-
-        private static SpellstoneTableRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
-            int count = buffer.readInt();
-            int size = buffer.readVarInt();
-            NonNullList<Ingredient> list = NonNullList.withSize(size, Ingredient.EMPTY);
-            list.replaceAll((ingredient) -> Ingredient.CONTENTS_STREAM_CODEC.decode(buffer));
-            ItemStack result = ItemStack.STREAM_CODEC.decode(buffer);
-            boolean allDifferent = buffer.readBoolean();
-            return new SpellstoneTableRecipe(result, count, list, allDifferent);
-        }
-
-        private static void toNetwork(RegistryFriendlyByteBuf buffer, SpellstoneTableRecipe recipe) {
-            buffer.writeInt(recipe.debrisCount);
-            buffer.writeVarInt(recipe.ingredients.size());
-            for (Ingredient ingredient : recipe.ingredients)
-                Ingredient.CONTENTS_STREAM_CODEC.encode(buffer, ingredient);
-            ItemStack.STREAM_CODEC.encode(buffer, recipe.result);
-            buffer.writeBoolean(recipe.allDifferent);
-        }
-
-        @Override
-        public MapCodec<SpellstoneTableRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, SpellstoneTableRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
-    }
-
-    public static class Builder implements RecipeBuilder {
-        private final Map<String, Criterion<?>> criteria;
-        private final int debrisCount;
-        private final ItemStack result;
-        private final NonNullList<Ingredient> ingredients;
-        private boolean allDifferent = false;
-
-        private Builder(ItemLike resultItem, int debrisCount) {
-            this.result = resultItem.asItem().getDefaultInstance();
-            this.debrisCount = debrisCount;
-            this.criteria = new LinkedHashMap<>();
-            this.ingredients = NonNullList.create();
-        }
-
-        public static Builder spell(ItemLike result, int debrisCount) {
-            return new Builder(result, debrisCount);
-        }
-
-        public Builder allDifferent() {
-            this.allDifferent = true;
-            return this;
-        }
-
-        public Builder requires(TagKey<Item> tag) {
-            return this.requires(Ingredient.of(tag));
-        }
-
-        public Builder requires(ItemLike item) {
-            return this.requires(item, 1);
-        }
-
-        public Builder requires(ItemLike item, int quantity) {
-            for (int i = 0; i < quantity; ++i) this.requires(Ingredient.of(item));
-            return this;
-        }
-
-        public Builder requires(Ingredient ingredient) {
-            return this.requires(ingredient, 1);
-        }
-
-        public Builder requires(Ingredient ingredient, int quantity) {
-            for (int i = 0; i < quantity; ++i) this.ingredients.add(ingredient);
-            return this;
-        }
-
-        @Override
-        public RecipeBuilder unlockedBy(String name, Criterion<?> criterion) {
-            this.criteria.put(name, criterion);
-            return this;
-        }
-
-        @Override
-        public RecipeBuilder group(@Nullable String s) {
-            return this;
-        }
-
-        @Override
-        public Item getResult() {
-            return result.getItem();
-        }
-
-        @Override
-        public void save(RecipeOutput recipeOutput) {
-            Identifier location = BuiltInRegistries.ITEM.getKey(this.getResult());
-            this.save(recipeOutput, Identifier.fromNamespaceAndPath(location.getNamespace(), "spellstone/" + location.getPath()));
-        }
-
-        @Override
-        public void save(@NotNull RecipeOutput recipeOutput, Identifier id) {
-            Advancement.Builder builder = recipeOutput.advancement().addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id)).rewards(AdvancementRewards.Builder.recipe(id)).requirements(AdvancementRequirements.Strategy.OR);
-            Objects.requireNonNull(builder);
-            this.criteria.forEach(builder::addCriterion);
-            SpellstoneTableRecipe recipe = new SpellstoneTableRecipe(this.result, this.debrisCount, this.ingredients, this.allDifferent);
-            recipeOutput.accept(id, recipe, builder.build(id.withPrefix("recipes/spellstone_table/")));
-        }
-    }
+    // 26.1.2-port: the datagen-only Builder moved to data/recipes/SpellstoneTableRecipeBuilder (parked until phase 9).
 }
