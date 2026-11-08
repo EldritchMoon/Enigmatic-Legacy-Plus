@@ -24,11 +24,13 @@ public class StarDustParticle extends SimpleAnimatedParticle {
         this.setSpriteFromAge(spriteSet);
     }
 
+    @Override
     public void tick() {
         this.gravity -= 0.012F;
         super.tick();
     }
 
+    @Override
     public void move(double dx, double dy, double dz) {
         this.setBoundingBox(this.getBoundingBox().move(dx, dy, dz));
         this.setLocationFromBoundingbox();
@@ -42,6 +44,7 @@ public class StarDustParticle extends SimpleAnimatedParticle {
             this.sprites = spriteSet;
         }
 
+        @Override
         public Particle createParticle(SimpleParticleType type, ClientLevel level, double posX, double posY, double posZ, double speedX, double speedY, double speedZ) {
             return new StarDustParticle(level, 12841470, posX, posY, posZ, speedX, speedY, speedZ, this.sprites);
         }

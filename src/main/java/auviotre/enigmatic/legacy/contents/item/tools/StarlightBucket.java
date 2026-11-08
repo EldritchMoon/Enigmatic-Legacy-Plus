@@ -66,6 +66,7 @@ public class StarlightBucket extends Item {
         return BuiltInRegistries.ITEM.getValue(Identifier.parse(stack.getOrDefault(EnigmaticComponents.CONTENT, "minecraft:air")));
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.starlightBucket1");
@@ -82,6 +83,7 @@ public class StarlightBucket extends Item {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.starlightBucket2", ChatFormatting.LIGHT_PURPLE, component);
     }
 
+    @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         Item content = getContent(stack);
@@ -120,6 +122,7 @@ public class StarlightBucket extends Item {
         return InteractionResult.FAIL;
     }
 
+    @Override
     public InteractionResult useOn(UseOnContext context) {
         Item content = getContent(context.getItemInHand());
         if (content instanceof SolidBucketItem bucket) {
@@ -128,6 +131,7 @@ public class StarlightBucket extends Item {
         return super.useOn(context);
     }
 
+    @Override
     public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access) {
         if (action == ClickAction.PRIMARY || !slot.mayPlace(stack) || !slot.mayPickup(player) || other.isEmpty())
             return super.overrideOtherStackedOnMe(stack, other, slot, action, player, access);
@@ -139,6 +143,7 @@ public class StarlightBucket extends Item {
         return false;
     }
 
+    @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         if (isMilk(getContent(stack))) {
             if (entity instanceof ServerPlayer player) {
@@ -151,12 +156,14 @@ public class StarlightBucket extends Item {
         return stack;
     }
 
+    @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
         // 26.1.2-port: use time comes from the content's consumable component, so ask with the content's own stack.
         Item content = getContent(stack);
         return content.getUseDuration(content.getDefaultInstance(), entity);
     }
 
+    @Override
     public ItemUseAnimation getUseAnimation(ItemStack stack) {
         Item content = getContent(stack);
         return content.getUseAnimation(content.getDefaultInstance());

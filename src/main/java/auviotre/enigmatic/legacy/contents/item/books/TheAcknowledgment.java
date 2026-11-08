@@ -47,6 +47,7 @@ public class TheAcknowledgment extends Item implements IBagContent {
         return PatchouliAPI.get().getSubtitle(BOOK_ID);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
@@ -61,6 +62,7 @@ public class TheAcknowledgment extends Item implements IBagContent {
         if (stack.isEnchanted()) TooltipHandler.line(list);
     }
 
+    @Override
     public List<Component> getTooltipInBag(List<Component> list) {
         TooltipHandler.line(list);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.antiqueBagSlot");
@@ -76,15 +78,18 @@ public class TheAcknowledgment extends Item implements IBagContent {
         return InteractionResult.SUCCESS;
     }
 
+    @Override
     public boolean hurtEnemy(ItemStack stack, @NotNull LivingEntity target, LivingEntity attacker) {
         target.igniteForSeconds(4);
         return super.hurtEnemy(stack, target, attacker);
     }
 
+    @Override
     public boolean isEnchantable(ItemStack stack) {
         return true;
     }
 
+    @Override
     public int getEnchantmentValue(ItemStack stack) {
         return 24;
     }

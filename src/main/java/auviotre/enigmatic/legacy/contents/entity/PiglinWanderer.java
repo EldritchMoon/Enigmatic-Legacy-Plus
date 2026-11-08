@@ -94,11 +94,13 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 32.0).add(Attributes.MOVEMENT_SPEED, 0.34).add(Attributes.ATTACK_KNOCKBACK, 1.6).add(Attributes.ATTACK_DAMAGE, 4.0);
     }
 
+    @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_IS_CHARGING, false);
     }
 
+    @Override
     @Nullable
     public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @Nullable SpawnGroupData spawnGroupData) {
         Ai.initMemories(this);
@@ -106,10 +108,12 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
     }
 
+    @Override
     protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
         this.setItemSlot(EquipmentSlot.MAINHAND, EnigmaticItems.ICHOR_SPEAR.toStack());
     }
 
+    @Override
     protected void customServerAiStep() {
         this.timeInOverworld = 0;
         this.level().getProfiler().push("piglinWandererBrain");
@@ -119,32 +123,39 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
         super.customServerAiStep();
     }
 
+    @Override
     public boolean doHurtTarget(Entity entity) {
         boolean flag = super.doHurtTarget(entity);
         if (flag) this.knockback(0.1, -Mth.sin(this.getYRot() * 0.017453292F), Mth.cos(this.getYRot() * 0.017453292F));
         return flag;
     }
 
+    @Override
     protected Brain.Provider<PiglinWanderer> brainProvider() {
         return Brain.provider(MEMORY_TYPES, SENSOR_TYPES);
     }
 
+    @Override
     protected Brain<?> makeBrain(Dynamic<?> dynamic) {
         return Ai.makeBrain(this, this.brainProvider().makeBrain(dynamic));
     }
 
+    @Override
     public Brain<PiglinWanderer> getBrain() {
         return (Brain<PiglinWanderer>) super.getBrain();
     }
 
+    @Override
     public boolean wantsToPickUp(ItemStack stack) {
         return stack.is(EnigmaticItems.ICHOR_SPEAR) && super.wantsToPickUp(stack);
     }
 
+    @Override
     protected boolean canHunt() {
         return false;
     }
 
+    @Override
     protected void playConvertedSound() {
         this.makeSound(SoundEvents.PIGLIN_CONVERTED_TO_ZOMBIFIED);
     }
@@ -153,6 +164,7 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
         this.makeSound(SoundEvents.PIGLIN_ANGRY);
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean flag = super.hurt(source, amount);
         if (this.level().isClientSide()) return false;
@@ -161,20 +173,24 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
         return flag;
     }
 
+    @Override
     public PiglinArmPose getArmPose() {
         if (this.isAggressive() && this.isHoldingMeleeWeapon()) return PiglinArmPose.ATTACKING_WITH_MELEE_WEAPON;
         if (this.isCharging()) return PiglinArmPose.CROSSBOW_HOLD;
         return PiglinArmPose.DEFAULT;
     }
 
+    @Override
     public boolean isCharging() {
         return this.entityData.get(DATA_IS_CHARGING);
     }
 
+    @Override
     public void setCharging(boolean isCharging) {
         this.entityData.set(DATA_IS_CHARGING, isCharging);
     }
 
+    @Override
     public void performRangedAttack(LivingEntity target, float distanceFactor) {
         InteractionHand hand = ProjectileUtil.getWeaponHoldingHand(this, (item) -> item instanceof IchorSpear);
         ItemStack stack = this.getItemInHand(hand);
@@ -202,6 +218,7 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
             return shooter.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).orElse(null);
         }
 
+        @Override
         protected void start(ServerLevel level, PiglinWanderer piglin, long gameTime) {
             LivingEntity target = getAttackTarget(piglin);
             if (target == null) return;

@@ -35,27 +35,33 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
         this.access = access;
         this.player = inventory.player;
         this.addSlot(new Slot(this.loreSlot, 0, 40, 51) {
+            @Override
             public boolean mayPlace(ItemStack stack) {
                 return stack.getItem() instanceof LoreInscriber.Fragment;
             }
 
+            @Override
             public int getMaxStackSize() {
                 return 1;
             }
 
+            @Override
             public Pair<Identifier, Identifier> getNoItemIcon() {
                 return Pair.of(InventoryMenu.BLOCK_ATLAS, EnigmaticLegacy.location("slot/empty_lore_fragment_slot"));
             }
         });
         this.addSlot(new Slot(this.result, 1, 116, 51) {
+            @Override
             public boolean mayPlace(ItemStack stack) {
                 return false;
             }
 
+            @Override
             public boolean mayPickup(Player playerIn) {
                 return this.hasItem();
             }
 
+            @Override
             public void onTake(Player thePlayer, ItemStack stack) {
                 this.setChanged();
                 LoreInscriberMenu.this.loreSlot.setItem(0, ItemStack.EMPTY);
@@ -73,10 +79,12 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
         for (int k = 0; k < 9; ++k) {
             if (k == this.player.getInventory().selected) {
                 this.addSlot(new Slot(inventory, k, 8 + k * 18, 142) {
+                    @Override
                     public boolean mayPickup(Player playerIn) {
                         return false;
                     }
 
+                    @Override
                     public boolean mayPlace(ItemStack stack) {
                         return false;
                     }
@@ -85,6 +93,7 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
         }
     }
 
+    @Override
     public void slotsChanged(Container container) {
         super.slotsChanged(container);
         if (container == this.loreSlot) this.createResult();
@@ -113,6 +122,7 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
             return !output.isEmpty();
         }
     }    private final Container loreSlot = new SimpleContainer(1) {
+        @Override
         public void setChanged() {
             super.setChanged();
             LoreInscriberMenu.this.slotsChanged(this);
@@ -142,6 +152,7 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
         return stack;
     }
 
+    @Override
     public ItemStack quickMoveStack(Player player, int id) {
         ItemStack stack = ItemStack.EMPTY;
         Slot slot = this.slots.get(id);
@@ -166,10 +177,12 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
         return stack;
     }
 
+    @Override
     public boolean stillValid(Player player) {
         return true;
     }
 
+    @Override
     public void removed(Player player) {
         super.removed(player);
         this.access.execute((level, pos) -> this.clearContainer(player, this.loreSlot));
@@ -182,10 +195,12 @@ public class LoreInscriberMenu extends AbstractContainerMenu {
             this.name = name;
         }
 
+        @Override
         public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
             return new LoreInscriberMenu(id, inventory, ContainerLevelAccess.create(inventory.player.level(), inventory.player.blockPosition()));
         }
 
+        @Override
         public Component getDisplayName() {
             return this.name;
         }

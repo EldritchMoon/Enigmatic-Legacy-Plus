@@ -51,6 +51,7 @@ public class IchorSpear extends BaseItem implements ProjectileItem {
         builder.pop(2);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
@@ -60,6 +61,7 @@ public class IchorSpear extends BaseItem implements ProjectileItem {
         } else TooltipHandler.holdShift(list);
     }
 
+    @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int tickCount) {
         int duration = this.getUseDuration(stack, entity) - tickCount;
         if (duration >= 8) {
@@ -85,24 +87,29 @@ public class IchorSpear extends BaseItem implements ProjectileItem {
         }
     }
 
+    @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack itemInHand = player.getItemInHand(hand);
         player.startUsingItem(hand);
         return InteractionResult.CONSUME;
     }
 
+    @Override
     public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) {
         return !player.isCreative();
     }
 
+    @Override
     public ItemUseAnimation getUseAnimation(ItemStack stack) {
         return ItemUseAnimation.TRIDENT /* 26.1.2-port: old SPEAR = trident throw */;
     }
 
+    @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 72000;
     }
 
+    @Override
     public Projectile asProjectile(Level level, Position pos, ItemStack stack, Direction direction) {
         ThrownIchorSpear spear = new ThrownIchorSpear(level, pos.x(), pos.y(), pos.z(), stack.copyWithCount(1));
         spear.pickup = AbstractArrow.Pickup.ALLOWED;

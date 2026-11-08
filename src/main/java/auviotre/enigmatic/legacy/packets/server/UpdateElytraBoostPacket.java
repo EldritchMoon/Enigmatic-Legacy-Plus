@@ -36,6 +36,7 @@ public record UpdateElytraBoostPacket(boolean boosting) implements CustomPacketP
         }
     }
 
+    @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }

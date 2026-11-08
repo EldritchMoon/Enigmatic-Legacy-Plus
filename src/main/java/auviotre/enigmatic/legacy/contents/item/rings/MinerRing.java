@@ -63,6 +63,7 @@ public class MinerRing extends BaseCurioItem {
         stack.set(EnigmaticComponents.MINER_POINT, Mth.clamp(damage, 0, MAX_POINT));
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -76,6 +77,7 @@ public class MinerRing extends BaseCurioItem {
         } else TooltipHandler.holdShift(list);
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
         builder.put(Attributes.MINING_EFFICIENCY, new AttributeModifier(IItemHelper.getLocation(this), 2, AttributeModifier.Operation.ADD_VALUE));
@@ -83,6 +85,7 @@ public class MinerRing extends BaseCurioItem {
         return builder.build();
     }
 
+    @Override
     public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access) {
         if (action != ClickAction.PRIMARY && slot.mayPickup(player) && slot.hasItem()) {
             if (other.getBurnTime(RecipeType.BLASTING) > 200 && getPoint(stack) < MAX_POINT) {
@@ -97,6 +100,7 @@ public class MinerRing extends BaseCurioItem {
         return super.overrideOtherStackedOnMe(stack, other, slot, action, player, access);
     }
 
+    @Override
     public void curioTick(SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
         Level level = entity.level();
@@ -126,14 +130,17 @@ public class MinerRing extends BaseCurioItem {
         if (getPoint(stack) < MAX_POINT && entity.tickCount % 80 == 0) setPoint(stack, getPoint(stack) + 1);
     }
 
+    @Override
     public boolean isBarVisible(ItemStack stack) {
         return getPoint(stack) > 0;
     }
 
+    @Override
     public int getBarWidth(ItemStack stack) {
         return Math.round((float) getPoint(stack) * 13.0F / MAX_POINT);
     }
 
+    @Override
     public int getBarColor(ItemStack stack) {
         float f = Math.max(0.0F, (float) getPoint(stack) / MAX_POINT);
         return Mth.hsvToRgb(f / 6.0F, 1.0F, 1.0F);

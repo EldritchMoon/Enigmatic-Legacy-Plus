@@ -35,6 +35,7 @@ public class BlessAmplifier extends BaseCursedItem {
         super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON), true);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.blessAmplifier1");

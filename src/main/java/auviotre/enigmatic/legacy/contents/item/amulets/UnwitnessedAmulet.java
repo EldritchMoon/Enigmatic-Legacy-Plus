@@ -25,6 +25,7 @@ public class UnwitnessedAmulet extends BaseCurioItem {
         super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.RARE));
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -38,6 +39,7 @@ public class UnwitnessedAmulet extends BaseCurioItem {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.unwitnessedAmuletUse");
     }
 
+    @Override
     public InteractionResult use(Level level, @NotNull Player player, InteractionHand hand) {
         ItemStack stack = EnigmaticAmulet.randomColor(player.getRandom());
         stack.set(EnigmaticComponents.AMULET_NAME, player.getGameProfile().getName());
@@ -46,6 +48,7 @@ public class UnwitnessedAmulet extends BaseCurioItem {
         return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
     }
 
+    @Override
     public boolean canEquip(SlotContext context, ItemStack stack) {
         return false;
     }

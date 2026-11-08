@@ -19,6 +19,7 @@ public class ELBlockLoot extends BlockLootSubProvider {
         super(Set.of(), FeatureFlags.REGISTRY.allFlags(), registries);
     }
 
+    @Override
     protected void generate() {
         this.add(COSMIC_CAKE.get(), noDrop());
         this.dropSelf(ASTRAL_DUST_SACK.get());
@@ -32,11 +33,13 @@ public class ELBlockLoot extends BlockLootSubProvider {
         this.dropSelf(STARLIGHT_BLOCK.get());
     }
 
+    @Override
     protected void add(Block block, LootTable.Builder builder) {
         this.generatedLootTables.add(block);
         this.map.put(block.getLootTable(), builder);
     }
 
+    @Override
     protected Iterable<Block> getKnownBlocks() {
         return this.generatedLootTables;
     }

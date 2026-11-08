@@ -72,6 +72,7 @@ public class TwistedPotion extends BaseDrinkableItem {
         }
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.twistedPotion1");
@@ -80,10 +81,12 @@ public class TwistedPotion extends BaseDrinkableItem {
         TooltipHandler.cursedOnly(list, stack);
     }
 
+    @Override
     public boolean isFoil(ItemStack stack) {
         return true;
     }
 
+    @Override
     public void onConsumed(Level level, Player player, ItemStack stack) {
         if (player instanceof ServerPlayer serverPlayer) {
             teleportToDeathPoint(serverPlayer, ColorParticleOption.create(EnigmaticParticles.SPELL.get(), 0xF06D00C3));

@@ -14,6 +14,7 @@ public class ThrownIchorSpearRenderer extends AbstractSpearRenderer<ThrownIchorS
         super(context, 0.45F, new Vec3(2.0, 2.0, 1.0));
     }
 
+    @Override
     public Identifier getTextureLocation(ThrownIchorSpear spear) {
         return EnigmaticLegacy.location("textures/item/3d/ichor_spear.png");
     }

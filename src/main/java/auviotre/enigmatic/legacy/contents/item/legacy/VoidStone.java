@@ -77,6 +77,7 @@ public class VoidStone extends BaseItem {
         stone.set(EnigmaticComponents.BLACKLIST, list);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.voidStone1");
@@ -94,6 +95,7 @@ public class VoidStone extends BaseItem {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.voidStoneShift");
     }
 
+    @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         TempStorage storage = stack.get(EnigmaticComponents.TEMPORARY_STORAGE);
@@ -114,6 +116,7 @@ public class VoidStone extends BaseItem {
         return super.use(level, player, hand);
     }
 
+    @Override
     public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access) {
         boolean notAllowed = blacklist.get().contains(IItemHelper.getLocation(other.getItem()).toString());
         if (notAllowed || action == ClickAction.PRIMARY || !slot.mayPlace(stack) || !slot.mayPickup(player) || other.isEmpty())
@@ -127,6 +130,7 @@ public class VoidStone extends BaseItem {
         return true;
     }
 
+    @Override
     public boolean overrideStackedOnOther(ItemStack stack, Slot slot, ClickAction action, Player player) {
         boolean notAllowed = blacklist.get().contains(IItemHelper.getLocation(slot.getItem().getItem()).toString());
         if (notAllowed || action == ClickAction.PRIMARY || !slot.mayPlace(stack) || !slot.mayPickup(player) || !slot.hasItem())

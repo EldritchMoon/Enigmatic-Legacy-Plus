@@ -23,11 +23,13 @@ public class RedemptionPotion extends BaseDrinkableItem {
         super(IItemHelper.singleProperties().rarity(Rarity.RARE).craftRemainder(Items.GLASS_BOTTLE));
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.redemptionPotion");
     }
 
+    @Override
     public void onConsumed(Level level, Player player, ItemStack stack) {
         EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);
         data.setForbiddenCursed(false);

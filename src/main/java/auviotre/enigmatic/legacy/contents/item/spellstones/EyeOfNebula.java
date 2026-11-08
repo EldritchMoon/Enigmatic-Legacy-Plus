@@ -89,6 +89,7 @@ public class EyeOfNebula extends SpellstoneItem {
         level.sendParticles(ParticleTypes.WITCH, porter.getX(), porter.getY(0.5), porter.getZ(), 48, hOffset, yOffset, hOffset, 0.03);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -110,15 +111,18 @@ public class EyeOfNebula extends SpellstoneItem {
         this.addKeyText(list);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void addTuneTooltip(List<Component> list) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.eyeOfNebula2", ChatFormatting.GOLD, (magicResistance.get() + 5) / 2 + "%");
     }
 
+    @Override
     public int getCooldown(ItemStack stack) {
         return cooldown.get();
     }
 
+    @Override
     public void triggerActiveAbility(ServerLevel level, @NotNull ServerPlayer player, ItemStack stack) {
         LivingEntity target = EnigmaticHandler.getObservedEntity(player, player.level(), 3.0F, 32);
         if (target == null) return;

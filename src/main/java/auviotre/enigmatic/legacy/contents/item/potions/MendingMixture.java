@@ -26,12 +26,14 @@ public class MendingMixture extends BaseItem {
         super(IItemHelper.singleProperties().craftRemainder(Items.GLASS_BOTTLE));
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.mendingMixture1");
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.mendingMixture2");
     }
 
+    @Override
     public boolean isFoil(ItemStack stack) {
         return true;
     }

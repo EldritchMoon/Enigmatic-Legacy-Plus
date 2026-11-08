@@ -103,6 +103,7 @@ public class ForgottenIce extends SpellstoneItem {
         return builder.build();
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -123,11 +124,13 @@ public class ForgottenIce extends SpellstoneItem {
         this.addKeyText(list);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void addTuneTooltip(List<Component> list) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.forgottenIce2");
     }
 
+    @Override
     public void curioTick(SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
         entity.setTicksFrozen(0);
@@ -147,10 +150,12 @@ public class ForgottenIce extends SpellstoneItem {
         }
     }
 
+    @Override
     public int getCooldown(ItemStack stack) {
         return cooldown.get();
     }
 
+    @Override
     public void triggerActiveAbility(ServerLevel level, ServerPlayer player, ItemStack stack) {
         ItemParticleOption particle = new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Blocks.BLUE_ICE));
         SimpleParticleType snowflake = ParticleTypes.SNOWFLAKE;

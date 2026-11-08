@@ -73,6 +73,7 @@ public class SoulCompass extends BaseCursedItem {
             private final CompassWobble wobble = SoulCompass.this.wobble;
             private final CompassWobble wobbleRandom = SoulCompass.this.wobbleRandom;
 
+            @Override
             public float unclampedCall(ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity living, int seed) {
                 Entity entity = living != null ? living : stack.getEntityRepresentation();
                 if (entity == null) return 0.0F;

@@ -33,6 +33,7 @@ public class SpellstoneModel extends Model {
         return LayerDefinition.create(meshdefinition, 32, 32);
     }
 
+    @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
         this.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
     }

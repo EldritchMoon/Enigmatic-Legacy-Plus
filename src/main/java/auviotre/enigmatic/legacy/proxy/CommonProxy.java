@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.DispenserBlock;
 public class CommonProxy {
     public void init() {
         DispenserBlock.registerBehavior(EnigmaticItems.ICHOR_SPEAR, new ProjectileDispenseBehavior(EnigmaticItems.ICHOR_SPEAR.asItem()) {
+            @Override
             protected void playSound(BlockSource blockSource) {
                 blockSource.level().playSound(null, blockSource.pos(), SoundEvents.TRIDENT_THROW.value(), SoundSource.BLOCKS, 1.0F, 1.2F);
             }

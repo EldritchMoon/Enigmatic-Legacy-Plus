@@ -70,6 +70,7 @@ public class VoidPearl extends SpellstoneItem {
         builder.pop(2);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -91,11 +92,13 @@ public class VoidPearl extends SpellstoneItem {
         this.addKeyText(list);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void addTuneTooltip(List<Component> list) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.voidPearl7", ChatFormatting.GOLD, undeadProbability.get() / 2 + "%");
     }
 
+    @Override
     public void curioTick(SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
         if (entity.isOnFire()) entity.clearFire();
@@ -131,6 +134,7 @@ public class VoidPearl extends SpellstoneItem {
         }
     }
 
+    @Override
     public int getCooldown(ItemStack stack) {
         return 0;
     }

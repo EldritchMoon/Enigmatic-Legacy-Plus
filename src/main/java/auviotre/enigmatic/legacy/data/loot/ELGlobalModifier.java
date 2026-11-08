@@ -25,6 +25,7 @@ public class ELGlobalModifier extends GlobalLootModifierProvider {
         super(output, provider, EnigmaticLegacy.MODID);
     }
 
+    @Override
     protected void start() {
         this.addChest(Chests.OVERWORLD_SIMPLE,
                 SIMPLE_DUNGEON, ABANDONED_MINESHAFT,

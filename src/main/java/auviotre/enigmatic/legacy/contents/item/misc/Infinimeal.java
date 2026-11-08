@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
 
 public class Infinimeal extends BaseItem {
     public static final DispenseItemBehavior DISPENSE_ITEM_BEHAVIOR = new OptionalDispenseItemBehavior() {
+        @Override
         protected ItemStack execute(@NotNull BlockSource source, ItemStack item) {
             this.setSuccess(true);
             Level level = source.level();
@@ -221,6 +222,7 @@ public class Infinimeal extends BaseItem {
         }
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.infinimeal1");
@@ -229,6 +231,7 @@ public class Infinimeal extends BaseItem {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.infinimeal3");
     }
 
+    @Override
     public InteractionResult useOn(@NotNull UseOnContext context) {
         ItemStack stack = context.getItemInHand();
         Level world = context.getLevel();

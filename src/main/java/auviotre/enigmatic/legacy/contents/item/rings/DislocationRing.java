@@ -30,6 +30,7 @@ public class DislocationRing extends MagnetRing {
         builder.pop(2);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -61,6 +62,7 @@ public class DislocationRing extends MagnetRing {
             }
     }
 
+    @Override
     public boolean canEquip(SlotContext context, ItemStack stack) {
         return super.canEquip(context, stack) && !EnigmaticHandler.hasCurio(context.entity(), EnigmaticItems.MAGNET_RING);
     }

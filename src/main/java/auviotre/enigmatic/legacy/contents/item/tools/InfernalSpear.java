@@ -73,6 +73,7 @@ public class InfernalSpear extends BaseItem {
         return builder.build();
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
@@ -83,6 +84,7 @@ public class InfernalSpear extends BaseItem {
         } else TooltipHandler.holdShift(list);
     }
 
+    @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         MobEffectInstance effect = player.getEffect(EnigmaticEffects.BLAZING_MIGHT);
@@ -113,6 +115,7 @@ public class InfernalSpear extends BaseItem {
         return super.use(level, player, hand);
     }
 
+    @Override
     public float getAttackDamageBonus(Entity target, float damage, DamageSource source) {
         if (source.getEntity() instanceof LivingEntity attacker) {
             MobEffectInstance effect = attacker.getEffect(EnigmaticEffects.BLAZING_MIGHT);
@@ -121,10 +124,12 @@ public class InfernalSpear extends BaseItem {
         return super.getAttackDamageBonus(target, damage, source);
     }
 
+    @Override
     public boolean isValidRepairItem(ItemStack stack, ItemStack repairCandidate) {
         return super.isValidRepairItem(stack, repairCandidate) || repairCandidate.is(Items.NETHERITE_SCRAP);
     }
 
+    @Override
     public int getEnchantmentValue(ItemStack stack) {
         return 24;
     }

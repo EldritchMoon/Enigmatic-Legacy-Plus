@@ -24,6 +24,7 @@ public class StarlightSpawner implements CustomSpawner {
         this.offsetZ = (level.getRandom().nextFloat() - 0.5F) * 3.2F;
     }
 
+    @Override
     public int tick(ServerLevel level, boolean spawnEnemies, boolean spawnFriendlies) {
         if (!spawnFriendlies) return 0;
         if (!Level.END.equals(level.dimension())) return 0;

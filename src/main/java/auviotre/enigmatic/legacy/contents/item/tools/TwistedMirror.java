@@ -29,6 +29,7 @@ public class TwistedMirror extends BaseCursedItem {
         super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON));
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
@@ -40,6 +41,7 @@ public class TwistedMirror extends BaseCursedItem {
         TooltipHandler.cursedOnly(list, stack);
     }
 
+    @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (!EnigmaticHandler.canUse(player, stack) || player.getCooldowns().isOnCooldown(this.getDefaultInstance()))
@@ -48,6 +50,7 @@ public class TwistedMirror extends BaseCursedItem {
         return InteractionResult.SUCCESS;
     }
 
+    @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         if (entity instanceof ServerPlayer player) {
             RecallPotion.teleportToRespawnPoint(player, ParticleTypes.WITCH);
@@ -56,10 +59,12 @@ public class TwistedMirror extends BaseCursedItem {
         return stack;
     }
 
+    @Override
     public ItemUseAnimation getUseAnimation(ItemStack stack) {
         return ItemUseAnimation.BOW;
     }
 
+    @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 18;
     }

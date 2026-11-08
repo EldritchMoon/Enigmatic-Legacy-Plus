@@ -65,6 +65,7 @@ public class SurvivorScroll extends BaseCurioItem {
         return blockLight;
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -76,6 +77,7 @@ public class SurvivorScroll extends BaseCurioItem {
         } else TooltipHandler.holdShift(list);
     }
 
+    @Override
     public void curioTick(SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
         if (entity.getHealth() < entity.getMaxHealth() * threshold.get() / 100) {
@@ -89,6 +91,7 @@ public class SurvivorScroll extends BaseCurioItem {
         }
     }
 
+    @Override
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
         context.entity().getAttributes().removeAttributeModifiers(getModifiers());
     }
@@ -100,6 +103,7 @@ public class SurvivorScroll extends BaseCurioItem {
         return map;
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
         builder.put(Attributes.BLOCK_BREAK_SPEED, new AttributeModifier(IItemHelper.getLocation(this), 0.1, AttributeModifier.Operation.ADD_VALUE));

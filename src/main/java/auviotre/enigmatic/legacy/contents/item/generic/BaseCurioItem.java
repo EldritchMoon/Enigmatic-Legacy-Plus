@@ -16,10 +16,12 @@ public class BaseCurioItem extends BaseItem implements ICurioItem {
         super(properties);
     }
 
+    @Override
     public boolean canEquipFromUse(SlotContext slotContext, ItemStack stack) {
         return true;
     }
 
+    @Override
     public boolean canEquip(SlotContext context, ItemStack stack) {
         return !EnigmaticHandler.hasCurio(context.entity(), this) && ICurioItem.super.canEquip(context, stack);
     }

@@ -19,6 +19,7 @@ public class BaseCursedItem extends BaseItem {
         super(properties.component(EnigmaticComponents.CURSED, true).component(EnigmaticComponents.BLESSED, betrayal));
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.cursedOnly(list, stack);

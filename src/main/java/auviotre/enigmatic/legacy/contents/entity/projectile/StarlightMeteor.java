@@ -20,18 +20,22 @@ public class StarlightMeteor extends ThrowableItemProjectile {
         super(type, level);
     }
 
+    @Override
     protected Item getDefaultItem() {
         return EnigmaticItems.STARLIGHT_PARTICLE.get();
     }
 
+    @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
     }
 
+    @Override
     public boolean isCurrentlyGlowing() {
         return true;
     }
 
+    @Override
     public void handleEntityEvent(byte id) {
         if (id == 3) {
             double d0 = 0.2;
@@ -44,6 +48,7 @@ public class StarlightMeteor extends ThrowableItemProjectile {
         }
     }
 
+    @Override
     public void tick() {
         this.setDeltaMovement(this.getDeltaMovement().scale(0.985F));
         super.tick();
@@ -55,6 +60,7 @@ public class StarlightMeteor extends ThrowableItemProjectile {
         this.level().addParticle(EnigmaticParticles.STARLIGHT.get(), this.getX(), this.getY(), this.getZ(), vec3.x, vec3.y, vec3.z);
     }
 
+    @Override
     protected void onHitEntity(EntityHitResult result) {
         super.onHitEntity(result);
         Entity entity = result.getEntity();
@@ -67,6 +73,7 @@ public class StarlightMeteor extends ThrowableItemProjectile {
         this.discard();
     }
 
+    @Override
     protected void onHitBlock(BlockHitResult result) {
         super.onHitBlock(result);
         this.dropItem();

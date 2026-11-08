@@ -42,6 +42,7 @@ public record EnderRingKeyPacket(ItemStack carried) implements CustomPacketPaylo
         }
     }
 
+    @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }

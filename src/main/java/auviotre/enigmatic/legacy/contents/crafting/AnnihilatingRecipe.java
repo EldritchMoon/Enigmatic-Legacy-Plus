@@ -22,6 +22,7 @@ public class AnnihilatingRecipe extends CustomRecipe {
         super(category);
     }
 
+    @Override
     public boolean matches(CraftingInput input, Level level) {
         if (input.size() < 9) return false;
         if (!input.getItem(0).is(EnigmaticTags.Items.ABYSSAL_ITEMS)) return false;
@@ -36,10 +37,12 @@ public class AnnihilatingRecipe extends CustomRecipe {
         return heart.is(EnigmaticItems.ABYSSAL_HEART) && ITaintable.isTainted(heart);
     }
 
+    @Override
     public ItemStack assemble(CraftingInput input, HolderLookup.Provider provider) {
         return EnigmaticItems.ANNIHILATING_SWORD.toStack();
     }
 
+    @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingInput input) {
         NonNullList<ItemStack> list = NonNullList.withSize(input.size(), ItemStack.EMPTY);
         Player player = CommonHooks.getCraftingPlayer();
@@ -54,14 +57,17 @@ public class AnnihilatingRecipe extends CustomRecipe {
         return list;
     }
 
+    @Override
     public ItemStack getResultItem(HolderLookup.Provider registries) {
         return EnigmaticItems.ANNIHILATING_SWORD.toStack();
     }
 
+    @Override
     public boolean canCraftInDimensions(int w, int h) {
         return w == 3 &&  h == 3;
     }
 
+    @Override
     public RecipeSerializer<?> getSerializer() {
         return EnigmaticRecipes.ANNIHILATING.get();
     }

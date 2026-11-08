@@ -23,6 +23,7 @@ public class SlotUnlockedToast implements Toast {
         this.identifier = id;
     }
 
+    @Override
     public Visibility render(GuiGraphicsExtractor graphics, ToastComponent toast, long timeLastVisible) {
         if (drawnStack.isEmpty()) return Visibility.HIDE;
         Font font = toast.getMinecraft().font;

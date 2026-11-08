@@ -46,6 +46,7 @@ public class AbyssProjectile extends Projectile implements ItemSupplier {
         this.setOwner(owner);
     }
 
+    @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(ID_DAMAGE, 0F);
     }
@@ -67,6 +68,7 @@ public class AbyssProjectile extends Projectile implements ItemSupplier {
         }
     }
 
+    @Override
     public void tick() {
         super.tick();
         Entity owner = this.getOwner();
@@ -109,10 +111,12 @@ public class AbyssProjectile extends Projectile implements ItemSupplier {
         }
     }
 
+    @Override
     protected boolean canHitEntity(Entity entity) {
         return !this.ownedBy(entity) && super.canHitEntity(entity);
     }
 
+    @Override
     protected void onHitEntity(EntityHitResult hitResult) {
         super.onHitEntity(hitResult);
         Entity entity = this.getOwner();
@@ -130,6 +134,7 @@ public class AbyssProjectile extends Projectile implements ItemSupplier {
         }
     }
 
+    @Override
     protected void onHitBlock(BlockHitResult hitResult) {
         super.onHitBlock(hitResult);
         if (this.level() instanceof ServerLevel server) {
@@ -159,10 +164,12 @@ public class AbyssProjectile extends Projectile implements ItemSupplier {
         }
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         if (this.targetUUID != null) tag.putUUID("TargetUUID", this.targetUUID);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         if (tag.hasUUID("TargetUUID")) {
             this.targetUUID = tag.getUUID("TargetUUID");
@@ -170,6 +177,7 @@ public class AbyssProjectile extends Projectile implements ItemSupplier {
         }
     }
 
+    @Override
     public ItemStack getItem() {
         return ItemStack.EMPTY;
     }

@@ -31,6 +31,7 @@ public class IchorPermeation implements INBTSerializable<CompoundTag> {
         return save();
     }
 
+    @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag tag) {
         load(tag);
     }

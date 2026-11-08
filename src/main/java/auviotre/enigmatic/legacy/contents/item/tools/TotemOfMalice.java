@@ -86,6 +86,7 @@ public class TotemOfMalice extends BaseCurioItem {
         stack.set(EnigmaticComponents.MALICE_DURABILITY, Mth.clamp(damage, 0, getMaxDurability(stack)));
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
@@ -105,16 +106,19 @@ public class TotemOfMalice extends BaseCurioItem {
         TooltipHandler.cursedOnly(list, stack);
     }
 
+    @Override
     public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
         return enchantment.is(EnchantmentTags.CURSE);
     }
 
+    @Override
     public boolean isFoil(ItemStack stack) {
         return getDurability(stack) > 0;
     }
 
     @OnlyIn(Dist.CLIENT)
     public static class Decorator implements IItemDecorator {
+        @Override
         public boolean render(GuiGraphicsExtractor graphics, Font font, @NotNull ItemStack stack, int x, int y) {
             int durability = getDurability(stack);
             if (stack.getCount() == 1 && durability > 0) {

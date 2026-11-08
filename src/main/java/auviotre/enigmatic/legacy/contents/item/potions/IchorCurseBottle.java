@@ -40,6 +40,7 @@ public class IchorCurseBottle extends BaseDrinkableItem {
         );
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         MutableComponent component = Component.translatable(EnigmaticEffects.ICHOR_CURSE.get().getDescriptionId());
@@ -53,6 +54,7 @@ public class IchorCurseBottle extends BaseDrinkableItem {
         TooltipHandler.cursedOnly(list, stack);
     }
 
+    @Override
     public void onConsumed(Level level, Player player, ItemStack stack) {
         player.eat(level, stack);
         if (EnigmaticHandler.isTheBlessedOne(player)) {
@@ -60,6 +62,7 @@ public class IchorCurseBottle extends BaseDrinkableItem {
         }
     }
 
+    @Override
     public boolean isFoil(ItemStack stack) {
         return true;
     }

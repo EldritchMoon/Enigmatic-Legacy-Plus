@@ -67,6 +67,7 @@ public class BlazingCore extends SpellstoneItem {
         builder.pop(2);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -89,15 +90,18 @@ public class BlazingCore extends SpellstoneItem {
         this.addKeyText(list);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void addTuneTooltip(List<Component> list) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.blazingCore1");
     }
 
+    @Override
     public int getCooldown(ItemStack stack) {
         return 0;
     }
 
+    @Override
     public void curioTick(@NotNull SlotContext slotContext, ItemStack stack) {
         LivingEntity entity = slotContext.entity();
         if (entity.isOnFire()) entity.clearFire();

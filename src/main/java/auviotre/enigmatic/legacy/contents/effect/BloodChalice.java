@@ -17,10 +17,12 @@ public class BloodChalice extends MobEffect {
         super(MobEffectCategory.BENEFICIAL, 0xBF0003);
     }
 
+    @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return true;
     }
 
+    @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         if (!entity.level().isClientSide()) {
             AttributeInstance attribute = entity.getAttributes().getInstance(Attributes.ATTACK_DAMAGE);
@@ -34,6 +36,7 @@ public class BloodChalice extends MobEffect {
         return true;
     }
 
+    @Override
     public void removeAttributeModifiers(AttributeMap attributeMap) {
         AttributeInstance attribute = attributeMap.getInstance(Attributes.ATTACK_DAMAGE);
         if (attribute != null) {

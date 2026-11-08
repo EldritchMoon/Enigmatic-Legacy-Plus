@@ -28,18 +28,22 @@ public class AngelBeamRenderer extends EntityRenderer<AngelBeam> {
                 .setLight(15728880).setNormal(pose, 0.0F, 1.0F, 0.0F);
     }
 
+    @Override
     protected int getBlockLightLevel(AngelBeam entity, BlockPos pos) {
         return 15;
     }
 
+    @Override
     protected int getSkyLightLevel(AngelBeam entity, BlockPos pos) {
         return 15;
     }
 
+    @Override
     public boolean shouldRender(AngelBeam livingEntity, Frustum camera, double camX, double camY, double camZ) {
         return true;
     }
 
+    @Override
     public void render(AngelBeam beam, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         Vec3 beginning = new Vec3(beam.getBeginning());
         Vec3 position = beam.getEyePosition(partialTick);
@@ -102,6 +106,7 @@ public class AngelBeamRenderer extends EntityRenderer<AngelBeam> {
         poseStack.popPose();
     }
 
+    @Override
     public Identifier getTextureLocation(AngelBeam angelBeam) {
         return TEXTURE;
     }

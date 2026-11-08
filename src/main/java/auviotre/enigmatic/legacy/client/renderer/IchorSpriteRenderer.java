@@ -33,6 +33,7 @@ public class IchorSpriteRenderer extends MobRenderer<IchorSprite, IchorSpriteMod
                 .setLight(15728880).setNormal(pose, 0.0F, 1.0F, 0.0F);
     }
 
+    @Override
     public void render(IchorSprite entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
         LivingEntity target = entity.getActiveAttackTarget();
@@ -94,10 +95,12 @@ public class IchorSpriteRenderer extends MobRenderer<IchorSprite, IchorSpriteMod
         }
     }
 
+    @Override
     protected int getBlockLightLevel(IchorSprite entity, BlockPos pos) {
         return 15;
     }
 
+    @Override
     public Identifier getTextureLocation(IchorSprite entity) {
         return TEXTURE;
     }

@@ -37,6 +37,7 @@ public class EtheriumShieldLayer extends RenderLayer<AbstractClientPlayer, Playe
         this.model = new PlayerModel<>(modelSet.bakeLayer(ModelLayers.PLAYER), false);
     }
 
+    @Override
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, AbstractClientPlayer player, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
         if (EtheriumArmor.etheriumShieldRenderLayer.get() && (EtheriumProperties.hasShield(player) || player.getData(EnigmaticAttachments.ENIGMATIC_DATA).getEtherealShield() > 0)) {
             float f = (float) player.tickCount + partialTick;

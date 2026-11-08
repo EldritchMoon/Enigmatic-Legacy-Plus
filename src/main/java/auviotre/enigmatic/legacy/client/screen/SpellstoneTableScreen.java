@@ -17,18 +17,21 @@ public class SpellstoneTableScreen extends AbstractContainerScreen<SpellstoneTab
         super(menu, inventory, title);
     }
 
+    @Override
     protected void init() {
         super.init();
         this.titleLabelX += 7;
         this.titleLabelY -= 1;
     }
 
+    @Override
     public void render(GuiGraphicsExtractor graphics, int x, int y, float partialTick) {
         super.render(graphics, x, y, partialTick);
         RenderSystem.disableBlend();
         this.renderTooltip(graphics, x, y);
     }
 
+    @Override
     protected void renderBg(@NotNull GuiGraphicsExtractor graphics, float partialTicks, int x, int y) {
         RenderSystem.clearColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, TEXTURE);

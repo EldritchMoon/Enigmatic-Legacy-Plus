@@ -38,6 +38,7 @@ public class TheJudgement extends Item {
         super(IItemHelper.singleProperties().rarity(Rarity.EPIC).attributes(IItemHelper.createAttributes(Float.POSITIVE_INFINITY - 1, 28F)));
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
@@ -53,6 +54,7 @@ public class TheJudgement extends Item {
         } else TooltipHandler.line(list, "tooltip.enigmaticlegacy.holdShift");
     }
 
+    @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         if (attacker.level().isClientSide()) return false;
         boolean player = attacker instanceof Player;
@@ -67,10 +69,12 @@ public class TheJudgement extends Item {
         return false;
     }
 
+    @Override
     public boolean canPerformAction(ItemStack stack, ItemAbility itemAbility) {
         return ItemAbilities.DEFAULT_SWORD_ACTIONS.contains(itemAbility);
     }
 
+    @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         boolean prevNoDrops = this.noDrops(stack);
@@ -81,10 +85,12 @@ public class TheJudgement extends Item {
         return super.use(level, player, hand);
     }
 
+    @Override
     public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) {
         return !player.isCreative();
     }
 
+    @Override
     public boolean isFoil(ItemStack stack) {
         return this.noDrops(stack);
     }

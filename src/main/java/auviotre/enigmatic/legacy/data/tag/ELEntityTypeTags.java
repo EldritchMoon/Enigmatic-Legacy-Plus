@@ -17,6 +17,7 @@ public class ELEntityTypeTags extends EntityTypeTagsProvider {
         super(output, lookupProvider, EnigmaticLegacy.MODID, existingFileHelper);
     }
 
+    @Override
     protected void addTags(HolderLookup.Provider provider) {
         this.tag(EnigmaticTags.EntityTypes.END_DWELLERS).add(
                 EntityType.ENDERMAN,

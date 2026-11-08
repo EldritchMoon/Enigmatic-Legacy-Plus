@@ -34,6 +34,7 @@ public class TheCubeRevivePacket implements CustomPacketPayload {
         ItemStack.OPTIONAL_STREAM_CODEC.encode(buf, this.cube);
     }
 
+    @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }

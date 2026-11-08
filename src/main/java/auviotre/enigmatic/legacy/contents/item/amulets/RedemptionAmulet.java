@@ -45,10 +45,12 @@ public class RedemptionAmulet extends CursedCurioItem implements IAmulet {
         super(IItemHelper.singleProperties().rarity(Rarity.EPIC).fireResistant(), true);
     }
 
+    @Override
     public Color getColor() {
         return Color.ALL;
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -72,11 +74,13 @@ public class RedemptionAmulet extends CursedCurioItem implements IAmulet {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.redemptionAmuletStat3", ChatFormatting.GOLD, 8);
     }
 
+    @Override
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         tooltips.clear();
         return tooltips;
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         attributes.put(Attributes.LUCK, new AttributeModifier(IItemHelper.getLocation(this), 2, AttributeModifier.Operation.ADD_VALUE));

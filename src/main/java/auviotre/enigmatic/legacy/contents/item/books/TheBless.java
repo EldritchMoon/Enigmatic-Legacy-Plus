@@ -57,6 +57,7 @@ public class TheBless extends TheAcknowledgment {
     }
 
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         LocalPlayer player = Minecraft.getInstance().player;
@@ -85,10 +86,12 @@ public class TheBless extends TheAcknowledgment {
         TooltipHandler.cursedOnly(list, stack);
     }
 
+    @Override
     public List<Component> getTooltipInBag(List<Component> list) {
         return list;
     }
 
+    @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         target.igniteForTicks(target.getRemainingFireTicks() + 80);
         if (attacker.getRandom().nextInt(5) == 0) {
@@ -102,6 +105,7 @@ public class TheBless extends TheAcknowledgment {
         return super.hurtEnemy(stack, target, attacker);
     }
 
+    @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (!EnigmaticHandler.canUse(player, stack)) return InteractionResult.PASS;

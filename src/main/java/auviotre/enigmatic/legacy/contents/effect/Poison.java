@@ -24,6 +24,7 @@ public class Poison extends MobEffect {
         NeoForge.EVENT_BUS.register(this);
     }
 
+    @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         if (entity.getHealth() > (1.5F + amplifier * 0.125F)) {
             Registry<DamageType> types = entity.damageSources().damageTypes;
@@ -34,10 +35,12 @@ public class Poison extends MobEffect {
         return true;
     }
 
+    @Override
     public String getDescriptionId() {
         return "effect.minecraft.poison";
     }
 
+    @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         int i = Math.max(0, 24 - 4 * amplifier);
         return i == 0 || duration % i == 0;

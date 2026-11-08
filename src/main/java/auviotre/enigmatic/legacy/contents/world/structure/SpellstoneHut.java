@@ -42,6 +42,7 @@ public class SpellstoneHut extends Structure {
         return CODEC;
     }
 
+    @Override
     protected Optional<GenerationStub> findGenerationPoint(@NotNull GenerationContext context) {
         ChunkPos chunkpos = context.chunkPos();
         BlockPos blockpos = new BlockPos(chunkpos.getMinBlockX(), 50, chunkpos.getMinBlockZ());
@@ -57,6 +58,7 @@ public class SpellstoneHut extends Structure {
         return builder.moveBelowSeaLevel(generator.getSeaLevel(), generator.getMinY(), random, 10);
     }
 
+    @Override
     public StructureType<?> type() {
         return EnigmaticStructureTypes.SPELLSTONE_HUT.get();
     }
@@ -74,11 +76,13 @@ public class SpellstoneHut extends Structure {
             return new StructurePlaceSettings().setRotation(rotation).setMirror(Mirror.NONE).addProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK).setLiquidSettings(LiquidSettings.IGNORE_WATERLOGGING);
         }
 
+        @Override
         protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tag) {
             super.addAdditionalSaveData(context, tag);
             tag.putString("Rot", this.placeSettings.getRotation().name());
         }
 
+        @Override
         protected void handleDataMarker(String metadata, BlockPos pos, ServerLevelAccessor level, RandomSource random, BoundingBox box) {
             if ("Table".equals(metadata)) {
                 level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);

@@ -96,6 +96,7 @@ public class TheCube extends SpellstoneItem {
         LOCATION_CACHE.clear();
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -123,11 +124,13 @@ public class TheCube extends SpellstoneItem {
         this.addKeyText(list);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void addTuneTooltip(List<Component> list) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.spelltunerEffectAll");
     }
 
+    @Override
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         tooltips.clear();
         return tooltips;
@@ -139,6 +142,7 @@ public class TheCube extends SpellstoneItem {
         return attributes;
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
         Identifier location = IItemHelper.getLocation(this);
@@ -150,10 +154,12 @@ public class TheCube extends SpellstoneItem {
         return builder.build();
     }
 
+    @Override
     public int getFortuneLevel(SlotContext context, LootContext loot, ItemStack stack) {
         return super.getFortuneLevel(context, loot, stack) + 1;
     }
 
+    @Override
     public void curioTick(SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
         if (entity.isOnFire()) entity.clearFire();
@@ -181,15 +187,18 @@ public class TheCube extends SpellstoneItem {
         }
     }
 
+    @Override
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
         context.entity().getAttributes().removeAttributeModifiers(this.getCurrentModifiers(context.entity()));
         super.onUnequip(context, newStack, stack);
     }
 
+    @Override
     public int getCooldown(ItemStack stack) {
         return 2400;
     }
 
+    @Override
     public void triggerActiveAbility(ServerLevel level, ServerPlayer player, ItemStack stack) {
         GlobalPos location = null;
         if (LOCATION_CACHE.containsKey(player)) {

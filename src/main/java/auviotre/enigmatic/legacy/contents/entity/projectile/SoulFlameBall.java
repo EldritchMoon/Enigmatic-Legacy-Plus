@@ -45,6 +45,7 @@ public class SoulFlameBall extends Projectile {
         this.setTarget(target);
     }
 
+    @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
     }
 
@@ -61,6 +62,7 @@ public class SoulFlameBall extends Projectile {
         }
     }
 
+    @Override
     public void tick() {
         super.tick();
         Entity owner = this.getOwner();
@@ -107,10 +109,12 @@ public class SoulFlameBall extends Projectile {
         }
     }
 
+    @Override
     protected boolean canHitEntity(Entity entity) {
         return !this.ownedBy(entity) && super.canHitEntity(entity);
     }
 
+    @Override
     protected void onHitEntity(EntityHitResult hitResult) {
         super.onHitEntity(hitResult);
         Entity entity = this.getOwner();
@@ -129,6 +133,7 @@ public class SoulFlameBall extends Projectile {
         }
     }
 
+    @Override
     protected void onHitBlock(BlockHitResult hitResult) {
         super.onHitBlock(hitResult);
         if (!this.level().isClientSide()) {
@@ -155,11 +160,13 @@ public class SoulFlameBall extends Projectile {
         }
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         if (this.targetUUID != null) tag.putUUID("TargetUUID", this.targetUUID);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         if (tag.hasUUID("TargetUUID")) {

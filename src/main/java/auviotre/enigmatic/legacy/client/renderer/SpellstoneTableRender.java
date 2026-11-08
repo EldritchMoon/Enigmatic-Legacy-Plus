@@ -19,6 +19,7 @@ public class SpellstoneTableRender implements BlockEntityRenderer<SpellstoneTabl
         this.model = new SpellstoneModel(context.bakeLayer(SpellstoneModel.LAYER));
     }
 
+    @Override
     public void render(SpellstoneTableEntity entity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
         if (!entity.render) return;
         poseStack.pushPose();

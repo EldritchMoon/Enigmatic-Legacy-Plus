@@ -32,6 +32,7 @@ public class ExplorerMarker extends Entity implements OwnableEntity {
         this.setPos(pos.getBottomCenter());
     }
 
+    @Override
     public void tick() {
         if (!this.level().isClientSide()) {
             BlockEntity blockEntity = this.level().getBlockEntity(BlockPos.containing(this.getX(), this.getEyeY(), this.getZ()));
@@ -39,10 +40,12 @@ public class ExplorerMarker extends Entity implements OwnableEntity {
         }
     }
 
+    @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(DATA_OWNER_UUID, Optional.empty());
     }
 
+    @Override
     protected void readAdditionalSaveData(CompoundTag compoundTag) {
         if (compoundTag.hasUUID("Owner")) {
             UUID uuid = compoundTag.getUUID("Owner");
@@ -50,6 +53,7 @@ public class ExplorerMarker extends Entity implements OwnableEntity {
         }
     }
 
+    @Override
     protected void addAdditionalSaveData(CompoundTag compoundTag) {
         if (this.getOwnerUUID() != null) {
             compoundTag.putUUID("Owner", this.getOwnerUUID());

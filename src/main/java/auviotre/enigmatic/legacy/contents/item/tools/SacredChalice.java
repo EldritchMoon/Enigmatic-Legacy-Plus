@@ -32,6 +32,7 @@ public class SacredChalice extends BaseCursedItem {
                 .component(EnigmaticComponents.BOOLEAN, false).component(EnigmaticComponents.INT, 0), true);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (!stack.getOrDefault(EnigmaticComponents.BOOLEAN, false)) {
@@ -47,6 +48,7 @@ public class SacredChalice extends BaseCursedItem {
         TooltipHandler.cursedOnly(list, stack);
     }
 
+    @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (!stack.getOrDefault(EnigmaticComponents.BOOLEAN, false) && player.getHealth() < player.getMaxHealth() * 0.5F)
@@ -56,6 +58,7 @@ public class SacredChalice extends BaseCursedItem {
         return InteractionResult.CONSUME;
     }
 
+    @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         boolean filled = stack.getOrDefault(EnigmaticComponents.BOOLEAN, false);
         stack.set(EnigmaticComponents.BOOLEAN, !filled);
@@ -86,10 +89,12 @@ public class SacredChalice extends BaseCursedItem {
         return stack;
     }
 
+    @Override
     public ItemUseAnimation getUseAnimation(ItemStack stack) {
         return stack.getOrDefault(EnigmaticComponents.BOOLEAN, false) ? ItemUseAnimation.DRINK : ItemUseAnimation.BLOCK;
     }
 
+    @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 36;
     }

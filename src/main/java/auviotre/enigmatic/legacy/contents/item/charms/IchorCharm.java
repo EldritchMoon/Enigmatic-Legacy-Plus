@@ -32,6 +32,7 @@ public class IchorCharm extends BaseCurioItem {
         super(IItemHelper.singleProperties().fireResistant());
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);

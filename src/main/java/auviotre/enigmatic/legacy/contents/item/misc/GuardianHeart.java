@@ -87,6 +87,7 @@ public class GuardianHeart extends BaseCursedItem {
         return closest;
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -110,6 +111,7 @@ public class GuardianHeart extends BaseCursedItem {
         TooltipHandler.cursedOnly(list, stack);
     }
 
+    @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         if (entity instanceof Player player && !level.isClientSide()) {
             List<Monster> monsters = player.level().getEntitiesOfClass(Monster.class, player.getBoundingBox().inflate(effectiveRange.get()));

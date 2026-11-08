@@ -27,16 +27,19 @@ public abstract class AbstractSpear extends AbstractArrow {
         this.item = item;
     }
 
+    @Override
     protected boolean tryPickup(Player player) {
         return super.tryPickup(player) || this.isNoPhysics() && this.ownedBy(player) && player.getInventory().add(this.getPickupItem());
     }
 
+    @Override
     public void playerTouch(Player player) {
         if (this.ownedBy(player) || this.getOwner() == null) {
             super.playerTouch(player);
         }
     }
 
+    @Override
     protected SoundEvent getDefaultHitGroundSoundEvent() {
         return SoundEvents.TRIDENT_HIT_GROUND;
     }
@@ -45,10 +48,12 @@ public abstract class AbstractSpear extends AbstractArrow {
         return this.item;
     }
 
+    @Override
     public boolean shouldRender(double x, double y, double z) {
         return true;
     }
 
+    @Override
     protected float getWaterInertia() {
         return 0.9F;
     }

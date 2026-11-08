@@ -19,6 +19,7 @@ public class ELEnchantmentTags extends EnchantmentTagsProvider {
         super(output, lookupProvider, EnigmaticLegacy.MODID, existingFileHelper);
     }
 
+    @Override
     protected void addTags(HolderLookup.Provider provider) {
         this.tag(EnchantmentTags.CURSE).add(NEMESIS_CURSE, SORROW_CURSE, ETERNAL_BINDING_CURSE, REDEMPTION_CURSE);
         this.tag(EnchantmentTags.TREASURE).add(NEMESIS_CURSE, SORROW_CURSE, ETERNAL_BINDING_CURSE, REDEMPTION_CURSE);

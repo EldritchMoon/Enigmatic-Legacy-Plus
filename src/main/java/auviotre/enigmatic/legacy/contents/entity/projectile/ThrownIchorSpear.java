@@ -29,6 +29,7 @@ public class ThrownIchorSpear extends AbstractSpear {
         super(EnigmaticEntities.THROWN_ICHOR_SPEAR.get(), x, y, z, world, stack);
     }
 
+    @Override
     protected void doPostHurtEffects(LivingEntity living) {
         super.doPostHurtEffects(living);
         Entity owner = this.getOwner();
@@ -36,6 +37,7 @@ public class ThrownIchorSpear extends AbstractSpear {
         living.addEffect(new MobEffectInstance(EnigmaticEffects.ICHOR_CORROSION, IchorSpear.duration.get(), IchorSpear.amplifier.get()), owner == null ? this : owner);
     }
 
+    @Override
     public void tick() {
         super.tick();
         if (this.level().isClientSide && !this.inGround) {
@@ -50,6 +52,7 @@ public class ThrownIchorSpear extends AbstractSpear {
         }
     }
 
+    @Override
     protected void onHitEntity(EntityHitResult hitResult) {
         Entity entity = hitResult.getEntity();
         Entity owner = this.getOwner();
@@ -63,10 +66,12 @@ public class ThrownIchorSpear extends AbstractSpear {
         this.discard();
     }
 
+    @Override
     protected ItemStack getPickupItem() {
         return this.item;
     }
 
+    @Override
     protected ItemStack getDefaultPickupItem() {
         return EnigmaticItems.ICHOR_SPEAR.toStack();
     }

@@ -153,6 +153,7 @@ public class CursedRing extends CursedCurioItem {
         return !enableInsomnia.get();
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -196,6 +197,7 @@ public class CursedRing extends CursedCurioItem {
         }
     }
 
+    @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         if (entity instanceof LivingEntity livingEntity && autoEquip.get()) {
             if (livingEntity instanceof Player player && (player.isCreative() || player.isSpectator())) return;
@@ -205,6 +207,7 @@ public class CursedRing extends CursedCurioItem {
         }
     }
 
+    @Override
     public void curioTick(@NotNull SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
         entity.getAttributes().addTransientAttributeModifiers(this.getArmorModifiers(entity));
@@ -262,28 +265,34 @@ public class CursedRing extends CursedCurioItem {
         return builder.build();
     }
 
+    @Override
     public DropRule getDropRule(SlotContext context, DamageSource source, boolean recentlyHit, ItemStack stack) {
         return DropRule.ALWAYS_KEEP;
     }
 
+    @Override
     public boolean canEquip(SlotContext context, ItemStack stack) {
         return !EnigmaticHandler.isTheBlessedOne(context.entity()) && super.canEquip(context, stack);
     }
 
+    @Override
     public boolean canUnequip(@NotNull SlotContext context, ItemStack stack) {
         if (context.entity() instanceof Player player && EnigmaticHandler.canUnequipBoundRelics(player))
             return super.canUnequip(context, stack);
         return false;
     }
 
+    @Override
     public boolean canEquipFromUse(SlotContext context, ItemStack stack) {
         return false;
     }
 
+    @Override
     public void onEquip(SlotContext context, ItemStack prevStack, ItemStack stack) {
         EnigmaticHandler.setCurrentWorldCursed(true);
     }
 
+    @Override
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
         LivingEntity entity = context.entity();
         entity.getAttributes().removeAttributeModifiers(this.getArmorModifiers(entity));
@@ -303,10 +312,12 @@ public class CursedRing extends CursedCurioItem {
         super.onUnequip(context, newStack, stack);
     }
 
+    @Override
     public int getLootingLevel(SlotContext context, @Nullable LootContext lootContext, ItemStack stack) {
         return super.getLootingLevel(context, lootContext, stack) + lootingBonus.getAsInt();
     }
 
+    @Override
     public int getFortuneLevel(SlotContext context, LootContext lootContext, ItemStack stack) {
         return super.getFortuneLevel(context, lootContext, stack) + fortuneBonus.getAsInt();
     }

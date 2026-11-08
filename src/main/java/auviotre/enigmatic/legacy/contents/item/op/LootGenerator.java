@@ -51,6 +51,7 @@ public class LootGenerator extends BaseItem {
         }
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
@@ -76,6 +77,7 @@ public class LootGenerator extends BaseItem {
         return stack.getOrDefault(EnigmaticComponents.LOOT_TABLE_ID.get(), 0);
     }
 
+    @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         int id = getLootTableIndex(stack);
@@ -89,6 +91,7 @@ public class LootGenerator extends BaseItem {
         return InteractionResult.SUCCESS;
     }
 
+    @Override
     public InteractionResult useOn(UseOnContext context) {
         Player player = context.getPlayer();
         Level level = context.getLevel();

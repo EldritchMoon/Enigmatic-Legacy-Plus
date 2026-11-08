@@ -15,10 +15,12 @@ public class PureHeart extends BaseCursedItem implements ITaintable {
         super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON), true);
     }
 
+    @Override
     public boolean canTaint(Player player) {
         return EnigmaticHandler.isTheOne(player);
     }
 
+    @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         if (entity instanceof Player player && !level.isClientSide())
             this.handleTaintable(stack, player);

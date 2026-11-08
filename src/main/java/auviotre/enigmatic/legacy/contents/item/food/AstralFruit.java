@@ -41,6 +41,7 @@ public class AstralFruit extends BaseItem {
         this.enchanted = enchanted;
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (this.enchanted) {
@@ -50,6 +51,7 @@ public class AstralFruit extends BaseItem {
         }
     }
 
+    @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         if (entity instanceof Player player && this.enchanted) {
             EnigmaticHandler.unlockSpecialSlot("ring", player, IItemHelper.getLocation(this));
@@ -57,6 +59,7 @@ public class AstralFruit extends BaseItem {
         return super.finishUsingItem(stack, level, entity);
     }
 
+    @Override
     public boolean isFoil(ItemStack stack) {
         return this.enchanted;
     }

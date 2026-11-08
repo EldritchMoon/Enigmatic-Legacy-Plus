@@ -10,6 +10,7 @@ public record EnderRingGrabItemPacket(ItemStack stack) implements CustomPacketPa
     public static final Type<EnderRingGrabItemPacket> TYPE = new Type<>(EnigmaticLegacy.location("ender_ring_grabbed_item"));
     public static final StreamCodec<RegistryFriendlyByteBuf, EnderRingGrabItemPacket> STREAM_CODEC = StreamCodec.composite(ItemStack.OPTIONAL_STREAM_CODEC, EnderRingGrabItemPacket::stack, EnderRingGrabItemPacket::new);
 
+    @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }

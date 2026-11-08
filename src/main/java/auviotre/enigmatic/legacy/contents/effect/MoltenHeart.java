@@ -16,6 +16,7 @@ public class MoltenHeart extends MobEffect {
         NeoForge.EVENT_BUS.register(this);
     }
 
+    @Override
     public boolean applyEffectTick(@NotNull LivingEntity entity, int amplifier) {
         if (entity.isOnFire()) entity.clearFire();
         return super.applyEffectTick(entity, amplifier);

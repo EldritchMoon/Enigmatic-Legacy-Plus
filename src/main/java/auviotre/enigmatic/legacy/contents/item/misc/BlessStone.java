@@ -36,6 +36,7 @@ public class BlessStone extends BaseCursedItem {
         super(IItemHelper.singleProperties().rarity(Rarity.RARE).fireResistant(), true);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.blessStone1");
@@ -52,6 +53,7 @@ public class BlessStone extends BaseCursedItem {
         list.add(Component.translatable("tooltip.enigmaticlegacy.cursedOnesOnly2").withStyle(color));
     }
 
+    @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack item = player.getItemInHand(hand);
         if (level.getLevelData().isHardcore() && EnigmaticHandler.isTheCursedOne(player)) {

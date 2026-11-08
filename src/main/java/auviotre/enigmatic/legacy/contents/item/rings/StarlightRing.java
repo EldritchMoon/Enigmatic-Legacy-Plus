@@ -51,6 +51,7 @@ public class StarlightRing extends BaseCurioItem {
         builder.pop(2);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -58,6 +59,7 @@ public class StarlightRing extends BaseCurioItem {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.starlightRing2");
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         List<Component> list = super.getAttributesTooltip(tooltips, context, stack);
@@ -66,6 +68,7 @@ public class StarlightRing extends BaseCurioItem {
         return list;
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
         builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(IItemHelper.getLocation(this), 6, AttributeModifier.Operation.ADD_VALUE));
@@ -73,12 +76,14 @@ public class StarlightRing extends BaseCurioItem {
         return builder.build();
     }
 
+    @Override
     public void curioTick(SlotContext slotContext, ItemStack stack) {
         if (slotContext.entity() instanceof ServerPlayer player && player.tickCount % 3 == 0) {
             player.getData(EnigmaticAttachments.ENIGMATIC_DATA).setInBeaconRangeTick(5);
         }
     }
 
+    @Override
     public void onUnequip(SlotContext slotContext, ItemStack newStack, ItemStack stack) {
         if (slotContext.entity() instanceof Player player)
             player.getData(EnigmaticAttachments.ENIGMATIC_DATA).setInBeaconRangeTick(0);

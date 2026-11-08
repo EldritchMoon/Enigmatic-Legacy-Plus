@@ -81,6 +81,7 @@ public class TheInfinitum extends TheAcknowledgment implements IBagContent {
         return builder.build();
     }
 
+    @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         if (entity instanceof LivingEntity livingEntity && !level.isClientSide()) {
             float timer = stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F);
@@ -94,6 +95,7 @@ public class TheInfinitum extends TheAcknowledgment implements IBagContent {
         }
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
@@ -123,6 +125,7 @@ public class TheInfinitum extends TheAcknowledgment implements IBagContent {
         TooltipHandler.worthyOnly(list, stack);
     }
 
+    @Override
     public List<Component> getTooltipInBag(List<Component> list) {
         TooltipHandler.line(list);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.antiqueBagSlot");
@@ -132,6 +135,7 @@ public class TheInfinitum extends TheAcknowledgment implements IBagContent {
         return list;
     }
 
+    @Override
     public InteractionResult use(Level world, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (!EnigmaticHandler.canUse(player, stack)) return InteractionResult.PASS;
@@ -140,6 +144,7 @@ public class TheInfinitum extends TheAcknowledgment implements IBagContent {
         return super.use(world, player, hand);
     }
 
+    @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return oldStack.getItem() != newStack.getItem();
     }

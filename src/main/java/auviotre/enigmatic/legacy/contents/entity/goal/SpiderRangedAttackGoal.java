@@ -39,6 +39,7 @@ public class SpiderRangedAttackGoal extends Goal {
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
+    @Override
     public boolean canUse() {
         if (!this.hasAmmo) return false;
         LivingEntity mobTarget = this.spider.getTarget();
@@ -49,20 +50,24 @@ public class SpiderRangedAttackGoal extends Goal {
         return false;
     }
 
+    @Override
     public boolean canContinueToUse() {
         return (this.canUse() || !this.spider.getNavigation().isDone()) && this.hasAmmo && this.target != null && this.target.isAlive();
     }
 
+    @Override
     public void stop() {
         this.target = null;
         this.seeTime = 0;
         this.attackTime = -1;
     }
 
+    @Override
     public boolean requiresUpdateEveryTick() {
         return true;
     }
 
+    @Override
     public void tick() {
         double distance = 0;
         if (this.target != null) {

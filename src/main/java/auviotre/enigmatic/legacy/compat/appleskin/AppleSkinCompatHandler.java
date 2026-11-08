@@ -16,6 +16,7 @@ import squeek.appleskin.api.event.TooltipOverlayEvent;
 import squeek.appleskin.helpers.TextureHelper;
 
 public class AppleSkinCompatHandler {
+    @Override
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onTooltipRender(TooltipOverlayEvent.@NotNull Render event) {
@@ -38,6 +39,7 @@ public class AppleSkinCompatHandler {
         poseStack.popPose();
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onHUDRender(HUDOverlayEvent.@NotNull Saturation event) {

@@ -47,6 +47,7 @@ public class MagnetRing extends BaseCurioItem {
         }
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -80,6 +81,7 @@ public class MagnetRing extends BaseCurioItem {
             }
     }
 
+    @Override
     public boolean canEquip(SlotContext context, ItemStack stack) {
         return super.canEquip(context, stack) && !EnigmaticHandler.hasCurio(context.entity(), EnigmaticItems.DISLOCATION_RING);
     }

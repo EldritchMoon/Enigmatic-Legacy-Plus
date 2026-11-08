@@ -22,6 +22,7 @@ import top.theillusivec4.curios.api.SlotContext;
 import java.util.List;
 
 public class GoldenRing extends BaseCurioItem {
+    @Override
     @OnlyIn(Dist.CLIENT)
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         List<Component> list = super.getAttributesTooltip(tooltips, context, stack);
@@ -32,20 +33,24 @@ public class GoldenRing extends BaseCurioItem {
         return list;
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
         builder.put(Attributes.LUCK, new AttributeModifier(IItemHelper.getLocation(this), 1, AttributeModifier.Operation.ADD_VALUE));
         return builder.build();
     }
 
+    @Override
     public boolean makesPiglinsNeutral(ItemStack stack, LivingEntity wearer) {
         return true;
     }
 
+    @Override
     public boolean makesPiglinsNeutral(SlotContext context, ItemStack stack) {
         return true;
     }
 
+    @Override
     public boolean isPiglinCurrency(ItemStack stack) {
         return true;
     }

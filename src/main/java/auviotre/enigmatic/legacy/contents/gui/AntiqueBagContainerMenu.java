@@ -57,10 +57,12 @@ public class AntiqueBagContainerMenu extends AbstractContainerMenu {
         for (int k = 0; k < 9; ++k) {
             if (k == this.player.getInventory().selected) {
                 this.addSlot(new Slot(inventory, k, 8 + k * 18, 142) {
+                    @Override
                     public boolean mayPickup(Player playerIn) {
                         return false;
                     }
 
+                    @Override
                     public boolean mayPlace(ItemStack stack) {
                         return false;
                     }
@@ -71,6 +73,7 @@ public class AntiqueBagContainerMenu extends AbstractContainerMenu {
         }
     }
 
+    @Override
     public ItemStack quickMoveStack(Player player, int id) {
         ItemStack stack = ItemStack.EMPTY;
         int slotsCount = AntiqueBagInventory.SLOTS_COUNT;
@@ -94,6 +97,7 @@ public class AntiqueBagContainerMenu extends AbstractContainerMenu {
         return stack;
     }
 
+    @Override
     public void broadcastChanges() {
         super.broadcastChanges();
         boolean flag = true;
@@ -105,15 +109,18 @@ public class AntiqueBagContainerMenu extends AbstractContainerMenu {
         }
     }
 
+    @Override
     public boolean stillValid(Player player) {
         return true;
     }
 
     public static class Provider implements MenuProvider {
+        @Override
         public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
             return new AntiqueBagContainerMenu(id, inventory, ContainerLevelAccess.create(inventory.player.level(), inventory.player.blockPosition()));
         }
 
+        @Override
         public Component getDisplayName() {
             return Component.translatable("gui.enigmaticlegacy.antique_bag");
         }
@@ -124,10 +131,12 @@ public class AntiqueBagContainerMenu extends AbstractContainerMenu {
             super(itemHandler, index, xPosition, yPosition);
         }
 
+        @Override
         public boolean mayPlace(@NotNull ItemStack stack) {
             return AntiqueBag.isBook(stack) && super.mayPlace(stack);
         }
 
+        @Override
         @Nullable
         public Pair<Identifier, Identifier> getNoItemIcon() {
             return Pair.of(InventoryMenu.BLOCK_ATLAS, EnigmaticLegacy.location("slot/empty_book_slot"));

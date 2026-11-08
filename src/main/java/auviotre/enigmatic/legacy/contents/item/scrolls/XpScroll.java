@@ -81,6 +81,7 @@ public class XpScroll extends BaseCurioItem {
         }
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         MutableComponent modeComponent;
@@ -120,12 +121,14 @@ public class XpScroll extends BaseCurioItem {
         }
     }
 
+    @Override
     public InteractionResult use(Level world, Player player, InteractionHand handIn) {
         ItemStack stack = player.getItemInHand(handIn);
         XpScroll.trigger(world, stack, player, handIn, true);
         return InteractionResult.SUCCESS;
     }
 
+    @Override
     public void curioTick(SlotContext context, ItemStack stack) {
         if (!(context.entity() instanceof Player player) || context.entity().level().isClientSide() || !stack.getOrDefault(EnigmaticComponents.XP_SCROLL_ACTIVE, false))
             return;
@@ -162,10 +165,12 @@ public class XpScroll extends BaseCurioItem {
         }
     }
 
+    @Override
     public boolean isFoil(@NotNull ItemStack stack) {
         return stack.getOrDefault(EnigmaticComponents.XP_SCROLL_ACTIVE, false);
     }
 
+    @Override
     public boolean canEquipFromUse(SlotContext context, ItemStack stack) {
         return false;
     }

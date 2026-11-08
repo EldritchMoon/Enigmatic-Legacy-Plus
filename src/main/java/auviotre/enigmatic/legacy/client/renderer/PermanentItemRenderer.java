@@ -37,10 +37,12 @@ public class PermanentItemRenderer extends EntityRenderer<PermanentItemEntity> {
         this.shadowStrength = 0.75F;
     }
 
+    @Override
     public Identifier getTextureLocation(PermanentItemEntity entity) {
         return TextureAtlas.LOCATION_BLOCKS;
     }
 
+    @Override
     public void render(PermanentItemEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null || !player.isAlive() && Math.sqrt(entity.distanceToSqr(player.getX(), player.getEyeY(), player.getZ())) <= 1.0)

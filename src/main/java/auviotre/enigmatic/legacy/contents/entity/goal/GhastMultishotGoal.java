@@ -16,22 +16,27 @@ public class GhastMultishotGoal extends Goal {
         this.ghast = ghast;
     }
 
+    @Override
     public boolean canUse() {
         return EnigmaticHandler.isCurseBoosted(this.ghast) && this.ghast.getTarget() != null;
     }
 
+    @Override
     public void start() {
         this.chargeTime = 0;
     }
 
+    @Override
     public void stop() {
         this.ghast.setCharging(false);
     }
 
+    @Override
     public boolean requiresUpdateEveryTick() {
         return true;
     }
 
+    @Override
     public void tick() {
         LivingEntity target = this.ghast.getTarget();
         if (target != null) {

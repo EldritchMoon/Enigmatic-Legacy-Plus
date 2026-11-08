@@ -33,14 +33,17 @@ public class ForbiddenJuice extends BaseDrinkableItem {
         return entity != null && entity.getData(EnigmaticAttachments.ENIGMATIC_DATA).isThirstForbiddenCursed();
     }
 
+    @Override
     public boolean isEnabled(FeatureFlagSet enabledFeatures) {
         return CompatHandler.isLoaded("thirst");
     }
 
+    @Override
     public boolean canDrink(Level level, Player player, ItemStack stack) {
         return !isForbiddenCursed(player);
     }
 
+    @Override
     public void onConsumed(Level level, @NotNull Player player, ItemStack stack) {
         player.eat(level, stack);
         EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);

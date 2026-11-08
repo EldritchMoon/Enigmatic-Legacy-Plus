@@ -46,37 +46,45 @@ public class SpellstoneCraftingCategory implements IRecipeCategory<RecipeHolder<
         this.icon = guiHelper.createDrawableItemLike(EnigmaticItems.SPELLCORE);
     }
 
+    @Override
     public RecipeType<RecipeHolder<SpellstoneTableRecipe>> getRecipeType() {
         return EnigmaticRecipeTypes.SPELLSTONE_CRAFTING;
     }
 
+    @Override
     public Component getTitle() {
         return Component.translatable("gui.enigmaticlegacy.jei.spellstone_crafting");
     }
 
+    @Override
     public IDrawable getIcon() {
         return this.icon;
     }
 
+    @Override
     public int getWidth() {
         return 132;
     }
 
+    @Override
     public int getHeight() {
         return 80;
     }
 
+    @Override
     public void draw(RecipeHolder<SpellstoneTableRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
         guiGraphics.blitSprite(SPRITE, 0, 0, getWidth(), getHeight());
         if (recipe.value().isAllDifferent()) guiGraphics.blitSprite(ICON, 124, 0, 8, 8);
     }
 
+    @Override
     public void getTooltip(ITooltipBuilder tooltip, RecipeHolder<SpellstoneTableRecipe> recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         if (recipe.value().isAllDifferent() && mouseX >= 124 && mouseY >= 0 && mouseX <= 132 && mouseY <= 8) {
             tooltip.add(Component.translatable("gui.enigmaticlegacy.jei.spellstone_crafting.all_different"));
         }
     }
 
+    @Override
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull RecipeHolder<SpellstoneTableRecipe> holder, IFocusGroup focuses) {
         SpellstoneTableRecipe recipe = holder.value();
         IRecipeSlotBuilder slot = builder.addInputSlot(5, 32);

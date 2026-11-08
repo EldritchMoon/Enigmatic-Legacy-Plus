@@ -51,6 +51,7 @@ public class Insignia extends BaseCurioItem {
         super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON).component(EnigmaticComponents.BOOLEAN, true));
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -82,6 +83,7 @@ public class Insignia extends BaseCurioItem {
         return player != null && player.isCreative() || EnigmaticHandler.hasCurio(player, EnigmaticItems.ENIGMATIC_EYE);
     }
 
+    @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         if (player.isCrouching()) {
             ItemStack stack = player.getItemInHand(hand);
@@ -99,15 +101,18 @@ public class Insignia extends BaseCurioItem {
         return super.use(level, player, hand);
     }
 
+    @Override
     public InteractionResult useOn(UseOnContext context) {
         if (context.getPlayer() == null) return InteractionResult.PASS;
         return this.use(context.getLevel(), context.getPlayer(), context.getHand()).getResult();
     }
 
+    @Override
     public boolean canEquipFromUse(SlotContext context, ItemStack stack) {
         return false;
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         CuriosApi.addSlotModifier(attributes, "charm", IItemHelper.getLocation(this), 1.0, AttributeModifier.Operation.ADD_VALUE);

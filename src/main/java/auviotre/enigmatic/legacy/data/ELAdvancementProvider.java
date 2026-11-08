@@ -36,6 +36,7 @@ public class ELAdvancementProvider extends AdvancementProvider {
 
     public static class Generator implements AdvancementProvider.AdvancementGenerator {
 
+        @Override
         public void generate(HolderLookup.Provider provider, Consumer<AdvancementHolder> consumer, ExistingFileHelper existingFileHelper) {
             AdvancementHolder root = Advancement.Builder.advancement().display(
                             EnigmaticItems.THE_ACKNOWLEDGMENT,

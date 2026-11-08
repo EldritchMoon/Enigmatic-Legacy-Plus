@@ -95,14 +95,17 @@ public class EnigmaticAmulet extends BaseCurioItem implements IAmulet {
         return list.get(random.nextInt(list.size())).toStack();
     }
 
+    @Override
     public Color getColor() {
         return color;
     }
 
+    @Override
     public Component getName(ItemStack stack) {
         return Component.translatable("item.enigmaticlegacyplus.enigmatic_amulet");
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -137,16 +140,19 @@ public class EnigmaticAmulet extends BaseCurioItem implements IAmulet {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.enigmaticAmuletModifier" + color, ChatFormatting.GOLD, IAmulet.getAttributeVar(color));
     }
 
+    @Override
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
         context.entity().getAttributes().removeAttributeModifiers(getAllModifiers(context.entity()));
         super.onUnequip(context, newStack, stack);
     }
 
+    @Override
     public void curioTick(SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
         entity.getAttributes().addTransientAttributeModifiers(getModifiers(stack, entity));
     }
 
+    @Override
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         tooltips.clear();
         return tooltips;

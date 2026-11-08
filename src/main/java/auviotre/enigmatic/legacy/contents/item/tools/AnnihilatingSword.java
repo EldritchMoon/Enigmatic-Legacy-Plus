@@ -190,6 +190,7 @@ public class AnnihilatingSword extends Item {
         stack.set(EnigmaticComponents.ANNI_ENERGY, Math.clamp(energy, 0.0F, getMaxEnergy(entity)));
     }
 
+    @Override
     public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
         int energy = stack.getOrDefault(EnigmaticComponents.ANNI_ENERGY, 0.0F).intValue();
         ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder()
@@ -200,6 +201,7 @@ public class AnnihilatingSword extends Item {
         return builder.build();
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
@@ -233,6 +235,7 @@ public class AnnihilatingSword extends Item {
         if (stack.isEmpty()) TooltipHandler.line(list);
     }
 
+    @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         if (entity instanceof LivingEntity livingEntity && !level.isClientSide()) {
             float timer = stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F);
@@ -246,6 +249,7 @@ public class AnnihilatingSword extends Item {
         }
     }
 
+    @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (!EnigmaticHandler.canUse(player, stack)) return InteractionResult.PASS;
@@ -260,6 +264,7 @@ public class AnnihilatingSword extends Item {
     }
 
     // 26.1.2-port: releaseUsing returns whether the item was used (applies use-cooldown/remainder components).
+    @Override
     public boolean releaseUsing(ItemStack stack, Level level, LivingEntity entity, int tick) {
         if (entity instanceof Player player && player.getOffhandItem().is(this)) {
             player.getCooldowns().addCooldown(this.getDefaultInstance(), 8);
@@ -267,6 +272,7 @@ public class AnnihilatingSword extends Item {
         return false;
     }
 
+    @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         if (entity instanceof Player player && player.getMainHandItem().is(this)) {
             ItemStack handItem = player.getMainHandItem();
@@ -295,6 +301,7 @@ public class AnnihilatingSword extends Item {
         return stack;
     }
 
+    @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return oldStack.getItem() != newStack.getItem();
     }
@@ -303,20 +310,24 @@ public class AnnihilatingSword extends Item {
         return target.getBoundingBox().inflate(1.75, 0.3, 1.75);
     }
 
+    @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 32000;
     }
 
+    @Override
     public ItemUseAnimation getUseAnimation(ItemStack stack) {
         return ItemUseAnimation.BLOCK;
     }
 
+    @Override
     public boolean canDisableShield(ItemStack stack, ItemStack shield, LivingEntity entity, LivingEntity attacker) {
         return true;
     }
 
     @OnlyIn(Dist.CLIENT)
     public static class Decorator implements IItemDecorator {
+        @Override
         public boolean render(GuiGraphicsExtractor graphics, Font font, @NotNull ItemStack stack, int x, int y) {
             int energy = stack.getOrDefault(EnigmaticComponents.ANNI_ENERGY, 0.0F).intValue();
             if (stack.getCount() == 1 && energy > 0) {

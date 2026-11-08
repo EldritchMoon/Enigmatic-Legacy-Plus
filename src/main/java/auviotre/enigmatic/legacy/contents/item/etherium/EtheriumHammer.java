@@ -49,6 +49,7 @@ public class EtheriumHammer extends Item {
         super(IItemHelper.properties().fireResistant().tool(EtheriumProperties.TIER, EnigmaticTags.Blocks.ALL_MINEABLE, 9.0F, -3.0F, 0.0F).attributes(EtheriumProperties.createAttributes(9.0F, -3.0F, 0.03F)));
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (!stack.getOrDefault(EnigmaticComponents.BOOLEAN, false)) {
@@ -64,6 +65,7 @@ public class EtheriumHammer extends Item {
         if (stack.isEnchanted()) TooltipHandler.line(list);
     }
 
+    @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (player.isShiftKeyDown()) {
@@ -74,11 +76,13 @@ public class EtheriumHammer extends Item {
         return super.use(level, player, hand);
     }
 
+    @Override
     public boolean canPerformAction(ItemStack stack, ItemAbility ability) {
         return ItemAbilities.DEFAULT_PICKAXE_ACTIONS.contains(ability) || ability == ItemAbilities.AXE_DIG
                 || ability == ItemAbilities.SHOVEL_DIG || ability == ItemAbilities.HOE_DIG || ability == ItemAbilities.SWORD_DIG;
     }
 
+    @Override
     public void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         Level level = attacker.level();
         var holder = EnigmaticHandler.get(level, Registries.ENCHANTMENT, EnigmaticEnchantments.ETHERIC_RESONANCE);
@@ -100,6 +104,7 @@ public class EtheriumHammer extends Item {
         super.postHurtEnemy(stack, target, attacker);
     }
 
+    @Override
     public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miningEntity) {
         if (miningEntity.isCrouching() || stack.getOrDefault(EnigmaticComponents.BOOLEAN, false))
             return super.mineBlock(stack, level, state, pos, miningEntity);

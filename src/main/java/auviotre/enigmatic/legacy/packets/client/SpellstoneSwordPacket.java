@@ -53,6 +53,7 @@ public class SpellstoneSwordPacket implements CustomPacketPayload {
         buf.writeInt(this.mode);
     }
 
+    @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }

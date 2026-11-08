@@ -29,10 +29,12 @@ public class UltimateWitherSkullRenderer extends EntityRenderer<UltimateWitherSk
         this.model = new SkullModel(context.bakeLayer(ModelLayers.WITHER_SKULL));
     }
 
+    @Override
     protected int getBlockLightLevel(UltimateWitherSkull entity, BlockPos pos) {
         return 15;
     }
 
+    @Override
     public void render(UltimateWitherSkull entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         poseStack.pushPose();
         float inflate = entity.isDangerous() ? 1.4F : 1.0F;
@@ -59,6 +61,7 @@ public class UltimateWitherSkullRenderer extends EntityRenderer<UltimateWitherSk
         poseStack.popPose();
     }
 
+    @Override
     public Identifier getTextureLocation(UltimateWitherSkull entity) {
         return entity.isDangerous() ? UltimateWitherSkullRenderer.WITHER_INVULNERABLE_LOCATION : UltimateWitherSkullRenderer.WITHER_LOCATION;
     }

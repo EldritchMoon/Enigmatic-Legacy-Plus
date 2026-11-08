@@ -33,6 +33,7 @@ public class DragonBreathArrow extends AbstractArrow {
         this.setBaseDamage(this.getBaseDamage() * 1.8);
     }
 
+    @Override
     public void tick() {
         if (!this.isNoGravity() && !this.isNoPhysics()) this.setDeltaMovement(this.getDeltaMovement().scale(1.01));
         super.tick();
@@ -48,6 +49,7 @@ public class DragonBreathArrow extends AbstractArrow {
         } else if (this.inGround) this.summonAreaEffect();
     }
 
+    @Override
     protected void onHit(HitResult hitResult) {
         super.onHit(hitResult);
         if (!this.level().isClientSide && hitResult.getType() == HitResult.Type.ENTITY && !this.ownedBy(((EntityHitResult) hitResult).getEntity())) {
@@ -56,6 +58,7 @@ public class DragonBreathArrow extends AbstractArrow {
         }
     }
 
+    @Override
     protected void onHitEntity(EntityHitResult hitResult) {
         super.onHitEntity(hitResult);
         hitResult.getEntity().invulnerableTime = 0;
@@ -96,6 +99,7 @@ public class DragonBreathArrow extends AbstractArrow {
         this.discard();
     }
 
+    @Override
     protected ItemStack getDefaultPickupItem() {
         return Items.AIR.getDefaultInstance();
     }

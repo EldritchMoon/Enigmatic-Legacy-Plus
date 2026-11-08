@@ -46,6 +46,7 @@ public class CursedShapedRecipe extends ShapedRecipe {
         this.showNotification = showNotification;
     }
 
+    @Override
     public boolean matches(CraftingInput input, Level level) {
         if (EnigmaticHandler.isCursedItem(this.result) || EnigmaticHandler.isBlessedItem(this.result)) {
             for (int i = 0; i < input.size(); i++) {
@@ -57,6 +58,7 @@ public class CursedShapedRecipe extends ShapedRecipe {
         return super.matches(input, level);
     }
 
+    @Override
     public RecipeSerializer<?> getSerializer() {
         return EnigmaticRecipes.CURSED_SHAPED.get();
     }
@@ -83,10 +85,12 @@ public class CursedShapedRecipe extends ShapedRecipe {
             ShapedRecipe.Serializer.STREAM_CODEC.encode(buffer, recipe);
         }
 
+        @Override
         public MapCodec<CursedShapedRecipe> codec() {
             return CODEC;
         }
 
+        @Override
         public StreamCodec<RegistryFriendlyByteBuf, CursedShapedRecipe> streamCodec() {
             return STREAM_CODEC;
         }
@@ -157,11 +161,13 @@ public class CursedShapedRecipe extends ShapedRecipe {
             }
         }
 
+        @Override
         public Builder unlockedBy(String name, Criterion<?> criterion) {
             this.criteria.put(name, criterion);
             return this;
         }
 
+        @Override
         public Builder group(@Nullable String groupName) {
             this.group = groupName;
             return this;
@@ -172,10 +178,12 @@ public class CursedShapedRecipe extends ShapedRecipe {
             return this;
         }
 
+        @Override
         public Item getResult() {
             return this.result;
         }
 
+        @Override
         public void save(RecipeOutput recipeOutput, Identifier id) {
             ShapedRecipePattern shapedrecipepattern = this.ensureValid(id);
             Advancement.Builder advancement$builder = recipeOutput.advancement().addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id)).rewards(AdvancementRewards.Builder.recipe(id)).requirements(AdvancementRequirements.Strategy.OR);

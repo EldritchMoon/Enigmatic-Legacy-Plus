@@ -24,6 +24,7 @@ import java.util.Optional;
 
 public class SpellstoneTableMenu extends AbstractContainerMenu {
     protected final Container coreSlot = new InputContainer(1) {
+        @Override
         public int getMaxStackSize() {
             return 1;
         }
@@ -49,28 +50,34 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
         this.player = inventory.player;
 
         this.addSlot(new Slot(this.debrisSlot, 0, 27, 35) {
+            @Override
             public boolean mayPlace(ItemStack stack) {
                 return stack.is(EnigmaticItems.SPELLSTONE_DEBRIS);
             }
 
+            @Override
             public Pair<Identifier, Identifier> getNoItemIcon() {
                 return Pair.of(InventoryMenu.BLOCK_ATLAS, EnigmaticLegacy.location("slot/empty_spellstone_debris_slot"));
             }
         });
         this.addSlot(new Slot(this.spellstoneSlot, 0, 133, 35) {
+            @Override
             public boolean mayPlace(ItemStack stack) {
                 return stack.is(EnigmaticTags.Items.SPELLSTONES);
             }
 
+            @Override
             public Pair<Identifier, Identifier> getNoItemIcon() {
                 return Pair.of(InventoryMenu.BLOCK_ATLAS, EnigmaticLegacy.location("slot/empty_spellstone_slot"));
             }
         });
         this.addSlot(new Slot(this.coreSlot, 0, 80, 35) {
+            @Override
             public boolean mayPlace(ItemStack stack) {
                 return stack.is(EnigmaticItems.SPELLCORE);
             }
 
+            @Override
             public Pair<Identifier, Identifier> getNoItemIcon() {
                 return Pair.of(InventoryMenu.BLOCK_ATLAS, EnigmaticLegacy.location("slot/empty_spellcore_slot"));
             }
@@ -83,14 +90,17 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
         this.addSlot(new Slot(this.ingredientSlot, 5, 107, 35));
         this.addSlot(new Slot(this.ingredientSlot, 6, 100, 55));
         this.addSlot(new Slot(this.result, 0, 80, 62) {
+            @Override
             public boolean mayPlace(ItemStack stack) {
                 return false;
             }
 
+            @Override
             public boolean mayPickup(Player playerIn) {
                 return this.hasItem();
             }
 
+            @Override
             public void onTake(Player thePlayer, ItemStack stack) {
                 this.setChanged();
                 SpellstoneTableRecipe.Input input = SpellstoneTableMenu.this.getInput();
@@ -118,6 +128,7 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
                 }
             }
 
+            @Override
             public boolean isFake() {
                 return true;
             }
@@ -133,6 +144,7 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
         }
     }
 
+    @Override
     public void slotsChanged(Container container) {
         this.access.execute((level, pos) -> {
             MinecraftServer server = level.getServer();
@@ -157,6 +169,7 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
         });
     }
 
+    @Override
     public ItemStack quickMoveStack(Player player, int id) {
         ItemStack stack = ItemStack.EMPTY;
         Slot slot = this.slots.get(id);
@@ -193,10 +206,12 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
         return !this.result.isEmpty();
     }
 
+    @Override
     public boolean canTakeItemForPickAll(ItemStack stack, Slot slot) {
         return slot.container != this.result && super.canTakeItemForPickAll(stack, slot);
     }
 
+    @Override
     public void removed(Player player) {
         super.removed(player);
         this.access.execute((level, pos) -> {
@@ -207,6 +222,7 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
         });
     }
 
+    @Override
     public boolean stillValid(Player player) {
         return stillValid(this.access, player, EnigmaticBlocks.SPELLSTONE_TABLE.get());
     }
@@ -218,10 +234,12 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
             this.name = name;
         }
 
+        @Override
         public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
             return new SpellstoneTableMenu(id, inventory);
         }
 
+        @Override
         public Component getDisplayName() {
             return this.name;
         }
@@ -232,6 +250,7 @@ public class SpellstoneTableMenu extends AbstractContainerMenu {
             super(size);
         }
 
+        @Override
         public void setChanged() {
             super.setChanged();
             SpellstoneTableMenu.this.slotsChanged(this);

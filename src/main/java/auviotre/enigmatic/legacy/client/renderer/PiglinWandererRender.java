@@ -27,10 +27,12 @@ public class PiglinWandererRender extends HumanoidMobRenderer<PiglinWanderer, Pi
         );
     }
 
+    @Override
     public Identifier getTextureLocation(PiglinWanderer mob) {
         return EnigmaticLegacy.location("textures/entity/piglin_wanderer.png");
     }
 
+    @Override
     protected boolean isShaking(PiglinWanderer entity) {
         return super.isShaking(entity) || entity.isConverting();
     }

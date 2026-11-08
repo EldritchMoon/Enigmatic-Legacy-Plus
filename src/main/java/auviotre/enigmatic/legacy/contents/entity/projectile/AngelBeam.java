@@ -34,6 +34,7 @@ public class AngelBeam extends AbstractHurtingProjectile {
         this.entityData.set(DATA_FROM_POS, new Vector3f((float) beginning.x, (float) beginning.y, (float) beginning.z));
     }
 
+    @Override
     public void tick() {
         super.tick();
         Vec3 vec3 = this.getDeltaMovement();
@@ -54,6 +55,7 @@ public class AngelBeam extends AbstractHurtingProjectile {
         return null;
     }
 
+    @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(DATA_FROM_POS, new Vector3f(0, 0, 0));
     }
@@ -62,6 +64,7 @@ public class AngelBeam extends AbstractHurtingProjectile {
         return this.entityData.get(DATA_FROM_POS);
     }
 
+    @Override
     protected void onHitEntity(EntityHitResult result) {
         if (this.getOwner() instanceof LivingEntity owner) {
             Entity entity = result.getEntity();
@@ -71,6 +74,7 @@ public class AngelBeam extends AbstractHurtingProjectile {
         }
     }
 
+    @Override
     protected void onHitBlock(BlockHitResult result) {
         super.onHitBlock(result);
         this.setDeltaMovement(this.getDeltaMovement().normalize().scale(result.distanceTo(this)));

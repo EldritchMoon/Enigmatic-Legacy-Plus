@@ -83,6 +83,7 @@ public class AntiqueBag extends BaseItem {
         return !EnigmaticHandler.getItemRaw(entity, EnigmaticItems.ANTIQUE_BAG).isEmpty() || enderCheck;
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.antiqueBag1");
@@ -91,6 +92,7 @@ public class AntiqueBag extends BaseItem {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.antiqueBag4");
     }
 
+    @Override
     public InteractionResult use(Level world, Player player, InteractionHand hand) {
         player.startUsingItem(hand);
         if (!world.isClientSide()) player.openMenu(new AntiqueBagContainerMenu.Provider());

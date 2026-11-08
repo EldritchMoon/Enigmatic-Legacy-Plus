@@ -27,6 +27,7 @@ public record SpellstoneLootCondition(float baseChance, float bonusChance) imple
         return EnigmaticLoots.SPELLSTONE.get();
     }
 
+    @Override
     public boolean test(@NotNull LootContext context) {
         float chance = this.baseChance;
         if (context.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof LivingEntity entity) {

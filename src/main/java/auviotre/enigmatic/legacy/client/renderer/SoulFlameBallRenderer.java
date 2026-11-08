@@ -17,10 +17,12 @@ public class SoulFlameBallRenderer extends EntityRenderer<SoulFlameBall> {
         super(context);
     }
 
+    @Override
     protected int getBlockLightLevel(SoulFlameBall entity, BlockPos pos) {
         return 15;
     }
 
+    @Override
     public void render(SoulFlameBall entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         if (entity.tickCount >= 2 || !(this.entityRenderDispatcher.camera.getEntity().distanceToSqr(entity) < (double) 12.25F)) {
             poseStack.pushPose();
@@ -31,6 +33,7 @@ public class SoulFlameBallRenderer extends EntityRenderer<SoulFlameBall> {
         }
     }
 
+    @Override
     public Identifier getTextureLocation(SoulFlameBall entity) {
         return TextureAtlas.LOCATION_BLOCKS;
     }

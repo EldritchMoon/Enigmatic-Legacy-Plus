@@ -36,6 +36,7 @@ public class IchorBottle extends BaseDrinkableItem {
         this.enchanted = enchanted;
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (this.enchanted) {
@@ -46,6 +47,7 @@ public class IchorBottle extends BaseDrinkableItem {
         }
     }
 
+    @Override
     public void onConsumed(Level level, Player player, ItemStack stack) {
         if (this.enchanted) {
             EnigmaticHandler.unlockSpecialSlot("charm", player, IItemHelper.getLocation(this));
@@ -53,6 +55,7 @@ public class IchorBottle extends BaseDrinkableItem {
         player.eat(level, stack);
     }
 
+    @Override
     public boolean isFoil(ItemStack stack) {
         return this.enchanted;
     }

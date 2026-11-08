@@ -40,6 +40,7 @@ public class HeavenScroll extends BaseCurioItem {
         super(IItemHelper.singleProperties().rarity(Rarity.RARE));
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -52,10 +53,12 @@ public class HeavenScroll extends BaseCurioItem {
         } else TooltipHandler.holdShift(list);
     }
 
+    @Override
     public boolean canEquip(SlotContext context, ItemStack stack) {
         return super.canEquip(context, stack) && !EnigmaticHandler.hasCurio(context.entity(), EnigmaticItems.FABULOUS_SCROLL);
     }
 
+    @Override
     public void onUnequip(@NotNull SlotContext context, ItemStack newStack, ItemStack stack) {
         LivingEntity entity = context.entity();
         entity.getAttributes().removeAttributeModifiers(this.getModifiers());
@@ -64,6 +67,7 @@ public class HeavenScroll extends BaseCurioItem {
         super.onUnequip(context, newStack, stack);
     }
 
+    @Override
     public void curioTick(@NotNull SlotContext slotContext, ItemStack stack) {
         if (slotContext.entity() instanceof ServerPlayer player) {
             if (canFly(player, false)) {

@@ -119,10 +119,12 @@ public class EldritchAmulet extends BaseCurioItem {
         return hadTag;
     }
 
+    @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return oldStack.getItem() != newStack.getItem();
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -154,11 +156,13 @@ public class EldritchAmulet extends BaseCurioItem {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.eldritchAmuletStat2", ChatFormatting.GOLD, lifeSteal.getAsInt() + "%");
     }
 
+    @Override
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         tooltips.clear();
         return tooltips;
     }
 
+    @Override
     public void curioTick(@NotNull SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
         if (!EnigmaticHandler.isTheWorthyOne(entity)) return;
@@ -178,6 +182,7 @@ public class EldritchAmulet extends BaseCurioItem {
         entity.getAttributes().addTransientAttributeModifiers(getModifiers());
     }
 
+    @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         if (entity instanceof LivingEntity livingEntity && !level.isClientSide()) {
             float timer = stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F);
@@ -187,6 +192,7 @@ public class EldritchAmulet extends BaseCurioItem {
         }
     }
 
+    @Override
     public void onUnequip(@NotNull SlotContext context, ItemStack newStack, ItemStack stack) {
         context.entity().getAttributes().removeAttributeModifiers(getModifiers());
         super.onUnequip(context, newStack, stack);
@@ -199,6 +205,7 @@ public class EldritchAmulet extends BaseCurioItem {
         return map;
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         CuriosApi.addSlotModifier(attributes, "charm", IItemHelper.getLocation(this), 1.0, AttributeModifier.Operation.ADD_VALUE);

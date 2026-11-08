@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class AnnihilatingRecipeExtension implements ICraftingCategoryExtension<AnnihilatingRecipe> {
+    @Override
     public void setRecipe(@NotNull RecipeHolder<AnnihilatingRecipe> recipeHolder, IRecipeLayoutBuilder builder, ICraftingGridHelper craftingGridHelper, IFocusGroup focuses) {
         AnnihilatingRecipe recipe = recipeHolder.value();
         List<IRecipeSlotBuilder> inputs = craftingGridHelper.createAndSetInputs(builder, List.of(), 3, 3);

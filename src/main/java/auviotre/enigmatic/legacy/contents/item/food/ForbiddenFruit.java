@@ -52,6 +52,7 @@ public class ForbiddenFruit extends BaseItem {
         return entity != null && entity.getData(EnigmaticAttachments.ENIGMATIC_DATA).isForbiddenCursed();
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
@@ -65,11 +66,13 @@ public class ForbiddenFruit extends BaseItem {
         }
     }
 
+    @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         if (isForbiddenCursed(player)) return InteractionResult.PASS;
         return super.use(level, player, hand);
     }
 
+    @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         EnigmaticData data = entity.getData(EnigmaticAttachments.ENIGMATIC_DATA);
         data.setForbiddenCursed(true);

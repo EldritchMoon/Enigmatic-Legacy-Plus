@@ -27,6 +27,7 @@ public class AscensionAmulet extends EnigmaticAmulet {
         super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.RARE), Color.ALL);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     protected void addAttributes(List<Component> list, ItemStack stack) {
         TooltipHandler.line(list, "curios.modifiers.amulet", ChatFormatting.GOLD);
@@ -38,15 +39,18 @@ public class AscensionAmulet extends EnigmaticAmulet {
         }
     }
 
+    @Override
     public Component getName(ItemStack stack) {
         return Component.translatable(this.getDescriptionId(stack));
     }
 
+    @Override
     public void curioTick(@NotNull SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
         entity.getAttributes().addTransientAttributeModifiers(getAllModifiers(entity));
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         CuriosApi.addSlotModifier(attributes, "charm", IItemHelper.getLocation(this), 1.0, AttributeModifier.Operation.ADD_VALUE);

@@ -46,6 +46,7 @@ public class EtheriumSword extends Item {
         ));
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         double power = 10;
@@ -64,6 +65,7 @@ public class EtheriumSword extends Item {
         if (stack.isEnchanted()) TooltipHandler.line(list);
     }
 
+    @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         var holder = EnigmaticHandler.get(level, Registries.ENCHANTMENT, EnigmaticEnchantments.ETHERIC_RESONANCE);
@@ -79,10 +81,12 @@ public class EtheriumSword extends Item {
         return super.use(level, player, hand);
     }
 
+    @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 32000;
     }
 
+    @Override
     public ItemUseAnimation getUseAnimation(ItemStack stack) {
         return ItemUseAnimation.BLOCK;
     }

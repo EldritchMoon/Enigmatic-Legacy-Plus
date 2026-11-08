@@ -65,6 +65,7 @@ public class EarthPromise extends CursedCurioItem {
         builder.pop(2);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -82,6 +83,7 @@ public class EarthPromise extends CursedCurioItem {
         TooltipHandler.cursedOnly(list, stack);
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
         Identifier location = IItemHelper.getLocation(this);
@@ -91,11 +93,13 @@ public class EarthPromise extends CursedCurioItem {
         return builder.build();
     }
 
+    @Override
     public int getFortuneLevel(SlotContext slotContext, LootContext lootContext, ItemStack curio) {
         LivingEntity entity = slotContext.entity();
         return super.getFortuneLevel(slotContext, lootContext, curio) + (EnigmaticHandler.hasCurio(entity, EnigmaticItems.MINING_CHARM) ? 3 : 2);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         List<Component> list = super.getAttributesTooltip(tooltips, context, stack);

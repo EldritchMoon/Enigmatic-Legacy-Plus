@@ -35,16 +35,19 @@ public class EarthHeart extends BaseItem implements ITaintable {
         super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON));
     }
 
+    @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         if (entity instanceof Player player && !level.isClientSide())
             this.handleTaintable(stack, player);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (ITaintable.isTainted(stack)) TooltipHandler.line(list, "tooltip.enigmaticlegacy.tainted");
     }
 
+    @Override
     public boolean canTaint(Player player) {
         return EnigmaticHandler.isTheOne(player);
     }

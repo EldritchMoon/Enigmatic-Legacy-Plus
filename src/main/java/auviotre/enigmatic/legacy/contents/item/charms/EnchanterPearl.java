@@ -29,6 +29,7 @@ public class EnchanterPearl extends CursedCurioItem {
         super(IItemHelper.singleProperties().rarity(Rarity.RARE).fireResistant());
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -47,6 +48,7 @@ public class EnchanterPearl extends CursedCurioItem {
         TooltipHandler.cursedOnly(list, stack);
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         if (EnigmaticHandler.canUse(context.entity(), stack))
@@ -54,6 +56,7 @@ public class EnchanterPearl extends CursedCurioItem {
         return attributes;
     }
 
+    @Override
     public List<Component> getAttributesTooltip(@NotNull List<Component> tooltips, TooltipContext context, ItemStack stack) {
         tooltips.clear();
         return tooltips;

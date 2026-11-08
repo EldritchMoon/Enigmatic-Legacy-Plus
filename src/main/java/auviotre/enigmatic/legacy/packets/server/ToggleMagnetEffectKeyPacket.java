@@ -30,6 +30,7 @@ public record ToggleMagnetEffectKeyPacket() implements CustomPacketPayload {
         }
     }
 
+    @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }

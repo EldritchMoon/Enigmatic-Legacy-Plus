@@ -91,6 +91,7 @@ public class HellBladeCharm extends BaseCurioItem {
         return amount;
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -106,6 +107,7 @@ public class HellBladeCharm extends BaseCurioItem {
         } else TooltipHandler.holdShift(list);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public List<Component> getAttributesTooltip(List<Component> list, TooltipContext context, ItemStack stack) {
         TooltipHandler.line(list);
@@ -118,6 +120,7 @@ public class HellBladeCharm extends BaseCurioItem {
         return list;
     }
 
+    @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         if (entity instanceof LivingEntity owner && stack.getOrDefault(EnigmaticComponents.BOOLEAN, false)) {
             if (stack != EnigmaticHandler.getCurio(owner, this)) stack.set(EnigmaticComponents.BOOLEAN, false);
@@ -135,15 +138,18 @@ public class HellBladeCharm extends BaseCurioItem {
         return attributes;
     }
 
+    @Override
     public void curioTick(SlotContext context, ItemStack stack) {
         context.entity().getAttributes().addTransientAttributeModifiers(this.createAttributeMap(context.entity()));
     }
 
+    @Override
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
         context.entity().getAttributes().removeAttributeModifiers(this.createAttributeMap(context.entity()));
         super.onUnequip(context, newStack, stack);
     }
 
+    @Override
     public boolean canUnequip(SlotContext context, ItemStack stack) {
         return stack.getOrDefault(EnigmaticComponents.BOOLEAN, false) || context.entity().hasInfiniteMaterials();
     }
@@ -152,6 +158,7 @@ public class HellBladeCharm extends BaseCurioItem {
     public static class Decorator implements IItemDecorator {
         static final Identifier SPRITE = EnigmaticLegacy.location("decorator/hell_blade_charm_slot");
 
+        @Override
         public boolean render(GuiGraphicsExtractor graphics, Font font, @NotNull ItemStack stack, int x, int y) {
             ItemStack curio = EnigmaticHandler.getCurio(Minecraft.getInstance().player, EnigmaticItems.HELL_BLADE_CHARM);
             if (curio == stack && !stack.getOrDefault(EnigmaticComponents.BOOLEAN, false)) {

@@ -24,10 +24,12 @@ public class PermanentDeathScreen extends Screen {
         this.reason = reason;
     }
 
+    @Override
     public boolean shouldCloseOnEsc() {
         return false;
     }
 
+    @Override
     protected void init() {
         this.clearWidgets();
         this.message = MultiLineLabel.create(this.font, this.reason.withStyle(ChatFormatting.WHITE), this.width - 50);
@@ -39,6 +41,7 @@ public class PermanentDeathScreen extends Screen {
                 .build());
     }
 
+    @Override
     public void render(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         guiGraphics.drawCenteredString(this.font, this.title, this.width / 2, this.height / 2 - this.textHeight / 2 - 9 * 2, 11184810);

@@ -81,6 +81,7 @@ public class Spelltuner extends BaseCurioItem {
         return context.color();
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         Context spellContext = stack.get(EnigmaticComponents.SPELLTUNER_CONTEXT);
@@ -110,6 +111,7 @@ public class Spelltuner extends BaseCurioItem {
         }
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         List<Component> list = super.getAttributesTooltip(tooltips, context, stack);
@@ -118,6 +120,7 @@ public class Spelltuner extends BaseCurioItem {
         return list;
     }
 
+    @Override
     public void curioTick(SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
         if (hasTune(entity, EnigmaticItems.GOLEM_HEART)) {
@@ -136,12 +139,14 @@ public class Spelltuner extends BaseCurioItem {
         }
     }
 
+    @Override
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
         LivingEntity entity = context.entity();
         entity.getAttributes().removeAttributeModifiers(this.getGolemHeartModifiers());
         super.onUnequip(context, newStack, stack);
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, Identifier id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
         builder.put(Attributes.LUCK, new AttributeModifier(IItemHelper.getLocation(this), 1, AttributeModifier.Operation.ADD_VALUE));
@@ -158,6 +163,7 @@ public class Spelltuner extends BaseCurioItem {
         return builder.build();
     }
 
+    @Override
     public boolean overrideStackedOnOther(ItemStack stack, Slot slot, ClickAction action, Player player) {
         if (action != ClickAction.PRIMARY && slot.mayPickup(player) && slot.hasItem()) {
             if (slot.getItem().getItem() instanceof SpellstoneItem spellstone) {
@@ -169,6 +175,7 @@ public class Spelltuner extends BaseCurioItem {
         return super.overrideStackedOnOther(stack, slot, action, player);
     }
 
+    @Override
     public boolean isFoil(ItemStack stack) {
         return stack.get(EnigmaticComponents.SPELLTUNER_CONTEXT) != null;
     }

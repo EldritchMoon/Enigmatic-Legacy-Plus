@@ -34,6 +34,7 @@ public class UnholyGrail extends BaseItem {
         super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON).fireResistant());
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
@@ -41,6 +42,7 @@ public class UnholyGrail extends BaseItem {
         } else TooltipHandler.holdShift(list);
     }
 
+    @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity user) {
         boolean theWorthy = EnigmaticHandler.isTheCursedOne(user) && ForbiddenFruit.isForbiddenCursed(user);
         if (!level.isClientSide()) {
@@ -67,23 +69,28 @@ public class UnholyGrail extends BaseItem {
         return stack;
     }
 
+    @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         player.startUsingItem(hand);
         return InteractionResult.CONSUME;
     }
 
+    @Override
     public SoundEvent getDrinkingSound() {
         return SoundEvents.HONEY_DRINK;
     }
 
+    @Override
     public SoundEvent getEatingSound() {
         return SoundEvents.HONEY_DRINK;
     }
 
+    @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 32;
     }
 
+    @Override
     public ItemUseAnimation getUseAnimation(ItemStack stack) {
         return ItemUseAnimation.DRINK;
     }

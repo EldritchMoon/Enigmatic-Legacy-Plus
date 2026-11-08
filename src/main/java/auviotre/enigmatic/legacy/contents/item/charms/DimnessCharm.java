@@ -30,6 +30,7 @@ public class DimnessCharm extends CursedCurioItem {
         return entity instanceof Player player && EnigmaticHandler.isTheCursedOne(entity) && EnigmaticHandler.getSufferingFraction(player) >= Math.clamp(2 * AbyssalHeart.abyssThreshold.get() - 1, 0.05, 0.999);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);

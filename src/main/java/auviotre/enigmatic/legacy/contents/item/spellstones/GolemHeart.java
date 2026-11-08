@@ -67,6 +67,7 @@ public class GolemHeart extends SpellstoneItem {
         builder.pop(2);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -90,16 +91,19 @@ public class GolemHeart extends SpellstoneItem {
         this.addKeyText(list);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void addTuneTooltip(List<Component> list) {
         double resistance = knockbackResistance.getAsDouble() * 50;
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.golemHeart6", ChatFormatting.GOLD, String.format("%.0f%%", resistance));
     }
 
+    @Override
     public int getCooldown(ItemStack stack) {
         return 0;
     }
 
+    @Override
     public void curioTick(SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
         if (EnigmaticHandler.hasNoArmor(entity)) {
@@ -111,6 +115,7 @@ public class GolemHeart extends SpellstoneItem {
         }
     }
 
+    @Override
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
         LivingEntity entity = context.entity();
         entity.getAttributes().removeAttributeModifiers(this.getArmorDefaultModifiers());

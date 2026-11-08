@@ -80,6 +80,7 @@ public class NightScroll extends CursedCurioItem {
         return 2.0F - (sky * 0.025F + block * 0.075F);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -97,11 +98,13 @@ public class NightScroll extends CursedCurioItem {
         TooltipHandler.cursedOnly(list, stack);
     }
 
+    @Override
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         tooltips.clear();
         return tooltips;
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, Identifier id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         attributes.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(IItemHelper.getLocation(this), damageBoost.get() / 100.0F * getDarkModifier(slotContext.entity()), AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));

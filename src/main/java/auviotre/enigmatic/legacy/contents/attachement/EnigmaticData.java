@@ -250,6 +250,7 @@ public class EnigmaticData implements INBTSerializable<CompoundTag> {
         return save(provider);
     }
 
+    @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag tag) {
         load(provider, tag);
     }

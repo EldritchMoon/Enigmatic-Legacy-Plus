@@ -67,6 +67,7 @@ public interface IAmulet {
             return this.id;
         }
 
+        @Override
         public String getSerializedName() {
             return getId();
         }

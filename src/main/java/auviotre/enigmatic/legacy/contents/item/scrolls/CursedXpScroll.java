@@ -70,6 +70,7 @@ public class CursedXpScroll extends XpScroll {
         return Mth.clamp((double) getExpLevel(stack.getOrDefault(EnigmaticComponents.XP_SCROLL_STORED, 0L)) / xpLevelUpperLimit.get(), 0.0D, 1.0D);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         MutableComponent modeComponent;
@@ -127,6 +128,7 @@ public class CursedXpScroll extends XpScroll {
         return attributes;
     }
 
+    @Override
     public void curioTick(SlotContext context, ItemStack stack) {
         if (!(context.entity() instanceof Player player) || context.entity().level().isClientSide() || !stack.getOrDefault(EnigmaticComponents.XP_SCROLL_ACTIVE, false))
             return;
@@ -141,6 +143,7 @@ public class CursedXpScroll extends XpScroll {
         }
     }
 
+    @Override
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
         context.entity().getAttributes().removeAttributeModifiers(getModifiers(stack));
         super.onUnequip(context, newStack, stack);

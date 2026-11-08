@@ -26,6 +26,7 @@ public class IchorSpriteBeamPacket implements CustomPacketPayload {
         buf.writeVec3(this.tarPos);
     }
 
+    @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }

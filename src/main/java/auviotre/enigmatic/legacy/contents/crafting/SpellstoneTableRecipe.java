@@ -45,6 +45,7 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
         this.allDifferent = flag;
     }
 
+    @Override
     public boolean matches(@NotNull Input input, Level level) {
         ItemStack core = input.core();
         if (core.isEmpty() || !core.is(EnigmaticItems.SPELLCORE)) return false;
@@ -68,6 +69,7 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
         return RecipeMatcher.findMatches(items, this.ingredients) != null;
     }
 
+    @Override
     public NonNullList<ItemStack> getRemainingItems(Input input) {
         NonNullList<ItemStack> nonnulllist = NonNullList.withSize(input.size(), ItemStack.EMPTY);
         input.debris().shrink(this.debrisCount);
@@ -82,10 +84,12 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
         return nonnulllist;
     }
 
+    @Override
     public ItemStack assemble(Input input, HolderLookup.Provider provider) {
         return this.result.copy();
     }
 
+    @Override
     public boolean canCraftInDimensions(int i, int i1) {
         return true;
     }
@@ -98,28 +102,34 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
         return this.allDifferent;
     }
 
+    @Override
     public NonNullList<Ingredient> getIngredients() {
         return this.ingredients;
     }
 
+    @Override
     public ItemStack getResultItem(HolderLookup.Provider provider) {
         return this.result;
     }
 
+    @Override
     public ItemStack getToastSymbol() {
         return EnigmaticBlocks.SPELLSTONE_TABLE.toStack();
     }
 
+    @Override
     public RecipeSerializer<?> getSerializer() {
         return EnigmaticRecipes.SPELLSTONE_TABLE.get();
     }
 
+    @Override
     public RecipeType<?> getType() {
         return EnigmaticRecipes.SPELLSTONE_CRAFTING.get();
     }
 
     public record Input(ItemStack core, ItemStack debris, List<ItemStack> ingredients,
                         boolean noSpellstone) implements RecipeInput {
+        @Override
         public ItemStack getItem(int id) {
             if (id == 0) return core;
             else if (id == 1) return debris;
@@ -127,6 +137,7 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
             return ingredients.get(id - 2);
         }
 
+        @Override
         public int size() {
             return ingredients.size() + 2;
         }
@@ -166,10 +177,12 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
             buffer.writeBoolean(recipe.allDifferent);
         }
 
+        @Override
         public MapCodec<SpellstoneTableRecipe> codec() {
             return CODEC;
         }
 
+        @Override
         public StreamCodec<RegistryFriendlyByteBuf, SpellstoneTableRecipe> streamCodec() {
             return STREAM_CODEC;
         }
@@ -220,24 +233,29 @@ public class SpellstoneTableRecipe implements Recipe<SpellstoneTableRecipe.Input
             return this;
         }
 
+        @Override
         public RecipeBuilder unlockedBy(String name, Criterion<?> criterion) {
             this.criteria.put(name, criterion);
             return this;
         }
 
+        @Override
         public RecipeBuilder group(@Nullable String s) {
             return this;
         }
 
+        @Override
         public Item getResult() {
             return result.getItem();
         }
 
+        @Override
         public void save(RecipeOutput recipeOutput) {
             Identifier location = BuiltInRegistries.ITEM.getKey(this.getResult());
             this.save(recipeOutput, Identifier.fromNamespaceAndPath(location.getNamespace(), "spellstone/" + location.getPath()));
         }
 
+        @Override
         public void save(@NotNull RecipeOutput recipeOutput, Identifier id) {
             Advancement.Builder builder = recipeOutput.advancement().addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id)).rewards(AdvancementRewards.Builder.recipe(id)).requirements(AdvancementRequirements.Strategy.OR);
             Objects.requireNonNull(builder);

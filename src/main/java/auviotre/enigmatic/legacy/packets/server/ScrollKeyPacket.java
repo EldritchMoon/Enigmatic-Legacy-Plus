@@ -39,6 +39,7 @@ public record ScrollKeyPacket() implements CustomPacketPayload {
     }
 
 
+    @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }

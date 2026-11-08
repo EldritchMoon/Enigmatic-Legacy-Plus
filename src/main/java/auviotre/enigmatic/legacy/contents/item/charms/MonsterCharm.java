@@ -40,12 +40,14 @@ public class MonsterCharm extends BaseCurioItem {
         super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON));
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.monsterCharm");
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         List<Component> list = super.getAttributesTooltip(tooltips, context, stack);
@@ -55,12 +57,14 @@ public class MonsterCharm extends BaseCurioItem {
         return list;
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
         builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(IItemHelper.getLocation(this), 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         return builder.build();
     }
 
+    @Override
     public int getLootingLevel(SlotContext context, LootContext lootContext, ItemStack stack) {
         return super.getLootingLevel(context, lootContext, stack) + 1;
     }

@@ -81,6 +81,7 @@ public class RevivalLeaf extends SpellstoneItem {
         builder.pop(2);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -102,11 +103,13 @@ public class RevivalLeaf extends SpellstoneItem {
         this.addKeyText(list);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void addTuneTooltip(List<Component> list) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.revivalLeaf1");
     }
 
+    @Override
     public void curioTick(SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
         if (!entity.getActiveEffects().isEmpty()) {
@@ -160,15 +163,18 @@ public class RevivalLeaf extends SpellstoneItem {
         }
     }
 
+    @Override
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
         context.entity().getAttributes().removeAttributeModifiers(this.getModifiers());
         super.onUnequip(context, newStack, stack);
     }
 
+    @Override
     public int getCooldown(ItemStack stack) {
         return cooldown.get();
     }
 
+    @Override
     public void triggerActiveAbility(ServerLevel level, ServerPlayer player, ItemStack stack) {
         boolean paybackReceived = false;
         int expLevel = player.experienceLevel;

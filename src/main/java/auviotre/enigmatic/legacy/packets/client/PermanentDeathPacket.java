@@ -10,6 +10,7 @@ public record PermanentDeathPacket() implements CustomPacketPayload {
     public static final StreamCodec<RegistryFriendlyByteBuf, PermanentDeathPacket> STREAM_CODEC = CustomPacketPayload.codec((packet, buf) -> {
     }, (buf) -> new PermanentDeathPacket());
 
+    @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }

@@ -78,6 +78,7 @@ public abstract class BaseElytraItem extends BaseCurioItem {
     }
 
     // 26.1.2-port: no longer a NeoForge hook; only called from curioTick for the Curios back slot.
+    @Override
     public boolean elytraFlightTick(ItemStack stack, @NotNull LivingEntity entity, int flightTicks) {
         if (!entity.level().isClientSide()) {
             int nextFlightTick = flightTicks + 1;
@@ -90,18 +91,22 @@ public abstract class BaseElytraItem extends BaseCurioItem {
         return true;
     }
 
+    @Override
     public EquipmentSlot getEquipmentSlot(ItemStack stack) {
         return EquipmentSlot.CHEST;
     }
 
+    @Override
     public ICurio.SoundInfo getEquipSound(SlotContext slotContext, ItemStack stack) {
         return new ICurio.SoundInfo(SoundEvents.ARMOR_EQUIP_ELYTRA.value(), 1F, 1F);
     }
 
+    @Override
     public boolean canEquip(SlotContext context, ItemStack stack) {
         return super.canEquip(context, stack) && getElytra(context.entity()).isEmpty();
     }
 
+    @Override
     public boolean canEquip(ItemStack stack, EquipmentSlot slot, LivingEntity entity) {
         return super.canEquip(stack, slot, entity) && EnigmaticHandler.canUse(entity, stack) && getElytra(entity).isEmpty();
     }

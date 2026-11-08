@@ -34,6 +34,7 @@ public class ExtradimensionalEye extends BaseItem {
         super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON));
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
@@ -58,10 +59,12 @@ public class ExtradimensionalEye extends BaseItem {
         }
     }
 
+    @Override
     public boolean isFoil(@NotNull ItemStack stack) {
         return stack.has(EnigmaticComponents.DIMENSIONAL_POS);
     }
 
+    @Override
     public InteractionResult use(Level level, @NotNull Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (player.isCrouching()) {
@@ -73,6 +76,7 @@ public class ExtradimensionalEye extends BaseItem {
         return super.use(level, player, hand);
     }
 
+    @Override
     public InteractionResult interactLivingEntity(@NotNull ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
         if (stack.has(EnigmaticComponents.DIMENSIONAL_POS)) {
             GlobalPos globalPos = stack.get(EnigmaticComponents.DIMENSIONAL_POS);

@@ -25,20 +25,24 @@ public class SpearAttack<E extends Mob & SpearAttackMob> extends Behavior<E> {
         return shooter.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).get();
     }
 
+    @Override
     protected boolean checkExtraStartConditions(ServerLevel level, E owner) {
         LivingEntity target = getAttackTarget(owner);
         return owner.isHolding(is -> is.getItem() instanceof IchorSpear) && BehaviorUtils.canSee(owner, target) && owner.closerThan(target, 16);
     }
 
+    @Override
     protected boolean canStillUse(ServerLevel level, E entity, long gameTime) {
         return entity.getBrain().hasMemoryValue(MemoryModuleType.ATTACK_TARGET) && this.checkExtraStartConditions(level, entity);
     }
 
+    @Override
     protected void tick(ServerLevel level, E owner, long gameTime) {
         this.lookAtTarget(owner, getAttackTarget(owner));
         this.attack(owner);
     }
 
+    @Override
     protected void stop(ServerLevel level, E entity, long gameTime) {
         if (entity.isUsingItem()) entity.stopUsingItem();
 

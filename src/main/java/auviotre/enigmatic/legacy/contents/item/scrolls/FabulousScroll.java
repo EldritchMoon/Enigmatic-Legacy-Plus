@@ -20,6 +20,7 @@ import top.theillusivec4.curios.api.SlotContext;
 import java.util.List;
 
 public class FabulousScroll extends HeavenScroll {
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -33,6 +34,7 @@ public class FabulousScroll extends HeavenScroll {
         } else TooltipHandler.holdShift(list);
     }
 
+    @Override
     public void curioTick(@NotNull SlotContext slotContext, ItemStack stack) {
         if (slotContext.entity() instanceof ServerPlayer player) {
             if (canFly(player, true)) {
@@ -49,6 +51,7 @@ public class FabulousScroll extends HeavenScroll {
         }
     }
 
+    @Override
     public boolean canEquip(SlotContext context, ItemStack stack) {
         return super.canEquip(context, stack) && !EnigmaticHandler.hasCurio(context.entity(), EnigmaticItems.HEAVEN_SCROLL);
     }

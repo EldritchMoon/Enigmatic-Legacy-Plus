@@ -34,30 +34,37 @@ public class TaintingCategory implements IRecipeCategory<TaintingCategory.Recipe
         return new Recipe(input, condition);
     }
 
+    @Override
     public RecipeType<Recipe> getRecipeType() {
         return EnigmaticRecipeTypes.TAINTING;
     }
 
+    @Override
     public Component getTitle() {
         return Component.translatable("gui.enigmaticlegacy.jei.tainting");
     }
 
+    @Override
     public IDrawable getIcon() {
         return this.icon;
     }
 
+    @Override
     public int getWidth() {
         return 108;
     }
 
+    @Override
     public int getHeight() {
         return 42;
     }
 
+    @Override
     public void draw(Recipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
         guiGraphics.blitSprite(SPRITE, 0, 0, getWidth(), getHeight());
     }
 
+    @Override
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull TaintingCategory.Recipe recipe, IFocusGroup focuses) {
         builder.addInputSlot(13, 13).addItemStack(recipe.input()).setStandardSlotBackground();
         ItemStack output = recipe.input().copy();

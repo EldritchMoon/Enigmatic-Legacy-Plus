@@ -42,10 +42,12 @@ public class ShapelessNoRemainRecipe extends ShapelessRecipe {
         this.ingredients = ingredients;
     }
 
+    @Override
     public RecipeSerializer<?> getSerializer() {
         return EnigmaticRecipes.SHAPELESS_NO_REMAIN.get();
     }
 
+    @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingInput input) {
         return NonNullList.withSize(input.size(), ItemStack.EMPTY);
     }
@@ -85,10 +87,12 @@ public class ShapelessNoRemainRecipe extends ShapelessRecipe {
             ItemStack.STREAM_CODEC.encode(buffer, recipe.result);
         }
 
+        @Override
         public MapCodec<ShapelessNoRemainRecipe> codec() {
             return CODEC;
         }
 
+        @Override
         public StreamCodec<RegistryFriendlyByteBuf, ShapelessNoRemainRecipe> streamCodec() {
             return STREAM_CODEC;
         }
@@ -149,20 +153,24 @@ public class ShapelessNoRemainRecipe extends ShapelessRecipe {
             return this;
         }
 
+        @Override
         public Builder unlockedBy(String name, Criterion<?> criterion) {
             this.criteria.put(name, criterion);
             return this;
         }
 
+        @Override
         public Builder group(@Nullable String groupName) {
             this.group = groupName;
             return this;
         }
 
+        @Override
         public Item getResult() {
             return this.result;
         }
 
+        @Override
         public void save(RecipeOutput recipeOutput, Identifier id) {
             if (this.criteria.isEmpty()) throw new IllegalStateException("No way of obtaining recipe " + id);
             Advancement.Builder advancement$builder = recipeOutput.advancement().addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id)).rewards(AdvancementRewards.Builder.recipe(id)).requirements(AdvancementRequirements.Strategy.OR);

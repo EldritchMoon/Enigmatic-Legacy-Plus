@@ -15,12 +15,14 @@ public class SkeletonMeleeAttackGoal extends Goal {
         this.mob = mob;
     }
 
+    @Override
     public boolean canUse() {
         LivingEntity target = this.mob.getTarget();
         if (target == null || !EnigmaticHandler.isCurseBoosted(mob) || mob.isUsingItem()) return false;
         return target.distanceToSqr(this.mob) <= 1.4D && this.mob.getRandom().nextInt(reducedTickDelay(3)) == 0;
     }
 
+    @Override
     public void start() {
         LivingEntity target = this.mob.getTarget();
         super.start();

@@ -58,6 +58,7 @@ public class EtheriumScythe extends Item {
         };
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumScythe", ChatFormatting.GOLD, 3, 3);
@@ -70,11 +71,13 @@ public class EtheriumScythe extends Item {
         if (stack.isEnchanted()) TooltipHandler.line(list);
     }
 
+    @Override
     public float getDestroySpeed(ItemStack stack, @NotNull BlockState state) {
         if (state.is(BlockTags.SWORD_EFFICIENT)) return EtheriumProperties.TIER.speed();
         return super.getDestroySpeed(stack, state);
     }
 
+    @Override
     public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, @NotNull LivingEntity miningEntity) {
         if (miningEntity.isCrouching()) return super.mineBlock(stack, level, state, pos, miningEntity);
         if (miningEntity instanceof Player player && isCorrectToolForDrops(stack, state) && !level.isClientSide()) {
@@ -89,6 +92,7 @@ public class EtheriumScythe extends Item {
         return super.mineBlock(stack, level, state, pos, miningEntity);
     }
 
+    @Override
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
         Player player = context.getPlayer();
@@ -169,6 +173,7 @@ public class EtheriumScythe extends Item {
         return false;
     }
 
+    @Override
     public boolean canPerformAction(ItemStack stack, ItemAbility ability) {
         return ItemAbilities.DEFAULT_HOE_ACTIONS.contains(ability) || ability == ItemAbilities.SWORD_SWEEP;
     }

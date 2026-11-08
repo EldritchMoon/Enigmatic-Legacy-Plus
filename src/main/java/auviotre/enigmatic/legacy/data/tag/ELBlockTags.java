@@ -19,6 +19,7 @@ public class ELBlockTags extends BlockTagsProvider {
         super(output, lookupProvider, EnigmaticLegacy.MODID, existingFileHelper);
     }
 
+    @Override
     protected void addTags(HolderLookup.Provider provider) {
         this.tag(BlockTags.NEEDS_DIAMOND_TOOL).add(
                 EnigmaticBlocks.DIMENSIONAL_ANCHOR.get(),

@@ -72,6 +72,7 @@ public class BerserkEmblem extends CursedCurioItem {
         return attributes;
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -104,12 +105,14 @@ public class BerserkEmblem extends CursedCurioItem {
         TooltipHandler.cursedOnly(list, stack);
     }
 
+    @Override
     public void curioTick(@NotNull SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
         if (entity.level().isClientSide()) return;
         entity.getAttributes().addTransientAttributeModifiers(this.createAttributeMap(entity));
     }
 
+    @Override
     public void onUnequip(@NotNull SlotContext context, ItemStack newStack, ItemStack stack) {
         LivingEntity entity = context.entity();
         entity.getAttributes().removeAttributeModifiers(this.createAttributeMap(entity));

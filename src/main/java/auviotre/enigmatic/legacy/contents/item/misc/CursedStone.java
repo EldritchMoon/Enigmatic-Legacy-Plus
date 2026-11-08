@@ -17,6 +17,7 @@ public class CursedStone extends BaseCursedItem {
         super(IItemHelper.singleProperties().rarity(Rarity.RARE).fireResistant());
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedStone1");

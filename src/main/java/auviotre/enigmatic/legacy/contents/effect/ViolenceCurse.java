@@ -28,6 +28,7 @@ public class ViolenceCurse extends MobEffect {
         NeoForge.EVENT_BUS.register(this);
     }
 
+    @Override
     public ParticleOptions createParticleOptions(MobEffectInstance effect) {
         return EnigmaticParticles.VIOLENCE_CURSE.get();
     }

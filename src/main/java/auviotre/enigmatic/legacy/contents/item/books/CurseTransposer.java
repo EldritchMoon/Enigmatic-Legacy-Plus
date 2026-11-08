@@ -23,6 +23,7 @@ public class CurseTransposer extends EnchantmentTransposer {
         super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON).component(EnigmaticComponents.CURSED, true));
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.curseTransposer1");
@@ -33,11 +34,13 @@ public class CurseTransposer extends EnchantmentTransposer {
         TooltipHandler.cursedOnly(list, stack);
     }
 
+    @Override
     protected boolean canDisenchant(Player player, ItemStack transposer, @NotNull ItemStack target) {
         if (transposer.is(this) && !EnigmaticHandler.canUse(player, transposer)) return false;
         return super.canDisenchant(player, transposer, target);
     }
 
+    @Override
     public boolean canTranspose(@NotNull Holder<Enchantment> enchantment) {
         return enchantment.is(EnchantmentTags.CURSE);
     }

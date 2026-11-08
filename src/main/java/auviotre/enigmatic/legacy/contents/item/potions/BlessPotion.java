@@ -27,6 +27,7 @@ public class BlessPotion extends BaseDrinkableItem {
                 .component(EnigmaticComponents.CURSED, true).component(EnigmaticComponents.BLESSED, true));
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.blessPotion1");
@@ -35,6 +36,7 @@ public class BlessPotion extends BaseDrinkableItem {
         TooltipHandler.cursedOnly(list, stack);
     }
 
+    @Override
     public void onConsumed(Level level, Player player, ItemStack stack) {
         int removeCount = 0;
         List<MobEffectInstance> activeEffects = new ArrayList<>(player.getActiveEffects());

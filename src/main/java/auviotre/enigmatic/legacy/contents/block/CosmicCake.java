@@ -70,10 +70,12 @@ public class CosmicCake extends CakeBlock {
         }
     }
 
+    @Override
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return SHAPE_BY_BITE[pState.getValue(BITES)];
     }
 
+    @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (level.isClientSide()) {
             if (eat(level, pos, state, player).consumesAction()) return InteractionResult.SUCCESS;
@@ -82,6 +84,7 @@ public class CosmicCake extends CakeBlock {
         return eat(level, pos, state, player);
     }
 
+    @Override
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         int bites;
         if ((bites = state.getValue(BITES)) > 0) {
@@ -91,6 +94,7 @@ public class CosmicCake extends CakeBlock {
         }
     }
 
+    @Override
     public boolean isRandomlyTicking(BlockState state) {
         return state.getValue(BITES) > 0;
     }

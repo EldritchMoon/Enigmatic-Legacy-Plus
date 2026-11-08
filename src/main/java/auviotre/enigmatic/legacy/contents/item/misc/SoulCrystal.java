@@ -98,6 +98,7 @@ public class SoulCrystal extends BaseItem implements IPermanentCrystal {
         ATTRIBUTE_DISPATCHER.put(player, soulMap);
     }
 
+    @Override
     public InteractionResult use(Level level, @NotNull Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (retrieveSoulFromCrystal(player)) {

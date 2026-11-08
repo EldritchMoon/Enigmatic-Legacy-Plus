@@ -55,6 +55,7 @@ public class ThirstCompatHandler {
         minecraft.getProfiler().pop();
     }
 
+    @Override
     @SubscribeEvent
     public void onRegisterThirst(@NotNull RegisterThirstValueEvent event) {
         event.addFood(EnigmaticItems.ICHOROOT.get(), 2, 3);
@@ -72,11 +73,13 @@ public class ThirstCompatHandler {
         event.addDrink(EnigmaticItems.FORBIDDEN_JUICE.get(), 2, 2);
     }
 
+    @Override
     @SubscribeEvent
     public void onPlayerTick(PlayerTickEvent.@NotNull Pre event) {
         lockThirstData(event.getEntity());
     }
 
+    @Override
     @SubscribeEvent
     public void onPlayerTicked(PlayerTickEvent.@NotNull Post event) {
         lockThirstData(event.getEntity());

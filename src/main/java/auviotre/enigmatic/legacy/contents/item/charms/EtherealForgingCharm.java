@@ -31,10 +31,12 @@ public class EtherealForgingCharm extends BaseCurioItem {
         super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON).component(EnigmaticComponents.BOOLEAN, false));
     }
 
+    @Override
     public Component getName(@NotNull ItemStack stack) {
         return stack.getOrDefault(EnigmaticComponents.BOOLEAN, false) ? Component.translatable("item.enigmaticlegacyplus.ethereal_forging_charm_active") : Component.translatable("item.enigmaticlegacyplus.ethereal_forging_charm");
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.etherealForgingCharm1");
@@ -51,6 +53,7 @@ public class EtherealForgingCharm extends BaseCurioItem {
         if (stack.isEnchanted()) TooltipHandler.line(list);
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         attributes.put(EnigmaticAttributes.ETHERIUM_SHIELD, new AttributeModifier(IItemHelper.getLocation(this), stack.getOrDefault(EnigmaticComponents.BOOLEAN, false) ? 0.05 : 0.03, AttributeModifier.Operation.ADD_VALUE));

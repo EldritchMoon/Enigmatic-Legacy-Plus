@@ -79,6 +79,7 @@ public class ChaosElytra extends BaseElytraItem {
         builder.pop(2);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -102,14 +103,17 @@ public class ChaosElytra extends BaseElytraItem {
         TooltipHandler.worthyOnly(list, stack);
     }
 
+    @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return oldStack.getItem() != newStack.getItem();
     }
 
+    @Override
     public int getEnchantmentValue(ItemStack stack) {
         return 21;
     }
 
+    @Override
     protected boolean flyingBoost(@NotNull Player player) {
         if (player.isFallFlying()) {
             Vec3 lookAngle = player.getLookAngle().scale(flyingSpeedModifier.get());
@@ -120,6 +124,7 @@ public class ChaosElytra extends BaseElytraItem {
         return false;
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     protected void addParticle(Player player) {
         int amount = 3;
@@ -132,6 +137,7 @@ public class ChaosElytra extends BaseElytraItem {
         }
     }
 
+    @Override
     public void curioTick(@NotNull SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
         if (!EnigmaticHandler.isTheWorthyOne(entity)) {
@@ -151,6 +157,7 @@ public class ChaosElytra extends BaseElytraItem {
 
     // 26.1.2-port: inventoryTick is server-only and gets the equipment slot instead of slotId/isSelected
     // (MAINHAND = selected hotbar item). The chest-slot flight tick is vanilla now (GLIDER component).
+    @Override
     public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
         if (entity instanceof LivingEntity livingEntity) {
             float timer = stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F);

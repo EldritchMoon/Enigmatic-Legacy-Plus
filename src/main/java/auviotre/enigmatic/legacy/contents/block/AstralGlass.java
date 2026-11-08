@@ -58,6 +58,7 @@ public class AstralGlass extends TransparentBlock {
         }
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(STYLE, FACING, COLORFUL);
     }
@@ -73,16 +74,19 @@ public class AstralGlass extends TransparentBlock {
         };
     }
 
+    @Override
     protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
         if (!level.isClientSide() && level.hasNeighborSignal(pos))
             level.setBlock(pos, state.setValue(STYLE, level.getBestNeighborSignal(pos) / 4 % 4), 3);
     }
 
+    @Override
     protected void attack(BlockState state, Level level, BlockPos pos, Player player) {
         interact(state, level, pos);
         super.attack(state, level, pos, player);
     }
 
+    @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (state.getValue(COLORFUL)) return InteractionResult.CONSUME;
         if (stack.is(EnigmaticItems.ASTRAL_DUST)) {
@@ -99,14 +103,17 @@ public class AstralGlass extends TransparentBlock {
         return result;
     }
 
+    @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
+    @Override
     protected BlockState rotate(BlockState state, Rotation rot) {
         return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
     }
 
+    @Override
     protected BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }

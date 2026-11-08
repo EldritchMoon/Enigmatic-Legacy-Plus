@@ -30,10 +30,12 @@ public class EnigmaticParticles {
 
     private static <T extends ParticleOptions> @NotNull DeferredHolder<ParticleType<?>, ParticleType<T>> register(final Function<ParticleType<T>, MapCodec<T>> codecGetter, final Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> streamCodecGetter) {
         return PARTICLE_TYPES.register("spell", () -> new ParticleType<T>(false) {
+            @Override
             public MapCodec<T> codec() {
                 return codecGetter.apply(this);
             }
 
+            @Override
             public StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec() {
                 return streamCodecGetter.apply(this);
             }

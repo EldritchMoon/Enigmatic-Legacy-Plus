@@ -29,12 +29,14 @@ public class AbyssCorruption extends MobEffect {
         NeoForge.EVENT_BUS.register(this);
     }
 
+    @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         entity.hurt(EnigmaticDamageTypes.source(entity.level(), EnigmaticDamageTypes.ABYSS), 2.0F * (float) Math.pow(2, (double) amplifier / 2));
 //        entity.invulnerableTime = 1;
         return true;
     }
 
+    @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         int i = 32 >> (amplifier / 2);
         return i == 0 || duration % i == 0;

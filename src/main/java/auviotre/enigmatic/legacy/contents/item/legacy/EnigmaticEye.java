@@ -85,6 +85,7 @@ public class EnigmaticEye extends BaseCurioItem {
         });
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, @NotNull List<Component> list, @NotNull TooltipFlag flag) {
         if (!this.isDormant(stack)) TooltipHandler.line(list);
@@ -119,15 +120,18 @@ public class EnigmaticEye extends BaseCurioItem {
         }
     }
 
+    @Override
     public boolean canEquip(SlotContext context, ItemStack stack) {
         return super.canEquip(context, stack) && !this.isDormant(stack);
     }
 
+    @Override
     public Component getName(@NotNull ItemStack stack) {
         if (this.isDormant(stack)) return Component.translatable("item.enigmaticlegacyplus.enigmatic_eye_dormant");
         else return Component.translatable("item.enigmaticlegacyplus.enigmatic_eye_active");
     }
 
+    @Override
     public void inventoryTick(ItemStack stack, @NotNull Level level, @NotNull Entity entity, int slotId, boolean isSelected) {
         int animTicks = stack.getOrDefault(EnigmaticComponents.ACTIVATION_ANIMATION.get(), -1);
 
@@ -149,6 +153,7 @@ public class EnigmaticEye extends BaseCurioItem {
         super.inventoryTick(stack, level, entity, slotId, isSelected);
     }
 
+    @Override
     public InteractionResult use(@NotNull Level level, Player player, @NotNull InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (this.isDormant(stack) && !stack.has(EnigmaticComponents.ACTIVATION_ANIMATION)) {
@@ -168,6 +173,7 @@ public class EnigmaticEye extends BaseCurioItem {
         return super.use(level, player, hand);
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         if (this.isDormant(stack)) return attributes;

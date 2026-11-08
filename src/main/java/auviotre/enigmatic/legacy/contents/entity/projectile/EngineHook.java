@@ -63,6 +63,7 @@ public class EngineHook extends Projectile {
         this.xRotO = this.getXRot();
     }
 
+    @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(DATA_HOOKED_ENTITY, 0);
     }
@@ -73,6 +74,7 @@ public class EngineHook extends Projectile {
         return attributes;
     }
 
+    @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         if (DATA_HOOKED_ENTITY.equals(key)) {
             int i = this.getEntityData().get(DATA_HOOKED_ENTITY);
@@ -81,6 +83,7 @@ public class EngineHook extends Projectile {
         super.onSyncedDataUpdated(key);
     }
 
+    @Override
     public void tick() {
         super.tick();
         Entity owner = this.getOwner();
@@ -121,6 +124,7 @@ public class EngineHook extends Projectile {
         }
     }
 
+    @Override
     protected boolean canHitEntity(Entity target) {
         return super.canHitEntity(target) || target.isAlive() && target instanceof ItemEntity;
     }
@@ -132,6 +136,7 @@ public class EngineHook extends Projectile {
         }
     }
 
+    @Override
     protected void onHitEntity(EntityHitResult result) {
         super.onHitEntity(result);
         if (this.getOwner() instanceof LivingEntity owner) {
@@ -143,6 +148,7 @@ public class EngineHook extends Projectile {
         }
     }
 
+    @Override
     protected void onHitBlock(BlockHitResult result) {
         super.onHitBlock(result);
         this.currentState = State.HOOKED_IN_BLOCK;
@@ -167,6 +173,7 @@ public class EngineHook extends Projectile {
         }
     }
 
+    @Override
     public void playerTouch(Player player) {
         super.playerTouch(player);
         if (this.tickCount > 10 && !player.isUsingItem()) {
@@ -178,6 +185,7 @@ public class EngineHook extends Projectile {
         return currentState;
     }
 
+    @Override
     public void handleEntityEvent(byte id) {
         if (id == 31 && this.level().isClientSide() && this.currentState == State.HOOKED_IN_BLOCK) this.pull();
         else if (id == 32 && this.level().isClientSide() && this.currentState == State.HOOKED_IN_BLOCK)
@@ -217,19 +225,23 @@ public class EngineHook extends Projectile {
         }
     }
 
+    @Override
     protected Entity.MovementEmission getMovementEmission() {
         return MovementEmission.NONE;
     }
 
+    @Override
     public void remove(Entity.RemovalReason reason) {
         this.updateOwnerInfo(null);
         super.remove(reason);
     }
 
+    @Override
     public void onClientRemoval() {
         this.updateOwnerInfo(null);
     }
 
+    @Override
     public void setOwner(@Nullable Entity owner) {
         super.setOwner(owner);
         this.updateOwnerInfo(this);
@@ -249,6 +261,7 @@ public class EngineHook extends Projectile {
         return this.hookedIn;
     }
 
+    @Override
     public boolean canUsePortal(boolean allowPassengers) {
         return false;
     }

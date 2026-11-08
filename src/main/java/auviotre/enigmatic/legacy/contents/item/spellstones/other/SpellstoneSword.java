@@ -251,6 +251,7 @@ public class SpellstoneSword extends Item {
         return 0;
     }
 
+    @Override
     public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
         Pair<Double, Double> bonus = getAttributeBonus(stack, stack.getOrDefault(SPELL_LEVEL, 0));
         ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder()
@@ -282,6 +283,7 @@ public class SpellstoneSword extends Item {
         };
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         ItemStack resonance = getResonance(stack);
@@ -309,20 +311,24 @@ public class SpellstoneSword extends Item {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneSwordLevel", ChatFormatting.GOLD, level);
     }
 
+    @Override
     public String getDescriptionId(ItemStack stack) {
         ItemStack resonance = getResonance(stack);
         if (resonance.isEmpty()) return super.getDescriptionId();
         return super.getDescriptionId() + "." + IItemHelper.getLocation(resonance.getItem()).getPath();
     }
 
+    @Override
     public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) {
         return !player.isCreative();
     }
 
+    @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         return true;
     }
 
+    @Override
     public void postHurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         stack.hurtAndBreak(1, attacker, EquipmentSlot.MAINHAND);
         int level = stack.getOrDefault(SPELL_LEVEL, 0);
@@ -339,17 +345,20 @@ public class SpellstoneSword extends Item {
         }
     }
 
+    @Override
     public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity entity) {
         if (state.getDestroySpeed(level, pos) != 0.0F) stack.hurtAndBreak(2, entity, EquipmentSlot.MAINHAND);
         return true;
     }
 
+    @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         if (isSelected && entity.getInBlockState().is(Blocks.BUBBLE_COLUMN) && isResonatingWith(stack, EnigmaticItems.OCEAN_STONE) && entity.tickCount % 4 == 0 && stack.getOrDefault(SPELL_LEVEL, 0) > 4) {
             stack.set(INT, Math.min(getMaxEnergy(stack), stack.getOrDefault(INT, 0) + 2));
         }
     }
 
+    @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (hand == InteractionHand.MAIN_HAND && stack.is(this)) {
@@ -408,6 +417,7 @@ public class SpellstoneSword extends Item {
         return InteractionResult.FAIL;
     }
 
+    @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity user) {
         InteractionHand hand = user.getUsedItemHand();
         if (hand == InteractionHand.MAIN_HAND && stack.is(this)) {
@@ -450,6 +460,7 @@ public class SpellstoneSword extends Item {
         return stack;
     }
 
+    @Override
     public void onUseTick(Level level, LivingEntity user, ItemStack stack, int remainingDuration) {
         InteractionHand hand = user.getUsedItemHand();
         int tick = stack.getUseDuration(user) - remainingDuration;
@@ -499,6 +510,7 @@ public class SpellstoneSword extends Item {
         }
     }
 
+    @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity user, int remainingDuration) {
         InteractionHand hand = user.getUsedItemHand();
         int tick = stack.getUseDuration(user) - remainingDuration;
@@ -582,6 +594,7 @@ public class SpellstoneSword extends Item {
         }
     }
 
+    @Override
     public InteractionResult useOn(UseOnContext context) {
         ItemStack stack = context.getItemInHand();
         Player player = context.getPlayer();
@@ -637,6 +650,7 @@ public class SpellstoneSword extends Item {
         return super.useOn(context);
     }
 
+    @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
         if (isResonatingWith(stack, EnigmaticItems.ANGEL_BLESSING)) return 36;
         if (isResonatingWith(stack, EnigmaticItems.ILLUSION_LANTERN)) return 80;
@@ -644,6 +658,7 @@ public class SpellstoneSword extends Item {
         return getResonance(stack).isEmpty() || entity.getOffhandItem().is(EnigmaticItems.SPELLCORE) ? 60 : 32000;
     }
 
+    @Override
     public ItemUseAnimation getUseAnimation(ItemStack stack) {
         if (isResonatingWith(stack, EnigmaticItems.BLAZING_CORE)) return ItemUseAnimation.BLOCK;
         if (isResonatingWith(stack, EnigmaticItems.OCEAN_STONE)) return ItemUseAnimation.BOW;
@@ -653,6 +668,7 @@ public class SpellstoneSword extends Item {
         return ItemUseAnimation.CUSTOM;
     }
 
+    @Override
     public AABB getSweepHitBox(ItemStack stack, Player player, Entity target) {
         if (isResonatingWith(stack, EnigmaticItems.VOID_PEARL) && stack.getOrDefault(INT, 0) > 0) {
             return target.getBoundingBox().inflate(8, 0.3, 8);
@@ -660,6 +676,7 @@ public class SpellstoneSword extends Item {
         return super.getSweepHitBox(stack, player, target);
     }
 
+    @Override
     public boolean canPerformAction(ItemStack stack, ItemAbility ability) {
         if (ItemAbilities.DEFAULT_SWORD_ACTIONS.contains(ability)) return true;
         if (isResonatingWith(stack, EnigmaticItems.VOID_PEARL))
@@ -667,14 +684,17 @@ public class SpellstoneSword extends Item {
         return false;
     }
 
+    @Override
     public int getEnchantmentValue(ItemStack stack) {
         return 64;
     }
 
+    @Override
     public boolean isValidRepairItem(ItemStack stack, ItemStack repairCandidate) {
         return repairCandidate.is(EnigmaticItems.SPELLSTONE_DEBRIS);
     }
 
+    @Override
     public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access) {
         if (action != ClickAction.PRIMARY && slot.mayPickup(player) && slot.hasItem() && other.is(EnigmaticItems.SPELLCORE)) {
             int level = stack.getOrDefault(SPELL_LEVEL, 0);
@@ -762,6 +782,7 @@ public class SpellstoneSword extends Item {
             return null;
         }
 
+        @Override
         public boolean applyForgeHandTransform(PoseStack poseStack, @NotNull LocalPlayer player, HumanoidArm arm, ItemStack stack, float partialTick, float equipProcess, float swingProcess) {
             int i = arm == HumanoidArm.RIGHT ? 1 : -1;
             float useTick = stack.getUseDuration(player) - (player.getUseItemRemainingTicks() - partialTick + 1.0F);
@@ -860,6 +881,7 @@ public class SpellstoneSword extends Item {
 
     @OnlyIn(Dist.CLIENT)
     public static class Decorator implements IItemDecorator {
+        @Override
         public boolean render(GuiGraphicsExtractor graphics, Font font, @NotNull ItemStack stack, int x, int y) {
             int energy = stack.getOrDefault(INT, 0);
             if (energy > 0 && getMaxEnergy(stack) > 0) {

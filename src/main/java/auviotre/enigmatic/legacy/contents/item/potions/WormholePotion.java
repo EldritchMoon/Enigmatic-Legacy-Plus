@@ -56,6 +56,7 @@ public class WormholePotion extends BaseDrinkableItem {
         }
     }
 
+    @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         if (stack.is(this)) {
             if (!stack.has(EnigmaticComponents.WORMHOLE_UUID))
@@ -72,6 +73,7 @@ public class WormholePotion extends BaseDrinkableItem {
         }
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (stack.has(EnigmaticComponents.WORMHOLE_UUID)) {
@@ -92,6 +94,7 @@ public class WormholePotion extends BaseDrinkableItem {
         }
     }
 
+    @Override
     public void onConsumed(Level level, Player player, ItemStack stack) {
         if (stack.has(EnigmaticComponents.WORMHOLE_UUID)) {
             String string = stack.get(EnigmaticComponents.WORMHOLE_UUID);
@@ -104,6 +107,7 @@ public class WormholePotion extends BaseDrinkableItem {
         }
     }
 
+    @Override
     public boolean isFoil(ItemStack stack) {
         return stack.has(EnigmaticComponents.WORMHOLE_UUID);
     }

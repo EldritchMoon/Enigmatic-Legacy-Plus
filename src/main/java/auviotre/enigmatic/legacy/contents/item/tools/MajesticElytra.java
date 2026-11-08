@@ -61,6 +61,7 @@ public class MajesticElytra extends BaseElytraItem {
         builder.pop(2);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -75,12 +76,14 @@ public class MajesticElytra extends BaseElytraItem {
         if (stack.isEnchanted()) TooltipHandler.line(list);
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         attributes.put(EnigmaticAttributes.ETHERIUM_SHIELD, new AttributeModifier(IItemHelper.getLocation(this), 0.04, AttributeModifier.Operation.ADD_VALUE));
         return attributes;
     }
 
+    @Override
     public boolean flyingBoost(@NotNull Player player) {
         if (player.isFallFlying()) {
             Vec3 lookAngle = player.getLookAngle().scale(0.64F);
@@ -91,6 +94,7 @@ public class MajesticElytra extends BaseElytraItem {
         return false;
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void addParticle(Player player) {
         int amount = 3;
@@ -102,10 +106,12 @@ public class MajesticElytra extends BaseElytraItem {
         }
     }
 
+    @Override
     public int getEnchantmentValue(ItemStack stack) {
         return 24;
     }
 
+    @Override
     public void curioTick(@NotNull SlotContext context, ItemStack stack) {
         if (context.entity() instanceof Player player && player.level().isClientSide()) handleBoosting(player);
         LivingEntity livingEntity = context.entity();
@@ -118,6 +124,7 @@ public class MajesticElytra extends BaseElytraItem {
 
     // 26.1.2-port: removed use(); Item.use swaps items that have an equippable component.
 
+    @Override
     public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
         return repair.is(EnigmaticItems.ETHERIUM_INGOT);
     }

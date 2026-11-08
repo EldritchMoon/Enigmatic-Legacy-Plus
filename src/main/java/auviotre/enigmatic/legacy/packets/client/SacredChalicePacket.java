@@ -34,6 +34,7 @@ public class SacredChalicePacket implements CustomPacketPayload {
         buf.writeVec3(this.center);
     }
 
+    @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }

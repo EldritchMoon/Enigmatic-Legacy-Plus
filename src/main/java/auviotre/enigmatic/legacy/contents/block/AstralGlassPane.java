@@ -55,6 +55,7 @@ public class AstralGlassPane extends IronBarsBlock {
         }
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(STYLE, COLORFUL);
@@ -70,16 +71,19 @@ public class AstralGlassPane extends IronBarsBlock {
         };
     }
 
+    @Override
     protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
         if (!level.isClientSide() && level.hasNeighborSignal(pos))
             level.setBlock(pos, state.setValue(STYLE, level.getBestNeighborSignal(pos) / 4 % 4), 3);
     }
 
+    @Override
     protected void attack(BlockState state, Level level, BlockPos pos, Player player) {
         interact(state, level, pos);
         super.attack(state, level, pos, player);
     }
 
+    @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (state.getValue(COLORFUL)) return InteractionResult.CONSUME;
         if (stack.is(EnigmaticItems.ASTRAL_DUST)) {

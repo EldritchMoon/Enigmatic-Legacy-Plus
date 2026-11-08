@@ -21,14 +21,17 @@ public class StarlightParticle extends SimpleAnimatedParticle {
         this.setFadeColor(0x22FFFFFF);
     }
 
+    @Override
     public ParticleRenderType getRenderType() {
         return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
+    @Override
     public int getLightColor(float partialTick) {
         return 15728880;
     }
 
+    @Override
     public void move(double dx, double dy, double dz) {
         this.setBoundingBox(this.getBoundingBox().move(dx, dy, dz));
         this.setLocationFromBoundingbox();
@@ -42,6 +45,7 @@ public class StarlightParticle extends SimpleAnimatedParticle {
             this.sprite = spriteSet;
         }
 
+        @Override
         public Particle createParticle(SimpleParticleType type, ClientLevel level, double posX, double posY, double posZ, double speedX, double speedY, double speedZ) {
             return new StarlightParticle(level, posX, posY, posZ, speedX, speedY, speedZ, this.sprite);
         }

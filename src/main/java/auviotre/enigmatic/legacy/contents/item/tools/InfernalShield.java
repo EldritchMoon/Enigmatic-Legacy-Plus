@@ -40,6 +40,7 @@ public class InfernalShield extends BaseCursedItem {
                 .equippableUnswappable(EquipmentSlot.OFFHAND));
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
@@ -58,10 +59,12 @@ public class InfernalShield extends BaseCursedItem {
         TooltipHandler.cursedOnly(list, stack);
     }
 
+    @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         if (entity instanceof LivingEntity living && living.isHolding(this)) entity.clearFire();
     }
 
+    @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (EnigmaticHandler.canUse(player, stack)) {
@@ -71,10 +74,12 @@ public class InfernalShield extends BaseCursedItem {
         return InteractionResult.PASS;
     }
 
+    @Override
     public boolean canPerformAction(ItemStack stack, ItemAbility itemAbility) {
         return ItemAbilities.DEFAULT_SHIELD_ACTIONS.contains(itemAbility);
     }
 
+    @Override
     public boolean isValidRepairItem(ItemStack stack, ItemStack repairCandidate) {
         return super.isValidRepairItem(stack, repairCandidate) || repairCandidate.is(Blocks.OBSIDIAN.asItem());
     }
@@ -83,14 +88,17 @@ public class InfernalShield extends BaseCursedItem {
         return EquipmentSlot.OFFHAND;
     }
 
+    @Override
     public ItemUseAnimation getUseAnimation(ItemStack stack) {
         return ItemUseAnimation.BLOCK;
     }
 
+    @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 32000;
     }
 
+    @Override
     public int getEnchantmentValue(ItemStack stack) {
         return 16;
     }

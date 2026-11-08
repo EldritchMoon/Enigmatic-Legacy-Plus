@@ -46,6 +46,7 @@ public class AvariceScroll extends CursedCurioItem {
         builder.pop(2);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -66,16 +67,19 @@ public class AvariceScroll extends CursedCurioItem {
         TooltipHandler.cursedOnly(list, stack);
     }
 
+    @Override
     public int getFortuneLevel(SlotContext slotContext, LootContext lootContext, ItemStack curio) {
         return super.getFortuneLevel(slotContext, lootContext, curio) + 1;
     }
 
 
+    @Override
     public boolean makesPiglinsNeutral(ItemStack stack, LivingEntity wearer) {
         return true;
     }
 
 
+    @Override
     public boolean makesPiglinsNeutral(SlotContext slotContext, ItemStack stack) {
         return true;
     }

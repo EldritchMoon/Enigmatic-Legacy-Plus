@@ -71,6 +71,7 @@ public class RedemptionRing extends BaseCurioItem {
         builder.pop(2);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -123,6 +124,7 @@ public class RedemptionRing extends BaseCurioItem {
         }
     }
 
+    @Override
     public void curioTick(SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
         int level = Helper.getLevel(stack);
@@ -143,20 +145,24 @@ public class RedemptionRing extends BaseCurioItem {
         }
     }
 
+    @Override
     public boolean canEquip(SlotContext context, ItemStack stack) {
         return !EnigmaticHandler.isTheCursedOne(context.entity()) && super.canEquip(context, stack);
     }
 
+    @Override
     public boolean canUnequip(@NotNull SlotContext context, ItemStack stack) {
         if (context.entity() instanceof Player player && EnigmaticHandler.canUnequipBoundRelics(player))
             return super.canUnequip(context, stack);
         return false;
     }
 
+    @Override
     public int getLootingLevel(SlotContext context, @Nullable LootContext lootContext, ItemStack stack) {
         return super.getLootingLevel(context, lootContext, stack) + Helper.getBonus(stack, lootingBonus.get());
     }
 
+    @Override
     public int getFortuneLevel(SlotContext context, LootContext lootContext, ItemStack stack) {
         return super.getFortuneLevel(context, lootContext, stack) + Helper.getBonus(stack, fortuneBonus.get());
     }

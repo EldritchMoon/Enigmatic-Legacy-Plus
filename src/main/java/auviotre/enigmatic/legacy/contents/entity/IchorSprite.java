@@ -92,12 +92,14 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
         return (random.nextFloat() * 2 - 1.0F) * range;
     }
 
+    @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_ID_ATTACK_TARGET, 0);
         builder.define(DATA_ATTACK_TIMER, 0);
     }
 
+    @Override
     protected PathNavigation createNavigation(Level level) {
         FlyingPathNavigation navigation = new FlyingPathNavigation(this, level);
         navigation.setCanOpenDoors(false);
@@ -106,18 +108,22 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
         return navigation;
     }
 
+    @Override
     protected Brain.Provider<IchorSprite> brainProvider() {
         return Brain.provider(MEMORY_TYPES, SENSOR_TYPES);
     }
 
+    @Override
     protected Brain<?> makeBrain(Dynamic<?> dynamic) {
         return Ai.makeBrain(this, this.brainProvider().makeBrain(dynamic));
     }
 
+    @Override
     public Brain<IchorSprite> getBrain() {
         return (Brain<IchorSprite>) super.getBrain();
     }
 
+    @Override
     public void aiStep() {
         if (this.isAlive()) {
             int attackTimer = this.getAttackTimer();
@@ -147,6 +153,7 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
         super.aiStep();
     }
 
+    @Override
     public void travel(Vec3 travelVector) {
         if (this.isControlledByLocalInstance()) {
             if (this.isInWater()) {
@@ -166,6 +173,7 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
         this.calculateEntityAnimation(false);
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (source.getEntity() == getOwner()) return false;
         if (this.getAttackTimer() >= 60 && source.getEntity() != null) {
@@ -186,6 +194,7 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
         return super.hurt(source, amount * 0.5F);
     }
 
+    @Override
     protected void tickDeath() {
         ++this.deathTime;
         if (this.deathTime >= 16 && !this.level().isClientSide() && !this.isRemoved()) {
@@ -201,17 +210,21 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
         }
     }
 
+    @Override
     protected boolean canRide(Entity vehicle) {
         return false;
     }
 
+    @Override
     protected void checkFallDamage(double y, boolean onGround, BlockState state, BlockPos pos) {
     }
 
+    @Override
     protected AABB getAttackBoundingBox() {
         return super.getAttackBoundingBox().inflate(BEAM_RANGE - 2);
     }
 
+    @Override
     protected void customServerAiStep() {
         this.level().getProfiler().push("ichorSpriteBrain");
         this.getBrain().tick((ServerLevel) this.level(), this);
@@ -222,11 +235,13 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
         super.customServerAiStep();
     }
 
+    @Override
     public void restoreFrom(Entity entity) {
         super.restoreFrom(entity);
         if (entity instanceof IchorSprite sprite) this.setOwner(sprite.getOwner());
     }
 
+    @Override
     public LivingEntity getOwner() {
         return this.getBrain().getMemory(EnigmaticMemories.ICHOR_SPRITE_OWNER.get()).orElse(null);
     }
@@ -259,6 +274,7 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
         this.entityData.set(DATA_ID_ATTACK_TARGET, activeAttackTargetId);
     }
 
+    @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
         if (DATA_ID_ATTACK_TARGET.equals(key)) {
@@ -283,6 +299,7 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
         return this.entityData.get(DATA_ID_ATTACK_TARGET) != 0;
     }
 
+    @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemInHand = player.getItemInHand(hand);
         if (this.getMainHandItem().isEmpty() && this.isEffectiveAi() && this.getBrain().isActive(Activity.IDLE) && itemInHand.isEmpty()) {
@@ -301,10 +318,12 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
             this.range = range;
         }
 
+        @Override
         protected boolean canStillUse(ServerLevel level, IchorSprite sprite, long gameTime) {
             return sprite.getOwner() != null && !sprite.getOwner().closerThan(sprite, range);
         }
 
+        @Override
         protected void tick(ServerLevel level, IchorSprite sprite, long gameTime) {
             LivingEntity owner = sprite.getOwner();
             if (owner != null && !owner.closerThan(sprite, range * 0.6)) {
@@ -320,15 +339,18 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
             super(ImmutableMap.of(EnigmaticMemories.ICHOR_SPRITE_OWNER.get(), MemoryStatus.VALUE_PRESENT), 1200);
         }
 
+        @Override
         protected boolean checkExtraStartConditions(ServerLevel level, IchorSprite entity) {
             LivingEntity owner = entity.getOwner();
             return owner != null && owner.isAlive() && BehaviorUtils.canSee(entity, owner) && !entity.getMainHandItem().isEmpty();
         }
 
+        @Override
         protected boolean canStillUse(ServerLevel level, IchorSprite sprite, long gameTime) {
             return sprite.getOwner() != null && !sprite.getMainHandItem().isEmpty();
         }
 
+        @Override
         protected void tick(ServerLevel level, IchorSprite sprite, long gameTime) {
             LivingEntity owner = sprite.getOwner();
             if (owner != null && !sprite.getMainHandItem().isEmpty()) {
@@ -351,6 +373,7 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
             super(ImmutableMap.of(EnigmaticMemories.ICHOR_SPRITE_OWNER.get(), MemoryStatus.VALUE_PRESENT), 20);
         }
 
+        @Override
         protected boolean checkExtraStartConditions(ServerLevel level, IchorSprite sprite) {
             if (sprite.getBrain().isActive(Activity.FIGHT)) return false;
             LivingEntity owner = sprite.getOwner();
@@ -359,6 +382,7 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
             return super.checkExtraStartConditions(level, sprite);
         }
 
+        @Override
         protected void start(ServerLevel level, IchorSprite sprite, long gameTime) {
             LivingEntity owner = sprite.getOwner();
             if (owner != null && sprite.tickCount % 4 == 0) {
@@ -383,16 +407,19 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
             return entity.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).orElse(null);
         }
 
+        @Override
         protected boolean checkExtraStartConditions(ServerLevel level, IchorSprite entity) {
             LivingEntity target = getAttackTarget(entity);
             return target != null && target.isAlive() && BehaviorUtils.canSee(entity, target);
         }
 
+        @Override
         protected boolean canStillUse(ServerLevel level, IchorSprite entity, long gameTime) {
             LivingEntity target = getAttackTarget(entity);
             return target != null && entity.isAlive() && entity.distanceToSqr(target) < BEAM_RANGE * BEAM_RANGE;
         }
 
+        @Override
         protected void start(ServerLevel level, IchorSprite sprite, long gameTime) {
             this.attackTime = -16;
             LivingEntity target = getAttackTarget(sprite);
@@ -401,12 +428,14 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
             sprite.hasImpulse = true;
         }
 
+        @Override
         protected void stop(ServerLevel level, IchorSprite sprite, long gameTime) {
             sprite.setActiveAttackTarget(0);
             sprite.setTarget(null);
             sprite.hasImpulse = true;
         }
 
+        @Override
         protected void tick(ServerLevel level, IchorSprite sprite, long gameTime) {
             LivingEntity target = getAttackTarget(sprite);
             if (target != null) {

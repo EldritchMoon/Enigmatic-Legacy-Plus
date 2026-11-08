@@ -16,6 +16,7 @@ public class AvoidTheWorthyGoal extends AvoidEntityGoal<Player> {
         });
     }
 
+    @Override
     public boolean canUse() {
         return EnigmaticHandler.isCurseBoosted(this.mob) && super.canUse();
     }

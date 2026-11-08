@@ -18,6 +18,7 @@ public class ELDataMaps extends DataMapProvider {
         super(packOutput, lookupProvider);
     }
 
+    @Override
     protected void gather(HolderLookup.Provider provider) {
         this.builder(NeoForgeDataMaps.COMPOSTABLES)
                 .add(IItemHelper.getLocation(ASTRAL_FRUIT), new Compostable(1.0F), false);

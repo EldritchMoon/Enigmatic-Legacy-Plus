@@ -21,6 +21,7 @@ public record PlayerMotionPacket(Vec3 movement) implements CustomPacketPayload {
         buf.writeDouble(this.movement.z);
     }
 
+    @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }

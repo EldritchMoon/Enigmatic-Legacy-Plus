@@ -24,6 +24,7 @@ public record LoreInscriberRenamePacket(String name) implements CustomPacketPayl
         }
     }
 
+    @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }

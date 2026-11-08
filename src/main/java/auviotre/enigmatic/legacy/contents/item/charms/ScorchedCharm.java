@@ -63,6 +63,7 @@ public class ScorchedCharm extends CursedCurioItem {
         builder.pop(2);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -81,6 +82,7 @@ public class ScorchedCharm extends CursedCurioItem {
         TooltipHandler.cursedOnly(list, stack);
     }
 
+    @Override
     public void curioTick(SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
         if (entity.isOnFire()) entity.clearFire();
@@ -97,6 +99,7 @@ public class ScorchedCharm extends CursedCurioItem {
         } else EQUIP_LIST.remove(context.entity());
     }
 
+    @Override
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
         EQUIP_LIST.remove(context.entity());
     }

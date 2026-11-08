@@ -69,6 +69,7 @@ public class ExplorerScroll extends BaseCurioItem {
         for (Entity entity : entities) entity.setGlowingTag(true);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -81,6 +82,7 @@ public class ExplorerScroll extends BaseCurioItem {
         } else TooltipHandler.holdShift(list);
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
         Identifier location = IItemHelper.getLocation(this);

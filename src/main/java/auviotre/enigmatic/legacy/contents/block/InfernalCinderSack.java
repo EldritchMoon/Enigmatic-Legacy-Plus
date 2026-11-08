@@ -15,6 +15,7 @@ public class InfernalCinderSack extends Block {
         super(Properties.ofFullCopy(Blocks.WHITE_WOOL).mapColor(MapColor.COLOR_GRAY).setId(RegistryIds.currentBlock()));
     }
 
+    @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (level.getBlockState(pos.above()).isCollisionShapeFullBlock(level, pos.above())) return;
         level.addParticle(ParticleTypes.ASH,

@@ -63,10 +63,12 @@ public class EtherealLantern extends BaseEntityBlock implements SimpleWaterlogge
         super(properties);
     }
 
+    @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new EtherealLanternEntity(pos, state);
     }
 
+    @Override
     protected RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
@@ -84,23 +86,28 @@ public class EtherealLantern extends BaseEntityBlock implements SimpleWaterlogge
         return null;
     }
 
+    @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         return createTickerHelper(type, EnigmaticBlockEntities.ETHEREAL_LANTERN_ENTITY.get(), EtherealLanternEntity::tick);
     }
 
+    @Override
     protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         Direction direction = state.getValue(BlockStateProperties.HANGING) ? Direction.UP : Direction.DOWN;
         return Block.canSupportCenter(level, pos.relative(direction), direction.getOpposite());
     }
 
+    @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return state.getValue(BlockStateProperties.HANGING) ? HANGING_AABB : AABB;
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(BlockStateProperties.WATERLOGGED, BlockStateProperties.HANGING);
     }
 
+    @Override
     protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         if (state.getValue(BlockStateProperties.WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
@@ -108,14 +115,17 @@ public class EtherealLantern extends BaseEntityBlock implements SimpleWaterlogge
         return Direction.DOWN == direction && !state.canSurvive(level, pos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, direction, neighborState, level, pos, neighborPos);
     }
 
+    @Override
     protected FluidState getFluidState(@NotNull BlockState state) {
         return state.getValue(BlockStateProperties.WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
+    @Override
     protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
         return false;
     }
 
+    @Override
     public MapCodec<EtherealLantern> codec() {
         return CODEC;
     }
@@ -125,6 +135,7 @@ public class EtherealLantern extends BaseEntityBlock implements SimpleWaterlogge
             super(block, IItemHelper.blockItemProperties().stacksTo(16).fireResistant());
         }
 
+        @Override
         @OnlyIn(Dist.CLIENT)
         public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.etherealLantern");

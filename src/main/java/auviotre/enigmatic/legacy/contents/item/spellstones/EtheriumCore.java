@@ -63,10 +63,12 @@ public class EtheriumCore extends SpellstoneItem {
         builder.pop(2);
     }
 
+    @Override
     public Component getName(@NotNull ItemStack stack) {
         return stack.getOrDefault(EnigmaticComponents.BOOLEAN, false) ? Component.translatable("item.enigmaticlegacyplus.etherium_core_active") : Component.translatable("item.enigmaticlegacyplus.etherium_core");
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -90,6 +92,7 @@ public class EtheriumCore extends SpellstoneItem {
         this.addKeyText(list);
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
         boolean boost = stack.getOrDefault(EnigmaticComponents.BOOLEAN, false);
@@ -103,11 +106,13 @@ public class EtheriumCore extends SpellstoneItem {
         return builder.build();
     }
 
+    @Override
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         tooltips.clear();
         return tooltips;
     }
 
+    @Override
     public void triggerActiveAbility(ServerLevel level, @NotNull ServerPlayer player, ItemStack stack) {
         boolean boost = stack.getOrDefault(EnigmaticComponents.BOOLEAN, false);
         if (boost) {
@@ -117,10 +122,12 @@ public class EtheriumCore extends SpellstoneItem {
         super.triggerActiveAbility(level, player, stack);
     }
 
+    @Override
     public int getCooldown(ItemStack stack) {
         return stack.getOrDefault(EnigmaticComponents.BOOLEAN, false) ? 4000 : 0;
     }
 
+    @Override
     public void addTuneTooltip(List<Component> list) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumCore4", ChatFormatting.GOLD, damageConversion.get() / 2 + "%");
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumCore5");

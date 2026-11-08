@@ -22,6 +22,7 @@ import static auviotre.enigmatic.legacy.registries.EnigmaticLootTables.Chests;
 
 public record ELChestLoot(HolderLookup.Provider registries) implements LootTableSubProvider {
 
+    @Override
     public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> output) {
         output.accept(Chests.OVERWORLD_SIMPLE,
                 LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))

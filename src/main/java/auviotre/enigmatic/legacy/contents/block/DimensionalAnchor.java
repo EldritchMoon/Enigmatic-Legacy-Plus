@@ -60,6 +60,7 @@ public class DimensionalAnchor extends BaseEntityBlock {
         this.registerDefaultState(this.stateDefinition.any().setValue(CHARGE, 0));
 
         DispenserBlock.registerBehavior(Items.ENDER_PEARL, new OptionalDispenseItemBehavior() {
+            @Override
             public ItemStack execute(BlockSource source, ItemStack stack) {
                 Direction direction = source.state().getValue(DispenserBlock.FACING);
                 BlockPos facedPos = source.pos().relative(direction);
@@ -104,6 +105,7 @@ public class DimensionalAnchor extends BaseEntityBlock {
         return true;
     }
 
+    @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (isRespawnFuel(stack) && canBeCharged(state)) {
             charge(player, level, pos, state);
@@ -114,6 +116,7 @@ public class DimensionalAnchor extends BaseEntityBlock {
         }
     }
 
+    @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (state.getValue(CHARGE) == 0) {
             return InteractionResult.PASS;
@@ -142,6 +145,7 @@ public class DimensionalAnchor extends BaseEntityBlock {
         boolean flag = directions.map(pos::relative).anyMatch((blockPos) -> isWaterThatWouldFlow(blockPos, level));
         final boolean flag1 = flag || level.getFluidState(pos.above()).is(FluidTags.WATER);
         ExplosionDamageCalculator calculator = new ExplosionDamageCalculator() {
+            @Override
             public Optional<Float> getBlockExplosionResistance(Explosion explosion, BlockGetter getter, BlockPos blockPos, BlockState state, FluidState fluidState) {
                 return blockPos.equals(pos) && flag1 ? Optional.of(Blocks.WATER.getExplosionResistance()) : super.getBlockExplosionResistance(explosion, getter, blockPos, state, fluidState);
             }
@@ -150,22 +154,27 @@ public class DimensionalAnchor extends BaseEntityBlock {
         level.explode(null, level.damageSources().badRespawnPointExplosion(vec3), calculator, vec3, 5.0F, true, Level.ExplosionInteraction.BLOCK);
     }
 
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(CHARGE);
     }
 
+    @Override
     protected boolean hasAnalogOutputSignal(BlockState state) {
         return true;
     }
 
+    @Override
     protected int getAnalogOutputSignal(BlockState blockState, Level level, BlockPos pos) {
         return getScaledChargeLevel(blockState, 15);
     }
 
+    @Override
     protected boolean isPathfindable(BlockState state, PathComputationType type) {
         return false;
     }
 
+    @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (state.getValue(CHARGE) > 0) {
             if (random.nextInt(100) == 0) {
@@ -179,18 +188,22 @@ public class DimensionalAnchor extends BaseEntityBlock {
         }
     }
 
+    @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new DimensionalAnchorEntity(pos, state);
     }
 
+    @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
 
+    @Override
     public RenderShape getRenderShape(BlockState pState) {
         return RenderShape.MODEL;
     }
 
+    @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }

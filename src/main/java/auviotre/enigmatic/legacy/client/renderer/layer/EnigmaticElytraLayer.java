@@ -39,6 +39,7 @@ public class EnigmaticElytraLayer<T extends LivingEntity, M extends EntityModel<
         this.elytraModel = new ElytraModel<>(modelSet.bakeLayer(ModelLayers.ELYTRA));
     }
 
+    @Override
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T entity, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
         ItemStack elytra = BaseElytraItem.getElytra(entity);
         AtomicBoolean notRender = new AtomicBoolean(false);

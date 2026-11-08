@@ -20,10 +20,12 @@ public class AntiqueBagInventory implements INBTSerializable<CompoundTag> {
         }
     }
 
+    @Override
     public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         return this.handler.serializeNBT(provider);
     }
 
+    @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag tag) {
         this.handler.deserializeNBT(provider, tag);
     }

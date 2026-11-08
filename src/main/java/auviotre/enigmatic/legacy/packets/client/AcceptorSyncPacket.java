@@ -39,6 +39,7 @@ public class AcceptorSyncPacket implements CustomPacketPayload {
         }
     }
 
+    @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }

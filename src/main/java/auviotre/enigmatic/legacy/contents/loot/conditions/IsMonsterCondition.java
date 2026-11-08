@@ -17,10 +17,12 @@ public record IsMonsterCondition(LootContext.EntityTarget entityTarget) implemen
         return () -> new IsMonsterCondition(target);
     }
 
+    @Override
     public LootItemConditionType getType() {
         return EnigmaticLoots.IS_MONSTER.get();
     }
 
+    @Override
     public boolean test(LootContext context) {
         Entity entity = context.getParam(this.entityTarget.getParam());
         return entity instanceof Monster;

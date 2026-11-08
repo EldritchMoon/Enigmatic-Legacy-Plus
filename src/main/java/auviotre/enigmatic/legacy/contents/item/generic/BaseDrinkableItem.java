@@ -22,6 +22,7 @@ public class BaseDrinkableItem extends BaseItem {
         super(properties);
     }
 
+    @Override
     public InteractionResult use(Level level, @NotNull Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (this.canDrink(level, player, stack))
@@ -29,6 +30,7 @@ public class BaseDrinkableItem extends BaseItem {
         return InteractionResult.PASS;
     }
 
+    @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         if (entity instanceof Player player) {
             ItemStack remainingItem = stack.getCraftingRemainingItem();
@@ -48,14 +50,17 @@ public class BaseDrinkableItem extends BaseItem {
         return stack;
     }
 
+    @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 32;
     }
 
+    @Override
     public ItemUseAnimation getUseAnimation(ItemStack stack) {
         return ItemUseAnimation.DRINK;
     }
 
+    @Override
     public SoundEvent getEatingSound() {
         return SoundEvents.GENERIC_DRINK;
     }

@@ -15,6 +15,7 @@ public class Exterminato extends BaseItem {
         super(IItemHelper.properties().food(PROPERTIES));
     }
 
+    @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         if (!level.isClientSide()) BlazingMight.addAmplifier(entity, entity.getRandom().nextInt(3), 600);
         return super.finishUsingItem(stack, level, entity);

@@ -28,6 +28,7 @@ public class QuotePlayer extends Item {
         super(IItemHelper.singleProperties().rarity(Rarity.EPIC).fireResistant());
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
@@ -43,6 +44,7 @@ public class QuotePlayer extends Item {
         return stack.getOrDefault(EnigmaticComponents.QUOTE_ID.get(), 0);
     }
 
+    @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (player.isCrouching()) {
@@ -58,6 +60,7 @@ public class QuotePlayer extends Item {
         return InteractionResult.SUCCESS;
     }
 
+    @Override
     public InteractionResult useOn(UseOnContext context) {
         if (context.getPlayer() == null) return InteractionResult.PASS;
         return this.use(context.getLevel(), context.getPlayer(), context.getHand()).getResult();

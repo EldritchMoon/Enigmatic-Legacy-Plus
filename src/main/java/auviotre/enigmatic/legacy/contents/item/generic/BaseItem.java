@@ -32,15 +32,18 @@ public class BaseItem extends Item {
 
     public static BaseItem Unknown() {
         return new BaseItem(IItemHelper.singleProperties().component(DataComponents.CREATIVE_SLOT_LOCK, Unit.INSTANCE)) {
+            @Override
             public Component getName(ItemStack stack) {
                 return Component.literal("?");
             }
 
+            @Override
             @OnlyIn(Dist.CLIENT)
             public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
                 list.add(Component.literal("Coming soon...").withStyle(ChatFormatting.GRAY));
             }
 
+            @Override
             public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
                 stack.shrink(1);
             }
@@ -51,6 +54,7 @@ public class BaseItem extends Item {
     public static class WIPDecorator implements IItemDecorator {
         static final Identifier SPRITE = EnigmaticLegacy.location("decorator/wip_warn");
 
+        @Override
         public boolean render(@NotNull GuiGraphicsExtractor graphics, Font font, @NotNull ItemStack stack, int x, int y) {
             graphics.pose().pushPose();
             graphics.blitSprite(SPRITE, x, y, 16, 16);
@@ -63,6 +67,7 @@ public class BaseItem extends Item {
     public static class UnknownDecorator implements IItemDecorator {
         static final Identifier SPRITE = EnigmaticLegacy.location("decorator/unknown");
 
+        @Override
         public boolean render(@NotNull GuiGraphicsExtractor graphics, Font font, @NotNull ItemStack stack, int x, int y) {
             graphics.pose().pushPose();
             graphics.blitSprite(SPRITE, x, y, 16, 16);

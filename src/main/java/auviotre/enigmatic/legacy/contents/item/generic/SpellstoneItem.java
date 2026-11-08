@@ -36,10 +36,12 @@ public abstract class SpellstoneItem extends BaseCurioItem implements ISpellston
     @OnlyIn(Dist.CLIENT)
     abstract public void addTuneTooltip(List<Component> list);
 
+    @Override
     public boolean isEnchantable(ItemStack stack) {
         return false;
     }
 
+    @Override
     public boolean canEquip(SlotContext context, ItemStack stack) {
         return super.canEquip(context, stack) && ISpellstone.get(context.entity()).isEmpty();
     }

@@ -13,6 +13,7 @@ public class DragonBreathArrowRender extends ArrowRenderer<DragonBreathArrow> {
         super(context);
     }
 
+    @Override
     public Identifier getTextureLocation(DragonBreathArrow arrow) {
         return LOCATION;
     }

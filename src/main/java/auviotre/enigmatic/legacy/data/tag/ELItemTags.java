@@ -23,6 +23,7 @@ public class ELItemTags extends ItemTagsProvider {
         super(output, provider, blockTagProvider, EnigmaticLegacy.MODID, existingFileHelper);
     }
 
+    @Override
     protected void addTags(HolderLookup.Provider provider) {
         this.tag(ItemTags.BOOKSHELF_BOOKS).add(
                 ANIMAL_GUIDEBOOK.get(), HUNTER_GUIDEBOOK.get(),

@@ -120,18 +120,22 @@ public class PermanentItemEntity extends Entity {
         return this.age;
     }
 
+    @Override
     public boolean dampensVibrations() {
         return this.getItem().is(ItemTags.DAMPENS_VIBRATIONS);
     }
 
+    @Override
     protected Entity.MovementEmission getMovementEmission() {
         return Entity.MovementEmission.NONE;
     }
 
+    @Override
     protected void defineSynchedData(SynchedEntityData.@NotNull Builder builder) {
         builder.define(PermanentItemEntity.ITEM, ItemStack.EMPTY);
     }
 
+    @Override
     public void tick() {
         if (this.getItem().isEmpty()) {
             this.discard();
@@ -178,18 +182,22 @@ public class PermanentItemEntity extends Entity {
         }
     }
 
+    @Override
     public int getDimensionChangingDelay() {
         return Short.MAX_VALUE;
     }
 
+    @Override
     public Entity changeDimension(TeleportTransition transition) {
         return null;
     }
 
+    @Override
     public boolean canChangeDimensions(Level oldLevel, Level newLevel) {
         return false;
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.level().isClientSide() || !this.isAlive()) return false;
 
@@ -201,6 +209,7 @@ public class PermanentItemEntity extends Entity {
         return false;
     }
 
+    @Override
     public void remove(Entity.RemovalReason reason) {
         if (reason == RemovalReason.DISCARDED || reason == RemovalReason.KILLED) {
             EnigmaticLegacy.LOGGER.warn("Removing Permanent Item Entity: {}", this);
@@ -209,6 +218,7 @@ public class PermanentItemEntity extends Entity {
         super.remove(reason);
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         compound.putShort("Health", (short) this.health);
         compound.putShort("Age", (short) this.age);
@@ -240,6 +250,7 @@ public class PermanentItemEntity extends Entity {
         compound.put("acceptorSet", acceptorTag);
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         this.health = compound.getShort("Health");
         this.age = compound.getShort("Age");
@@ -281,12 +292,14 @@ public class PermanentItemEntity extends Entity {
         if (this.getItem().isEmpty()) this.discard();
     }
 
+    @Override
     public boolean isInvisibleTo(Player player) {
         if (this.getItem().getItem() instanceof ISharableItem)
             if (this.acceptors != null && !this.acceptors.contains(player.getUUID())) return false;
         return super.isInvisibleTo(player);
     }
 
+    @Override
     public void playerTouch(Player player) {
         if (this.level() instanceof ServerLevel level) {
             if (this.pickupDelay > 0) return;
@@ -342,10 +355,12 @@ public class PermanentItemEntity extends Entity {
         }
     }
 
+    @Override
     public boolean isPickable() {
         return true;
     }
 
+    @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
         if (this.pickupDelay > 0) return InteractionResult.PASS;
         if (!player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) return InteractionResult.PASS;
@@ -373,16 +388,19 @@ public class PermanentItemEntity extends Entity {
         return this.getItem().is(EnigmaticItems.SOUL_CRYSTAL);
     }
 
+    @Override
     public Component getName() {
         Component itextcomponent = this.getCustomName();
         ItemStack item = this.getItem();
         return itextcomponent != null ? itextcomponent : item.getItem().getName(item);
     }
 
+    @Override
     public boolean isAttackable() {
         return false;
     }
 
+    @Override
     public boolean isCurrentlyGlowing() {
         return true;
     }
@@ -435,6 +453,7 @@ public class PermanentItemEntity extends Entity {
         this.setInfinitePickupDelay();
     }
 
+    @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity entity) {
         return new ClientboundAddEntityPacket(this, entity);
     }

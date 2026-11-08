@@ -69,6 +69,7 @@ public class CreationHeart extends SpellstoneItem {
         builder.pop(2);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -91,14 +92,17 @@ public class CreationHeart extends SpellstoneItem {
         this.addKeyText(list);
     }
 
+    @Override
     public int getCooldown(ItemStack stack) {
         return cooldown.get();
     }
 
+    @Override
     public void addTuneTooltip(List<Component> list) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.creationHeart2");
     }
 
+    @Override
     public void curioTick(SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
         if (entity.isOnFire()) entity.clearFire();
@@ -116,17 +120,20 @@ public class CreationHeart extends SpellstoneItem {
         }
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, Identifier id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         attributes.put(NeoForgeMod.CREATIVE_FLIGHT, new AttributeModifier(IItemHelper.getLocation(this), 1, AttributeModifier.Operation.ADD_VALUE));
         return attributes;
     }
 
+    @Override
     public List<Component> getAttributesTooltip(@NotNull List<Component> tooltips, TooltipContext context, ItemStack stack) {
         tooltips.clear();
         return tooltips;
     }
 
+    @Override
     public void triggerActiveAbility(ServerLevel level, @NotNull ServerPlayer player, ItemStack stack) {
         this.launchWitherSkull(level, player, player.getRandom().nextDouble() <= 0.25);
         super.triggerActiveAbility(level, player, stack);

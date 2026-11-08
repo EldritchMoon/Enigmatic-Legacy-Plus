@@ -19,6 +19,7 @@ public class ELEffectTags extends TagsProvider<MobEffect> {
         super(output, Registries.MOB_EFFECT, lookupProvider, EnigmaticLegacy.MODID, existingFileHelper);
     }
 
+    @Override
     protected void addTags(HolderLookup.Provider provider) {
         this.tag(EnigmaticTags.Effects.ALWAYS_APPLY).add(
                 MobEffects.NIGHT_VISION.getKey(),

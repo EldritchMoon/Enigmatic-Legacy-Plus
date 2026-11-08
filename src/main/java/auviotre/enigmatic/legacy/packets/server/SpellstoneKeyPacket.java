@@ -31,6 +31,7 @@ public record SpellstoneKeyPacket() implements CustomPacketPayload {
     }
 
 
+    @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }

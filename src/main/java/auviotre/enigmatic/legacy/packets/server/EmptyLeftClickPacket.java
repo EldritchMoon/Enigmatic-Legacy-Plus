@@ -49,6 +49,7 @@ public record EmptyLeftClickPacket(boolean clicked) implements CustomPacketPaylo
         }
     }
 
+    @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }

@@ -53,6 +53,7 @@ public class AddCurseLootModifier extends AddTableLootModifier {
         return list;
     }
 
+    @Override
     public MapCodec<? extends IGlobalLootModifier> codec() {
         return CODEC.get();
     }

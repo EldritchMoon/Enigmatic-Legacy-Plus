@@ -45,6 +45,7 @@ public class DragonBreathBow extends ProjectileWeaponItem {
         return Math.min(f, 1.0F);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
 //      TooltipHandler.line(list, "tooltip.enigmaticlegacy.dragonBreathBowAmmo", ChatFormatting.LIGHT_PURPLE, Items.DRAGON_BREATH.getDescription());
@@ -59,6 +60,7 @@ public class DragonBreathBow extends ProjectileWeaponItem {
         if (stack.isEnchanted()) TooltipHandler.line(list);
     }
 
+    @Override
     public InteractionResult use(Level level, @NotNull Player player, InteractionHand hand) {
         ItemStack bow = player.getItemInHand(hand);
         InteractionResult ret = EventHooks.onArrowNock(bow, level, player, hand, true);
@@ -70,10 +72,12 @@ public class DragonBreathBow extends ProjectileWeaponItem {
         }
     }
 
+    @Override
     public int getEnchantmentValue(ItemStack stack) {
         return 16;
     }
 
+    @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entityLiving, int timeLeft) {
         if (entityLiving instanceof Player player) {
             ItemStack projectile = Items.DRAGON_BREATH.getDefaultInstance();
@@ -92,6 +96,7 @@ public class DragonBreathBow extends ProjectileWeaponItem {
         }
     }
 
+    @Override
     public AbstractArrow customArrow(@NotNull AbstractArrow arrow, ItemStack projectile, ItemStack bow) {
         DragonBreathArrow dragonBreathArrow = new DragonBreathArrow(arrow.getX(), arrow.getY(), arrow.getZ(), arrow.level(), bow);
         dragonBreathArrow.setCritArrow(arrow.isCritArrow());
@@ -99,26 +104,32 @@ public class DragonBreathBow extends ProjectileWeaponItem {
         return dragonBreathArrow;
     }
 
+    @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 72000;
     }
 
+    @Override
     public ItemUseAnimation getUseAnimation(ItemStack stack) {
         return ItemUseAnimation.BOW;
     }
 
+    @Override
     public Predicate<ItemStack> getAllSupportedProjectiles() {
         return ItemStack::isEmpty;
     }
 
+    @Override
     public int getDefaultProjectileRange() {
         return 16;
     }
 
+    @Override
     protected void shootProjectile(LivingEntity shooter, Projectile projectile, int index, float velocity, float inaccuracy, float angle, @Nullable LivingEntity target) {
         projectile.shootFromRotation(shooter, shooter.getXRot(), shooter.getYRot() + angle, 0.0F, velocity, inaccuracy);
     }
 
+    @Override
     public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access) {
         if (action != ClickAction.PRIMARY && slot.mayPickup(player) && slot.hasItem()) {
             PotionContents bow = stack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);

@@ -23,6 +23,7 @@ public class Ichoroot extends BaseItem {
         super(IItemHelper.properties().food(PROPERTIES));
     }
 
+    @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         List<MobEffectInstance> list = entity.getActiveEffects().stream().filter(effect -> effect.getEffect().value().getCategory().equals(MobEffectCategory.HARMFUL)).toList();
         if (!list.isEmpty()) entity.removeEffect(list.get(entity.getRandom().nextInt(list.size())).getEffect());

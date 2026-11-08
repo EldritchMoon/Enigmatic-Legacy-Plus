@@ -18,15 +18,18 @@ public class LeapAttackGoal extends MeleeAttackGoal {
         this.jumpModifier = jumpModifier;
     }
 
+    @Override
     public boolean canUse() {
         return super.canUse() && leaper.isHolding((item) -> item.is(ItemTags.AXES)) && EnigmaticHandler.isCurseBoosted(this.leaper);
     }
 
+    @Override
     public void start() {
         super.start();
         this.resetJumpCooldown();
     }
 
+    @Override
     public void tick() {
         super.tick();
         if (!this.leaper.isPassenger() && this.mob.onGround()) {

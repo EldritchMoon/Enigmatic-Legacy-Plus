@@ -59,6 +59,7 @@ public class HunterScroll extends BaseCurioItem {
         return Mth.floor(0.5 + size);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -68,6 +69,7 @@ public class HunterScroll extends BaseCurioItem {
         } else TooltipHandler.holdShift(list);
     }
 
+    @Override
     public List<Component> getAttributesTooltip(List<Component> list, TooltipContext context, ItemStack stack) {
         List<Component> tooltip = super.getAttributesTooltip(list, context, stack);
         MutableComponent component = Component.translatable("tooltip.enigmaticlegacy.hunterScrollAttribute");
@@ -80,6 +82,7 @@ public class HunterScroll extends BaseCurioItem {
         return tooltip;
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
         builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(IItemHelper.getLocation(this), 0.5, AttributeModifier.Operation.ADD_VALUE));

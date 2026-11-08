@@ -71,6 +71,7 @@ public class IllusionLantern extends SpellstoneItem {
         builder.pop(2);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -92,15 +93,18 @@ public class IllusionLantern extends SpellstoneItem {
         this.addKeyText(list);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void addTuneTooltip(List<Component> list) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.illusionLantern4", ChatFormatting.GOLD, String.format("%d%%", bypassDamageResistance.get() / 2));
     }
 
+    @Override
     public int getCooldown(ItemStack stack) {
         return 0;
     }
 
+    @Override
     public void curioTick(SlotContext context, ItemStack stack) {
         if (context.entity() instanceof ServerPlayer entity) {
             int count = stack.getOrDefault(EnigmaticComponents.ILLUSION_COUNT, 0);
@@ -147,6 +151,7 @@ public class IllusionLantern extends SpellstoneItem {
 
     @OnlyIn(Dist.CLIENT)
     public static class Decorator implements IItemDecorator {
+        @Override
         public boolean render(GuiGraphicsExtractor graphics, Font font, @NotNull ItemStack stack, int x, int y) {
             int count = stack.getOrDefault(EnigmaticComponents.ILLUSION_COUNT, 0);
             if (stack.getCount() == 1 && count > 0) {

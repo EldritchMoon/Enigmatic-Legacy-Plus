@@ -42,6 +42,7 @@ public class IchorCurse extends MobEffect {
         NeoForge.EVENT_BUS.register(this);
     }
 
+    @Override
     public ParticleOptions createParticleOptions(MobEffectInstance effect) {
         return EnigmaticParticles.ICHOR_CURSE.get();
     }

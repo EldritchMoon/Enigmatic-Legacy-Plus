@@ -60,6 +60,7 @@ public class DesolationRing extends BaseCurioItem {
         builder.pop(2);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(@NotNull ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -79,6 +80,7 @@ public class DesolationRing extends BaseCurioItem {
         TooltipHandler.worthyOnly(list, stack);
     }
 
+    @Override
     public void curioTick(@NotNull SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
         if (!EnigmaticHandler.isTheWorthyOne(entity)) {
@@ -92,6 +94,7 @@ public class DesolationRing extends BaseCurioItem {
         }
     }
 
+    @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         if (entity instanceof LivingEntity livingEntity && !level.isClientSide()) {
             float timer = stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F);
@@ -105,6 +108,7 @@ public class DesolationRing extends BaseCurioItem {
         }
     }
 
+    @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return oldStack.getItem() != newStack.getItem();
     }

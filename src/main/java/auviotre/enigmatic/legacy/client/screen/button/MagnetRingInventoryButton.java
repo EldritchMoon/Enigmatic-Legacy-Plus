@@ -58,6 +58,7 @@ public class MagnetRingInventoryButton extends ImageButton {
         return magnetButton;
     }
 
+    @Override
     public void renderWidget(@Nonnull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
         this.active = true;
         if (this.parentGui instanceof InventoryScreen || this.parentGui instanceof ICuriosScreen) {

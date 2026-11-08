@@ -85,6 +85,7 @@ public class ExecutionAxe extends Item {
         return loot;
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
@@ -104,6 +105,7 @@ public class ExecutionAxe extends Item {
         TooltipHandler.line(list);
     }
 
+    @Override
     public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
         return false;
     }

@@ -41,17 +41,20 @@ public class LoreInscriberScreen extends AbstractContainerScreen<LoreInscriberMe
         this.setInitialFocus(this.name);
     }
 
+    @Override
     protected void init() {
         super.init();
         this.subInit();
         this.menu.addSlotListener(this);
     }
 
+    @Override
     public void removed() {
         super.removed();
         this.menu.removeSlotListener(this);
     }
 
+    @Override
     public void render(GuiGraphicsExtractor graphics, int x, int y, float partialTick) {
         super.render(graphics, x, y, partialTick);
         RenderSystem.disableBlend();
@@ -59,6 +62,7 @@ public class LoreInscriberScreen extends AbstractContainerScreen<LoreInscriberMe
         this.renderTooltip(graphics, x, y);
     }
 
+    @Override
     protected void renderBg(GuiGraphicsExtractor graphics, float partialTicks, int x, int y) {
         RenderSystem.clearColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, TEXTURE);
@@ -71,17 +75,20 @@ public class LoreInscriberScreen extends AbstractContainerScreen<LoreInscriberMe
         }
     }
 
+    @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (keyCode == 256 && this.minecraft.player != null) this.minecraft.player.closeContainer();
         return this.name.keyPressed(keyCode, scanCode, modifiers) || this.name.canConsumeInput() || super.keyPressed(keyCode, scanCode, modifiers);
     }
 
+    @Override
     public void resize(Minecraft minecraft, int width, int height) {
         String s = this.name.getValue();
         this.init(minecraft, width, height);
         this.name.setValue(s);
     }
 
+    @Override
     protected void renderLabels(GuiGraphicsExtractor graphics, int x, int y) {
         graphics.drawString(this.font, this.title, 52, 13, 4210752);
         RenderSystem.disableBlend();
@@ -105,6 +112,7 @@ public class LoreInscriberScreen extends AbstractContainerScreen<LoreInscriberMe
         }
     }
 
+    @Override
     public void slotChanged(AbstractContainerMenu menu, int id, ItemStack stack) {
         if (id == 0) {
             this.name.setValue(stack.isEmpty() ? "" : stack.getHoverName().getString());
@@ -113,6 +121,7 @@ public class LoreInscriberScreen extends AbstractContainerScreen<LoreInscriberMe
         }
     }
 
+    @Override
     public void dataChanged(AbstractContainerMenu menu, int i, int i1) {
     }
 }

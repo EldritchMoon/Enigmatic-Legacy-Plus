@@ -70,6 +70,7 @@ public class LostEngine extends SpellstoneItem {
         builder.pop(2);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -91,15 +92,18 @@ public class LostEngine extends SpellstoneItem {
         this.addKeyText(list);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void addTuneTooltip(List<Component> list) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.lostEngine4", ChatFormatting.GOLD, "30%");
     }
 
+    @Override
     public int getCooldown(ItemStack stack) {
         return 0;
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, Identifier id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         Identifier location = IItemHelper.getLocation(this);
@@ -111,6 +115,7 @@ public class LostEngine extends SpellstoneItem {
         return attributes;
     }
 
+    @Override
     public List<Component> getAttributesTooltip(@NotNull List<Component> tooltips, TooltipContext context, ItemStack stack) {
         tooltips.clear();
         return tooltips;

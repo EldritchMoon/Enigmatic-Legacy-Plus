@@ -51,6 +51,7 @@ public class ForceProjectileRotationsPacket implements CustomPacketPayload {
         buf.writeDouble(this.posZ);
     }
 
+    @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }

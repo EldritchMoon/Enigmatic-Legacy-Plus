@@ -47,6 +47,7 @@ public class SpecialLootModifier extends LootModifier {
         super(conditionsIn);
     }
 
+    @Override
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> list, LootContext context) {
         ServerLevel level = context.getLevel();
         if (list.isEmpty()) return list;
@@ -113,6 +114,7 @@ public class SpecialLootModifier extends LootModifier {
         return list;
     }
 
+    @Override
     public MapCodec<? extends IGlobalLootModifier> codec() {
         return CODEC.get();
     }

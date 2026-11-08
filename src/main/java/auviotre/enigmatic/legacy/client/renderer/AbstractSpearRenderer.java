@@ -30,6 +30,7 @@ public abstract class AbstractSpearRenderer<T extends AbstractSpear> extends Ent
         this.scale = scale.scale(0.85);
     }
 
+    @Override
     public void render(T spear, float v, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int light) {
         poseStack.pushPose();
         ItemStack itemstack = spear.getItem();

@@ -82,6 +82,7 @@ public class AbyssalHeart extends BaseCursedItem implements ITaintable, ISharabl
         return count;
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (!ClientHelper.hasShiftDown()) {
@@ -94,6 +95,7 @@ public class AbyssalHeart extends BaseCursedItem implements ITaintable, ISharabl
         TooltipHandler.worthyOnly(list, stack);
     }
 
+    @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         if (entity instanceof Player player && !level.isClientSide()) {
             this.handleTaintable(stack, player);
@@ -108,10 +110,12 @@ public class AbyssalHeart extends BaseCursedItem implements ITaintable, ISharabl
         }
     }
 
+    @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return oldStack.getItem() != newStack.getItem();
     }
 
+    @Override
     public boolean canTaint(Player player) {
         return EnigmaticHandler.isTheWorthyOne(player);
     }

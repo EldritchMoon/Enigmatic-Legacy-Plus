@@ -17,6 +17,7 @@ public class ELBiomeTags extends BiomeTagsProvider {
         super(output, lookupProvider, EnigmaticLegacy.MODID, existingFileHelper);
     }
 
+    @Override
     protected void addTags(HolderLookup.Provider provider) {
         this.tag(EnigmaticTags.Biomes.HAS_SPELLSTONE_HUT)
                 .addTag(BiomeTags.IS_FOREST)

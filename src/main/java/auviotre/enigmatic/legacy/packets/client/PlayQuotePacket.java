@@ -17,6 +17,7 @@ public record PlayQuotePacket(int quoteId, int delay, boolean isDeath) implement
                     buf -> new PlayQuotePacket(buf.readInt(), buf.readInt(), buf.readBoolean())
             );
 
+    @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }

@@ -35,18 +35,22 @@ public class EngineHookRenderer extends EntityRenderer<EngineHook> {
                 .setLight(light).setNormal(pose, 0.0F, 1.0F, 0.0F);
     }
 
+    @Override
     protected int getBlockLightLevel(EngineHook entity, BlockPos pos) {
         return 15;
     }
 
+    @Override
     protected int getSkyLightLevel(EngineHook entity, BlockPos pos) {
         return 15;
     }
 
+    @Override
     public boolean shouldRender(EngineHook livingEntity, Frustum camera, double camX, double camY, double camZ) {
         return true;
     }
 
+    @Override
     public void render(EngineHook hook, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         poseStack.pushPose();
         poseStack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTick, hook.yRotO, hook.getYRot())));
@@ -127,6 +131,7 @@ public class EngineHookRenderer extends EntityRenderer<EngineHook> {
         }
     }
 
+    @Override
     public Identifier getTextureLocation(EngineHook angelBeam) {
         return TEXTURE;
     }

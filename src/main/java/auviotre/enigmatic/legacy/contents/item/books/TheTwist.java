@@ -65,6 +65,7 @@ public class TheTwist extends TheAcknowledgment {
         return builder.build();
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
@@ -83,6 +84,7 @@ public class TheTwist extends TheAcknowledgment {
         TooltipHandler.cursedOnly(list, stack);
     }
 
+    @Override
     public List<Component> getTooltipInBag(List<Component> list) {
         TooltipHandler.line(list);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.antiqueBagSlot");
@@ -90,6 +92,7 @@ public class TheTwist extends TheAcknowledgment {
         return list;
     }
 
+    @Override
     public InteractionResult use(Level world, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (!EnigmaticHandler.canUse(player, stack)) return InteractionResult.PASS;

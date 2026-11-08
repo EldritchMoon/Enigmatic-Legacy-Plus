@@ -42,13 +42,16 @@ public class CobwebBall extends Projectile implements ItemSupplier {
         this.setPos(spider.getX() - (double) (spider.getBbWidth() + 1.0F) * 0.5D * (double) Mth.sin(spider.yBodyRot * ((float) Math.PI / 180F)), spider.getEyeY() - (double) 0.1F, spider.getZ() + (double) (spider.getBbWidth() + 1.0F) * 0.5D * (double) Mth.cos(spider.yBodyRot * ((float) Math.PI / 180F)));
     }
 
+    @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
     }
 
+    @Override
     public ItemStack getItem() {
         return Blocks.COBWEB.asItem().getDefaultInstance();
     }
 
+    @Override
     public void tick() {
         super.tick();
         for (int i = 0; i < 3; ++i) {
@@ -87,6 +90,7 @@ public class CobwebBall extends Projectile implements ItemSupplier {
         return new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Blocks.COBWEB));
     }
 
+    @Override
     protected void onHitEntity(EntityHitResult hitResult) {
         super.onHitEntity(hitResult);
         Entity entity = this.getOwner();
@@ -109,6 +113,7 @@ public class CobwebBall extends Projectile implements ItemSupplier {
         }
     }
 
+    @Override
     protected void onHitBlock(BlockHitResult hitResult) {
         super.onHitBlock(hitResult);
         if (!this.level().isClientSide()) {
@@ -116,6 +121,7 @@ public class CobwebBall extends Projectile implements ItemSupplier {
         }
     }
 
+    @Override
     public void recreateFromPacket(ClientboundAddEntityPacket entityPacket) {
         super.recreateFromPacket(entityPacket);
         double xa = entityPacket.getXa();

@@ -45,10 +45,12 @@ public class JEIHandler implements IModPlugin {
         else throw new NullPointerException("minecraft level must not be null.");
     }
 
+    @Override
     public Identifier getPluginUid() {
         return ID;
     }
 
+    @Override
     public void registerItemSubtypes(@NotNull ISubtypeRegistration registration) {
         // registration.registerSubtypeInterpreter(EnigmaticItems.EARTH_HEART.get(), TaintableSubtypeInterpreter.INSTANCE);
         registration.registerSubtypeInterpreter(EnigmaticItems.TWISTED_HEART.get(), TaintableSubtypeInterpreter.INSTANCE);
@@ -56,29 +58,35 @@ public class JEIHandler implements IModPlugin {
         registration.registerSubtypeInterpreter(EnigmaticItems.ABYSSAL_HEART.get(), TaintableSubtypeInterpreter.INSTANCE);
     }
 
+    @Override
     public void registerRecipeCatalysts(@NotNull IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(EnigmaticBlocks.SPELLSTONE_TABLE.toStack(), EnigmaticRecipeTypes.SPELLSTONE_CRAFTING);
     }
 
+    @Override
     public void registerGuiHandlers(@NotNull IGuiHandlerRegistration registration) {
         registration.addRecipeClickArea(SpellstoneTableScreen.class, 85, 53, 6, 6, EnigmaticRecipeTypes.SPELLSTONE_CRAFTING);
     }
 
+    @Override
     public void registerRecipeTransferHandlers(@NotNull IRecipeTransferRegistration registration) {
         registration.addRecipeTransferHandler(SpellstoneTableMenu.class, EnigmaticMenus.SPELLSTONE_TABLE_MENU.get(), EnigmaticRecipeTypes.SPELLSTONE_CRAFTING, 0, 10, 11, 36);
     }
 
+    @Override
     public void registerVanillaCategoryExtensions(@NotNull IVanillaCategoryExtensionRegistration registration) {
         registration.getCraftingCategory().addExtension(CursedShapedRecipe.class, new CursedRecipeExtension());
         registration.getCraftingCategory().addExtension(AnnihilatingRecipe.class, new AnnihilatingRecipeExtension());
     }
 
+    @Override
     public void registerCategories(@NotNull IRecipeCategoryRegistration registration) {
         IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
         registration.addRecipeCategories(new TaintingCategory(guiHelper));
         registration.addRecipeCategories(new SpellstoneCraftingCategory(guiHelper));
     }
 
+    @Override
     public void registerRecipes(@NotNull IRecipeRegistration registration) {
         IVanillaRecipeFactory factory = registration.getVanillaRecipeFactory();
         RecipeManager manager = getLevel().getRecipeManager();

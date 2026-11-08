@@ -53,14 +53,17 @@ public class UltimateWitherSkull extends AbstractHurtingProjectile {
         this.setDeltaMovement(Vec3.ZERO);
     }
 
+    @Override
     public boolean isOnFire() {
         return false;
     }
 
+    @Override
     public float getBlockExplosionResistance(Explosion explosionIn, BlockGetter worldIn, BlockPos pos, BlockState blockStateIn, FluidState fluidState, float explosionPower) {
         return this.isDangerous() && !blockStateIn.is(BlockTags.WITHER_IMMUNE) ? Math.min(0.8F, explosionPower) : explosionPower;
     }
 
+    @Override
     public void tick() {
         super.tick();
         if (this.tickCount > 10 && this.tickCount < 400) {
@@ -101,6 +104,7 @@ public class UltimateWitherSkull extends AbstractHurtingProjectile {
         }
     }
 
+    @Override
     protected void onHitEntity(EntityHitResult result) {
         super.onHitEntity(result);
         Entity entity = result.getEntity();
@@ -126,6 +130,7 @@ public class UltimateWitherSkull extends AbstractHurtingProjectile {
         }
     }
 
+    @Override
     protected void onHit(HitResult result) {
         super.onHit(result);
         if (this.level() instanceof ServerLevel level) {
@@ -137,14 +142,17 @@ public class UltimateWitherSkull extends AbstractHurtingProjectile {
         }
     }
 
+    @Override
     public boolean isPickable() {
         return false;
     }
 
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         return false;
     }
 
+    @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(UltimateWitherSkull.DATA_DANGEROUS, false);
         builder.define(UltimateWitherSkull.DATA_TARGET_ID, -1);
@@ -158,16 +166,19 @@ public class UltimateWitherSkull extends AbstractHurtingProjectile {
         this.entityData.set(DATA_DANGEROUS, invulnerable);
     }
 
+    @Override
     protected boolean shouldBurn() {
         return false;
     }
 
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("dangerous", this.isDangerous());
         compound.putInt("boundTargetID", this.entityData.get(UltimateWitherSkull.DATA_TARGET_ID));
     }
 
+    @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.setDangerous(compound.getBoolean("dangerous"));

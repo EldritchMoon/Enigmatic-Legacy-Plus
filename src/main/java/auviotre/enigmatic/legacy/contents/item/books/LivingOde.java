@@ -73,6 +73,7 @@ public class LivingOde extends BaseItem {
         stack.set(EnigmaticComponents.BLACKLIST, list);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.inInventory", ChatFormatting.GOLD);
@@ -92,6 +93,7 @@ public class LivingOde extends BaseItem {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.odeToLiving4");
     }
 
+    @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
         if (!player.getCooldowns().isOnCooldown(this.getDefaultInstance()) && player.level() instanceof ServerLevel level) {
             boolean noAction = true;

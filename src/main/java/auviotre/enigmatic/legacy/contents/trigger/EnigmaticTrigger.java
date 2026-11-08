@@ -27,6 +27,7 @@ public class EnigmaticTrigger extends SimpleCriterionTrigger<EnigmaticTrigger.Tr
         this.trigger(player, instance -> instance.test(triggerID));
     }
 
+    @Override
     public Codec<TriggerInstance> codec() {
         return EnigmaticTrigger.TriggerInstance.CODEC;
     }

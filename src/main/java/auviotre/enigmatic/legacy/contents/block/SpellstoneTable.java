@@ -42,18 +42,22 @@ public class SpellstoneTable extends BaseEntityBlock {
         super(properties);
     }
 
+    @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
         return new SpellstoneTableEntity(blockPos, blockState);
     }
 
+    @Override
     protected RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 
+    @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
 
+    @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (level.isClientSide()) {
             return InteractionResult.SUCCESS;
@@ -63,10 +67,12 @@ public class SpellstoneTable extends BaseEntityBlock {
         }
     }
 
+    @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         return level.isClientSide() ? createTickerHelper(type, EnigmaticBlockEntities.SPELLSTONE_TABLE_ENTITY.get(), SpellstoneTableEntity::animationTick) : null;
     }
 
+    @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         super.animateTick(state, level, pos, random);
         if (random.nextInt(16) == 0) {
@@ -74,20 +80,24 @@ public class SpellstoneTable extends BaseEntityBlock {
         }
     }
 
+    @Override
     protected boolean useShapeForLightOcclusion(BlockState state) {
         return true;
     }
 
+    @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 
+    @Override
     protected MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
         BlockEntity blockentity = level.getBlockEntity(pos);
         if (!(blockentity instanceof SpellstoneTableEntity)) return null;
         return new SimpleMenuProvider((id, inventory, player) -> new SpellstoneTableMenu(id, inventory, ContainerLevelAccess.create(level, pos)), Component.translatable("gui.enigmaticlegacy.spellstone_crafting"));
     }
 
+    @Override
     protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
         return false;
     }

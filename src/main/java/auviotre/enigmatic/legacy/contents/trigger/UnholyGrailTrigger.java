@@ -16,6 +16,7 @@ public class UnholyGrailTrigger extends SimpleCriterionTrigger<UnholyGrailTrigge
         this.trigger(player, instance -> instance.test(isTheWorthyOne));
     }
 
+    @Override
     public Codec<TriggerInstance> codec() {
         return UnholyGrailTrigger.TriggerInstance.CODEC;
     }

@@ -24,6 +24,7 @@ public class ELEntityLoot extends EntityLootSubProvider {
         super(FeatureFlags.REGISTRY.allFlags(), FeatureFlagSet.of(), registries);
     }
 
+    @Override
     public void generate() {
         this.add(EnigmaticEntities.PIGLIN_WANDERER.get(),
                 LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))

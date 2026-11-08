@@ -19,6 +19,7 @@ public record EnigmaticDataSyncPacket(CompoundTag dataTag) implements CustomPack
         buf.writeNbt(this.dataTag);
     }
 
+    @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }

@@ -95,6 +95,7 @@ public class ViolenceScroll extends BaseCurioItem {
         return super.getDescriptionId();
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -141,6 +142,7 @@ public class ViolenceScroll extends BaseCurioItem {
         TooltipHandler.worthyOnly(list, stack);
     }
 
+    @Override
     public void curioTick(@NotNull SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
         if (!EnigmaticHandler.isTheWorthyOne(entity)) {
@@ -182,6 +184,7 @@ public class ViolenceScroll extends BaseCurioItem {
         stack.set(EnigmaticComponents.VIOLENCE_TIMER, Math.max(i, 0));
     }
 
+    @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         if (entity instanceof LivingEntity livingEntity && !level.isClientSide()) {
             float timer = stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F);
@@ -203,6 +206,7 @@ public class ViolenceScroll extends BaseCurioItem {
         }
     }
 
+    @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return oldStack.getItem() != newStack.getItem();
     }
@@ -219,6 +223,7 @@ public class ViolenceScroll extends BaseCurioItem {
         return multimap;
     }
 
+    @Override
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
         LivingEntity entity = context.entity();
         entity.getAttributes().removeAttributeModifiers(this.createAttributeMap(entity, stack));
@@ -227,6 +232,7 @@ public class ViolenceScroll extends BaseCurioItem {
         stack.set(EnigmaticComponents.VIOLENCE_CURSE_TIMER, 0);
     }
 
+    @Override
     public boolean overrideStackedOnOther(ItemStack stack, Slot slot, ClickAction action, Player player) {
         if (!EnigmaticHandler.isTheWorthyOne(player)) return super.overrideStackedOnOther(stack, slot, action, player);
         if (action != ClickAction.PRIMARY && slot.mayPlace(stack) && slot.mayPickup(player) && slot.hasItem()) {
@@ -241,6 +247,7 @@ public class ViolenceScroll extends BaseCurioItem {
         return super.overrideStackedOnOther(stack, slot, action, player);
     }
 
+    @Override
     public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access) {
         if (!EnigmaticHandler.isTheWorthyOne(player))
             return super.overrideOtherStackedOnMe(stack, other, slot, action, player, access);

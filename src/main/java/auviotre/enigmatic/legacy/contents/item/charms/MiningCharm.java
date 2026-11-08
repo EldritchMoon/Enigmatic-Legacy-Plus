@@ -40,6 +40,7 @@ public class MiningCharm extends BaseCurioItem {
         super(IItemHelper.singleProperties().rarity(Rarity.UNCOMMON));
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -56,6 +57,7 @@ public class MiningCharm extends BaseCurioItem {
         if (stack.isEmpty()) TooltipHandler.line(list);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         List<Component> list = super.getAttributesTooltip(tooltips, context, stack);
@@ -63,6 +65,7 @@ public class MiningCharm extends BaseCurioItem {
         return list;
     }
 
+    @Override
     public void curioTick(SlotContext context, ItemStack stack) {
         if (context.entity() instanceof Player player && stack.getOrDefault(EnigmaticComponents.BOOLEAN, false) && player.tickCount % 19 == 0) {
             if (player.getY() < 50 && !player.level().dimension().equals(Level.NETHER)
@@ -76,6 +79,7 @@ public class MiningCharm extends BaseCurioItem {
         }
     }
 
+    @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         Boolean enable = stack.getOrDefault(EnigmaticComponents.BOOLEAN, false);
@@ -86,6 +90,7 @@ public class MiningCharm extends BaseCurioItem {
         return InteractionResult.SUCCESS;
     }
 
+    @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         ImmutableMultimap.Builder<Holder<Attribute>, AttributeModifier> builder = new ImmutableMultimap.Builder<>();
         builder.put(Attributes.MINING_EFFICIENCY, new AttributeModifier(IItemHelper.getLocation(this), 3, AttributeModifier.Operation.ADD_VALUE));
@@ -93,10 +98,12 @@ public class MiningCharm extends BaseCurioItem {
         return builder.build();
     }
 
+    @Override
     public boolean canEquipFromUse(SlotContext context, ItemStack stack) {
         return false;
     }
 
+    @Override
     public int getFortuneLevel(SlotContext context, LootContext lootContext, ItemStack stack) {
         return super.getFortuneLevel(context, lootContext, stack) + 1;
     }

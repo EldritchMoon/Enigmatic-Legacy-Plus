@@ -18,6 +18,7 @@ public class DimensionalAnchorRender implements BlockEntityRenderer<DimensionalA
     public DimensionalAnchorRender(BlockEntityRendererProvider.Context context) {
     }
 
+    @Override
     public void render(DimensionalAnchorEntity entity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
         if (entity.getBlockState().getValue(DimensionalAnchor.CHARGE) > 0) {
             Matrix4f matrix4f = poseStack.last().pose();

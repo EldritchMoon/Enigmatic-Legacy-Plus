@@ -77,6 +77,7 @@ public class OceanStone extends SpellstoneItem {
         builder.pop(2);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -98,15 +99,18 @@ public class OceanStone extends SpellstoneItem {
         this.addKeyText(list);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void addTuneTooltip(List<Component> list) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.oceanStone2");
     }
 
+    @Override
     public int getCooldown(ItemStack stack) {
         return cooldown.get();
     }
 
+    @Override
     public void triggerActiveAbility(ServerLevel level, @NotNull ServerPlayer player, ItemStack stack) {
         if (player.level().dimensionType().natural())
             if (!level.getLevelData().isThundering()) {
@@ -125,11 +129,13 @@ public class OceanStone extends SpellstoneItem {
             }
     }
 
+    @Override
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
         context.entity().getAttributes().removeAttributeModifiers(this.getModifiers(context.entity()));
         super.onUnequip(context, newStack, stack);
     }
 
+    @Override
     public void curioTick(SlotContext context, ItemStack stack) {
         LivingEntity entity = context.entity();
         if (EnigmaticHandler.hasCurio(entity, this)) {

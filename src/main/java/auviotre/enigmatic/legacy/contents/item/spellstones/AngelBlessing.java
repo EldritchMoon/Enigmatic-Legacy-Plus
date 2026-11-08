@@ -85,6 +85,7 @@ public class AngelBlessing extends SpellstoneItem {
         return motionVec.add(motionVec.x + accelerationVec.x, motionVec.y + accelerationVec.y, motionVec.z + accelerationVec.z);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
@@ -105,11 +106,13 @@ public class AngelBlessing extends SpellstoneItem {
         this.addKeyText(list);
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void addTuneTooltip(List<Component> list) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.angelBlessing1");
     }
 
+    @Override
     public int getCooldown(ItemStack stack) {
         return cooldown.get();
     }
@@ -120,6 +123,7 @@ public class AngelBlessing extends SpellstoneItem {
         return map;
     }
 
+    @Override
     public void triggerActiveAbility(ServerLevel level, ServerPlayer player, ItemStack stack) {
         if (player.getAbilities().flying) return;
 
@@ -131,6 +135,7 @@ public class AngelBlessing extends SpellstoneItem {
         super.triggerActiveAbility(level, player, stack);
     }
 
+    @Override
     public void curioTick(@NotNull SlotContext context, ItemStack stack) {
         LivingEntity living = context.entity();
         living.getAttributes().addTransientAttributeModifiers(getModifiers());
@@ -148,6 +153,7 @@ public class AngelBlessing extends SpellstoneItem {
         for (ThrowableItemProjectile entity : potionEntities) this.redirect(level, living, entity);
     }
 
+    @Override
     public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
         context.entity().getAttributes().removeAttributeModifiers(this.getModifiers());
         super.onUnequip(context, newStack, stack);

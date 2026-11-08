@@ -15,6 +15,7 @@ public record SoulCompassUpdatePacket(boolean noValid, BlockPos pos) implements 
             BlockPos.STREAM_CODEC, SoulCompassUpdatePacket::pos,
             SoulCompassUpdatePacket::new);
 
+    @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }

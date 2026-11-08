@@ -94,15 +94,18 @@ public abstract class MixinEnderDragon extends Mob implements Enemy, AbyssalHear
         this.attackers = set;
     }
 
+    @Override
     public void addAttacker(UUID uuid) {
         if (this.attackers == null) this.attackers = new HashSet<>();
         this.attackers.add(uuid);
     }
 
+    @Override
     public Set<UUID> getAllAttackers() {
         return attackers;
     }
 
+    @Override
     public void dropAbyssalHeart(Player player) {
     }
 }

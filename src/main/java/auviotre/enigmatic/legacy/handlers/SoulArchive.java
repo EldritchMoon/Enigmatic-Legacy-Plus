@@ -177,6 +177,7 @@ public class SoulArchive {
 
     private record SoulData(Identifier dimension, UUID id, UUID ownerID, BlockPos pos, int type) {
 
+        @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
             if (obj == null) return false;

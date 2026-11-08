@@ -14,6 +14,7 @@ public class ELCuriosDataProvider extends CuriosDataProvider {
         super(EnigmaticLegacy.MODID, output, fileHelper, provider);
     }
 
+    @Override
     public void generate(HolderLookup.Provider registries, ExistingFileHelper fileHelper) {
         this.createEntities("init").addEntities(EntityType.PLAYER).addSlots(
                 "charm", "ring", "amulet", "back", "scroll", "spellstone"

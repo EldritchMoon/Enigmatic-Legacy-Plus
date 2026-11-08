@@ -51,6 +51,7 @@ public class RecallPotion extends BaseDrinkableItem {
         }
     }
 
+    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.recallPotion1");
@@ -58,6 +59,7 @@ public class RecallPotion extends BaseDrinkableItem {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.recallPotion3");
     }
 
+    @Override
     public void onConsumed(Level level, Player player, ItemStack stack) {
         if (player instanceof ServerPlayer serverPlayer) {
             teleportToRespawnPoint(serverPlayer, ColorParticleOption.create(EnigmaticParticles.SPELL.get(), 0xF017A3C8));

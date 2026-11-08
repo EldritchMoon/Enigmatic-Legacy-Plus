@@ -34,6 +34,7 @@ public class ForgerCrystalPacket implements CustomPacketPayload {
         ItemStack.OPTIONAL_STREAM_CODEC.encode(buf, this.totem);
     }
 
+    @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }

@@ -26,6 +26,7 @@ public class ELRecipeProvider extends RecipeProviderWithHelper {
         super(output, provider);
     }
 
+    @Override
     protected void buildRecipes(RecipeOutput output) {
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SPELLTUNER)
                 .pattern("SAA").pattern("AXA").pattern("AAS")

@@ -21,6 +21,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 
 public class ClientProxy extends CommonProxy {
+    @Override
     public void clientInit() {
         try {
             Identifier eldritchLocation = EnigmaticLegacy.location("eldritch_open");
@@ -62,10 +63,12 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
+    @Override
     public boolean isOperatorItemsTabEnabled() {
         return Minecraft.getInstance().options.operatorItemsTab().get();
     }
 
+    @Override
     public void displayPermanentDeathScreen() {
         if (Minecraft.getInstance().level != null) {
             boolean local = Minecraft.getInstance().isLocalServer();
@@ -83,6 +86,7 @@ public class ClientProxy extends CommonProxy {
         Minecraft.getInstance().setScreen(screen);
     }
 
+    @Override
     public String getClientUsername() {
         return Minecraft.getInstance().getUser().getName();
     }

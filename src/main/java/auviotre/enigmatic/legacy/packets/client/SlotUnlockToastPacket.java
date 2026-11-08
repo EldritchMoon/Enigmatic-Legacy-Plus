@@ -13,6 +13,7 @@ public record SlotUnlockToastPacket(String identifier) implements CustomPacketPa
             ByteBufCodecs.STRING_UTF8, SlotUnlockToastPacket::identifier,
             SlotUnlockToastPacket::new);
 
+    @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }

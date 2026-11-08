@@ -13,6 +13,7 @@ public class PiglinWandererModel extends PiglinModel<PiglinWanderer> {
         super(part);
     }
 
+    @Override
     public void setupAnim(PiglinWanderer entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         super.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         PiglinArmPose pose = entity.getArmPose();

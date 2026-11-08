@@ -16,6 +16,7 @@ public class AstralDustSack extends Block {
         super(BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_WOOL).mapColor(MapColor.COLOR_PINK).setId(RegistryIds.currentBlock()));
     }
 
+    @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (random.nextInt(4) == 0 && !level.getBlockState(pos.above()).isCollisionShapeFullBlock(level, pos.above()))
             level.addParticle(EnigmaticParticles.randomStarDust(random),

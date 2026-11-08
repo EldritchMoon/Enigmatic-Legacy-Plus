@@ -24,24 +24,28 @@ public class AntiqueBagScreen extends AbstractContainerScreen<AntiqueBagContaine
         super(menu, inventory, component);
     }
 
+    @Override
     public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(graphics, mouseX, mouseY, partialTicks);
         super.render(graphics, mouseX, mouseY, partialTicks);
         this.renderTooltip(graphics, mouseX, mouseY);
     }
 
+    @Override
     protected List<Component> getTooltipFromContainerItem(ItemStack stack) {
         List<Component> list = super.getTooltipFromContainerItem(stack);
         if (stack.getItem() instanceof IBagContent content) return content.getTooltipInBag(list);
         return list;
     }
 
+    @Override
     protected void renderLabels(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY) {
         guiGraphics.drawString(this.font, this.title, this.titleLabelX + 1, this.titleLabelY + 1, 0x8f7ec4, false);
         guiGraphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 0xb2cfdb, false);
         guiGraphics.drawString(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 4210752, false);
     }
 
+    @Override
     protected void renderBg(@Nonnull GuiGraphicsExtractor guiGraphics, float partialTicks, int mouseX, int mouseY) {
         int x = (this.width - this.imageWidth) / 2;
         int y = (this.height - this.imageHeight) / 2;

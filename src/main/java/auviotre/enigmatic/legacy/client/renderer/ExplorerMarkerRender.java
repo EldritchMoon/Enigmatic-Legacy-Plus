@@ -24,6 +24,7 @@ public class ExplorerMarkerRender extends EntityRenderer<ExplorerMarker> {
         this.model = new ExplorerMarkerModel(context.bakeLayer(ExplorerMarkerModel.LAYER));
     }
 
+    @Override
     public void render(ExplorerMarker entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         poseStack.pushPose();
         VertexConsumer vertexconsumer = buffer.getBuffer(RenderType.outline(getTextureLocation(entity)));
@@ -32,6 +33,7 @@ public class ExplorerMarkerRender extends EntityRenderer<ExplorerMarker> {
     }
 
 
+    @Override
     public Identifier getTextureLocation(ExplorerMarker entity) {
         return TEXTURE;
     }

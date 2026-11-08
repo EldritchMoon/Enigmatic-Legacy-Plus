@@ -109,6 +109,7 @@ public class StorageCrystal extends BaseItem implements IPermanentCrystal {
         else if (!player.level().isClientSide()) player.playSound(SoundEvents.BEACON_ACTIVATE, 1.0f, 1.0f);
     }
 
+    @Override
     public boolean isFoil(ItemStack stack) {
         return true;
     }
@@ -132,6 +133,7 @@ public class StorageCrystal extends BaseItem implements IPermanentCrystal {
             return new Info(soulCrystal, exp, drops);
         }
 
+        @Override
         public List<ItemStack> drops() {
             return new ArrayList<>(drops);
         }

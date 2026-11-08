@@ -25,10 +25,12 @@ public class EtheriumShieldAttribute extends PercentageAttribute {
         this.setSyncable(true);
     }
 
+    @Override
     public Identifier getBaseId() {
         return BASE_ID;
     }
 
+    @Override
     public MutableComponent toBaseComponent(double value, double entityBase, boolean merged, TooltipFlag flag) {
         LocalPlayer player = Minecraft.getInstance().player;
         double currentBase = entityBase;

@@ -19,6 +19,7 @@ public class ELDamageTypeTags extends DamageTypeTagsProvider {
         super(output, lookupProvider, EnigmaticLegacy.MODID, existingFileHelper);
     }
 
+    @Override
     protected void addTags(HolderLookup.Provider provider) {
         this.tag(DamageTypeTags.BYPASSES_ARMOR).add(NEMESIS_CURSE, EVIL_CURSE, DARKNESS);
         this.tag(DamageTypeTags.BYPASSES_ENCHANTMENTS).add(DARKNESS, EVIL_CURSE);

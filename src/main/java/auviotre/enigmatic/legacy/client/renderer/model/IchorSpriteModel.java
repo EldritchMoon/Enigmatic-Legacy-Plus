@@ -50,6 +50,7 @@ public class IchorSpriteModel extends HierarchicalModel<IchorSprite> implements 
         return LayerDefinition.create(definition, 32, 32);
     }
 
+    @Override
     public void setupAnim(IchorSprite entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.root().getAllParts().forEach(ModelPart::resetPose);
         this.head.yRot = netHeadYaw * 0.017453292F;
@@ -79,10 +80,12 @@ public class IchorSpriteModel extends HierarchicalModel<IchorSprite> implements 
         this.rightWing.zRot = 0.47123888F;
     }
 
+    @Override
     public ModelPart root() {
         return this.root;
     }
 
+    @Override
     public void translateToHand(HumanoidArm side, PoseStack poseStack) {
         boolean flag = side == HumanoidArm.RIGHT;
         ModelPart modelpart = flag ? this.rightArm : this.leftArm;

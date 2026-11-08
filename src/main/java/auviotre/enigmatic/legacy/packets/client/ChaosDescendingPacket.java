@@ -33,6 +33,7 @@ public class ChaosDescendingPacket implements CustomPacketPayload {
         buf.writeBoolean(this.targeted);
     }
 
+    @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
