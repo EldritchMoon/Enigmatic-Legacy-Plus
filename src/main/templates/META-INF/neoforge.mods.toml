@@ -29,22 +29,15 @@ config="${mod_id}.mixins.json"
 
 [[dependencies.${mod_id}]]
     modId="curios"
-    mandatory=true
-    versionRange="[1.21.1-9.5.0,)"
+    type="required"
+    versionRange="[15.0.0,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.${mod_id}]]
     modId="patchouli"
-    mandatory=true
-    versionRange="[1.21-88,)"
-    ordering="NONE"
-    side="BOTH"
-
-[[dependencies.${mod_id}]]
-    modId="caelus"
-    mandatory=true
-    versionRange="[1.21.1-7.0.0,)"
+    type="required"
+    versionRange="[26.1-94,)"
     ordering="NONE"
     side="BOTH"
 

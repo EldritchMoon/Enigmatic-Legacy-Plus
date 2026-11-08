@@ -2,7 +2,7 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '2.0.99'
+    id 'net.neoforged.moddev' version '2.0.148'
     id 'idea'
 }
 
@@ -27,6 +27,11 @@ repositories {
         url = "https://modmaven.dev"
     }
     maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+        content { includeGroup "maven.modrinth" }
+    }
+    maven {
         url "https://cursemaven.com"
         content {
             includeGroup "curse.maven"
@@ -38,17 +43,12 @@ base {
     archivesName = mod_id
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 neoForge {
     version = project.neo_version
 
     validateAccessTransformers = true
-
-    parchment {
-        mappingsVersion = project.parchment_mappings_version
-        minecraftVersion = project.parchment_minecraft_version
-    }
 
     runs {
         client {
@@ -95,48 +95,15 @@ configurations {
 }
 
 dependencies {
-    // info
+    // 26.1.2-port: only the hard dependencies + JEI API are kept for now.
+    // The original's dev/test mods and optional integrations (AppleSkin, Thirst, Mystical Agriculture,
+    // Apotheosis, Sophisticated Backpacks, Jade...) come back in phase 9 once they exist on 26.1.2.
     compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
-    runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
-
-    implementation "curse.maven:simple-loot-viewer-1237334:7114924"
-    // depend
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
     runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
-
-    compileOnly "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}:api"
-    runtimeOnly "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}"
-
-    implementation "vazkii.patchouli:Patchouli:1.21.1-93-NEOFORGE"
-    implementation "curse.maven:appleskin-248787:6616291"
-    implementation "curse.maven:l2library-620203:6478950"
-    implementation "curse.maven:jade-324717:6738687"
-    // client
-    implementation "curse.maven:enchantment-descriptions-250419:6348560"
-    implementation "curse.maven:bookshelf-228525:7606240"
-    implementation "curse.maven:prickle-1023259:6546240"
-
-    implementation "curse.maven:legendary-tooltips-532127:6400660"
-    implementation "curse.maven:prism-lib-638111:6372979"
-    implementation "curse.maven:iceberg-520110:6423863"
-
-    implementation "curse.maven:sodium-394468:6382651"
-    implementation "curse.maven:irisshaders-455508:6661598"
-    // compat
-    implementation "curse.maven:thirst-was-reclaimed-884742:8852248"
-
-    implementation "curse.maven:sophisticated-backpacks-422301:8084526"
-    implementation "curse.maven:sophisticated-core-618298:8084486"
-
-    implementation "curse.maven:placebo-283644:6926281"
-    implementation "curse.maven:apothic-attributes-898963:6751650"
-    implementation "curse.maven:apothic-enchanting-1063926:6926290"
-
-//    implementation "curse.maven:mob-battle-mod-268746:8065542"
-
-    implementation "curse.maven:mystical-agriculture-246640:8344249"
-    implementation "curse.maven:cucumber-272335:8035802"
+    // 26.1.2-port: Patchouli's 26.1 build is only published on Modrinth's maven
+    implementation "maven.modrinth:patchouli:26.1-94-beta"
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
@@ -175,6 +142,7 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+    options.compilerArgs += ['-Xmaxerrs', '100000'] // 26.1.2-port: show every error, not just the first 100
 }
 
 idea {
@@ -182,4 +150,12 @@ idea {
         downloadSources = true
         downloadJavadoc = true
     }
+}
+
+// TODO(port): optional-mod integrations disabled until their mods are on 26.1.2 (phase 9)
+sourceSets.main.java {
+        exclude 'auviotre/enigmatic/legacy/compat/appleskin/**'
+        exclude 'auviotre/enigmatic/legacy/compat/mysticalagriculture/**'
+        exclude 'auviotre/enigmatic/legacy/compat/thirst/**'
+        exclude 'auviotre/enigmatic/legacy/mixin/compat/**'
 }
