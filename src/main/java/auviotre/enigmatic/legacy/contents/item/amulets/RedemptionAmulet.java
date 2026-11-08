@@ -101,7 +101,7 @@ public class RedemptionAmulet extends CursedCurioItem implements IAmulet {
             LivingEntity victim = event.getEntity();
             if (EnigmaticHandler.hasCurio(victim, EnigmaticItems.REDEMPTION_AMULET) && RedemptionRing.Helper.canUseRelic(victim)) {
                 DamageSource source = event.getSource();
-                if (source.getEntity() == null || !source.getEntity().getPersistentData().getBoolean("RedemptionMark")) {
+                if (source.getEntity() == null || !source.getEntity().getPersistentData().getBooleanOr("RedemptionMark", false)) {
                     event.setAmount(0.0F);
                     event.setCanceled(true);
                 }

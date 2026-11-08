@@ -54,7 +54,7 @@ public class TwistedPotion extends BaseDrinkableItem {
         CompoundTag deathLoc = (CompoundTag) EnigmaticHandler.getPersistedData(player).get("LastDeathLoc");
         if (deathLoc == null) return;
 
-        ResourceKey<Level> deathDimension = ResourceKey.create(Registries.DIMENSION, Identifier.parse(deathLoc.getString("dimension")));
+        ResourceKey<Level> deathDimension = ResourceKey.create(Registries.DIMENSION, Identifier.parse(deathLoc.getStringOr("dimension", "")));
         ServerLevel destLevel = player.level().getServer().getLevel(deathDimension);
         if (destLevel == null) return;
         BlockPos respawnPos = new BlockPos(deathLoc.getInt("x"), deathLoc.getInt("y") + 2, deathLoc.getInt("z"));

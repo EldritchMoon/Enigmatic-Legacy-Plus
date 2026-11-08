@@ -68,7 +68,7 @@ public class SoulCrystal extends BaseItem implements IPermanentCrystal {
     }
 
     public static int getLostCrystals(Player player) {
-        return EnigmaticHandler.getPersistedData(player).getInt("SixthCurseSoulLossCount");
+        return EnigmaticHandler.getPersistedData(player).getIntOr("SixthCurseSoulLossCount", 0);
     }
 
     public static Multimap<Holder<Attribute>, AttributeModifier> getOrCreateSoulMap(Player player) {

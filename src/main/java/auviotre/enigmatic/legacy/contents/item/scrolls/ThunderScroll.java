@@ -111,7 +111,7 @@ public class ThunderScroll extends CursedCurioItem {
         @SubscribeEvent
         private static void onTick(EntityTickEvent.@NotNull Pre event) {
             if (event.getEntity() instanceof LivingEntity entity) {
-                int electric = entity.getPersistentData().getInt(TAG_ID);
+                int electric = entity.getPersistentData().getIntOr(TAG_ID, 0);
                 if (electric > 0) {
                     if (electric > 1200) {
                         LightningBolt lightningbolt = EntityType.LIGHTNING_BOLT.create(entity.level());
@@ -134,7 +134,7 @@ public class ThunderScroll extends CursedCurioItem {
             LivingEntity victim = event.getEntity();
             if (source.getEntity() instanceof LivingEntity entity && EnigmaticHandler.hasCurio(entity, EnigmaticItems.THUNDER_SCROLL)) {
                 if (entity.getWeaponItem().canPerformAction(ItemAbilities.SWORD_SWEEP) && source.is(DamageTypeTags.IS_PLAYER_ATTACK)) {
-                    int electric = victim.getPersistentData().getInt(TAG_ID);
+                    int electric = victim.getPersistentData().getIntOr(TAG_ID, 0);
                     victim.getPersistentData().putInt(TAG_ID, electric + 60 + entity.getRandom().nextInt(80) + (int) (event.getNewDamage() * 10));
                 }
             }

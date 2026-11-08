@@ -137,7 +137,7 @@ public class ForgottenIce extends SpellstoneItem {
         List<LivingEntity> entities = entity.level().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(5.0));
         for (LivingEntity target : entities) {
             if (target.isFullyFrozen()) {
-                int tick = target.getPersistentData().getInt("ForgottenFrozenTick");
+                int tick = target.getPersistentData().getIntOr("ForgottenFrozenTick", 0);
                 if (target.getTicksFrozen() > 340) {
                     tick++;
                     target.getPersistentData().putBoolean("ForgottenFrozenHard", true);
@@ -158,7 +158,7 @@ public class ForgottenIce extends SpellstoneItem {
         float damage = (float) (damageFeedback.getAsDouble() + player.getAttributeValue(Attributes.ATTACK_DAMAGE));
         for (LivingEntity entity : entities) {
             if (entity.is(player)) continue;
-            int tick = entity.getPersistentData().getInt("ForgottenFrozenTick");
+            int tick = entity.getPersistentData().getIntOr("ForgottenFrozenTick", 0);
             float extra = 0;
             if (entity.isFullyFrozen()) extra = ((0.01F)) * Math.min(tick, 400) / 2;
             if (entity.canFreeze()) entity.setTicksFrozen(entity.getTicksFrozen() + 500);
@@ -179,7 +179,7 @@ public class ForgottenIce extends SpellstoneItem {
         private static void onTick(EntityTickEvent.Pre event) {
             if (event.getEntity() instanceof LivingEntity entity) {
                 CompoundTag data = entity.getPersistentData();
-                if (data.getBoolean("ForgottenFrozenHard")) {
+                if (data.getBooleanOr("ForgottenFrozenHard", false)) {
                     Vec3 movement = entity.getDeltaMovement();
                     entity.setDeltaMovement(new Vec3(0, movement.y, 0));
                     entity.hasImpulse = true;

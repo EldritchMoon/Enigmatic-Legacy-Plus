@@ -90,6 +90,6 @@ public class MagnetRing extends BaseCurioItem {
 
     protected boolean canPullItem(@NotNull ItemEntity item) {
         ItemStack stack = item.getItem();
-        return item.isAlive() && !stack.isEmpty() && !item.getPersistentData().getBoolean("PreventRemoteMovement");
+        return item.isAlive() && !stack.isEmpty() && !item.getPersistentData().getBooleanOr("PreventRemoteMovement", false);
     }
 }

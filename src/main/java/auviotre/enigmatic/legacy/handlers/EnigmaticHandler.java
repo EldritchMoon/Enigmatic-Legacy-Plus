@@ -149,7 +149,7 @@ public interface EnigmaticHandler {
             entity.getPersistentData().remove("CurseBoost");
             return false;
         }
-        return entity.getPersistentData().getBoolean("CurseBoost");
+        return entity.getPersistentData().getBooleanOr("CurseBoost", false);
     }
 
     static void setCurseBoosted(LivingEntity entity, boolean boost, LivingEntity player) {
@@ -450,7 +450,7 @@ public interface EnigmaticHandler {
                 HolderLookup<MobEffect> lookup = entity.level().holderLookup(Registries.MOB_EFFECT);
                 List<ResourceKey<MobEffect>> keys = lookup.listElementIds().toList();
                 for (ResourceKey<MobEffect> key : keys) {
-                    MobEffect effect = BuiltInRegistries.MOB_EFFECT.get(key);
+                    MobEffect effect = BuiltInRegistries.MOB_EFFECT.getValue(key);
                     if (effect != null && effect.getCategory().equals(MobEffectCategory.HARMFUL) && !effect.isInstantenous()) {
                         if (lookup.getOrThrow(EnigmaticTags.Effects.SHOULD_NOT_RANDOM_OUT).stream().anyMatch(holder -> holder.value().equals(effect)))
                             continue;
@@ -505,7 +505,7 @@ public interface EnigmaticHandler {
 
         if (!data.contains(Player.PERSISTED_NBT_TAG))
             data.put(Player.PERSISTED_NBT_TAG, (persistedData = new CompoundTag()));
-        else persistedData = data.getCompound(Player.PERSISTED_NBT_TAG);
+        else persistedData = data.getCompoundOrEmpty(Player.PERSISTED_NBT_TAG);
 
         return persistedData;
     }

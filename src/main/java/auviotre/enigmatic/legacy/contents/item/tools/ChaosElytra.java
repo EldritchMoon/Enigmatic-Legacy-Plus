@@ -278,9 +278,9 @@ public class ChaosElytra extends BaseElytraItem {
             if (!(event.getEntity() instanceof Monster) || !(attacker instanceof Player player)) return;
             if (!getElytra(player).is(EnigmaticItems.CHAOS_ELYTRA)) return;
             CompoundTag data = EnigmaticHandler.getPersistedData(player);
-            if (data.getBoolean("ChaoAchievementCheck")) {
+            if (data.getBooleanOr("ChaoAchievementCheck", false)) {
                 if (event.getEntity().getMaxHealth() < player.getMaxHealth() / 2) return;
-                int count = data.getInt("ChaoExplosionKillCount");
+                int count = data.getIntOr("ChaoExplosionKillCount", 0);
                 data.putInt("ChaoExplosionKillCount", count + 1);
             }
         }

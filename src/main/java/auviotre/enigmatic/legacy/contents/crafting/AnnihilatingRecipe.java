@@ -45,7 +45,7 @@ public class AnnihilatingRecipe extends CustomRecipe {
         Player player = CommonHooks.getCraftingPlayer();
         if (EnigmaticHandler.isTheWorthyOne(player)) {
             CompoundTag data = EnigmaticHandler.getPersistedData(player);
-            int gained = data.getInt("AbyssalHeartsGained");
+            int gained = data.getIntOr("AbyssalHeartsGained", 0);
             if (gained > 4) list.set(0, input.getItem(0).copy());
             if (gained > 3) list.set(2, input.getItem(2).copy());
             if (gained > 2) list.set(6, input.getItem(6).copy());

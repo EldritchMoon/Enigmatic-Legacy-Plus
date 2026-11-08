@@ -556,7 +556,7 @@ public class CursedRing extends CursedCurioItem {
                     EnigmaticLegacy.LOGGER.info("Granting starter gear to {}", player.getGameProfile().getName());
                     CompoundTag data = EnigmaticHandler.getPersistedData(player);
 
-                    if (!data.getBoolean("UnwitnessedAmuletGift")) {
+                    if (!data.getBooleanOr("UnwitnessedAmuletGift", false)) {
                         ItemStack stack = EnigmaticItems.UNWITNESSED_AMULET.toStack();
                         if (player.getInventory().getItem(8).isEmpty()) {
                             player.getInventory().setItem(8, stack);
@@ -568,7 +568,7 @@ public class CursedRing extends CursedCurioItem {
                         }
                         data.putBoolean("UnwitnessedAmuletGift", true);
                     }
-                    if (!data.getBoolean("CursedRingGift")) {
+                    if (!data.getBooleanOr("CursedRingGift", false)) {
                         ItemStack stack = EnigmaticItems.CURSED_RING.toStack();
                         if (ultraHardcore.get()) EnigmaticHandler.tryForceEquip(player, stack);
                         else {

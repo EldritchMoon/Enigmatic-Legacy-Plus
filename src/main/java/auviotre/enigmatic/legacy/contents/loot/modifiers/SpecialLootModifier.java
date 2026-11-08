@@ -84,7 +84,7 @@ public class SpecialLootModifier extends LootModifier {
                 }
             }
 
-            if (entity.level().dimension().equals(Level.NETHER) && context.getQueriedLootTableId().getPath().startsWith("chests/") && !data.getBoolean("LootedHellBladeCharm")) {
+            if (entity.level().dimension().equals(Level.NETHER) && context.getQueriedLootTableId().getPath().startsWith("chests/") && !data.getBooleanOr("LootedHellBladeCharm", false)) {
                 if (data.getFloat("HellPoint") > 100.0F) {
                     list.set(0, EnigmaticItems.HELL_BLADE_CHARM.toStack());
                     data.putBoolean("LootedHellBladeCharm", true);

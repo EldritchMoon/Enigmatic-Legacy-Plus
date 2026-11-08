@@ -197,7 +197,7 @@ public class DesolationRing extends BaseCurioItem {
         private static void onAttack(@NotNull LivingIncomingDamageEvent event) {
             if (event.getSource().getEntity() instanceof LivingEntity attacker && event.getEntity() instanceof Mob entity) {
                 if (EnigmaticHandler.isAbyssBoosted(attacker) && EnigmaticHandler.hasCurio(attacker, EnigmaticItems.DESOLATION_RING)) {
-                    if (entity.getTarget() == null && entity.getLastHurtByMob() == null && !entity.getPersistentData().getBoolean("DesolationExecution")) {
+                    if (entity.getTarget() == null && entity.getLastHurtByMob() == null && !entity.getPersistentData().getBooleanOr("DesolationExecution", false)) {
                         entity.getPersistentData().putBoolean("DesolationExecution", true);
                         entity.setHealth(Math.max(1.0F, entity.getHealth() - entity.getMaxHealth() * 0.2F));
                         entity.addEffect(new MobEffectInstance(EnigmaticEffects.ABYSS_CORRUPTION, 400, 1));

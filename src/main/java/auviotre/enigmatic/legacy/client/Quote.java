@@ -102,7 +102,7 @@ public class Quote {
 
     private boolean hasHeard(ServerPlayer player) {
         CompoundTag heard = getHeardContainer(player);
-        return heard.getBoolean(this.name);
+        return heard.getBooleanOr(this.name, false);
     }
 
     private void markHeardIfNeeded(ServerPlayer player, PlayOptions options) {
@@ -119,7 +119,7 @@ public class Quote {
             data.put(HEARD_TAG, new CompoundTag());
         }
 
-        return data.getCompound(HEARD_TAG);
+        return data.getCompoundOrEmpty(HEARD_TAG);
     }
 
     public void play(ServerPlayer player, PlayOptions options) {

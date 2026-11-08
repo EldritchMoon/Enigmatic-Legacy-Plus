@@ -53,7 +53,7 @@ public abstract class MixinEnderDragon extends Mob implements Enemy, AbyssalHear
                     Player player = level.getPlayerByUUID(attacker);
                     if (player instanceof ServerPlayer sp && players.contains(sp)) {
                         CompoundTag data = EnigmaticHandler.getPersistedData(sp);
-                        int heartsGained = data.getInt("AbyssalHeartsGained");
+                        int heartsGained = data.getIntOr("AbyssalHeartsGained", 0);
                         if (heartsGained < AbyssalHeart.getMaxCount(player)) {
                             heart.acceptors.add(player.getUUID());
                             data.putInt("AbyssalHeartsGained", heartsGained + 1);
@@ -84,7 +84,7 @@ public abstract class MixinEnderDragon extends Mob implements Enemy, AbyssalHear
     @Inject(method = "readAdditionalSaveData", at = @At("RETURN"))
     public void readData(CompoundTag compoundTag, CallbackInfo info) {
         Set<UUID> set = new HashSet<>();
-        CompoundTag attacker = compoundTag.getCompound("Attackers");
+        CompoundTag attacker = compoundTag.getCompoundOrEmpty("Attackers");
         for (String key : attacker.getAllKeys()) {
             if (attacker.hasUUID(key)) {
                 UUID tagUUID = attacker.getUUID(key);

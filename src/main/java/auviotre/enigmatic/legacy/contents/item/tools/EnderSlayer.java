@@ -123,7 +123,7 @@ public class EnderSlayer extends SwordItem {
         private static void onTick(EntityTickEvent.@NotNull Pre event) {
             Entity entity = event.getEntity();
             if (entity.getPersistentData().contains("EnderSlayerTeleportForbidden")) {
-                int tick = entity.getPersistentData().getInt("EnderSlayerTeleportForbidden");
+                int tick = entity.getPersistentData().getIntOr("EnderSlayerTeleportForbidden", 0);
                 if (tick > 1) entity.getPersistentData().putInt("EnderSlayerTeleportForbidden", tick - 1);
                 else entity.getPersistentData().remove("EnderSlayerTeleportForbidden");
             }

@@ -109,7 +109,7 @@ public class EldritchAmulet extends BaseCurioItem {
                 Tag maybeList = tag.get("Inventory" + key);
                 if (maybeList instanceof ListTag list) {
                     for (int i = 0; i < value.size(); i++) {
-                        CompoundTag stackTag = list.getCompound(i);
+                        CompoundTag stackTag = list.getCompoundOrEmpty(i);
                         ItemStack stack = ItemStack.parseOptional(newPlayer.registryAccess(), stackTag);
                         value.set(i, stack);
                     }

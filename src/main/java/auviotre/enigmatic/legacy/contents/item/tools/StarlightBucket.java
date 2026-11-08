@@ -59,7 +59,7 @@ public class StarlightBucket extends Item {
     }
 
     private Item getContent(ItemStack stack) {
-        return BuiltInRegistries.ITEM.get(Identifier.parse(stack.getOrDefault(EnigmaticComponents.CONTENT, "minecraft:air")));
+        return BuiltInRegistries.ITEM.getValue(Identifier.parse(stack.getOrDefault(EnigmaticComponents.CONTENT, "minecraft:air")));
     }
 
     @OnlyIn(Dist.CLIENT)

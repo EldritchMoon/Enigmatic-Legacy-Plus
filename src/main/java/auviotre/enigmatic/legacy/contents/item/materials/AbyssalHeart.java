@@ -75,7 +75,7 @@ public class AbyssalHeart extends BaseCursedItem implements ITaintable, ISharabl
             Player player = level.getPlayerByUUID(uuid);
             if (player != null) {
                 CompoundTag data = EnigmaticHandler.getPersistedData(player);
-                int heartsGained = data.getInt("AbyssalHeartsGained");
+                int heartsGained = data.getIntOr("AbyssalHeartsGained", 0);
                 count += heartsGained;
             }
         }
