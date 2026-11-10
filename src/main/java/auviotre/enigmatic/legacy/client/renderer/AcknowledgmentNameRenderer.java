@@ -7,6 +7,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -44,7 +45,7 @@ public class AcknowledgmentNameRenderer {
     public void drawHeader(GuiGraphicsExtractor graphics) {
         GuiBook.drawFromTexture(graphics, this.gui.book, -8, 12, 0, 180, 140, 31);
 
-        int color = this.book.nameplateColor;
+        int color = ARGB.opaque(this.book.nameplateColor); // 26.1.2-port: text() skips colours with alpha 0
         graphics.text(this.font.get(), this.name, 13, 16, color);
         Component toDraw = this.book.getSubtitle().withStyle(this.book.getFontStyle());
         graphics.text(this.font.get(), toDraw, 24, 24, color);
