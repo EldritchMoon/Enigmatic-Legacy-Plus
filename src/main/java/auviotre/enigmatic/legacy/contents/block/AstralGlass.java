@@ -22,13 +22,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
 public class AstralGlass extends TransparentBlock {
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING; // 26.1.2-port: DirectionProperty was removed
     public static final BooleanProperty COLORFUL = BooleanProperty.create("colorful");
     public static final IntegerProperty STYLE = IntegerProperty.create("style", 0, 3);
 
@@ -48,7 +49,7 @@ public class AstralGlass extends TransparentBlock {
         level.playSound(null, pos, EnigmaticSounds.ASTRAL_GLASS_CHANGE.get(), SoundSource.BLOCKS, 0.25F, 1.8F + 0.2F * random.nextFloat());
         for (Direction direction : Direction.values()) {
             BlockPos blockpos = pos.relative(direction);
-            if (!level.getBlockState(blockpos).isSolidRender(level, blockpos)) {
+            if (!level.getBlockState(blockpos).isSolidRender()) { // 26.1.2-port: isSolidRender takes no arguments
                 Direction.Axis axis = direction.getAxis();
                 float d1 = axis == Direction.Axis.X ? 0.5F + d0 * direction.getStepX() : random.nextFloat();
                 float d2 = axis == Direction.Axis.Y ? 0.5F + d0 * direction.getStepY() : random.nextFloat();
@@ -75,7 +76,7 @@ public class AstralGlass extends TransparentBlock {
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, @Nullable Orientation orientation, boolean movedByPiston) { // 26.1.2-port: neighbour position -> Orientation
         if (!level.isClientSide() && level.hasNeighborSignal(pos))
             level.setBlock(pos, state.setValue(STYLE, level.getBestNeighborSignal(pos) / 4 % 4), 3);
     }

@@ -12,7 +12,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.TooltipFlag;
-import net.neoforged.neoforge.common.NeoForgeConfig;
+import net.neoforged.neoforge.common.config.NeoForgeCommonConfig;
 import net.neoforged.neoforge.common.PercentageAttribute;
 
 import java.util.Locale;
@@ -52,7 +52,7 @@ public class EtheriumShieldAttribute extends PercentageAttribute {
         }
 
         MutableComponent component = Component.translatable("attribute.modifier.equals.0", toValueComponent(AttributeModifier.Operation.ADD_VALUE, current, flag), Component.translatable(this.getDescriptionId()));
-        if (flag.isAdvanced() && !merged && NeoForgeConfig.COMMON.attributeAdvancedTooltipDebugInfo.get()) {
+        if (flag.isAdvanced() && !merged && NeoForgeCommonConfig.INSTANCE.attributeAdvancedTooltipDebugInfo.get()) { // 26.1.2-port: NeoForgeConfig.COMMON -> NeoForgeCommonConfig.INSTANCE
             double baseBonus = current - currentBase;
             String baseBonusText = String.format(Locale.ROOT, baseBonus > 0 ? " + %s" : " - %s", FORMAT.format(baseBonus * 100.0) + "%");
             Component debugInfo = Component.translatable("neoforge.attribute.debug.base", toValueComponent(AttributeModifier.Operation.ADD_VALUE, currentBase, flag), baseBonusText).withStyle(ChatFormatting.GRAY);

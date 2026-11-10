@@ -37,7 +37,7 @@ public class ProjectileDeflectAttribute extends PercentageAttribute {
                     Entity projectile = event.getEntity();
                     if (projectile instanceof Projectile arrow) {
                         if (arrow.getOwner() == player) {
-                            for (String tag : arrow.getTags()) {
+                            for (String tag : arrow.entityTags()) { // 26.1.2-port: getTags -> entityTags
                                 if (tag.startsWith("ProjectileDeflected")) {
                                     try {
                                         int time = Integer.parseInt(tag.split(":")[1]);
