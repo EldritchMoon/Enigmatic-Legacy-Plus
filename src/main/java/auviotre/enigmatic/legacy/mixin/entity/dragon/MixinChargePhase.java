@@ -52,7 +52,7 @@ public abstract class MixinChargePhase extends AbstractDragonPhaseInstance {
                 flame.setOwner(this.dragon);
                 flame.setRadius(4.0F);
                 flame.setDuration(160);
-                flame.setParticle(PowerParticleOption.create(ParticleTypes.DRAGON_BREATH, 1.0F));
+                flame.setCustomParticle(PowerParticleOption.create(ParticleTypes.DRAGON_BREATH, 1.0F));
                 flame.addEffect(new MobEffectInstance(MobEffects.INSTANT_DAMAGE));
                 ++this.flameAmount;
                 this.dragon.level().addFreshEntity(flame);

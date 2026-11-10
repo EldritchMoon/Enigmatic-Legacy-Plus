@@ -31,10 +31,12 @@ public abstract class MixinAnvilMenu extends ItemCombinerMenu {
     private DataSlot cost;
 
     public MixinAnvilMenu(@Nullable MenuType<?> type, int containerId, Inventory playerInventory, ContainerLevelAccess access) {
-        super(type, containerId, playerInventory, access);
+        super(type, containerId, playerInventory, access, null); // 26.1.2-port: extra slot definition argument (this constructor never runs)
     }
 
-    @Inject(method = "createResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/AnvilMenu;broadcastChanges()V"))
+    // 26.1.2-port: NeoForge wraps the vanilla body in createResultInternal(); createResult() only calls it and then
+    // fires the anvil update event, so the broadcastChanges() call is in createResultInternal() now.
+    @Inject(method = "createResultInternal", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/AnvilMenu;broadcastChanges()V"))
     public void createResultMix(CallbackInfo ci) {
         if (EnigmaticHandler.hasCurio(player, EnigmaticItems.FORGER_GEM) || EnigmaticHandler.hasCurio(player, EnigmaticItems.FORGER_CRYSTAL)) {
             int xp = 0;

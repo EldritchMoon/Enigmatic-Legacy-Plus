@@ -26,7 +26,7 @@ import java.util.List;
 public class MixinPiglinAi {
     private static void markPiglinWithCondition(Piglin piglin, Player player) {
         if (piglin != null && EnigmaticHandler.hasCurio(player, EnigmaticItems.AVARICE_SCROLL))
-            if (!piglin.getTags().contains(AvariceScroll.EFFECT_TAG)) {
+            if (!piglin.entityTags().contains(AvariceScroll.EFFECT_TAG)) { // 26.1.2-port: getTags() -> entityTags()
                 piglin.addTag(AvariceScroll.EFFECT_TAG);
             }
     }
@@ -40,7 +40,8 @@ public class MixinPiglinAi {
     }
 
     @Inject(at = @At("RETURN"), method = "pickUpItem")
-    private static void onPiglinItemPickup(Piglin piglin, ItemEntity itemEntity, CallbackInfo info) {
+    // 26.1.2-port: pickUpItem, mobInteract and stopHoldingOffHandItem take the ServerLevel first
+    private static void onPiglinItemPickup(ServerLevel level, Piglin piglin, ItemEntity itemEntity, CallbackInfo info) {
         Entity owner = itemEntity.getOwner();
         if (!itemEntity.isAlive() && itemEntity.level() instanceof ServerLevel world && owner instanceof Player player) {
             markPiglinWithCondition(piglin, player);
@@ -48,16 +49,16 @@ public class MixinPiglinAi {
     }
 
     @Inject(at = @At("RETURN"), method = "mobInteract")
-    private static void onBarterByHand(Piglin piglin, Player player, InteractionHand hand, @NotNull CallbackInfoReturnable<InteractionResult> info) {
+    private static void onBarterByHand(ServerLevel level, Piglin piglin, Player player, InteractionHand hand, @NotNull CallbackInfoReturnable<InteractionResult> info) {
         if (info.getReturnValue() == InteractionResult.CONSUME) {
             markPiglinWithCondition(piglin, player);
         }
     }
 
     @Inject(at = @At("HEAD"), method = "stopHoldingOffHandItem", cancellable = true)
-    private static void onPiglinBarter(@NotNull Piglin piglin, boolean repay, CallbackInfo info) {
+    private static void onPiglinBarter(ServerLevel level, @NotNull Piglin piglin, boolean repay, CallbackInfo info) {
         ItemStack stack = piglin.getItemInHand(InteractionHand.OFF_HAND);
-        if (piglin.level() instanceof ServerLevel && piglin.getTags().contains(AvariceScroll.EFFECT_TAG)) {
+        if (piglin.level() instanceof ServerLevel && piglin.entityTags().contains(AvariceScroll.EFFECT_TAG)) {
             piglin.removeTag(AvariceScroll.EFFECT_TAG);
             if (piglin.isAdult()) {
                 if (repay && stack.isPiglinCurrency()) {

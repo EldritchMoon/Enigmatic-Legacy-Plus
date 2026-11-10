@@ -36,7 +36,7 @@ public abstract class MixinWitherBoss extends Monster {
             int count = attacker.getRandom().nextInt(4) + 1;
             int lootingLevel = ExecutionAxe.getLootingLevel(attacker, this.level());
             count += attacker.getRandom().nextInt(lootingLevel);
-            ItemEntity itementity = this.spawnAtLocation(new ItemStack(EnigmaticItems.EVIL_ESSENCE.get(), count));
+            ItemEntity itementity = this.spawnAtLocation(level, new ItemStack(EnigmaticItems.EVIL_ESSENCE.get(), count)); // 26.1.2-port: takes the ServerLevel
             if (itementity != null) itementity.setExtendedLifetime();
         }
     }

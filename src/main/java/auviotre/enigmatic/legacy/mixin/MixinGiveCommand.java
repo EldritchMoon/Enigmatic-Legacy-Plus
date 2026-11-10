@@ -17,7 +17,7 @@ import java.util.Collection;
 public abstract class MixinGiveCommand {
     @Inject(method = "giveItem", at = @At("HEAD"), cancellable = true)
     private static void mix(CommandSourceStack source, ItemInput item, Collection<ServerPlayer> targets, int count, CallbackInfoReturnable<Integer> cir) {
-        if (IItemHelper.UNKNOWN_ITEMS.stream().anyMatch(itemLike -> item.getItem() == itemLike.asItem())) {
+        if (IItemHelper.UNKNOWN_ITEMS.stream().anyMatch(itemLike -> item.item().value() == itemLike.asItem() /* 26.1.2-port: ItemInput is a record holding a Holder<Item> */)) {
             source.sendFailure(Component.literal("Not Valid."));
             cir.setReturnValue(0);
         }

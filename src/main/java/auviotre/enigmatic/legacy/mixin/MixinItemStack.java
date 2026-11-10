@@ -48,7 +48,7 @@ public abstract class MixinItemStack implements DataComponentHolder {
 
     @Inject(method = "hasFoil", at = @At("RETURN"), cancellable = true)
     public void hasFoilMix(CallbackInfoReturnable<Boolean> info) {
-        if (this.is(Tags.Items.POTION_BOTTLE) || this.is(Items.TIPPED_ARROW)) {
+        if (this.is(Tags.Items.POTIONS_BOTTLE) /* 26.1.2-port: constant renamed, still c:potions/bottle */ || this.is(Items.TIPPED_ARROW)) {
             PotionContents contents = this.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
             if (contents.potion().isPresent() && EnigmaticPotions.ULTIMATE_POTIONS.contains(contents.potion().get())) {
                 info.setReturnValue(true);

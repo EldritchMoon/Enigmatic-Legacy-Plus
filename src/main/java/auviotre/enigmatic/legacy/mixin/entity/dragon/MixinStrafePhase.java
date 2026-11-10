@@ -39,7 +39,8 @@ public abstract class MixinStrafePhase extends AbstractDragonPhaseInstance {
         }
     }
 
-    @ModifyArg(method = "doServerTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"))
+    // 26.1.2-port: doServerTick(ServerLevel) calls addFreshEntity on the ServerLevel it is given, so the call's owner changed
+    @ModifyArg(method = "doServerTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"))
     public Entity Fireball(Entity entity) {
         RandomSource random = this.dragon.getRandom();
         int modifier = AbyssalHeart.getModifier(dragon.level(), (AbyssalHeartBearer) dragon);

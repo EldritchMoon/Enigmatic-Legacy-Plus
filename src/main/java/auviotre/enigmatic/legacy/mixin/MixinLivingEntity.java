@@ -27,6 +27,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -168,9 +169,11 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntityE
         }
         ItemStack curio = EnigmaticHandler.getCurio(this.self(), EnigmaticItems.FORGER_CRYSTAL);
         if (!curio.isEmpty() && RedemptionRing.Helper.canUseRelic(this.self())) {
-            Iterable<ItemStack> slots = this.self().getAllSlots();
             ItemStack unbreakable = null;
-            for (ItemStack slot : slots) {
+            // 26.1.2-port: getAllSlots() is gone; this walks the same slots in the same order (hands, armour, body),
+            // plus the new saddle slot, which players do not have.
+            for (EquipmentSlot equipmentSlot : EquipmentSlot.VALUES) {
+                ItemStack slot = this.self().getItemBySlot(equipmentSlot);
                 if (slot.has(DataComponents.UNBREAKABLE)) {
                     unbreakable = slot;
                     break;

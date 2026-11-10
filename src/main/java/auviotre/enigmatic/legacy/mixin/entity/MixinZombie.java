@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.mixin.entity;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Monster;
@@ -19,9 +20,10 @@ public abstract class MixinZombie extends Monster {
     }
 
     @Inject(method = "doHurtTarget", at = @At("RETURN"))
-    public void doHurtTargetMix(Entity entity, @NotNull CallbackInfoReturnable<Boolean> cir) {
+    // 26.1.2-port: doHurtTarget takes the ServerLevel first
+    public void doHurtTargetMix(ServerLevel level, Entity entity, @NotNull CallbackInfoReturnable<Boolean> cir) {
         if (cir.getReturnValue()) {
-            float effectiveDifficulty = this.level().getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
+            float effectiveDifficulty = level.getCurrentDifficultyAt(this.blockPosition()).getEffectiveDifficulty();
             if (this.getMainHandItem().is(Items.TORCH) && this.random.nextInt(8) == 0) {
                 entity.igniteForSeconds((int) (2 * effectiveDifficulty));
             }
