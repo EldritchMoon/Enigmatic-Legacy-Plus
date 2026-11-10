@@ -5,119 +5,86 @@ import auviotre.enigmatic.legacy.contents.item.etherium.EtheriumArmor;
 import auviotre.enigmatic.legacy.contents.item.etherium.EtheriumProperties;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.model.player.PlayerModel;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.item.CrossbowItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.util.context.ContextKey;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
+// 26.1.2-port: layers are generic over the render state (not the entity) and draw in submit(), where the entity is not
+// available. The shield check moved to extractShield(), which ClientSetupHandler registers as a NeoForge render state
+// modifier for the player renderers; it marks the state with the SHIELD key.
 @OnlyIn(Dist.CLIENT)
-public class EtheriumShieldLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
+public class EtheriumShieldLayer extends RenderLayer<AvatarRenderState, PlayerModel> {
+    /** Present (TRUE) on the render state of a player whose Etherium shield should be drawn. */
+    public static final ContextKey<Boolean> SHIELD = new ContextKey<>(EnigmaticLegacy.location("etherium_shield"));
     private static final Identifier TEXTURE = EnigmaticLegacy.location("textures/models/misc/ultimate_wither_armor.png");
-    private final PlayerModel<AbstractClientPlayer> model;
+    private final PlayerModel model;
 
-    public EtheriumShieldLayer(RenderLayerParent<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> renderer, EntityModelSet modelSet) {
+    public EtheriumShieldLayer(RenderLayerParent<AvatarRenderState, PlayerModel> renderer, EntityModelSet modelSet) {
         super(renderer);
-        this.model = new PlayerModel<>(modelSet.bakeLayer(ModelLayers.PLAYER), false);
+        this.model = new PlayerModel(modelSet.bakeLayer(ModelLayers.PLAYER), false) {
+            // 26.1.2-port: PlayerModel.setupAnim() now hides the hat/jacket/sleeve/trouser overlays the player switched
+            // off in Skin Customisation. The old layer called setAllVisible(true) (and showed head + hat for
+            // spectators), so the shield always covered the overlays; switching them back on here keeps that. For
+            // spectators the body, arms and legs stay hidden by super, which hides their overlays with them.
+            @Override
+            public void setupAnim(AvatarRenderState state) {
+                super.setupAnim(state);
+                this.hat.visible = true;
+                this.jacket.visible = true;
+                this.leftSleeve.visible = true;
+                this.rightSleeve.visible = true;
+                this.leftPants.visible = true;
+                this.rightPants.visible = true;
+            }
+        };
     }
 
+    /** 26.1.2-port: the entity half of the old render(). Runs each frame while the entity's render state is filled. */
+    public static void extractShield(LivingEntity entity, EntityRenderState state) {
+        boolean shield = entity instanceof Player player && EtheriumArmor.etheriumShieldRenderLayer.get()
+                && (EtheriumProperties.hasShield(player) || player.getData(EnigmaticAttachments.ENIGMATIC_DATA).getEtherealShield() > 0);
+        state.setRenderData(SHIELD, shield ? Boolean.TRUE : null);
+    }
+
+    // 26.1.2-port: render() -> submit(). The old code posed its own PlayerModel by hand (prepareMobModel, crouching, a
+    // copy of the 1.21.1 PlayerRenderer.getArmPose(), copyPropertiesTo, setupAnim). All of that is in AvatarRenderState
+    // now and submitModel() poses the model from the state when it is drawn, so the hand-written copy was removed.
     @Override
-    public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, AbstractClientPlayer player, float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (EtheriumArmor.etheriumShieldRenderLayer.get() && (EtheriumProperties.hasShield(player) || player.getData(EnigmaticAttachments.ENIGMATIC_DATA).getEtherealShield() > 0)) {
-            float f = (float) player.tickCount + partialTick;
-
-            PlayerModel<AbstractClientPlayer> playerModel = this.model();
-            playerModel.prepareMobModel(player, limbSwing, limbSwingAmount, partialTick);
-
-            if (player.isSpectator()) {
-                this.model.setAllVisible(false);
-                this.model.head.visible = true;
-                this.model.hat.visible = true;
-            } else {
-                ItemStack mainHandItem = player.getMainHandItem();
-                ItemStack offhandItem = player.getOffhandItem();
-                this.model.setAllVisible(true);
-
-                this.model.crouching = player.isCrouching();
-                HumanoidModel.ArmPose mainArmPose = this.getArmPose(player, mainHandItem, offhandItem, InteractionHand.MAIN_HAND);
-                HumanoidModel.ArmPose offArmPose = this.getArmPose(player, mainHandItem, offhandItem, InteractionHand.OFF_HAND);
-                if (player.getMainArm() == HumanoidArm.RIGHT) {
-                    this.model.rightArmPose = mainArmPose;
-                    this.model.leftArmPose = offArmPose;
-                } else {
-                    this.model.rightArmPose = offArmPose;
-                    this.model.leftArmPose = mainArmPose;
-                }
-            }
+    public void submit(PoseStack poseStack, SubmitNodeCollector collector, int packedLight, AvatarRenderState state, float yRot, float xRot) {
+        if (state.getRenderData(SHIELD) != null) {
+            float f = state.ageInTicks; // 26.1.2-port: tickCount + partialTick
 
             float scale = 1.02F;
             poseStack.pushPose();
             poseStack.scale(scale, scale, scale);
             poseStack.translate(0, (1F - scale) / 2F, 0);
 
-            this.getParentModel().copyPropertiesTo(playerModel);
-            VertexConsumer consumer = buffer.getBuffer(RenderType.energySwirl(TEXTURE, xOffset(f), f * 0.01F));
-            playerModel.setupAnim(player, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-            playerModel.renderToBuffer(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY, 0xAAFFFFFF);
+            // 26.1.2-port: order(1) draws the swirl after the player model, as vanilla's EnergySwirlLayer does.
+            // 0xAAFFFFFF is the tint that used to be passed to renderToBuffer().
+            collector.order(1).submitModel(this.model, state, poseStack, RenderTypes.energySwirl(TEXTURE, xOffset(f), f * 0.01F), packedLight, OverlayTexture.NO_OVERLAY, 0xAAFFFFFF, null, state.outlineColor, null);
             poseStack.popPose();
         }
-    }
-
-    private HumanoidModel.ArmPose getArmPose(AbstractClientPlayer player, ItemStack mainStack, ItemStack offStack, InteractionHand hand) {
-        HumanoidModel.ArmPose armPose = HumanoidModel.ArmPose.EMPTY;
-        ItemStack itemstack = hand == InteractionHand.MAIN_HAND ? mainStack : offStack;
-        if (!itemstack.isEmpty()) {
-            armPose = HumanoidModel.ArmPose.ITEM;
-            if (player.getUseItemRemainingTicks() > 0) {
-                ItemUseAnimation useAnim = itemstack.getUseAnimation();
-                if (useAnim == ItemUseAnimation.BLOCK) {
-                    armPose = HumanoidModel.ArmPose.BLOCK;
-                } else if (useAnim == ItemUseAnimation.BOW) {
-                    armPose = HumanoidModel.ArmPose.BOW_AND_ARROW;
-                } else if (useAnim == ItemUseAnimation.TRIDENT /* 26.1.2-port: old SPEAR = trident throw */) {
-                    armPose = HumanoidModel.ArmPose.THROW_SPEAR;
-                } else if (useAnim == ItemUseAnimation.CROSSBOW && hand == player.getUsedItemHand()) {
-                    armPose = HumanoidModel.ArmPose.CROSSBOW_CHARGE;
-                }
-            } else {
-                boolean flag3 = mainStack.getItem() == Items.CROSSBOW;
-                boolean flag = CrossbowItem.isCharged(mainStack);
-                boolean flag1 = offStack.getItem() == Items.CROSSBOW;
-                boolean flag2 = CrossbowItem.isCharged(offStack);
-                if (flag3 && flag) {
-                    armPose = HumanoidModel.ArmPose.CROSSBOW_HOLD;
-                }
-
-                if (flag1 && flag2 && mainStack.getItem().getUseAnimation(mainStack) == ItemUseAnimation.NONE) {
-                    armPose = HumanoidModel.ArmPose.CROSSBOW_HOLD;
-                }
-            }
-        }
-
-        return armPose;
     }
 
     protected float xOffset(float tickCount) {
         return Mth.cos(tickCount * 0.02F) * 2.0F;
     }
 
-    protected PlayerModel<AbstractClientPlayer> model() {
+    protected PlayerModel model() {
         return this.model;
     }
 }

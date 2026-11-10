@@ -26,6 +26,7 @@ import auviotre.enigmatic.legacy.contents.item.spellstones.other.Spelltuner;
 import auviotre.enigmatic.legacy.contents.item.tools.AnnihilatingSword;
 import auviotre.enigmatic.legacy.contents.item.tools.TotemOfMalice;
 import auviotre.enigmatic.legacy.registries.*;
+import net.minecraft.client.entity.ClientAvatarEntity;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
@@ -33,10 +34,16 @@ import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.particle.EndRodParticle;
 import net.minecraft.client.particle.SpellParticle;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.entity.ArmorStandRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
-import net.minecraft.world.entity.player.PlayerSkin;
+import net.minecraft.client.renderer.entity.player.AvatarRenderer;
+import net.minecraft.client.renderer.entity.state.ArmorStandRenderState;
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
+import net.minecraft.world.entity.Avatar;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.player.PlayerModelType;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
@@ -45,6 +52,8 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import net.neoforged.neoforge.client.renderstate.AvatarRenderStateModifier;
+import net.neoforged.neoforge.client.renderstate.RegisterRenderStateModifiersEvent;
 import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.client.ICuriosScreen;
 
@@ -139,21 +148,36 @@ public class ClientSetupHandler {
         event.registerItem(new SpellstoneSword.ClientExtension(), EnigmaticItems.SPELLSTONE_SWORD);
     }
 
+    // 26.1.2-port: PlayerSkin.Model -> PlayerModelType and getSkin() -> getPlayerRenderer(). The event hands out typed
+    // renderers now, so the raw LivingEntityRenderer casts (and their @SuppressWarnings) are gone.
     @SubscribeEvent
-    @SuppressWarnings({"rawtypes", "unchecked"})
     private static void addLayers(EntityRenderersEvent.AddLayers event) {
-        addPlayerLayer(event, PlayerSkin.Model.WIDE);
-        addPlayerLayer(event, PlayerSkin.Model.SLIM);
-        if (event.getRenderer(EntityType.ARMOR_STAND) instanceof LivingEntityRenderer renderer) {
+        addPlayerLayer(event, PlayerModelType.WIDE);
+        addPlayerLayer(event, PlayerModelType.SLIM);
+        if (event.getRenderer(EntityType.ARMOR_STAND) instanceof ArmorStandRenderer renderer) {
             renderer.addLayer(new EnigmaticElytraLayer<>(renderer, event.getEntityModels()));
         }
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    private static void addPlayerLayer(EntityRenderersEvent.AddLayers event, PlayerSkin.Model skin) {
-        if (event.getSkin(skin) instanceof LivingEntityRenderer renderer) {
+    private static void addPlayerLayer(EntityRenderersEvent.AddLayers event, PlayerModelType skin) {
+        AvatarRenderer<AbstractClientPlayer> renderer = event.getPlayerRenderer(skin);
+        if (renderer != null) {
             renderer.addLayer(new EnigmaticElytraLayer<>(renderer, event.getEntityModels()));
             renderer.addLayer(new EtheriumShieldLayer(renderer, event.getEntityModels()));
         }
+    }
+
+    // 26.1.2-port: new. Layers cannot see the entity any more, so what the two layers above need from it is copied into
+    // the render state here (NeoForge calls these after vanilla has filled the state, once per entity per frame).
+    @SubscribeEvent
+    private static void registerRenderStateModifiers(RegisterRenderStateModifiersEvent event) {
+        event.registerAvatarEntityModifier(new AvatarRenderStateModifier() {
+            @Override
+            public <T extends Avatar & ClientAvatarEntity> void accept(T avatar, AvatarRenderState state) {
+                EnigmaticElytraLayer.extractElytra(avatar, state);
+                EtheriumShieldLayer.extractShield(avatar, state);
+            }
+        });
+        event.registerEntityModifier(ArmorStandRenderer.class, (ArmorStand stand, ArmorStandRenderState state) -> EnigmaticElytraLayer.extractElytra(stand, state));
     }
 }
