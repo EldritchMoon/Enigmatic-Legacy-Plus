@@ -21,6 +21,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
@@ -95,7 +96,7 @@ public class SpellstoneCraftingCategory implements IRecipeCategory<RecipeHolder<
             if (i < ingredients.size()) {
                 Ingredient ingredient = ingredients.get(i);
                 if (recipe.isAllDifferent()) {
-                    List<ItemStack> items = List.of(ingredient.getItems());
+                    List<ItemStack> items = ingredient.items().map(item -> new ItemStack(item)).toList(); // 26.1.2-port: getItems() -> items()
                     List<ItemStack> list = new ArrayList<>(items);
                     for (int j = 0; j < items.size(); j++) {
                         list.set(j, items.get((j + i) % items.size()));
@@ -104,8 +105,11 @@ public class SpellstoneCraftingCategory implements IRecipeCategory<RecipeHolder<
                 } else builder.addInputSlot(pair.getA(), pair.getB()).add(ingredient); // 26.1.2-port: JEI renamed addIngredients/addItemStack to add
             } else builder.addInputSlot(pair.getA(), pair.getB());
         }
-        if (holder.id().equals(EnigmaticLegacy.location("spellstone_fragmentation"))) {
-            spell.addIngredients(Ingredient.of(EnigmaticTags.Items.SPELLSTONES));
+        // 26.1.2-port: the id is a ResourceKey now, so it has to be unwrapped before comparing with an Identifier
+        // (the old line still compiled, and would always have been false).
+        if (holder.id().identifier().equals(EnigmaticLegacy.location("spellstone_fragmentation"))) {
+            // 26.1.2-port: Ingredient.of(TagKey) is gone; a tag slot display shows every item in the tag
+            spell.add(new SlotDisplay.TagSlotDisplay(EnigmaticTags.Items.SPELLSTONES));
             builder.addOutputSlot(58, 59).add(EnigmaticItems.SPELLSTONE_DEBRIS.toStack(4));
             return;
         }

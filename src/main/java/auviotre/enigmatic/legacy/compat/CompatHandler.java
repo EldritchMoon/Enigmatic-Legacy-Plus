@@ -1,12 +1,7 @@
 package auviotre.enigmatic.legacy.compat;
 
-import auviotre.enigmatic.legacy.EnigmaticLegacy;
-import auviotre.enigmatic.legacy.compat.appleskin.AppleSkinCompatHandler;
-import auviotre.enigmatic.legacy.compat.thirst.ThirstCompatHandler;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
-import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.common.NeoForge;
 
 public class CompatHandler {
     private static final CompatHandler INSTANCE = new CompatHandler();
@@ -20,13 +15,15 @@ public class CompatHandler {
     }
 
     public void register(IEventBus modEventBus) {
-        if (isLoaded("appleskin") && FMLEnvironment.getDist().isClient()) {
-            EnigmaticLegacy.LOGGER.info("Appleskin Compat.");
-            NeoForge.EVENT_BUS.register(new AppleSkinCompatHandler());
-        }
-        if (isLoaded("thirst")) {
-            EnigmaticLegacy.LOGGER.info("Thirst Compat.");
-            NeoForge.EVENT_BUS.register(new ThirstCompatHandler());
-        }
+        // TODO(port): the AppleSkin and Thirst handlers are excluded from the build until those mods are on 26.1.2
+        // (phase 9, see build.gradle); restore these registrations and the two imports with them.
+        // if (isLoaded("appleskin") && FMLEnvironment.getDist().isClient()) {
+        //     EnigmaticLegacy.LOGGER.info("Appleskin Compat.");
+        //     NeoForge.EVENT_BUS.register(new AppleSkinCompatHandler());
+        // }
+        // if (isLoaded("thirst")) {
+        //     EnigmaticLegacy.LOGGER.info("Thirst Compat.");
+        //     NeoForge.EVENT_BUS.register(new ThirstCompatHandler());
+        // }
     }
 }

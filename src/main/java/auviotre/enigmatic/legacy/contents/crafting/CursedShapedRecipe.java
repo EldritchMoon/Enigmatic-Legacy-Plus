@@ -58,6 +58,11 @@ public class CursedShapedRecipe extends ShapedRecipe {
         return super.matches(input, level);
     }
 
+    // 26.1.2-port: new. Recipe.getResultItem() is gone and ShapedRecipe keeps its result private; the JEI plugin shows it.
+    public ItemStack getResultItem() {
+        return this.result.create();
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public RecipeSerializer<ShapedRecipe> getSerializer() {

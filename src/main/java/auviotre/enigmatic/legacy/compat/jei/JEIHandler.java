@@ -22,13 +22,14 @@ import mezz.jei.api.recipe.vanilla.IJeiBrewingRecipe;
 import mezz.jei.api.recipe.vanilla.IVanillaRecipeFactory;
 import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.NotNull;
@@ -89,11 +90,13 @@ public class JEIHandler implements IModPlugin {
     @Override
     public void registerRecipes(@NotNull IRecipeRegistration registration) {
         IVanillaRecipeFactory factory = registration.getVanillaRecipeFactory();
-        RecipeManager manager = getLevel().getRecipeManager();
-        List<RecipeHolder<SpellstoneTableRecipe>> holders = manager.getAllRecipesFor(EnigmaticRecipes.SPELLSTONE_CRAFTING.get());
+        // 26.1.2-port: the client has no RecipeManager any more; the recipes come from the server through
+        // SyncedRecipes (which needs JEI on the server as well, like JEI's own vanilla recipes do).
+        List<RecipeHolder<SpellstoneTableRecipe>> holders = SyncedRecipes.spellstoneCrafting();
+        // 26.1.2-port: a RecipeHolder's id is a ResourceKey, the result an ItemStackTemplate, the ingredients a List
         RecipeHolder<SpellstoneTableRecipe> fragmentation = new RecipeHolder<>(
-                EnigmaticLegacy.location("spellstone_fragmentation"),
-                new SpellstoneTableRecipe(EnigmaticItems.SPELLSTONE_DEBRIS.toStack(4), 0, NonNullList.create(), false)
+                ResourceKey.create(Registries.RECIPE, EnigmaticLegacy.location("spellstone_fragmentation")),
+                new SpellstoneTableRecipe(new ItemStackTemplate(EnigmaticItems.SPELLSTONE_DEBRIS.get(), 4), 0, List.of(), false)
         );
         registration.addRecipes(EnigmaticRecipeTypes.SPELLSTONE_CRAFTING, holders);
         registration.addRecipes(EnigmaticRecipeTypes.SPELLSTONE_CRAFTING, List.of(fragmentation));
@@ -179,7 +182,7 @@ public class JEIHandler implements IModPlugin {
             damagedFully.setDamageValue(damagedFully.getMaxDamage());
             IJeiAnvilRecipe repairWithMaterial = factory.createAnvilRecipe(
                     List.of(damagedFully),
-                    List.of(repairIngredient.getItems()),
+                    repairIngredient.items().map(item -> new ItemStack(item)).toList(), // 26.1.2-port: getItems() -> items(), a stream of item holders
                     damagedThreeQuartersSingletonList,
                     EnigmaticLegacy.location("materials_repair." + name)
             );
