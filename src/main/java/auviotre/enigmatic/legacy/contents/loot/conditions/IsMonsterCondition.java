@@ -24,7 +24,7 @@ public record IsMonsterCondition(LootContext.EntityTarget entityTarget) implemen
 
     @Override
     public boolean test(LootContext context) {
-        Entity entity = context.getParam(this.entityTarget.getParam());
+        Entity entity = context.getParameter(this.entityTarget.contextParam()); // 26.1.2-port: getParam -> getParameter, EntityTarget.getParam -> contextParam
         return entity instanceof Monster;
     }
 }

@@ -30,7 +30,7 @@ public record SpellstoneLootCondition(float baseChance, float bonusChance) imple
     @Override
     public boolean test(@NotNull LootContext context) {
         float chance = this.baseChance;
-        if (context.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof LivingEntity entity) {
+        if (context.getOptionalParameter(LootContextParams.THIS_ENTITY) instanceof LivingEntity entity) { // 26.1.2-port: getParamOrNull -> getOptionalParameter
             if (EnigmaticHandler.hasCurio(entity, EnigmaticItems.SPELLTUNER)) {
                 chance += this.bonusChance;
             }
