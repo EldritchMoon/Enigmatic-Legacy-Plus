@@ -29,6 +29,7 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -661,10 +662,16 @@ public class SpellstoneSword extends Item {
 
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
+        return useDuration(stack, entity.getOffhandItem());
+    }
+
+    // 26.1.2-port: the body of getUseDuration(), split out because the third-person arm pose only has a render state
+    // (with the held stacks) and no entity to ask.
+    public static int useDuration(ItemStack stack, ItemStack offhand) {
         if (isResonatingWith(stack, EnigmaticItems.ANGEL_BLESSING)) return 36;
         if (isResonatingWith(stack, EnigmaticItems.ILLUSION_LANTERN)) return 80;
         if (isResonatingWith(stack, EnigmaticItems.VOID_PEARL)) return 24;
-        return getResonance(stack).isEmpty() || entity.getOffhandItem().is(EnigmaticItems.SPELLCORE) ? 60 : 32000;
+        return getResonance(stack).isEmpty() || offhand.is(EnigmaticItems.SPELLCORE) ? 60 : 32000;
     }
 
     @Override
@@ -674,7 +681,10 @@ public class SpellstoneSword extends Item {
         if (isResonatingWith(stack, EnigmaticItems.LOST_ENGINE)) return ItemUseAnimation.BLOCK;
         if (isResonatingWith(stack, EnigmaticItems.VOID_PEARL)) return ItemUseAnimation.BLOCK;
         if (isResonatingWith(stack, EnigmaticItems.ILLUSION_LANTERN)) return ItemUseAnimation.BOW;
-        return ItemUseAnimation.CUSTOM;
+        // 26.1.2-port: NeoForge's ItemUseAnimation.CUSTOM was removed. NONE is the closest value left: third person
+        // treats both the same, and in first person applyForgeHandTransform() below still takes over whenever it
+        // returns true. When it returns false, NONE holds the sword in the normal position while it is being used.
+        return ItemUseAnimation.NONE;
     }
 
     @Override
@@ -755,11 +765,17 @@ public class SpellstoneSword extends Item {
 
     @OnlyIn(Dist.CLIENT)
     public static class ClientExtension implements IClientItemExtensions {
-        public static void animate(ModelPart rightArm, ModelPart leftArm, @NotNull LivingEntity entity, boolean rightHanded) {
+        // 26.1.2-port: arm pose transformers get the render state instead of the entity. "arm" is the arm in this
+        // pose, i.e. the one using the sword, so its stack is the old entity.getUseItem(); the off-hand stack is the
+        // one in the arm opposite the main arm. state.ticksUsingItem(arm) includes the partial tick, where
+        // entity.getTicksUsingItem() counted whole ticks.
+        public static void animate(ModelPart rightArm, ModelPart leftArm, @NotNull HumanoidRenderState state, HumanoidArm arm) {
+            boolean rightHanded = arm == HumanoidArm.RIGHT;
             ModelPart right = rightHanded ? rightArm : leftArm;
             ModelPart left = rightHanded ? leftArm : rightArm;
-            float duration = (float) entity.getUseItem().getUseDuration(entity);
-            float tick = Mth.clamp((float) entity.getTicksUsingItem(), 0.0F, duration);
+            ItemStack offhand = state.mainArm == HumanoidArm.RIGHT ? state.leftHandItemStack : state.rightHandItemStack;
+            float duration = (float) useDuration(state.getUseItemStackForArm(arm), offhand);
+            float tick = Mth.clamp(state.ticksUsingItem(arm), 0.0F, duration);
             float partial = tick / duration;
             right.yRot = rightHanded ? -0.8F : 0.8F;
             right.xRot = Mth.lerp(partial, -0.98F, -1.28F);
