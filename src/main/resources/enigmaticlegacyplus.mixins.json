@@ -39,9 +39,6 @@
   },
   "client": [
     "MixinWorldListEntry",
-    "accessor.EffectInstanceAccessor",
-    "accessor.PostChainAccessor",
-    "client.MixinGameRenderer",
     "client.MixinItemModelResolver"
   ]
 }
