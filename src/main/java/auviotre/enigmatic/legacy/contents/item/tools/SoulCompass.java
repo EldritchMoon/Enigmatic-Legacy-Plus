@@ -9,13 +9,10 @@ import auviotre.enigmatic.legacy.handlers.SoulArchive;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.base.Objects;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
-import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ItemOwner;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -65,70 +62,68 @@ public class SoulCompass extends BaseCursedItem {
         }
     }
 
+    // 26.1.2-port: was registerVariants(). It created the two needles and registered the "angle" item property as an
+    // anonymous ClampedItemPropertyFunction; ItemProperties is gone, so only the needles are left here and the function
+    // body is getAngle() below, called by ELItemModelProperties.SoulCompassAngle.
     @OnlyIn(Dist.CLIENT)
-    public void registerVariants() {
+    public void initNeedle() {
         this.wobble = new CompassWobble(0.1);
         this.wobbleRandom = new CompassWobble(0.6);
-        ItemProperties.register(this, Identifier.withDefaultNamespace("angle"), new ClampedItemPropertyFunction() {
-            private final CompassWobble wobble = SoulCompass.this.wobble;
-            private final CompassWobble wobbleRandom = SoulCompass.this.wobbleRandom;
-
-            @Override
-            public float unclampedCall(ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity living, int seed) {
-                Entity entity = living != null ? living : stack.getEntityRepresentation();
-                if (entity == null) return 0.0F;
-                if (level == null && entity.level() instanceof ClientLevel) {
-                    level = (ClientLevel) entity.level();
-                }
-                assert level != null;
-                BlockPos target = this.getTargetPosition();
-                long gameTime = level.getGameTime();
-
-                if (target != null && !(entity.position().distanceToSqr(target.getX() + 0.5D, entity.position().y(), target.getZ() + 0.5D) < 1.0E-5F)) {
-                    boolean isLocalPlayer = living instanceof Player player && player.isLocalPlayer();
-                    double bodyRotation;
-
-                    if (isLocalPlayer) bodyRotation = living.getYRot();
-                    else return this.randomAngle(gameTime, seed);
-                    ItemStack item = EnigmaticHandler.getItem(living, EnigmaticItems.SOUL_COMPASS);
-                    if (!EnigmaticHandler.canUse(living, stack) || !ItemStack.isSameItemSameComponents(item, stack) || level.getBiome(living.blockPosition()).is(Biomes.SOUL_SAND_VALLEY))
-                        return this.randomAngle(gameTime, seed);
-
-                    bodyRotation = Mth.positiveModulo(bodyRotation / 360.0D, 1.0D);
-                    double angle = SoulCompass.this.getAngleTo(Vec3.atCenterOf(target), entity) / ((float) Math.PI * 2F);
-                    double otherAngle;
-
-                    if (this.wobble.shouldUpdate(gameTime)) {
-                        this.wobble.update(gameTime, 0.5D - (bodyRotation - 0.25D));
-                    }
-
-                    otherAngle = angle + this.wobble.rotation;
-
-                    return Mth.positiveModulo((float) otherAngle, 1.0F);
-                } else return this.randomAngle(gameTime, seed);
-            }
-
-            private float randomAngle(long gameTime, int seed) {
-                if (this.wobbleRandom.shouldUpdate(gameTime)) {
-                    this.wobbleRandom.update(gameTime, Math.random());
-                }
-                double randomAngle = this.wobbleRandom.rotation + this.hash(seed) / 2.14748365E9F;
-                return Mth.positiveModulo((float) randomAngle, 1.0F);
-            }
-
-            private int hash(int value) {
-                return value * 1327217883;
-            }
-
-            @Nullable
-            private BlockPos getTargetPosition() {
-                return SoulCompass.this.nearestCrystal;
-            }
-        });
     }
 
-    private double getAngleTo(Vec3 pos, Entity entity) {
-        return Math.atan2(pos.z() - entity.getZ(), pos.x() - entity.getX());
+    // 26.1.2-port: the old function got a LivingEntity and fell back to stack.getEntityRepresentation() (an item frame
+    // or a dropped item), which no longer exists. Item model properties get an ItemOwner now, which is the living
+    // holder or that other entity, so "entity" became "owner" and "living" is owner.asLivingEntity().
+    @OnlyIn(Dist.CLIENT)
+    public float getAngle(ItemStack stack, @Nullable ClientLevel level, @Nullable ItemOwner owner, int seed) {
+        if (owner == null) return 0.0F;
+        LivingEntity living = owner.asLivingEntity();
+        if (level == null && owner.level() instanceof ClientLevel) {
+            level = (ClientLevel) owner.level();
+        }
+        assert level != null;
+        BlockPos target = this.nearestCrystal;
+        long gameTime = level.getGameTime();
+
+        if (target != null && !(owner.position().distanceToSqr(target.getX() + 0.5D, owner.position().y(), target.getZ() + 0.5D) < 1.0E-5F)) {
+            boolean isLocalPlayer = living instanceof Player player && player.isLocalPlayer();
+            double bodyRotation;
+
+            if (isLocalPlayer) bodyRotation = living.getYRot();
+            else return this.randomAngle(gameTime, seed);
+            ItemStack item = EnigmaticHandler.getItem(living, EnigmaticItems.SOUL_COMPASS);
+            if (!EnigmaticHandler.canUse(living, stack) || !ItemStack.isSameItemSameComponents(item, stack) || level.getBiome(living.blockPosition()).is(Biomes.SOUL_SAND_VALLEY))
+                return this.randomAngle(gameTime, seed);
+
+            bodyRotation = Mth.positiveModulo(bodyRotation / 360.0D, 1.0D);
+            double angle = this.getAngleTo(Vec3.atCenterOf(target), owner.position()) / ((float) Math.PI * 2F);
+            double otherAngle;
+
+            if (this.wobble.shouldUpdate(gameTime)) {
+                this.wobble.update(gameTime, 0.5D - (bodyRotation - 0.25D));
+            }
+
+            otherAngle = angle + this.wobble.rotation;
+
+            return Mth.positiveModulo((float) otherAngle, 1.0F);
+        } else return this.randomAngle(gameTime, seed);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private float randomAngle(long gameTime, int seed) {
+        if (this.wobbleRandom.shouldUpdate(gameTime)) {
+            this.wobbleRandom.update(gameTime, Math.random());
+        }
+        double randomAngle = this.wobbleRandom.rotation + this.hash(seed) / 2.14748365E9F;
+        return Mth.positiveModulo((float) randomAngle, 1.0F);
+    }
+
+    private int hash(int value) {
+        return value * 1327217883;
+    }
+
+    private double getAngleTo(Vec3 pos, Vec3 from) { // 26.1.2-port: takes the owner's position instead of an Entity
+        return Math.atan2(pos.z() - from.z(), pos.x() - from.x());
     }
 
     @OnlyIn(Dist.CLIENT)

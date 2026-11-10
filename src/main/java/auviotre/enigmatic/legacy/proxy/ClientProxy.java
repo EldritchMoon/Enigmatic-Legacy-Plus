@@ -1,12 +1,7 @@
 package auviotre.enigmatic.legacy.proxy;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
-import auviotre.enigmatic.legacy.api.item.ITaintable;
 import auviotre.enigmatic.legacy.client.screen.PermanentDeathScreen;
-import auviotre.enigmatic.legacy.contents.item.rings.MinerRing;
-import auviotre.enigmatic.legacy.contents.item.spellstones.other.SpellstoneSword;
-import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
-import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.GenericMessageScreen;
@@ -14,51 +9,16 @@ import net.minecraft.client.gui.screens.ProgressScreen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
-import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.player.Player;
 
 public class ClientProxy extends CommonProxy {
     @Override
     public void clientInit() {
+        // 26.1.2-port: the 26 ItemProperties.register(...) calls that were here are gone with ItemProperties. What each
+        // one computed is now a registered item model property in ELItemModelProperties (or a vanilla one; the list is
+        // in that file), registered from ClientSetupHandler.
         try {
-            Identifier eldritchLocation = EnigmaticLegacy.location("eldritch_open");
-            ClampedItemPropertyFunction taintedFunc = (stack, level, entity, i) -> ITaintable.isTainted(stack) ? 1.0F : 0.0F;
-            ClampedItemPropertyFunction eldritchFunc = (stack, level, entity, i) -> stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F);
-            ItemProperties.register(EnigmaticItems.TWISTED_HEART.get(), ITaintable.LOCATION, taintedFunc);
-            ItemProperties.register(EnigmaticItems.PURE_HEART.get(), ITaintable.LOCATION, taintedFunc);
-            ItemProperties.register(EnigmaticItems.ABYSSAL_HEART.get(), eldritchLocation, (stack, level, entity, i) -> entity == null ? (ITaintable.isTainted(stack) ? 1.0F : 0.0F) : stack.getOrDefault(EnigmaticComponents.ELDRITCH_TIMER, 0.0F));
-            ItemProperties.register(EnigmaticItems.THE_INFINITUM.get(), eldritchLocation, eldritchFunc);
-            ItemProperties.register(EnigmaticItems.ELDRITCH_AMULET.get(), eldritchLocation, eldritchFunc);
-            ItemProperties.register(EnigmaticItems.DESOLATION_RING.get(), eldritchLocation, eldritchFunc);
-            ItemProperties.register(EnigmaticItems.VIOLENCE_SCROLL.get(), eldritchLocation, eldritchFunc);
-            ItemProperties.register(EnigmaticItems.CHAOS_ELYTRA.get(), eldritchLocation, eldritchFunc);
-            ItemProperties.register(EnigmaticItems.ANNIHILATING_SWORD.get(), eldritchLocation, eldritchFunc);
-            ItemProperties.register(EnigmaticItems.ANNIHILATING_SWORD.get(), Identifier.withDefaultNamespace("blocking"), (stack, level, entity, i) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack && entity.getUsedItemHand() == InteractionHand.OFF_HAND ? 1.0F : 0.0F);
-            ItemProperties.register(EnigmaticItems.ANNIHILATING_SWORD.get(), Identifier.withDefaultNamespace("charging"), (stack, level, entity, i) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack && entity.getUsedItemHand() == InteractionHand.MAIN_HAND ? 1.0F : 0.0F);
-            ItemProperties.register(EnigmaticItems.SPELLSTONE_SWORD.get(), Identifier.withDefaultNamespace("blocking"), (stack, level, entity, i) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
-            ItemProperties.register(EnigmaticItems.SPELLSTONE_SWORD.get(), Identifier.withDefaultNamespace("out"), (stack, level, entity, i) ->
-                    (SpellstoneSword.isResonatingWith(stack, EnigmaticItems.LOST_ENGINE) && entity != null && entity.getMainHandItem() == stack && entity.getData(EnigmaticAttachments.ENIGMATIC_DATA).getEngineHook() != null) ? 1.0F : 0.0F);
-            ItemProperties.register(EnigmaticItems.SPELLSTONE_SWORD.get(), Identifier.withDefaultNamespace("charged"), (stack, level, entity, i) ->
-                    (SpellstoneSword.isResonatingWith(stack, EnigmaticItems.ANGEL_BLESSING) && stack.getOrDefault(EnigmaticComponents.INT, 0) > 0) ? 1.0F : 0.0F);
-            ItemProperties.register(EnigmaticItems.SPELLSTONE_SWORD.get(), Identifier.withDefaultNamespace("pulling"), (stack, level, entity, i) ->
-                    (entity != null && SpellstoneSword.isResonatingWith(stack, EnigmaticItems.ANGEL_BLESSING) && entity.isUsingItem() && entity.getUseItem() == stack) ? (float) (stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / stack.getUseDuration(entity) : 0.0F);
-            ItemProperties.register(EnigmaticItems.SPELLSTONE_SWORD.get(), EnigmaticLegacy.location("form"), (stack, level, entity, i) -> SpellstoneSword.Form.getValue(stack));
-            ItemProperties.register(EnigmaticItems.MINER_RING.get(), Identifier.withDefaultNamespace("on"), (stack, level, entity, i) -> MinerRing.getPoint(stack) > 0 ? 1.0F : 0.0F);
-            ItemProperties.register(EnigmaticItems.ICHOR_SPEAR.get(), Identifier.withDefaultNamespace("using"), (stack, level, entity, i) -> entity != null && entity.getUseItem().equals(stack) ? 1.0F : 0.0F);
-            ItemProperties.register(EnigmaticItems.DRAGON_BREATH_BOW.get(), Identifier.withDefaultNamespace("pulling"), (stack, level, entity, i) -> entity != null && entity.isUsingItem() && entity.getUseItem().equals(stack) ? 1.0F : 0.0F);
-            ItemProperties.register(EnigmaticItems.DRAGON_BREATH_BOW.get(), Identifier.withDefaultNamespace("pull"), (stack, level, entity, i) -> (entity == null || entity.getUseItem() != stack) ? 0.0F : (stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / 20.0F);
-            ItemProperties.register(EnigmaticItems.ETHEREAL_FORGING_CHARM.get(), Identifier.withDefaultNamespace("active"), (stack, level, entity, i) -> stack.getOrDefault(EnigmaticComponents.BOOLEAN, false) ? 1.0F : 0.0F);
-            ItemProperties.register(EnigmaticItems.ETHERIUM_CORE.get(), Identifier.withDefaultNamespace("active"), (stack, level, entity, i) -> stack.getOrDefault(EnigmaticComponents.BOOLEAN, false) ? 1.0F : 0.0F);
-            ItemProperties.register(EnigmaticItems.SACRED_CHALICE.get(), Identifier.withDefaultNamespace("filled"), (stack, level, entity, i) -> stack.getOrDefault(EnigmaticComponents.BOOLEAN, false) ? 1.0F : 0.0F);
-            ItemProperties.register(EnigmaticItems.EARTH_PROMISE.get(), Identifier.withDefaultNamespace("broken"), (stack, level, entity, i) -> entity instanceof Player player && player.getCooldowns().isOnCooldown(stack) ? 1.0F : 0.0F);
-            ItemProperties.register(EnigmaticItems.ETHERIUM_SWORD.get(), Identifier.withDefaultNamespace("blocking"), (stack, level, entity, i) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
-            ItemProperties.register(EnigmaticItems.INFERNAL_SHIELD.get(), Identifier.withDefaultNamespace("blocking"), (stack, level, entity, i) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
-            EnigmaticItems.SOUL_COMPASS.get().registerVariants();
-            EnigmaticItems.ENIGMATIC_EYE.get().registerVariants();
+            EnigmaticItems.SOUL_COMPASS.get().initNeedle();
         } catch (Exception exception) {
             EnigmaticLegacy.LOGGER.warn("Could not load item models.");
         }

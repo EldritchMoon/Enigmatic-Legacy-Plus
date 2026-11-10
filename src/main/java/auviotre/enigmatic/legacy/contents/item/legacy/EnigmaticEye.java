@@ -18,7 +18,6 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -80,14 +79,13 @@ public class EnigmaticEye extends BaseCurioItem {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public void registerVariants() {
-        ItemProperties.register(this, Identifier.withDefaultNamespace("enigmatic_eye_activated"), (stack, world, entity, number) -> {
-            if (!this.isDormant(stack)) return 1F;
-            int animTicks = stack.getOrDefault(EnigmaticComponents.ACTIVATION_ANIMATION.get(), -1);
-            if (animTicks > -1) return animTicks > 2 ? 0.4F : 0.8F;
-            return 0F;
-        });
+    // 26.1.2-port: was registerVariants(), which registered this as the "enigmatic_eye_activated" item property.
+    // ItemProperties is gone; ELItemModelProperties.EnigmaticEyeActivated calls this instead.
+    public float getActivation(ItemStack stack) {
+        if (!this.isDormant(stack)) return 1F;
+        int animTicks = stack.getOrDefault(EnigmaticComponents.ACTIVATION_ANIMATION.get(), -1);
+        if (animTicks > -1) return animTicks > 2 ? 0.4F : 0.8F;
+        return 0F;
     }
 
     @Override

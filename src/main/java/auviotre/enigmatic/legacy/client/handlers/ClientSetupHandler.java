@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.client.handlers;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
+import auviotre.enigmatic.legacy.client.ELItemModelProperties;
 import auviotre.enigmatic.legacy.client.KeyHandler;
 import auviotre.enigmatic.legacy.client.particles.IchorParticle;
 import auviotre.enigmatic.legacy.client.particles.StarDustParticle;
@@ -181,5 +182,17 @@ public class ClientSetupHandler {
             }
         });
         event.registerEntityModifier(ArmorStandRenderer.class, (ArmorStand stand, ArmorStandRenderState state) -> EnigmaticElytraLayer.extractElytra(stand, state));
+    }
+
+    // 26.1.2-port: new. ItemProperties is gone; the properties that pick item models are registered types that item
+    // model definitions refer to by id (see ELItemModelProperties for the list and what each one replaces).
+    @SubscribeEvent
+    private static void registerConditionalItemModelProperties(RegisterConditionalItemModelPropertyEvent event) {
+        ELItemModelProperties.registerConditional(event);
+    }
+
+    @SubscribeEvent
+    private static void registerRangeSelectItemModelProperties(RegisterRangeSelectItemModelPropertyEvent event) {
+        ELItemModelProperties.registerRangeSelect(event);
     }
 }
