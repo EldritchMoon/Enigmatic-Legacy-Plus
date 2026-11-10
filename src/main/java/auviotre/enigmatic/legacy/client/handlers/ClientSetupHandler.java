@@ -114,7 +114,7 @@ public class ClientSetupHandler {
         event.registerEntityRenderer(EnigmaticEntities.ABYSS_PROJECTILE.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(EnigmaticEntities.ENGINE_HOOK.get(), EngineHookRenderer::new);
         event.registerEntityRenderer(EnigmaticEntities.ANGEL_BEAM.get(), AngelBeamRenderer::new);
-        event.registerEntityRenderer(EnigmaticEntities.PIGLIN_WANDERER.get(), context -> new PiglinWandererRender(context, ModelLayers.PIGLIN_BRUTE, ModelLayers.PIGLIN_BRUTE_INNER_ARMOR, ModelLayers.PIGLIN_BRUTE_OUTER_ARMOR));
+        event.registerEntityRenderer(EnigmaticEntities.PIGLIN_WANDERER.get(), context -> new PiglinWandererRender(context, ModelLayers.PIGLIN_BRUTE, ModelLayers.PIGLIN_BRUTE_ARMOR)); // 26.1.2-port: inner/outer armour layers -> one ArmorModelSet
         event.registerBlockEntityRenderer(EnigmaticBlockEntities.DIMENSIONAL_ANCHOR_ENTITY.get(), DimensionalAnchorRender::new);
         event.registerBlockEntityRenderer(EnigmaticBlockEntities.SPELLSTONE_TABLE_ENTITY.get(), SpellstoneTableRender::new);
     }
