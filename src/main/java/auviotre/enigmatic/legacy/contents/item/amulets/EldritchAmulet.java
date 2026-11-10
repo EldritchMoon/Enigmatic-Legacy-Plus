@@ -16,7 +16,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -31,6 +30,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
@@ -58,6 +58,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EquipmentSlot;
 import org.jetbrains.annotations.Nullable;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 import net.minecraft.world.item.component.TooltipDisplay;
 import auviotre.enigmatic.legacy.handlers.SaveDataHelper;
 
@@ -79,25 +80,30 @@ public class EldritchAmulet extends BaseCurioItem {
         builder.pop(2);
     }
 
-    private static Map<String, NonNullList<ItemStack>> inventoryMap(Player player) {
-        Map<String, NonNullList<ItemStack>> inventories = new HashMap<>();
-        inventories.put("Armor", player.getInventory().armor);
-        inventories.put("Main", player.getInventory().items);
-        inventories.put("Offhand", player.getInventory().offhand);
+    // 26.1.2-port: Inventory.armor / items / offhand are no longer lists that can be read and cleared directly (armour
+    // and offhand live in the entity's equipment). Each group is now the list of its inventory slot numbers, in the
+    // order of the old lists, so the saved "InventoryArmor" / "InventoryMain" / "InventoryOffhand" layout is unchanged.
+    private static Map<String, List<Integer>> inventoryMap() {
+        Map<String, List<Integer>> inventories = new HashMap<>();
+        inventories.put("Armor", List.of(EquipmentSlot.FEET.getIndex(Inventory.INVENTORY_SIZE), EquipmentSlot.LEGS.getIndex(Inventory.INVENTORY_SIZE),
+                EquipmentSlot.CHEST.getIndex(Inventory.INVENTORY_SIZE), EquipmentSlot.HEAD.getIndex(Inventory.INVENTORY_SIZE)));
+        inventories.put("Main", IntStream.range(0, Inventory.INVENTORY_SIZE).boxed().toList());
+        inventories.put("Offhand", List.of(Inventory.SLOT_OFFHAND));
         return inventories;
     }
 
     public static void storeInventory(ServerPlayer player) {
-        Map<String, NonNullList<ItemStack>> inventories = inventoryMap(player);
+        Map<String, List<Integer>> inventories = inventoryMap();
+        Inventory inventory = player.getInventory();
         CompoundTag tag = new CompoundTag();
         inventories.forEach((key, value) -> {
             ListTag list = new ListTag();
-            for (int i = 0; i < value.size(); i++) {
-                ItemStack stack = value.get(i);
-                if (!stack.isEmpty() && !player.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) && EnchantmentHelper.has(stack, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP))
+            for (int slot : value) {
+                ItemStack stack = inventory.getItem(slot);
+                if (!stack.isEmpty() && !player.level().getGameRules().get(GameRules.KEEP_INVENTORY) && EnchantmentHelper.has(stack, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP))
                     stack = ItemStack.EMPTY;
                 list.add(SaveDataHelper.saveItem(player.registryAccess(), stack));
-                value.set(i, ItemStack.EMPTY);
+                inventory.setItem(slot, ItemStack.EMPTY);
             }
             tag.put("Inventory" + key, list);
         });
@@ -105,7 +111,8 @@ public class EldritchAmulet extends BaseCurioItem {
     }
 
     public static boolean reclaimInventory(ServerPlayer oldPlayer, ServerPlayer newPlayer) {
-        Map<String, NonNullList<ItemStack>> inventories = inventoryMap(newPlayer);
+        Map<String, List<Integer>> inventories = inventoryMap();
+        Inventory inventory = newPlayer.getInventory();
         Tag maybeTag = EnigmaticHandler.getPersistedData(oldPlayer).get("ELPersistentInventory");
         boolean hadTag = false;
         if (maybeTag instanceof CompoundTag tag) {
@@ -117,7 +124,7 @@ public class EldritchAmulet extends BaseCurioItem {
                     for (int i = 0; i < value.size(); i++) {
                         CompoundTag stackTag = list.getCompoundOrEmpty(i);
                         ItemStack stack = SaveDataHelper.parseItem(newPlayer.registryAccess(), stackTag);
-                        value.set(i, stack);
+                        inventory.setItem(value.get(i), stack);
                     }
                 }
             });

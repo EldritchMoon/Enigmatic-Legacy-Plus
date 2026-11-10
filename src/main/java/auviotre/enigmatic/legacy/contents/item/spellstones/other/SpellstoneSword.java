@@ -739,7 +739,7 @@ public class SpellstoneSword extends Item {
 
     public record Resonance(ItemStack spellstone) {
         public static final MapCodec<Resonance> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                ItemStack.SINGLE_ITEM_CODEC.fieldOf("spellstone").forGetter(Resonance::spellstone)
+                ItemStack.CODEC.fieldOf("spellstone").forGetter(Resonance::spellstone)
         ).apply(instance, Resonance::of));
 
         public static final Codec<Resonance> CODEC = MAP_CODEC.codec();

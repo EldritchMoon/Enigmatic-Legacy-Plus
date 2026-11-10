@@ -2,7 +2,8 @@ package auviotre.enigmatic.legacy.contents.item.misc;
 
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.compat.CompatHandler;
-import auviotre.enigmatic.legacy.compat.mysticalagriculture.MACompatHandler;
+// TODO(port): Mystical Agriculture compat is excluded from the build until phase 9 (see build.gradle).
+// import auviotre.enigmatic.legacy.compat.mysticalagriculture.MACompatHandler;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import net.minecraft.core.BlockPos;
@@ -58,9 +59,10 @@ public class Infinimeal extends BaseItem {
     private static boolean tryApply(@NotNull ItemStack stack, Level world, BlockPos pos, Optional<Player> optionalPlayer, Optional<Direction> clickedFace) {
         ItemStack stackCopy = new ItemStack(stack.getItem());
 
-        if (CompatHandler.isLoaded("mysticalagriculture") && MACompatHandler.tryGrow(world, world.getBlockState(pos), pos)) {
-            return true;
-        }
+        // TODO(port): re-enable with the Mystical Agriculture compat (phase 9).
+        // if (CompatHandler.isLoaded("mysticalagriculture") && MACompatHandler.tryGrow(world, world.getBlockState(pos), pos)) {
+        //     return true;
+        // }
 
         if (applyVanillaBoneMeal(stackCopy, world, pos, optionalPlayer, clickedFace)) {
             if (!world.isClientSide()) world.levelEvent(1505, pos, 15);

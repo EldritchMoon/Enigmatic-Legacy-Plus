@@ -86,7 +86,7 @@ public class EyeOfNebula extends SpellstoneItem {
         pitch = Math.toDegrees(pitch) * 0.95;
         yaw = Math.toDegrees(yaw);
         yaw -= 90.0;
-        porter.teleportTo(level, pos.x, pos.y, pos.z, Collections.emptySet(), (float) yaw, (float) pitch);
+        porter.teleportTo(level, pos.x, pos.y, pos.z, Collections.emptySet(), (float) yaw, (float) pitch, false); // 26.1.2-port: gained resetCamera
         level.playSound(null, porter.blockPosition(), SoundEvents.PLAYER_TELEPORT, SoundSource.PLAYERS, 1.0F, 0.8F + random.nextFloat() * 0.2F);
         level.sendParticles(ParticleTypes.WITCH, porter.getX(), porter.getY(0.5), porter.getZ(), 48, hOffset, yOffset, hOffset, 0.03);
     }
@@ -143,7 +143,7 @@ public class EyeOfNebula extends SpellstoneItem {
         pitch = Math.toDegrees(pitch) * 0.95;
         yaw = Math.toDegrees(yaw);
         yaw -= 90.0;
-        player.teleportTo(level, pos.x, pos.y, pos.z, (float) yaw, (float) pitch);
+        player.teleportTo(level, pos.x, pos.y, pos.z, Collections.emptySet(), (float) yaw, (float) pitch, true); // 26.1.2-port: the six-argument teleportTo is gone
 
         level.playSound(null, player.blockPosition(), SoundEvents.PLAYER_TELEPORT, SoundSource.PLAYERS, 1.0F, 0.8F + player.getRandom().nextFloat() * 0.2F);
         level.sendParticles(ParticleTypes.WITCH, player.getX(), player.getY(0.5), player.getZ(), 48, hOffset, yOffset, hOffset, 0.03);

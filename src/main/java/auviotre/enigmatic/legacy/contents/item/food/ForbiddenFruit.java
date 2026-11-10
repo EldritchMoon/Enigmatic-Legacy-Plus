@@ -23,6 +23,9 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.component.Consumables;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -40,14 +43,18 @@ import net.minecraft.world.item.component.TooltipDisplay;
 
 public class ForbiddenFruit extends BaseItem {
     public static final FoodProperties FOOD_PROPERTIES = new FoodProperties.Builder()
-            .effect(() -> new MobEffectInstance(MobEffects.WITHER, 400, 3), 1.0F)
-            .effect(() -> new MobEffectInstance(MobEffects.NAUSEA, 400, 2), 1.0F)
-            .effect(() -> new MobEffectInstance(MobEffects.WEAKNESS, 480, 3), 1.0F)
-            .effect(() -> new MobEffectInstance(MobEffects.SLOWNESS, 640, 2), 1.0F)
             .nutrition(2).saturationModifier(0.5F).alwaysEdible().build();
+    // 26.1.2-port: FoodProperties no longer carries effects; they are consume effects on the Consumable component
+    public static final Consumable CONSUMABLE = Consumables.defaultFood()
+            .onConsume(new ApplyStatusEffectsConsumeEffect(List.of(
+                    new MobEffectInstance(MobEffects.WITHER, 400, 3),
+                    new MobEffectInstance(MobEffects.NAUSEA, 400, 2),
+                    new MobEffectInstance(MobEffects.WEAKNESS, 480, 3),
+                    new MobEffectInstance(MobEffects.SLOWNESS, 640, 2)
+            ))).build();
 
     public ForbiddenFruit() {
-        super(IItemHelper.singleProperties().food(FOOD_PROPERTIES).rarity(Rarity.RARE).fireResistant());
+        super(IItemHelper.singleProperties().food(FOOD_PROPERTIES, CONSUMABLE).rarity(Rarity.RARE).fireResistant());
     }
 
     public static boolean isForbiddenCursed(LivingEntity entity) {

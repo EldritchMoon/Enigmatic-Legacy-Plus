@@ -114,8 +114,10 @@ public class OceanStone extends SpellstoneItem {
 
     @Override
     public void triggerActiveAbility(ServerLevel level, @NotNull ServerPlayer player, ItemStack stack) {
-        if (player.level().dimensionType().natural())
-            if (!level.getLevelData().isThundering()) {
+        // 26.1.2-port: DimensionType.natural() was removed; ask the level whether it can have weather instead. The
+        // weather flags moved from LevelData to the server-wide WeatherData.
+        if (player.level().canHaveWeather())
+            if (!level.getWeatherData().isThundering()) {
                 boolean paybackReceived = false;
                 if (player.totalExperience >= 200) {
                     player.giveExperiencePoints((int) (-200 * xpCostModifier.getAsDouble()));
@@ -124,7 +126,7 @@ public class OceanStone extends SpellstoneItem {
 
                 if (paybackReceived) {
                     int thunderstormTime = (int) (10000 + (player.getRandom().nextFloat() * 20000));
-                    level.setWeatherParameters(0, thunderstormTime, true, true);
+                    level.getServer().setWeatherParameters(0, thunderstormTime, true, true); // 26.1.2-port: moved to the server
                     level.playSound(null, player.blockPosition(), SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.NEUTRAL, 2.0F, 0.7F + player.getRandom().nextFloat() * 0.3F);
                     super.triggerActiveAbility(level, player, stack);
                 }

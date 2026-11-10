@@ -54,7 +54,10 @@ public class SurvivorScroll extends BaseCurioItem {
     }
 
     public static int getBrightness(Level level, BlockPos blockPos) {
-        float timeOfDay = level.getTimeOfDay(0.0F);
+        // 26.1.2-port: Level.getTimeOfDay was removed (time comes from world clocks now). This applies the 1.21.1
+        // DimensionType.timeOfDay formula to the dimension's default clock: 0 is noon, 0.5 is midnight.
+        double dayFraction = Mth.frac(level.getDefaultClockTime() / 24000.0 - 0.25);
+        float timeOfDay = (float) (dayFraction * 2.0 + (0.5 - Math.cos(dayFraction * Math.PI) / 2.0)) / 3.0F;
         boolean hasSkyLight = level.dimensionType().hasSkyLight();
         int skyLight = level.getLightEngine().getRawBrightness(blockPos, 0);
         int blockLight = level.getLightEngine().getRawBrightness(blockPos, 15);

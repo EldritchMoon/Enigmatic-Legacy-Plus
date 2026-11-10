@@ -16,6 +16,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -53,7 +54,8 @@ public class ExplorerScroll extends BaseCurioItem {
 
     public static void trigger(Level level, ServerPlayer player) {
         if (player.getCooldowns().isOnCooldown(EnigmaticItems.EXPLORER_SCROLL.get().getDefaultInstance())) return;
-        player.playNotifySound(EnigmaticSounds.SCROLL_TRIGGER.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+        // 26.1.2-port: ServerPlayer.playNotifySound was removed; send the sound packet to this player only
+        player.connection.send(new ClientboundSoundPacket(EnigmaticSounds.SCROLL_TRIGGER, SoundSource.PLAYERS, player.getX(), player.getY(), player.getZ(), 1.0F, 1.0F, player.getRandom().nextLong()));
         player.getCooldowns().addCooldown(EnigmaticItems.EXPLORER_SCROLL.get().getDefaultInstance(), player.hasInfiniteMaterials() ? 20 : cooldown.get());
         BlockPos blockPos = player.blockPosition();
         int d = distance.get();

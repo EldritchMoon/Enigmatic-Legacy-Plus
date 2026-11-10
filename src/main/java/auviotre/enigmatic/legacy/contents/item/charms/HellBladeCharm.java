@@ -5,7 +5,8 @@ import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.SubscribeConfig;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.compat.CompatHandler;
-import auviotre.enigmatic.legacy.compat.thirst.ThirstCompatHandler;
+// TODO(port): Thirst Was Taken compat is excluded from the build until phase 9 (see build.gradle).
+// import auviotre.enigmatic.legacy.compat.thirst.ThirstCompatHandler;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
@@ -200,7 +201,8 @@ public class HellBladeCharm extends BaseCurioItem {
                         attacker.heal((float) (victim.getHealth() * 0.6));
                         if (attacker instanceof Player player) {
                             player.getFoodData().setSaturation(player.getFoodData().getFoodLevel());
-                            if (CompatHandler.isLoaded("thirst")) ThirstCompatHandler.setHellBladeRecover(player);
+                            // TODO(port): re-enable with the Thirst compat (phase 9).
+                            // if (CompatHandler.isLoaded("thirst")) ThirstCompatHandler.setHellBladeRecover(player);
                         }
                         event.setNewDamage(Math.min(event.getOriginalDamage() * 5.0F, Float.MAX_VALUE / 10.0F));
                         double hOffset = victim.getBbWidth() / 6;

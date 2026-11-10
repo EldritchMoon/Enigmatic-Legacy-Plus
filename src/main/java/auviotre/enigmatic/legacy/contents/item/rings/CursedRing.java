@@ -27,7 +27,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -350,8 +349,9 @@ public class CursedRing extends CursedCurioItem {
                     ImmutableMap.Builder<String, ItemStack> builder = ImmutableMap.builder();
                     // Inventory
                     Inventory inventory = player.getInventory();
-                    int size = 0;
-                    for (NonNullList<ItemStack> part : inventory.compartments) size += part.size();
+                    // 26.1.2-port: Inventory.compartments was removed; getContainerSize covers the same slots (main,
+                    // armour, offhand) plus the unused body and saddle slots
+                    int size = inventory.getContainerSize();
                     for (int i = 0; i < size; i++) {
                         ItemStack item = inventory.getItem(i);
                         if (!item.isEmpty()) builder.put(String.valueOf(i), item);
@@ -548,7 +548,7 @@ public class CursedRing extends CursedCurioItem {
                 event.setDroppedExperience(event.getDroppedExperience() + Mth.floor(event.getOriginalExperience() * modifier));
             }
             if (event.getEntity() instanceof ServerPlayer dropper) {
-                if (POSSESSIONS.containsEntry(dropper, EnigmaticItems.ASCENSION_AMULET) && !event.getEntity().level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
+                if (POSSESSIONS.containsEntry(dropper, EnigmaticItems.ASCENSION_AMULET) && !dropper.level().getGameRules().get(GameRules.KEEP_INVENTORY)) {
                     event.setCanceled(true);
                 }
             }
