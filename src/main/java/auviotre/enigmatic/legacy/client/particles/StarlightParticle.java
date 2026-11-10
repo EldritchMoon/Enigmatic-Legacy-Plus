@@ -3,6 +3,7 @@ package auviotre.enigmatic.legacy.client.particles;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.util.RandomSource;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
@@ -22,12 +23,12 @@ public class StarlightParticle extends SimpleAnimatedParticle {
     }
 
     @Override
-    public ParticleRenderType getRenderType() {
-        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+    public SingleQuadParticle.Layer getLayer() { // 26.1.2-port: getRenderType -> getLayer
+        return SingleQuadParticle.Layer.TRANSLUCENT;
     }
 
     @Override
-    public int getLightColor(float partialTick) {
+    public int getLightCoords(float partialTick) { // 26.1.2-port: getLightColor -> getLightCoords
         return 15728880;
     }
 
@@ -46,7 +47,7 @@ public class StarlightParticle extends SimpleAnimatedParticle {
         }
 
         @Override
-        public Particle createParticle(SimpleParticleType type, ClientLevel level, double posX, double posY, double posZ, double speedX, double speedY, double speedZ) {
+        public Particle createParticle(SimpleParticleType type, ClientLevel level, double posX, double posY, double posZ, double speedX, double speedY, double speedZ, RandomSource random) { // 26.1.2-port: gained the RandomSource
             return new StarlightParticle(level, posX, posY, posZ, speedX, speedY, speedZ, this.sprite);
         }
     }
