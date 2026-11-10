@@ -2,15 +2,19 @@ package auviotre.enigmatic.legacy.client.renderer;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.client.renderer.model.IchorSpriteModel;
+import auviotre.enigmatic.legacy.client.renderer.state.IchorSpriteRenderState;
 import auviotre.enigmatic.legacy.contents.entity.IchorSprite;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
+import net.minecraft.client.renderer.entity.state.ArmedEntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
@@ -18,14 +22,20 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 
-public class IchorSpriteRenderer extends MobRenderer<IchorSprite, IchorSpriteModel> {
+// 26.1.2-port: render-state renderer, following vanilla's VexRenderer (held items) and GuardianRenderer (beam).
+// MobRenderer takes the state type as a second type argument.
+public class IchorSpriteRenderer extends MobRenderer<IchorSprite, IchorSpriteRenderState, IchorSpriteModel> {
     private static final Identifier TEXTURE = EnigmaticLegacy.location("textures/entity/ichor_sprite.png");
     private static final Identifier BEAM_LOCATION = EnigmaticLegacy.location("textures/entity/ichor_sprite_beam.png");
-    private static final RenderType BEAM_RENDER_TYPE = RenderType.entityTranslucentCull(BEAM_LOCATION);
+    // 26.1.2-port: RenderType.entityTranslucentCull was removed. entityTranslucentCullItemTarget is the remaining type on
+    // the ENTITY_TRANSLUCENT_CULL pipeline, so the beam stays translucent and back-face culled.
+    private static final RenderType BEAM_RENDER_TYPE = RenderTypes.entityTranslucentCullItemTarget(BEAM_LOCATION);
 
     public IchorSpriteRenderer(EntityRendererProvider.Context context) {
         super(context, new IchorSpriteModel(context.bakeLayer(IchorSpriteModel.LAYER)), 0.3F);
-        this.addLayer(new ItemInHandLayer<>(this, context.getItemInHandRenderer()));
+        // 26.1.2-port: ItemInHandLayer no longer takes an ItemInHandRenderer; it draws the item states held in
+        // ArmedEntityRenderState.
+        this.addLayer(new ItemInHandLayer<>(this));
     }
 
     private static void vertex(VertexConsumer consumer, PoseStack.Pose pose, float x, float y, float z, int alpha, float u, float v) {
@@ -34,20 +44,40 @@ public class IchorSpriteRenderer extends MobRenderer<IchorSprite, IchorSpriteMod
     }
 
     @Override
-    public void render(IchorSprite entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
-        super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
+    public IchorSpriteRenderState createRenderState() {
+        return new IchorSpriteRenderState();
+    }
+
+    @Override
+    public void extractRenderState(IchorSprite entity, IchorSpriteRenderState state, float partialTicks) {
+        super.extractRenderState(entity, state, partialTicks);
+        ArmedEntityRenderState.extractArmedEntityRenderState(entity, state, this.itemModelResolver, partialTicks);
+        state.attackScale = entity.getAttackAnimationScale(partialTicks);
         LivingEntity target = entity.getActiveAttackTarget();
         if (target != null) {
-            float scale = entity.getAttackAnimationScale(partialTicks);
+            Vec3 tarPos = this.getPosition(target, target.getBbHeight() * 0.5, partialTicks);
+            Vec3 selfPos = this.getPosition(entity, entity.getEyeHeight(), partialTicks);
+            Vec3 delta = tarPos.subtract(selfPos);
+            state.beamVector = delta;
+            state.beamLength = (float) (delta.length() + 0.25 * target.getBbWidth());
+            state.beamCapFrame = entity.tickCount % 2 == 0;
+        } else {
+            state.beamVector = null;
+        }
+    }
+
+    // 26.1.2-port: render() -> submit(). The beam is drawn from the state; its numbers are unchanged.
+    @Override
+    public void submit(IchorSpriteRenderState state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
+        super.submit(state, poseStack, collector, camera);
+        Vec3 delta = state.beamVector;
+        if (delta != null) {
+            float scale = state.attackScale;
             float timer = scale * 30.0F;
             float f2 = timer * 0.5F % 1.0F;
-            float eyeHeight = entity.getEyeHeight();
             poseStack.pushPose();
-            poseStack.translate(0.0F, eyeHeight, 0.0F);
-            Vec3 tarPos = this.getPosition(target, target.getBbHeight() * 0.5, partialTicks);
-            Vec3 selfPos = this.getPosition(entity, eyeHeight, partialTicks);
-            Vec3 delta = tarPos.subtract(selfPos);
-            float len = (float) (delta.length() + 0.25 * target.getBbWidth());
+            poseStack.translate(0.0F, state.eyeHeight, 0.0F);
+            float len = state.beamLength;
             delta = delta.normalize();
             float phi = (float) Math.acos(delta.y);
             float theta = (float) Math.atan2(delta.z, delta.x);
@@ -75,22 +105,21 @@ public class IchorSpriteRenderer extends MobRenderer<IchorSprite, IchorSpriteMod
             float f26 = Mth.sin(f7 + (float) (Math.PI * 3.0 / 2.0)) * 0.2F;
             float f29 = -1.0F + f2;
             float f30 = len * 2.5F + f29;
-            VertexConsumer consumer = buffer.getBuffer(BEAM_RENDER_TYPE);
-            PoseStack.Pose pose = poseStack.last();
-            vertex(consumer, pose, f19, len, f20, alpha, 0.4999F, f30);
-            vertex(consumer, pose, f19, 0.0F, f20, alpha, 0.4999F, f29);
-            vertex(consumer, pose, f21, 0.0F, f22, alpha, 0.0F, f29);
-            vertex(consumer, pose, f21, len, f22, alpha, 0.0F, f30);
-            vertex(consumer, pose, f23, len, f24, alpha, 0.4999F, f30);
-            vertex(consumer, pose, f23, 0.0F, f24, alpha, 0.4999F, f29);
-            vertex(consumer, pose, f25, 0.0F, f26, alpha, 0.0F, f29);
-            vertex(consumer, pose, f25, len, f26, alpha, 0.0F, f30);
-            float yOffset = 0.0F;
-            if (entity.tickCount % 2 == 0) yOffset = 0.5F;
-            vertex(consumer, pose, f11, len, f12, alpha, 0.5F, yOffset + 0.5F);
-            vertex(consumer, pose, f13, len, f14, alpha, 1.0F, yOffset + 0.5F);
-            vertex(consumer, pose, f17, len, f18, alpha, 1.0F, yOffset);
-            vertex(consumer, pose, f15, len, f16, alpha, 0.5F, yOffset);
+            float yOffset = state.beamCapFrame ? 0.5F : 0.0F;
+            collector.submitCustomGeometry(poseStack, BEAM_RENDER_TYPE, (pose, consumer) -> {
+                vertex(consumer, pose, f19, len, f20, alpha, 0.4999F, f30);
+                vertex(consumer, pose, f19, 0.0F, f20, alpha, 0.4999F, f29);
+                vertex(consumer, pose, f21, 0.0F, f22, alpha, 0.0F, f29);
+                vertex(consumer, pose, f21, len, f22, alpha, 0.0F, f30);
+                vertex(consumer, pose, f23, len, f24, alpha, 0.4999F, f30);
+                vertex(consumer, pose, f23, 0.0F, f24, alpha, 0.4999F, f29);
+                vertex(consumer, pose, f25, 0.0F, f26, alpha, 0.0F, f29);
+                vertex(consumer, pose, f25, len, f26, alpha, 0.0F, f30);
+                vertex(consumer, pose, f11, len, f12, alpha, 0.5F, yOffset + 0.5F);
+                vertex(consumer, pose, f13, len, f14, alpha, 1.0F, yOffset + 0.5F);
+                vertex(consumer, pose, f17, len, f18, alpha, 1.0F, yOffset);
+                vertex(consumer, pose, f15, len, f16, alpha, 0.5F, yOffset);
+            });
             poseStack.popPose();
         }
     }
@@ -100,8 +129,9 @@ public class IchorSpriteRenderer extends MobRenderer<IchorSprite, IchorSpriteMod
         return 15;
     }
 
+    // 26.1.2-port: takes the render state instead of the entity
     @Override
-    public Identifier getTextureLocation(IchorSprite entity) {
+    public Identifier getTextureLocation(IchorSpriteRenderState state) {
         return TEXTURE;
     }
 
