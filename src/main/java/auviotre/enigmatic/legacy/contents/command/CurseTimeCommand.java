@@ -17,7 +17,7 @@ public class CurseTimeCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("cursetime")
-                .requires(source -> source.hasPermission(4))
+                .requires(Commands.hasPermission(Commands.LEVEL_OWNERS)) // 26.1.2-port: hasPermission(4) -> the owners permission check
                 .then(Commands.literal("get")
                         .executes(context -> getTime(context.getSource(), context.getSource().getPlayerOrException(), false))
                         .then(Commands.argument("player", EntityArgument.player())

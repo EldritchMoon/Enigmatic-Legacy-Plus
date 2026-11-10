@@ -9,7 +9,7 @@ import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticParticles;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.toasts.ToastComponent;
+import net.minecraft.client.gui.components.toasts.ToastManager;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.particles.ColorParticleOption;
@@ -158,7 +158,7 @@ public class ClientPackets {
     }
 
     public static void handle(final SlotUnlockToastPacket packet) {
-        ToastComponent toasts = Minecraft.getInstance().getToasts();
+        ToastManager toasts = Minecraft.getInstance().getToastManager(); // 26.1.2-port: ToastComponent -> ToastManager
         ItemStack stack = switch (packet.identifier()) {
             case "ring" -> EnigmaticItems.IRON_RING.toStack();
             case "scroll" -> EnigmaticItems.BLANK_SCROLL.toStack();

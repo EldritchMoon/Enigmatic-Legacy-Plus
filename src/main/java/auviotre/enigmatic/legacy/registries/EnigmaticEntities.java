@@ -7,6 +7,7 @@ import auviotre.enigmatic.legacy.contents.entity.misc.ExplorerMarker;
 import auviotre.enigmatic.legacy.contents.entity.misc.PermanentItemEntity;
 import auviotre.enigmatic.legacy.contents.entity.projectile.*;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -35,7 +36,7 @@ public class EnigmaticEntities {
     public static final DeferredHolder<EntityType<?>, EntityType<AbyssProjectile>> ABYSS_PROJECTILE = register("abyss_projectile", EntityType.Builder.<AbyssProjectile>of(AbyssProjectile::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(64).updateInterval(1).fireImmune());
 
     public static <T extends Entity> DeferredHolder<EntityType<?>, EntityType<T>> register(String name, EntityType.Builder<T> builder) {
-        return ENTITY_TYPES.register(name, () -> builder.build(EnigmaticLegacy.MODID + ":" + name));
+        return ENTITY_TYPES.register(name, () -> builder.build(ResourceKey.create(Registries.ENTITY_TYPE, EnigmaticLegacy.location(name)))); // 26.1.2-port: build takes the entity type's ResourceKey
     }
 
     @Mod(value = EnigmaticLegacy.MODID)

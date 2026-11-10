@@ -51,9 +51,9 @@ import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.monster.Guardian;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
@@ -111,7 +111,7 @@ public interface EnigmaticHandler {
     }
 
     static boolean isTheCursedOne(LivingEntity entity) {
-        return !getCurio(entity, EnigmaticItems.CURSED_RING).isEmpty() || entity instanceof Player player && getPersistedData(player).getBoolean("SevenCursesBearing");
+        return !getCurio(entity, EnigmaticItems.CURSED_RING).isEmpty() || entity instanceof Player player && getPersistedData(player).getBooleanOr("SevenCursesBearing", false); // 26.1.2-port: getBoolean returns Optional now
     }
 
     static boolean isCursedItem(@NotNull ItemStack stack) {
@@ -126,7 +126,7 @@ public interface EnigmaticHandler {
     }
 
     static boolean isTheBlessedOne(LivingEntity entity) {
-        return !getCurio(entity, EnigmaticItems.REDEMPTION_RING).isEmpty() || entity instanceof Player player && getPersistedData(player).getBoolean("RedemptionBearing");
+        return !getCurio(entity, EnigmaticItems.REDEMPTION_RING).isEmpty() || entity instanceof Player player && getPersistedData(player).getBooleanOr("RedemptionBearing", false); // 26.1.2-port: getBoolean returns Optional now
     }
 
     static boolean isTheWorthyOne(LivingEntity entity) {
@@ -549,7 +549,7 @@ public interface EnigmaticHandler {
             }
 
             boolean compatible = input.supportsEnchantment(mergedEnchantHolder);
-            if (input.getItem() instanceof EnchantedBookItem) compatible = true;
+            if (input.is(Items.ENCHANTED_BOOK)) compatible = true; // 26.1.2-port: the EnchantedBookItem class was removed
 
             for (Holder<Enchantment> originalEnchant : inputEnchants.keySet()) {
                 if (originalEnchant != mergedEnchantHolder && mergedEnchant.exclusiveSet().contains(originalEnchant)) {

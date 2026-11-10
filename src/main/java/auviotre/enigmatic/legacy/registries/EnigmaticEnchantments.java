@@ -22,6 +22,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -67,6 +68,7 @@ public class EnigmaticEnchantments {
     public static void bootstrap(BootstrapContext<Enchantment> context) {
         HolderGetter<Enchantment> enchantmentGetter = context.lookup(Registries.ENCHANTMENT);
         HolderGetter<Item> itemGetter = context.lookup(Registries.ITEM);
+        HolderGetter<EntityType<?>> entityTypeGetter = context.lookup(Registries.ENTITY_TYPE); // 26.1.2-port: predicates need the registry lookup
         register(context, SLAYER, Enchantment.enchantment(
                                 Enchantment.definition(
                                         itemGetter.getOrThrow(ItemTags.WEAPON_ENCHANTABLE), itemGetter.getOrThrow(ItemTags.SWORD_ENCHANTABLE),
@@ -99,7 +101,7 @@ public class EnigmaticEnchantments {
                                 EnchantmentEffectComponents.DAMAGE,
                                 new AddValue(LevelBasedValue.perLevel(0.5F)),
                                 LootItemEntityPropertyCondition.hasProperties(
-                                        LootContext.EntityTarget.DIRECT_ATTACKER, EntityPredicate.Builder.entity().of(EntityTypeTags.ARROWS).build()
+                                        LootContext.EntityTarget.DIRECT_ATTACKER, EntityPredicate.Builder.entity().of(entityTypeGetter, EntityTypeTags.ARROWS).build()
                                 )
                         )
         );
@@ -112,7 +114,7 @@ public class EnigmaticEnchantments {
                         .withEffect(
                                 EnchantmentEffectComponents.AMMO_USE,
                                 new SetValue(LevelBasedValue.constant(0.0F)),
-                                MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.ARROW))
+                                MatchTool.toolMatches(ItemPredicate.Builder.item().of(itemGetter, Items.ARROW))
                         )
         );
         register(context, WRATH, Enchantment.enchantment(
