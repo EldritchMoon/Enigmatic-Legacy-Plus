@@ -6,8 +6,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.RandomizableContainer;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
@@ -22,7 +25,8 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.core.UUIDUtil;
 
 public class ExplorerMarker extends Entity implements OwnableEntity {
-    protected static final EntityDataAccessor<Optional<UUID>> DATA_OWNER_UUID = SynchedEntityData.defineId(ExplorerMarker.class, EntityDataSerializers.OPTIONAL_UUID);
+    // 26.1.2-port: the OPTIONAL_UUID serializer was removed; owners are synced as an EntityReference (a UUID that resolves lazily)
+    protected static final EntityDataAccessor<Optional<EntityReference<LivingEntity>>> DATA_OWNER_UUID = SynchedEntityData.defineId(ExplorerMarker.class, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
 
     public ExplorerMarker(EntityType<?> entityType, Level level) {
         super(entityType, level);
@@ -59,11 +63,24 @@ public class ExplorerMarker extends Entity implements OwnableEntity {
         output.storeNullable("Owner", UUIDUtil.CODEC, this.getOwnerUUID());
     }
 
-    public @Nullable UUID getOwnerUUID() {
+    // 26.1.2-port: OwnableEntity asks for getOwnerReference() instead of getOwnerUUID()
+    @Override
+    public @Nullable EntityReference<LivingEntity> getOwnerReference() {
         return this.entityData.get(DATA_OWNER_UUID).orElse(null);
     }
 
+    public @Nullable UUID getOwnerUUID() {
+        EntityReference<LivingEntity> owner = this.getOwnerReference();
+        return owner == null ? null : owner.getUUID();
+    }
+
     public void setOwnerUUID(@Nullable UUID uuid) {
-        this.entityData.set(DATA_OWNER_UUID, Optional.ofNullable(uuid));
+        this.entityData.set(DATA_OWNER_UUID, Optional.ofNullable(uuid).map(id -> EntityReference.<LivingEntity>of(id)));
+    }
+
+    // 26.1.2-port: hurtServer is abstract in Entity now; the marker cannot be damaged (as vanilla's Marker)
+    @Override
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+        return false;
     }
 }

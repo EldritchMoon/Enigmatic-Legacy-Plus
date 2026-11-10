@@ -194,8 +194,10 @@ public class PermanentItemEntity extends Entity {
         return Short.MAX_VALUE;
     }
 
+    // 26.1.2-port: changeDimension -> teleport. Every teleport goes through this method now (portals, /tp, other mods,
+    // same dimension or not), so this entity can no longer be teleported at all.
     @Override
-    public Entity changeDimension(TeleportTransition transition) {
+    public @Nullable Entity teleport(TeleportTransition transition) {
         return null;
     }
 
@@ -204,13 +206,14 @@ public class PermanentItemEntity extends Entity {
         return false;
     }
 
+    // 26.1.2-port: hurt -> hurtServer (server side only; the client side is hurtClient, which returns false by default)
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (this.level().isClientSide() || !this.isAlive()) return false;
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+        if (!this.isAlive()) return false;
 
         if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             EnigmaticLegacy.LOGGER.warn("Attacked permanent item entity with absolute DamageSource: {}", source);
-            this.kill();
+            this.kill(level);
             return true;
         }
         return false;

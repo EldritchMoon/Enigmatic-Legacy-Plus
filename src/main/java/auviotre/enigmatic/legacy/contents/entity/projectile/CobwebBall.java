@@ -8,6 +8,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -98,7 +99,8 @@ public class CobwebBall extends Projectile implements ItemSupplier {
             Entity target = hitResult.getEntity();
             AttributeInstance attribute = spider.getAttribute(Attributes.ATTACK_DAMAGE);
             float damage = attribute == null ? 1.0F : (float) attribute.getValue() / 2;
-            if (!(target instanceof Spider) && target.hurt(this.damageSources().mobProjectile(this, spider), Math.max(damage, 1.0F))) {
+            // 26.1.2-port: hurt no longer returns a result; hurtServer does, on the server only
+            if (!(target instanceof Spider) && this.level() instanceof ServerLevel serverLevel && target.hurtServer(serverLevel, this.damageSources().mobProjectile(this, spider), Math.max(damage, 1.0F))) {
                 if (target == spider.getTarget() && target instanceof LivingEntity living) {
                     entity.level().playSound(null, target.blockPosition(), SoundEvents.HONEY_BLOCK_PLACE, SoundSource.BLOCKS);
                     int difficulty = this.level().getDifficulty().getId();

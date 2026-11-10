@@ -4,6 +4,7 @@ import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticParticles;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -66,8 +67,9 @@ public class StarlightMeteor extends ThrowableItemProjectile {
         super.onHitEntity(result);
         Entity entity = result.getEntity();
         if (entity instanceof LivingEntity livingEntity) {
-            if (livingEntity.hurt(livingEntity.damageSources().magic(), 8.0F)) {
-                livingEntity.kill();
+            // 26.1.2-port: hurt no longer returns a result; hurtServer does, on the server only. kill() needs the level.
+            if (this.level() instanceof ServerLevel serverLevel && livingEntity.hurtServer(serverLevel, livingEntity.damageSources().magic(), 8.0F)) {
+                livingEntity.kill(serverLevel);
             }
         }
         this.dropItem();

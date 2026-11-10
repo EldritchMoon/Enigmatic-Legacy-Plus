@@ -115,13 +115,13 @@ public class UltimateWitherSkull extends AbstractHurtingProjectile {
             boolean flag;
             if (this.getOwner() instanceof LivingEntity owner) {
                 DamageSource source = this.damageSources().indirectMagic(this, owner);
-                flag = entity.hurt(source, this.isDangerous() ? 24.0F : 8.0F);
+                flag = entity.hurtServer(level, source, this.isDangerous() ? 24.0F : 8.0F); // 26.1.2-port: hurt -> hurtServer
                 if (flag) {
                     if (entity.isAlive()) {
                         EnchantmentHelper.doPostAttackEffects(level, entity, source);
                     }
                 }
-            } else flag = entity.hurt(this.damageSources().magic(), this.isDangerous() ? 16.0F : 5.0F);
+            } else flag = entity.hurtServer(level, this.damageSources().magic(), this.isDangerous() ? 16.0F : 5.0F); // 26.1.2-port: hurt -> hurtServer
 
 
             if (flag && entity instanceof LivingEntity living) {
@@ -150,7 +150,7 @@ public class UltimateWitherSkull extends AbstractHurtingProjectile {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) { // 26.1.2-port: hurt -> hurtServer
         return false;
     }
 

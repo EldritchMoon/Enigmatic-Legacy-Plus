@@ -6,6 +6,7 @@ import auviotre.enigmatic.legacy.registries.EnigmaticEntities;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticParticles;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -58,7 +59,8 @@ public class ThrownIchorSpear extends AbstractSpear {
         Entity owner = this.getOwner();
         double damage = IchorSpear.baseDamage.get() * Math.sqrt(this.getDeltaMovement().length());
         DamageSource damageSource = this.damageSources().trident(this, owner == null ? this : owner);
-        if (entity.hurt(damageSource, (float) damage)) {
+        // 26.1.2-port: hurt no longer returns a result; hurtServer does, on the server only
+        if (this.level() instanceof ServerLevel serverLevel && entity.hurtServer(serverLevel, damageSource, (float) damage)) {
             if (entity.getType() == EntityType.ENDERMAN) return;
             if (entity instanceof LivingEntity living) this.doPostHurtEffects(living);
         }
