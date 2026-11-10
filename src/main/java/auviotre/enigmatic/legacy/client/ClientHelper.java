@@ -13,4 +13,9 @@ public final class ClientHelper {
     public static boolean hasShiftDown() {
         return Minecraft.getInstance().hasShiftDown();
     }
+
+    /** Replaces Screen.hasAltDown(), which no longer exists in 26.1. */
+    public static boolean hasAltDown() {
+        return Minecraft.getInstance().hasAltDown();
+    }
 }

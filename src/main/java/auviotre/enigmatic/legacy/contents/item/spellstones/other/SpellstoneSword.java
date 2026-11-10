@@ -28,7 +28,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -884,14 +884,14 @@ public class SpellstoneSword extends Item {
         public boolean render(GuiGraphicsExtractor graphics, Font font, @NotNull ItemStack stack, int x, int y) {
             int energy = stack.getOrDefault(INT, 0);
             if (energy > 0 && getMaxEnergy(stack) > 0) {
-                graphics.pose().pushPose();
+                graphics.pose().pushMatrix(); // 26.1.2-port: pushPose -> pushMatrix (2D matrix stack)
                 int j = x + 2;
                 int k = y + 12;
                 int width = Mth.floor(13.0F * energy / getMaxEnergy(stack));
                 int color = getColor(stack);
-                graphics.fill(RenderType.guiOverlay(), j, k, j + 13, k + (stack.isBarVisible() ? 1 : 2), 0xFF000000);
-                graphics.fill(RenderType.guiOverlay(), j, k, j + width, k + 1, color | 0xFF000000);
-                graphics.pose().popPose();
+                graphics.fill(RenderPipelines.GUI, j, k, j + 13, k + (stack.isBarVisible() ? 1 : 2), 0xFF000000); // 26.1.2-port: RenderType.guiOverlay() -> RenderPipelines.GUI, as the vanilla item bar
+                graphics.fill(RenderPipelines.GUI, j, k, j + width, k + 1, color | 0xFF000000);
+                graphics.pose().popMatrix();
                 return true;
             }
             return false;

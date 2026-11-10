@@ -19,7 +19,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.util.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.CommonComponents;
@@ -100,7 +99,7 @@ public class ViolenceScroll extends BaseCurioItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
         int count = AbsorbedEnchants.getCount(stack);
-        if (Screen.hasAltDown()) {
+        if (ClientHelper.hasAltDown()) { // 26.1.2-port: Screen.hasAltDown was removed
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.violenceScrollList");
             for (String enchantment : AbsorbedEnchants.getEnchantments(stack)) {
                 MutableComponent component = Component.translatable(Util.makeDescriptionId("enchantment", Identifier.parse(enchantment)));

@@ -5,6 +5,7 @@ import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -61,9 +62,9 @@ public class BaseItem extends Item {
 
         @Override
         public boolean render(@NotNull GuiGraphicsExtractor graphics, Font font, @NotNull ItemStack stack, int x, int y) {
-            graphics.pose().pushPose();
-            graphics.blitSprite(SPRITE, x, y, 16, 16);
-            graphics.pose().popPose();
+            graphics.pose().pushMatrix(); // 26.1.2-port: pushPose -> pushMatrix (2D matrix stack)
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, SPRITE, x, y, 16, 16); // 26.1.2-port: blitSprite names its pipeline
+            graphics.pose().popMatrix();
             return true;
         }
     }
@@ -74,9 +75,9 @@ public class BaseItem extends Item {
 
         @Override
         public boolean render(@NotNull GuiGraphicsExtractor graphics, Font font, @NotNull ItemStack stack, int x, int y) {
-            graphics.pose().pushPose();
-            graphics.blitSprite(SPRITE, x, y, 16, 16);
-            graphics.pose().popPose();
+            graphics.pose().pushMatrix(); // 26.1.2-port: pushPose -> pushMatrix (2D matrix stack)
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, SPRITE, x, y, 16, 16); // 26.1.2-port: blitSprite names its pipeline
+            graphics.pose().popMatrix();
             return true;
         }
     }

@@ -19,6 +19,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -167,9 +168,9 @@ public class HellBladeCharm extends BaseCurioItem {
         public boolean render(GuiGraphicsExtractor graphics, Font font, @NotNull ItemStack stack, int x, int y) {
             ItemStack curio = EnigmaticHandler.getCurio(Minecraft.getInstance().player, EnigmaticItems.HELL_BLADE_CHARM);
             if (curio == stack && !stack.getOrDefault(EnigmaticComponents.BOOLEAN, false)) {
-                graphics.pose().pushPose();
-                graphics.blitSprite(SPRITE, x - 1, y - 1, 18, 18);
-                graphics.pose().popPose();
+                graphics.pose().pushMatrix(); // 26.1.2-port: pushPose -> pushMatrix (2D matrix stack)
+                graphics.blitSprite(RenderPipelines.GUI_TEXTURED, SPRITE, x - 1, y - 1, 18, 18); // 26.1.2-port: blitSprite names its pipeline
+                graphics.pose().popMatrix();
                 return true;
             }
             return false;

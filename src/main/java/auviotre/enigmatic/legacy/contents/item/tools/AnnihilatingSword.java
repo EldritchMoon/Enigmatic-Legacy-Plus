@@ -336,11 +336,11 @@ public class AnnihilatingSword extends Item {
         public boolean render(GuiGraphicsExtractor graphics, Font font, @NotNull ItemStack stack, int x, int y) {
             int energy = stack.getOrDefault(EnigmaticComponents.ANNI_ENERGY, 0.0F).intValue();
             if (stack.getCount() == 1 && energy > 0) {
-                graphics.pose().pushPose();
+                graphics.pose().pushMatrix(); // 26.1.2-port: pushPose -> pushMatrix (2D matrix stack)
                 String s = String.valueOf(energy);
                 graphics.pose().translate(0.0F, 0.0F, 200.0F);
                 graphics.drawString(font, s, x + 19 - 2 - font.width(s), y + 6 + 3, 16733695, true);
-                graphics.pose().popPose();
+                graphics.pose().popMatrix();
                 return true;
             }
             return false;
