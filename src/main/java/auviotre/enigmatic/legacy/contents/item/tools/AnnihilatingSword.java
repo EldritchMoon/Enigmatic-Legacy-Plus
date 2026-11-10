@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.tools;
 
+import net.minecraft.util.ARGB;
 import net.minecraft.world.InteractionResult;
 import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
@@ -338,8 +339,8 @@ public class AnnihilatingSword extends Item {
             if (stack.getCount() == 1 && energy > 0) {
                 graphics.pose().pushMatrix(); // 26.1.2-port: pushPose -> pushMatrix (2D matrix stack)
                 String s = String.valueOf(energy);
-                graphics.pose().translate(0.0F, 0.0F, 200.0F);
-                graphics.drawString(font, s, x + 19 - 2 - font.width(s), y + 6 + 3, 16733695, true);
+                // 26.1.2-port: no z translate (GUI drawing is 2D and decorators draw after the item); text() skips colours with alpha 0
+                graphics.text(font, s, x + 19 - 2 - font.width(s), y + 6 + 3, ARGB.opaque(16733695), true);
                 graphics.pose().popMatrix();
                 return true;
             }

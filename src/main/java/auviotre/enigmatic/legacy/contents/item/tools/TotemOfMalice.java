@@ -18,6 +18,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -127,8 +128,8 @@ public class TotemOfMalice extends BaseCurioItem {
                 graphics.pose().pushMatrix(); // 26.1.2-port: pushPose -> pushMatrix (2D matrix stack)
                 String s = String.valueOf(durability);
                 float f = Math.clamp((float) getDurability(stack) / getMaxDurability(stack), 0.0F, 0.8F);
-                graphics.pose().translate(0.0F, 0.0F, 200.0F);
-                graphics.drawString(font, s, x + 19 - 2 - font.width(s), y + 6 + 3, Mth.hsvToRgb(5.0F / 6, 1.0F, 0.6F + f * 0.5F), true);
+                // 26.1.2-port: no z translate (GUI drawing is 2D and decorators draw after the item); text() skips colours with alpha 0
+                graphics.text(font, s, x + 19 - 2 - font.width(s), y + 6 + 3, ARGB.opaque(Mth.hsvToRgb(5.0F / 6, 1.0F, 0.6F + f * 0.5F)), true);
                 graphics.pose().popMatrix();
                 return true;
             }
