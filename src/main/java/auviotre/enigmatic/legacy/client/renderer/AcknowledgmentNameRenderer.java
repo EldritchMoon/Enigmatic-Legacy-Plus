@@ -2,7 +2,6 @@ package auviotre.enigmatic.legacy.client.renderer;
 
 import auviotre.enigmatic.legacy.contents.item.books.TheAcknowledgment;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -43,12 +42,11 @@ public class AcknowledgmentNameRenderer {
     }
 
     public void drawHeader(GuiGraphicsExtractor graphics) {
-        RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
         GuiBook.drawFromTexture(graphics, this.gui.book, -8, 12, 0, 180, 140, 31);
 
         int color = this.book.nameplateColor;
-        graphics.drawString(this.font.get(), this.name, 13, 16, color);
+        graphics.text(this.font.get(), this.name, 13, 16, color);
         Component toDraw = this.book.getSubtitle().withStyle(this.book.getFontStyle());
-        graphics.drawString(this.font.get(), toDraw, 24, 24, color);
+        graphics.text(this.font.get(), toDraw, 24, 24, color);
     }
 }
