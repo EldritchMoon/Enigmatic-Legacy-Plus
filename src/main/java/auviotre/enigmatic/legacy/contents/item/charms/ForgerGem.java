@@ -117,14 +117,7 @@ public class ForgerGem extends BaseCurioItem {
     @Mod(value = EnigmaticLegacy.MODID)
     @EventBusSubscriber(modid = EnigmaticLegacy.MODID)
     public static class Events {
-        // TODO(port): NeoForge 26.1 removed AnvilRepairEvent and its break-chance hook. Restore this with a
-        // mixin on AnvilMenu.onTake (the 0.12F break chance) in phase 6.
-        // @SubscribeEvent
-        // private static void onAnvilRepair(@NotNull AnvilRepairEvent event) {
-        //     Player player = event.getEntity();
-        //     if (EnigmaticHandler.hasCurio(player, EnigmaticItems.FORGER_GEM)) {
-        //         event.setBreakChance(event.getBreakChance() * breakChanceModifier.get() * 0.01F);
-        //     }
-        // }
+        // 26.1.2-port: the AnvilRepairEvent handler that was here (break chance times breakChanceModifier percent) is
+        // now MixinAnvilMenu.modifyBreakChance(); NeoForge removed the event.
     }
 }
