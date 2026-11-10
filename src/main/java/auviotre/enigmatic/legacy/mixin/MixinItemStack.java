@@ -9,7 +9,6 @@ import net.minecraft.core.component.DataComponentHolder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -17,7 +16,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.neoforged.neoforge.common.Tags;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -28,11 +26,9 @@ import java.util.function.Consumer;
 
 @Mixin(ItemStack.class)
 public abstract class MixinItemStack implements DataComponentHolder {
-    @Shadow
-    public abstract boolean is(Item item);
-
-    @Shadow
-    public abstract boolean is(TagKey<Item> tag);
+    // 26.1.2-port: the two @Shadow is(...) methods that were here are gone. ItemStack no longer declares is(Item) and
+    // is(TagKey) itself; it inherits them from an interface, and a mixin can only shadow what the target class
+    // declares (the game stopped at startup on this). The handler below calls them on the stack directly.
 
     @Inject(method = "hurtAndBreak(ILnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Consumer;)V", at = @At("HEAD"), cancellable = true)
     public void breakMix(int amount, ServerLevel level, @Nullable LivingEntity user, Consumer<Item> consumer, CallbackInfo info) {
@@ -48,7 +44,8 @@ public abstract class MixinItemStack implements DataComponentHolder {
 
     @Inject(method = "hasFoil", at = @At("RETURN"), cancellable = true)
     public void hasFoilMix(CallbackInfoReturnable<Boolean> info) {
-        if (this.is(Tags.Items.POTIONS_BOTTLE) /* 26.1.2-port: constant renamed, still c:potions/bottle */ || this.is(Items.TIPPED_ARROW)) {
+        ItemStack self = (ItemStack) (Object) this;
+        if (self.is(Tags.Items.POTIONS_BOTTLE) /* 26.1.2-port: constant renamed, still c:potions/bottle */ || self.is(Items.TIPPED_ARROW)) {
             PotionContents contents = this.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
             if (contents.potion().isPresent() && EnigmaticPotions.ULTIMATE_POTIONS.contains(contents.potion().get())) {
                 info.setReturnValue(true);

@@ -103,7 +103,10 @@ dependencies {
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
     runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
     // 26.1.2-port: Patchouli's 26.1 build is only published on Modrinth's maven
-    implementation "maven.modrinth:patchouli:26.1-94-beta"
+    // 26.1.2-port: Modrinth has a Fabric and a NeoForge file that are both numbered "26.1-94-beta", and that
+    // coordinate resolved to the Fabric one (a jar with fabric.mod.json and no neoforge.mods.toml), so NeoForge did
+    // not see Patchouli at all. 2CsnFLom is the Modrinth version id of the NeoForge file, patchouli-neoforge-26.1-94.jar.
+    implementation "maven.modrinth:patchouli:2CsnFLom"
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
