@@ -1,4 +1,5 @@
 {
     "type": "enigmaticlegacyplus:special_loot",
-    "conditions": []
+    "conditions": [],
+    "priority": 500
 }
