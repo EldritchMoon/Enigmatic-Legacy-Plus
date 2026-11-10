@@ -117,18 +117,18 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
     }
 
     @Override
-    protected void customServerAiStep() {
+    protected void customServerAiStep(ServerLevel level) { // 26.1.2-port: customServerAiStep takes the level
         this.timeInOverworld = 0;
         Profiler.get().push("piglinWandererBrain");
-        this.getBrain().tick((ServerLevel) this.level(), this);
+        this.getBrain().tick(level, this);
         Profiler.get().pop();
         Ai.updateActivity(this);
-        super.customServerAiStep();
+        super.customServerAiStep(level);
     }
 
     @Override
-    public boolean doHurtTarget(Entity entity) {
-        boolean flag = super.doHurtTarget(entity);
+    public boolean doHurtTarget(ServerLevel level, Entity entity) { // 26.1.2-port: doHurtTarget takes the level
+        boolean flag = super.doHurtTarget(level, entity);
         if (flag) this.knockback(0.1, -Mth.sin(this.getYRot() * 0.017453292F), Mth.cos(this.getYRot() * 0.017453292F));
         return flag;
     }
@@ -149,8 +149,8 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
     }
 
     @Override
-    public boolean wantsToPickUp(ItemStack stack) {
-        return stack.is(EnigmaticItems.ICHOR_SPEAR) && super.wantsToPickUp(stack);
+    public boolean wantsToPickUp(ServerLevel level, ItemStack stack) { // 26.1.2-port: wantsToPickUp takes the level
+        return stack.is(EnigmaticItems.ICHOR_SPEAR) && super.wantsToPickUp(level, stack);
     }
 
     @Override

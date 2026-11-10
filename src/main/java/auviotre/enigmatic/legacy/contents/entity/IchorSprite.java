@@ -105,7 +105,7 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
         FlyingPathNavigation navigation = new FlyingPathNavigation(this, level);
         navigation.setCanOpenDoors(false);
         navigation.setCanFloat(true);
-        navigation.setCanPassDoors(true);
+        // 26.1.2-port: PathNavigation.setCanPassDoors was removed; passing doors is the node evaluator's default
         return navigation;
     }
 
@@ -221,19 +221,19 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
     }
 
     @Override
-    protected AABB getAttackBoundingBox() {
-        return super.getAttackBoundingBox().inflate(BEAM_RANGE - 2);
+    protected AABB getAttackBoundingBox(double horizontalExpansion) { // 26.1.2-port: the attack reach is passed in now
+        return super.getAttackBoundingBox(horizontalExpansion).inflate(BEAM_RANGE - 2);
     }
 
     @Override
-    protected void customServerAiStep() {
+    protected void customServerAiStep(ServerLevel level) { // 26.1.2-port: customServerAiStep takes the level
         Profiler.get().push("ichorSpriteBrain");
-        this.getBrain().tick((ServerLevel) this.level(), this);
+        this.getBrain().tick(level, this);
         Profiler.get().pop();
         Profiler.get().push("ichorSpriteActivityUpdate");
         Ai.updateActivity(this);
         Profiler.get().pop();
-        super.customServerAiStep();
+        super.customServerAiStep(level);
     }
 
     @Override
@@ -306,7 +306,7 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
         if (this.getMainHandItem().isEmpty() && this.isEffectiveAi() && this.getBrain().isActive(Activity.IDLE) && itemInHand.isEmpty()) {
             this.setItemInHand(InteractionHand.MAIN_HAND, itemInHand.copyWithCount(1));
             itemInHand.consume(1, player);
-            return InteractionResult.sidedSuccess(player.level().isClientSide());
+            return InteractionResult.SUCCESS; // 26.1.2-port: sidedSuccess was removed
         }
         return super.mobInteract(player, hand);
     }
@@ -470,7 +470,7 @@ public class IchorSprite extends PathfinderMob implements TraceableEntity {
                         }
                         nextTimer = 0;
                         sprite.setAttackTimer(0);
-                        sprite.doHurtTarget(target);
+                        sprite.doHurtTarget(level, target); // 26.1.2-port: doHurtTarget takes the level
                         this.doStop(level, sprite, gameTime);
                     }
                     this.attackTime = nextTimer;
