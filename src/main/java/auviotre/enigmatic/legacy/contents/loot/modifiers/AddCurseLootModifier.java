@@ -30,11 +30,13 @@ public class AddCurseLootModifier extends AddTableLootModifier {
                     .apply(inst, AddCurseLootModifier::new)));
     private final ResourceKey<LootTable> lootTable;
 
-    public AddCurseLootModifier(LootItemCondition[] conditionsIn, ResourceKey<LootTable> table) {
-        super(conditionsIn, table);
+    // 26.1.2-port: loot modifiers carry a priority, read from the modifier's JSON ("priority", default 1000; higher runs first)
+    public AddCurseLootModifier(LootItemCondition[] conditionsIn, int priority, ResourceKey<LootTable> table) {
+        super(conditionsIn, priority, table);
         this.lootTable = table;
     }
 
+    @Override
     protected @Nonnull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> list, LootContext context) {
         // 26.1.2-port: hasParam -> hasParameter, getParam -> getParameter
         if (!context.hasParameter(LootContextParams.ATTACKING_ENTITY)) return list;

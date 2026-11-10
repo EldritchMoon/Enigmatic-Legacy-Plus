@@ -43,8 +43,9 @@ public class SpecialLootModifier extends LootModifier {
             BuiltInLootTables.TRAIL_RUINS_ARCHAEOLOGY_RARE.identifier()
     );
 
-    public SpecialLootModifier(LootItemCondition[] conditionsIn) {
-        super(conditionsIn);
+    // 26.1.2-port: loot modifiers carry a priority, read from the modifier's JSON ("priority", default 1000; higher runs first)
+    public SpecialLootModifier(LootItemCondition[] conditionsIn, int priority) {
+        super(conditionsIn, priority);
     }
 
     @Override
