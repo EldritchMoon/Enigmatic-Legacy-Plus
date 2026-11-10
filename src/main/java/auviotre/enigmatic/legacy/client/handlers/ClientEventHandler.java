@@ -20,7 +20,6 @@ import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
-import com.illusivesoulworks.caelus.api.RenderCapeEvent;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -28,11 +27,11 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.fog.FogRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -67,36 +66,39 @@ public class ClientEventHandler {
     public static float violenceLastTimer = 0;
     private static boolean spaceDown = false;
 
-    @SubscribeEvent
-    private static void onTooltipRendering(RenderTooltipEvent.@NotNull Color event) {
-        ItemStack stack = event.getItemStack();
-        if (!stack.isEmpty()) {
-            if (EnigmaticHandler.isCursedItem(stack)) {
-                if (EnigmaticHandler.isTheBlessedOne(Minecraft.getInstance().player) && EnigmaticHandler.isBlessedItem(stack)) {
-                    event.setBackground(0xF01a0a07);
-                    event.setBorderStart(0xF0FFA400);
-                    event.setBorderEnd(0x80D07540);
-                } else if (EnigmaticHandler.isEldritchItem(stack)) {
-                    event.setBackground(0xF0201020);
-                    event.setBorderStart(0xF08F609A);
-                    event.setBorderEnd(0x805A3A7A);
-                } else {
-                    event.setBackground(0xF0201010);
-                    event.setBorderStart(0xF0A01000);
-                    event.setBorderEnd(0x70901000);
-                }
-            }
-            if (stack.is(EnigmaticItems.CURSED_RING)) {
-                event.setBackground(0xF0201010);
-                event.setBorderStart(0xF0A01000);
-                event.setBorderEnd(0x70901000);
-            } else if (stack.is(EnigmaticItems.REDEMPTION_RING)) {
-                event.setBackground(0xF01a0a07);
-                event.setBorderStart(0xF0FFA400);
-                event.setBorderEnd(0x80D07540);
-            }
-        }
-    }
+    // TODO(port): RenderTooltipEvent.Color was removed. Tooltip backgrounds and borders are sprites now
+    // (RenderTooltipEvent.Texture or the tooltip_style component), so the cursed / blessed / eldritch colours below
+    // need tooltip sprite assets (phase 7). The colours are kept here as the reference for those sprites.
+    // @SubscribeEvent
+    // private static void onTooltipRendering(RenderTooltipEvent.@NotNull Color event) {
+    //     ItemStack stack = event.getItemStack();
+    //     if (!stack.isEmpty()) {
+    //         if (EnigmaticHandler.isCursedItem(stack)) {
+    //             if (EnigmaticHandler.isTheBlessedOne(Minecraft.getInstance().player) && EnigmaticHandler.isBlessedItem(stack)) {
+    //                 event.setBackground(0xF01a0a07);
+    //                 event.setBorderStart(0xF0FFA400);
+    //                 event.setBorderEnd(0x80D07540);
+    //             } else if (EnigmaticHandler.isEldritchItem(stack)) {
+    //                 event.setBackground(0xF0201020);
+    //                 event.setBorderStart(0xF08F609A);
+    //                 event.setBorderEnd(0x805A3A7A);
+    //             } else {
+    //                 event.setBackground(0xF0201010);
+    //                 event.setBorderStart(0xF0A01000);
+    //                 event.setBorderEnd(0x70901000);
+    //             }
+    //         }
+    //         if (stack.is(EnigmaticItems.CURSED_RING)) {
+    //             event.setBackground(0xF0201010);
+    //             event.setBorderStart(0xF0A01000);
+    //             event.setBorderEnd(0x70901000);
+    //         } else if (stack.is(EnigmaticItems.REDEMPTION_RING)) {
+    //             event.setBackground(0xF01a0a07);
+    //             event.setBorderStart(0xF0FFA400);
+    //             event.setBorderEnd(0x80D07540);
+    //         }
+    //     }
+    // }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     private static void onTooltip(@NotNull ItemTooltipEvent event) {
@@ -178,21 +180,22 @@ public class ClientEventHandler {
         if (event.getType() == FogType.LAVA) {
             if (player.hasEffect(EnigmaticEffects.MOLTEN_HEART)) {
                 event.setNearPlaneDistance(0.0F);
-                event.setFarPlaneDistance(6.0F);
-                event.setCanceled(true);
+                event.setFarPlaneDistance(6.0F); // 26.1.2-port: no setCanceled; the event is not cancellable and changes always apply
             } else if (EnigmaticHandler.hasCurio(player, EnigmaticItems.BLAZING_CORE)) {
                 event.setNearPlaneDistance(0.0F);
                 event.setFarPlaneDistance(10.0F);
-                event.setCanceled(true);
             }
         }
         ItemStack curio = EnigmaticHandler.getCurio(player, EnigmaticItems.VIOLENCE_SCROLL);
         if (!curio.isEmpty() && event.getCamera().getFluidInCamera() == FogType.NONE) {
             float timer = 1.0F - (float) Math.clamp(Mth.lerp(event.getPartialTick(), violenceLastTimer, violenceTimer) / 800.0F, 0.0F, 1.0F);
             float f = Math.max(event.getFarPlaneDistance() * (float) Math.pow(timer, 6.0F), 24.0F);
-            event.setNearPlaneDistance(event.getMode() == FogRenderer.FogMode.FOG_SKY ? 0.0F : f * 0.6F);
+            // 26.1.2-port: the event used to fire once per fog mode (terrain, sky) and now fires once with every
+            // distance in FogData. Terrain fog keeps its near/far values; sky fog, which had near 0 and its own far
+            // distance scaled the same way, is the separate skyEnd field.
+            event.setNearPlaneDistance(f * 0.6F);
             event.setFarPlaneDistance(f);
-            event.setCanceled(true);
+            event.getFogData().skyEnd = Math.max(event.getFogData().skyEnd * (float) Math.pow(timer, 6.0F), 24.0F);
         }
     }
 
@@ -218,10 +221,12 @@ public class ClientEventHandler {
         }
     }
 
-    @SubscribeEvent
-    private static void renderCape(@NotNull RenderCapeEvent event) {
-        if (!BaseElytraItem.getElytra(event.getEntity()).isEmpty()) event.setCanceled(true);
-    }
+    // TODO(port): Caelus is no longer a dependency, so its RenderCapeEvent is gone. Hiding the cape while an elytra is
+    // worn in the Curios back slot belongs with the back-slot gliding mixin (phase 6).
+    // @SubscribeEvent
+    // private static void renderCape(@NotNull RenderCapeEvent event) {
+    //     if (!BaseElytraItem.getElytra(event.getEntity()).isEmpty()) event.setCanceled(true);
+    // }
 
     @SubscribeEvent
     private static void renderScreenEffect(@NotNull RenderBlockScreenEffectEvent event) {
@@ -270,20 +275,24 @@ public class ClientEventHandler {
                 Font font = minecraft.font;
                 int x = (guiGraphics.guiWidth() - font.width(title)) / 2 + 1;
                 int y = guiGraphics.guiHeight() - 31 - 4;
-                int boundaryColor = 5832704;
+                int boundaryColor = ARGB.opaque(5832704); // 26.1.2-port: text() skips colours with alpha 0
                 guiGraphics.text(font, title, x + 1, y, boundaryColor);
                 guiGraphics.text(font, title, x - 1, y, boundaryColor);
                 guiGraphics.text(font, title, x, y + 1, boundaryColor);
                 guiGraphics.text(font, title, x, y - 1, boundaryColor);
-                guiGraphics.text(font, title, x, y, 16770638);
+                guiGraphics.text(font, title, x, y, ARGB.opaque(16770638));
             }
-        } else if (event.getName().equals(VanillaGuiLayers.EXPERIENCE_BAR) && player != null && spellstone.is(EnigmaticItems.BLAZING_CORE)) {
+        } else if ((event.getName().equals(VanillaGuiLayers.CONTEXTUAL_INFO_BAR_BACKGROUND) || event.getName().equals(VanillaGuiLayers.CONTEXTUAL_INFO_BAR)) && player != null && spellstone.is(EnigmaticItems.BLAZING_CORE)) {
+            // 26.1.2-port: EXPERIENCE_BAR no longer exists. The bar is the "contextual info bar" now, in two layers: its
+            // background (drawn before the level number) and its fill (drawn after). Both are cancelled, and the lava bar
+            // is drawn in place of the background so it stays underneath the title text, as before.
             if (minecraft.gameMode != null && minecraft.gameMode.hasExperience()) {
                 EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);
                 int timer = data.getFireImmunityTimer();
                 int lastTimer = data.getFireImmunityTimerLast();
                 if (timer == 0 && lastTimer == 0) return;
                 event.setCanceled(true);
+                if (event.getName().equals(VanillaGuiLayers.CONTEXTUAL_INFO_BAR)) return;
                 int cap = data.getFireImmunityCap();
                 DeltaTracker partialTick = event.getPartialTick();
                 float barFiller = Mth.lerp(partialTick.getGameTimeDeltaTicks(), lastTimer, timer) / cap;

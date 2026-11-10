@@ -8,7 +8,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.LevelLoadingScreen;
-import net.minecraft.client.gui.screens.ReceivingLevelScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.network.chat.Component;
@@ -56,7 +55,7 @@ public class QuoteHandler {
         Minecraft mc = Minecraft.getInstance();
 
         if (mc.player == null || mc.level == null) return;
-        if (mc.screen instanceof LevelLoadingScreen || mc.screen instanceof ReceivingLevelScreen) return;
+        if (mc.screen instanceof LevelLoadingScreen) return; // 26.1.2-port: ReceivingLevelScreen was removed; LevelLoadingScreen is the only loading screen
 
         this.delayTicks--;
 
