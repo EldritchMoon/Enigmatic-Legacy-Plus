@@ -42,6 +42,6 @@
     "accessor.EffectInstanceAccessor",
     "accessor.PostChainAccessor",
     "client.MixinGameRenderer",
-    "client.MixinItemRenderer"
+    "client.MixinItemModelResolver"
   ]
 }
