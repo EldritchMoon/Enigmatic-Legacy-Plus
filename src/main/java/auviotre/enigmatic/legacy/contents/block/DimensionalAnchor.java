@@ -32,6 +32,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.level.storage.LevelData;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
@@ -128,8 +129,12 @@ public class DimensionalAnchor extends BaseEntityBlock {
         } else {
             if (!level.isClientSide()) {
                 ServerPlayer serverplayer = (ServerPlayer) player;
-                if (serverplayer.getRespawnDimension() != level.dimension() || !pos.equals(serverplayer.getRespawnPosition())) {
-                    serverplayer.setRespawnPosition(level.dimension(), pos, 0.0F, false, true);
+                // 26.1.2-port: the respawn point is one RespawnConfig now (was separate dimension / position getters);
+                // same check and same values as before (not forced, show the message), as vanilla's RespawnAnchorBlock
+                ServerPlayer.RespawnConfig current = serverplayer.getRespawnConfig();
+                ServerPlayer.RespawnConfig anchor = new ServerPlayer.RespawnConfig(LevelData.RespawnData.of(level.dimension(), pos, 0.0F, 0.0F), false);
+                if (current == null || !current.isSamePosition(anchor)) {
+                    serverplayer.setRespawnPosition(anchor, true);
                     level.playSound(null, pos, SoundEvents.RESPAWN_ANCHOR_SET_SPAWN, SoundSource.BLOCKS, 1.0F, 1.0F);
                     return InteractionResult.SUCCESS;
                 }

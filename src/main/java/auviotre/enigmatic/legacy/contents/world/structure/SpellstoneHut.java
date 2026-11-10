@@ -69,7 +69,7 @@ public class SpellstoneHut extends Structure {
         }
 
         public Piece(StructurePieceSerializationContext context, CompoundTag tag) {
-            super(EnigmaticStructureTypes.SPELLSTONE_HUT_PIECE.get(), tag, context.structureTemplateManager(), (location) -> makeSettings(Rotation.valueOf(tag.getString("Rot"))));
+            super(EnigmaticStructureTypes.SPELLSTONE_HUT_PIECE.get(), tag, context.structureTemplateManager(), (location) -> makeSettings(tag.read("Rot", Rotation.LEGACY_CODEC).orElseThrow())); // 26.1.2-port: getString returns Optional; read it as vanilla's IglooPieces does
         }
 
         private static StructurePlaceSettings makeSettings(Rotation rotation) {

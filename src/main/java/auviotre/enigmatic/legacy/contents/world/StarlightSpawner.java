@@ -26,18 +26,18 @@ public class StarlightSpawner implements CustomSpawner {
     }
 
     @Override
-    public int tick(ServerLevel level, boolean spawnEnemies, boolean spawnFriendlies) {
-        if (!spawnFriendlies) return 0;
-        if (!Level.END.equals(level.dimension())) return 0;
+    // 26.1.2-port: CustomSpawner.tick returns nothing and lost spawnFriendlies (the server's spawn-animals setting no
+    // longer exists), so the old "if (!spawnFriendlies) return" gate is gone; mob spawning being on is still required.
+    public void tick(ServerLevel level, boolean spawnEnemies) {
+        if (!Level.END.equals(level.dimension())) return;
         RandomSource random = level.getRandom();
         --this.nextTick;
-        if (this.nextTick > 0) return 0;
+        if (this.nextTick > 0) return;
         this.nextTick = this.nextTick + 500 + random.nextInt(250);
         this.offsetX += (level.getRandom().nextFloat() - 0.5F) * 2.4F;
         this.offsetZ += (level.getRandom().nextFloat() - 0.5F) * 2.4F;
         if (Math.abs(this.offsetX) > 2.0F) this.offsetX *= 0.9F;
         if (Math.abs(this.offsetZ) > 2.0F) this.offsetZ *= 0.9F;
-        int count = 0;
         for (ServerPlayer player : level.players()) {
             if (player.isSpectator()) continue;
             BlockPos blockPos = player.blockPosition();
@@ -59,11 +59,9 @@ public class StarlightSpawner implements CustomSpawner {
                         starlightMeteor.snapTo(spawnPos, 0.0F, 0.0F);
                         starlightMeteor.setDeltaMovement(offsetX, 1.6F, offsetZ);
                         level.addFreshEntityWithPassengers(starlightMeteor);
-                        ++count;
                     }
                 }
             }
         }
-        return count;
     }
 }
