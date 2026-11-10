@@ -17,9 +17,11 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 public class AngelBeam extends AbstractHurtingProjectile {
-    private static final EntityDataAccessor<Vector3f> DATA_FROM_POS = SynchedEntityData.defineId(AngelBeam.class, EntityDataSerializers.VECTOR3);
+    // 26.1.2-port: the VECTOR3 serializer is typed Vector3fc (read-only view) now
+    private static final EntityDataAccessor<Vector3fc> DATA_FROM_POS = SynchedEntityData.defineId(AngelBeam.class, EntityDataSerializers.VECTOR3);
 
     public AngelBeam(EntityType<? extends AbstractHurtingProjectile> entityType, Level level) {
         super(entityType, level);
@@ -60,7 +62,7 @@ public class AngelBeam extends AbstractHurtingProjectile {
         builder.define(DATA_FROM_POS, new Vector3f(0, 0, 0));
     }
 
-    public Vector3f getBeginning() {
+    public Vector3fc getBeginning() {
         return this.entityData.get(DATA_FROM_POS);
     }
 
@@ -68,7 +70,7 @@ public class AngelBeam extends AbstractHurtingProjectile {
     protected void onHitEntity(EntityHitResult result) {
         if (this.getOwner() instanceof LivingEntity owner) {
             Entity entity = result.getEntity();
-            int bless = entity.getPersistentData().getInt("ResonanceAngelBless");
+            int bless = entity.getPersistentData().getIntOr("ResonanceAngelBless", 0); // 26.1.2-port: getInt returns Optional now
             entity.getPersistentData().putInt("ResonanceAngelBless", bless | 2);
             entity.hurt(this.damageSources().indirectMagic(this, owner), (float) owner.getAttributeValue(Attributes.ATTACK_DAMAGE));
         }

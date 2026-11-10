@@ -40,7 +40,7 @@ public class ThrownIchorSpear extends AbstractSpear {
     @Override
     public void tick() {
         super.tick();
-        if (this.level().isClientSide() && !this.inGround) {
+        if (this.level().isClientSide() && !this.isInGround()) { // 26.1.2-port: inGround field -> isInGround()
             Vec3 vec3 = this.getDeltaMovement();
             double dx = vec3.x;
             double dy = vec3.y;

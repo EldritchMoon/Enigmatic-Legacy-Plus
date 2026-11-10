@@ -124,7 +124,7 @@ public class SoulFlameBall extends Projectile {
         if (entity instanceof LivingEntity owner) {
             Entity target = hitResult.getEntity();
             if (target == this.getOwner()) return;
-            int level = target.getPersistentData().getInt("IllusionSoulLevel");
+            int level = target.getPersistentData().getIntOr("IllusionSoulLevel", 0); // 26.1.2-port: getInt returns Optional now
             float damage = Math.min(4.0F + level * 0.4F, owner.getMaxHealth() * 0.64F);
             target.hurt(EnigmaticDamageTypes.source(level(), DamageTypes.MAGIC, this, this.getOwner()), damage);
             target.getPersistentData().putInt("IllusionSoulLevel", level + 1);

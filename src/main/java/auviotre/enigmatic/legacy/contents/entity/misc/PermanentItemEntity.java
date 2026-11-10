@@ -200,7 +200,7 @@ public class PermanentItemEntity extends Entity {
     }
 
     @Override
-    public boolean canChangeDimensions(Level oldLevel, Level newLevel) {
+    public boolean canTeleport(Level oldLevel, Level newLevel) { // 26.1.2-port: canChangeDimensions -> canTeleport
         return false;
     }
 
@@ -360,7 +360,7 @@ public class PermanentItemEntity extends Entity {
     }
 
     @Override
-    public InteractionResult interact(Player player, InteractionHand hand) {
+    public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) { // 26.1.2-port: interact gained the hit location
         if (this.pickupDelay > 0) return InteractionResult.PASS;
         if (!player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) return InteractionResult.PASS;
         if (player.isSpectator()) return InteractionResult.SUCCESS;

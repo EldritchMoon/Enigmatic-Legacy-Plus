@@ -126,7 +126,7 @@ public class AbyssProjectile extends Projectile implements ItemSupplier {
         if (entity instanceof LivingEntity livingEntity) {
             Entity target = hitResult.getEntity();
             if (target == this.getOwner()) return;
-            int level = target.getPersistentData().getInt("AnnihilationPoint");
+            int level = target.getPersistentData().getIntOr("AnnihilationPoint", 0); // 26.1.2-port: getInt returns Optional now
             float damage = this.entityData.get(ID_DAMAGE) * 0.3F;
             if (target instanceof LivingEntity living) damage += living.getMaxHealth() * 0.02F * level;
             target.hurt(EnigmaticDamageTypes.source(this.level(), EnigmaticDamageTypes.ABYSS, this, this.getOwner()), damage);

@@ -75,7 +75,7 @@ public class CobwebBall extends Projectile implements ItemSupplier {
         this.updateRotation();
         if (this.level().getBlockStates(this.getBoundingBox()).noneMatch(BlockBehaviour.BlockStateBase::isAir)) {
             this.discard();
-        } else if (this.isInWaterOrBubble()) {
+        } else if (this.isInWater()) { // 26.1.2-port: isInWaterOrBubble was removed (bubble columns count as water)
             this.discard();
         } else {
             this.setDeltaMovement(vec3.scale(0.98F));
@@ -124,9 +124,11 @@ public class CobwebBall extends Projectile implements ItemSupplier {
     @Override
     public void recreateFromPacket(ClientboundAddEntityPacket entityPacket) {
         super.recreateFromPacket(entityPacket);
-        double xa = entityPacket.getXa();
-        double ya = entityPacket.getYa();
-        double za = entityPacket.getZa();
+        // 26.1.2-port: getXa/getYa/getZa -> getMovement()
+        Vec3 movement = entityPacket.getMovement();
+        double xa = movement.x;
+        double ya = movement.y;
+        double za = movement.z;
 
         for (int i = 0; i < 7; ++i) {
             double v = 0.4D + 0.1D * i;
