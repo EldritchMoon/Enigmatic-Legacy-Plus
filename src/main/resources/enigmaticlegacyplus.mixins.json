@@ -15,9 +15,6 @@
     "MixinPlayer",
     "MixinPlayerList",
     "MixinServerPlayer",
-    "compat.MixinApothMenu",
-    "compat.MixinItemStackUtil",
-    "compat.MixinThirstBarRenderer",
     "entity.MixinEnderDragon",
     "entity.MixinGuardian",
     "entity.MixinHoglinAi",
@@ -46,8 +43,6 @@
     "accessor.PostChainAccessor",
     "client.MixinEntityRenderer",
     "client.MixinGameRenderer",
-    "client.MixinItemRenderer",
-    "compat.MixinApothScreen",
-    "compat.MixinGuiBookLanding"
+    "client.MixinItemRenderer"
   ]
 }

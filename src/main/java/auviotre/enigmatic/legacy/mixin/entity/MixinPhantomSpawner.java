@@ -24,22 +24,23 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PhantomSpawner.class)
 public class MixinPhantomSpawner {
     @Unique
     private int ticksUntilSpawn = 0;
 
-    @Inject(at = @At("RETURN"), method = "tick", cancellable = true)
-    private void onTick(ServerLevel level, boolean spawnEnemies, boolean spawnFriendlies, CallbackInfoReturnable<Integer> info) {
-        if (spawnEnemies && level.getGameRules().getBoolean(GameRules.RULE_DOINSOMNIA)) {
+    // 26.1.2-port: tick(level, spawnEnemies, spawnFriendlies) returning a count -> tick(level, spawnEnemies) returning
+    // nothing, so the extra phantoms are no longer added to a return value (nothing reads a count any more).
+    @Inject(at = @At("RETURN"), method = "tick")
+    private void onTick(ServerLevel level, boolean spawnEnemies, CallbackInfo info) {
+        if (spawnEnemies && level.getGameRules().get(GameRules.SPAWN_PHANTOMS)) { // 26.1.2-port: was RULE_DOINSOMNIA
             var random = level.getRandom();
             --this.ticksUntilSpawn;
             if (this.ticksUntilSpawn <= 0) {
                 this.ticksUntilSpawn += (60 + random.nextInt(60)) * 10;
                 if (level.getSkyDarken() < 5 && level.dimensionType().hasSkyLight()) return;
-                int i = 0;
                 for (ServerPlayer player : level.players()) {
                     if (!player.isSpectator()) {
                         BlockPos pos = player.blockPosition();
@@ -61,7 +62,7 @@ public class MixinPhantomSpawner {
                                                 SpawnGroupData spawnGroupData = null;
                                                 int l = 1 + random.nextInt(difficulty.getDifficulty().getId() + 1);
                                                 for (int i1 = 0; i1 < l; ++i1) {
-                                                    Phantom phantom = EntityType.PHANTOM.create(level);
+                                                    Phantom phantom = EntityType.PHANTOM.create(level, EntitySpawnReason.NATURAL); // 26.1.2-port: create() takes the spawn reason
                                                     if (phantom != null) {
                                                         phantom.snapTo(blockPos, 0.0F, 0.0F);
                                                         EnigmaticHandler.setCurseBoosted(phantom, true, player);
@@ -69,7 +70,6 @@ public class MixinPhantomSpawner {
                                                         level.addFreshEntityWithPassengers(phantom);
                                                     }
                                                 }
-                                                i += l;
                                             }
                                         }
                                     }
@@ -78,7 +78,6 @@ public class MixinPhantomSpawner {
                         }
                     }
                 }
-                info.setReturnValue(info.getReturnValue() + i);
             }
         }
     }

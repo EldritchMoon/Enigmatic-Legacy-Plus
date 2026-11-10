@@ -157,6 +157,7 @@ sourceSets.main.java {
         exclude 'auviotre/enigmatic/legacy/compat/appleskin/**'
         exclude 'auviotre/enigmatic/legacy/compat/mysticalagriculture/**'
         exclude 'auviotre/enigmatic/legacy/compat/thirst/**'
+        // these five are also taken out of enigmaticlegacyplus.mixins.json; put both back together
         exclude 'auviotre/enigmatic/legacy/mixin/compat/**'
         // TODO(port): data generators parked until phase 9; their JSON output is already in src/generated
         exclude 'auviotre/enigmatic/legacy/data/**'

@@ -7,6 +7,7 @@ import auviotre.enigmatic.legacy.contents.item.materials.AbyssalHeart;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.packets.client.AcceptorSyncPacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,6 +15,8 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,14 +27,21 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import com.mojang.serialization.Codec;
 
 @Mixin(EnderDragon.class)
 public abstract class MixinEnderDragon extends Mob implements Enemy, AbyssalHeartBearer {
     @Shadow
     public int dragonDeathTime;
+    // 26.1.2-port: entities save through ValueOutput/ValueInput with codecs instead of a CompoundTag. This codec writes
+    // what the old code wrote by hand: a compound "Attackers" of "0", "1", ... -> UUID (as an int array).
+    @Unique
+    private static final Codec<Map<String, UUID>> EL$ATTACKERS_CODEC = Codec.unboundedMap(Codec.STRING, UUIDUtil.CODEC);
     @Unique
     private Set<UUID> attackers;
 
@@ -70,27 +80,21 @@ public abstract class MixinEnderDragon extends Mob implements Enemy, AbyssalHear
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("RETURN"))
-    public void addSaveData(CompoundTag compoundTag, CallbackInfo info) {
-        CompoundTag attacker = new CompoundTag();
+    public void addSaveData(ValueOutput output, CallbackInfo info) {
+        Map<String, UUID> attacker = new LinkedHashMap<>();
         int i = 0;
         if (this.attackers != null) {
             for (UUID uuid : this.attackers) {
-                if (uuid != null) attacker.putUUID(String.valueOf(i++), uuid);
+                if (uuid != null) attacker.put(String.valueOf(i++), uuid);
             }
         }
-        compoundTag.put("Attackers", attacker);
+        output.store("Attackers", EL$ATTACKERS_CODEC, attacker);
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("RETURN"))
-    public void readData(CompoundTag compoundTag, CallbackInfo info) {
+    public void readData(ValueInput input, CallbackInfo info) {
         Set<UUID> set = new HashSet<>();
-        CompoundTag attacker = compoundTag.getCompoundOrEmpty("Attackers");
-        for (String key : attacker.getAllKeys()) {
-            if (attacker.hasUUID(key)) {
-                UUID tagUUID = attacker.getUUID(key);
-                set.add(tagUUID);
-            }
-        }
+        input.read("Attackers", EL$ATTACKERS_CODEC).ifPresent(attacker -> set.addAll(attacker.values()));
         this.attackers = set;
     }
 
