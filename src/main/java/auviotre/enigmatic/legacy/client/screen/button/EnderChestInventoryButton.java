@@ -11,11 +11,11 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
-import net.minecraft.client.gui.screens.recipebook.RecipeUpdateListener;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.item.ItemStack;
@@ -34,7 +34,9 @@ public class EnderChestInventoryButton extends ImageButton {
             EnigmaticLegacy.location("button/ender_chest_button_highlighted")
     );
     protected final AbstractContainerScreen<?> parentGui;
-    protected boolean isRecipeBookVisible = false;
+    // 26.1.2-port: getRecipeBookComponent() is gone. The button only watched the recipe book to follow the GUI when it
+    // shifts sideways, so it now watches the GUI's left edge directly.
+    protected int lastGuiLeft = Integer.MIN_VALUE;
 
     public EnderChestInventoryButton(AbstractContainerScreen<?> container, int x, int y, int width, int height, Button.OnPress onPress) {
         super(x, y, width, height, SPRITES, onPress);
@@ -49,8 +51,10 @@ public class EnderChestInventoryButton extends ImageButton {
                 ItemStack stack = player.containerMenu.getCarried();
                 player.containerMenu.setCarried(ItemStack.EMPTY);
                 if (gui instanceof InventoryScreen inventory) {
-                    RecipeBookComponent recipeBookGui = inventory.getRecipeBookComponent();
-                    if (recipeBookGui.isVisible()) recipeBookGui.toggleVisibility();
+                    // 26.1.2-port: getRecipeBookComponent() is gone; the recipe book is still one of the screen's widgets
+                    for (GuiEventListener child : inventory.children()) {
+                        if (child instanceof RecipeBookComponent<?> recipeBookGui && recipeBookGui.isVisible()) recipeBookGui.toggleVisibility();
+                    }
                 }
                 ClientPacketDistributor.sendToServer(new EnderRingKeyPacket(stack));
             }
@@ -68,9 +72,9 @@ public class EnderChestInventoryButton extends ImageButton {
     public void extractContents(@Nonnull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) { // 26.1.2-port: renderWidget -> extractContents
         this.active = true;
         if (this.parentGui instanceof InventoryScreen || this.parentGui instanceof ICuriosScreen) {
-            boolean lastVisible = this.isRecipeBookVisible;
-            this.isRecipeBookVisible = ((RecipeUpdateListener) this.parentGui).getRecipeBookComponent().isVisible();
-            if (lastVisible != this.isRecipeBookVisible) {
+            int guiLeft = this.parentGui.getGuiLeft();
+            if (guiLeft != this.lastGuiLeft) {
+                this.lastGuiLeft = guiLeft;
                 Tuple<Integer, Integer> offsets = this.getOffsets(false);
                 this.setPosition(this.parentGui.getGuiLeft() + offsets.getA(), this.parentGui.getGuiTop() + offsets.getB());
             }

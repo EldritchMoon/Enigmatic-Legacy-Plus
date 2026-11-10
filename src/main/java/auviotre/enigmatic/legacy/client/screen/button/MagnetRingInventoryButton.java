@@ -14,7 +14,6 @@ import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.client.gui.screens.recipebook.RecipeUpdateListener;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
@@ -36,7 +35,9 @@ public class MagnetRingInventoryButton extends ImageButton {
             EnigmaticLegacy.location("button/magnet_button_off_highlighted")
     );
     protected final AbstractContainerScreen<?> parentGui;
-    protected boolean isRecipeBookVisible = false;
+    // 26.1.2-port: getRecipeBookComponent() is gone. The button only watched the recipe book to follow the GUI when it
+    // shifts sideways, so it now watches the GUI's left edge directly.
+    protected int lastGuiLeft = Integer.MIN_VALUE;
 
     public MagnetRingInventoryButton(AbstractContainerScreen<?> container, int x, int y, int width, int height, OnPress onPress) {
         super(x, y, width, height, SPRITES, onPress);
@@ -63,9 +64,9 @@ public class MagnetRingInventoryButton extends ImageButton {
     public void extractContents(@Nonnull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) { // 26.1.2-port: renderWidget -> extractContents
         this.active = true;
         if (this.parentGui instanceof InventoryScreen || this.parentGui instanceof ICuriosScreen) {
-            boolean lastVisible = this.isRecipeBookVisible;
-            this.isRecipeBookVisible = ((RecipeUpdateListener) this.parentGui).getRecipeBookComponent().isVisible();
-            if (lastVisible != this.isRecipeBookVisible) {
+            int guiLeft = this.parentGui.getGuiLeft();
+            if (guiLeft != this.lastGuiLeft) {
+                this.lastGuiLeft = guiLeft;
                 Tuple<Integer, Integer> offsets = this.getOffsets(false);
                 this.setPosition(this.parentGui.getGuiLeft() + offsets.getA(), this.parentGui.getGuiTop() + offsets.getB());
             }

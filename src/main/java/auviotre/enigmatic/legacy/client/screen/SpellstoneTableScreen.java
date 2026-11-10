@@ -2,7 +2,6 @@ package auviotre.enigmatic.legacy.client.screen;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.gui.SpellstoneTableMenu;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -25,12 +24,8 @@ public class SpellstoneTableScreen extends AbstractContainerScreen<SpellstoneTab
         this.titleLabelY -= 1;
     }
 
-    @Override
-    public void render(GuiGraphicsExtractor graphics, int x, int y, float partialTick) {
-        super.render(graphics, x, y, partialTick);
-        RenderSystem.disableBlend();
-        this.renderTooltip(graphics, x, y);
-    }
+    // 26.1.2-port: the render() override is gone. The screen now draws its own background (extractBackground) and the
+    // hovered slot's tooltip (AbstractContainerScreen.extractRenderState), which is all the override did.
 
     @Override
     // 26.1.2-port: renderBg -> extractBackground (public, new argument order). The dimmed world behind the screen is

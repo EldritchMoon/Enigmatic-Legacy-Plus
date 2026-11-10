@@ -2,11 +2,13 @@ package auviotre.enigmatic.legacy.client.screen;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.TextAlignment;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.MultiLineLabel;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.util.ARGB;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
@@ -44,7 +46,8 @@ public class PermanentDeathScreen extends Screen {
     @Override
     public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) { // 26.1.2-port: render -> extractRenderState
         super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
-        guiGraphics.centeredText(this.font, this.title, this.width / 2, this.height / 2 - this.textHeight / 2 - 9 * 2, 11184810);
-        this.message.renderCentered(guiGraphics, this.width / 2, this.height / 2 - this.textHeight / 2);
+        guiGraphics.centeredText(this.font, this.title, this.width / 2, this.height / 2 - this.textHeight / 2 - 9 * 2, ARGB.opaque(11184810)); // 26.1.2-port: text skips colours with alpha 0
+        // 26.1.2-port: MultiLineLabel.renderCentered -> visitLines with a text collector (line height 9, as before)
+        this.message.visitLines(TextAlignment.CENTER, this.width / 2, this.height / 2 - this.textHeight / 2, 9, guiGraphics.textRenderer());
     }
 }

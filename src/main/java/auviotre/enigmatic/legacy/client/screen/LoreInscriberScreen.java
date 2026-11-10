@@ -3,7 +3,6 @@ package auviotre.enigmatic.legacy.client.screen;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.gui.LoreInscriberMenu;
 import auviotre.enigmatic.legacy.packets.server.LoreInscriberRenamePacket;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -12,6 +11,7 @@ import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerListener;
@@ -38,7 +38,7 @@ public class LoreInscriberScreen extends AbstractContainerScreen<LoreInscriberMe
         this.name.setBordered(false);
         this.name.setMaxLength(128);
         this.name.setResponder(this::onNameChanged);
-        this.addWidget(this.name);
+        this.addRenderableWidget(this.name); // 26.1.2-port: drawn by the screen itself now (was renderNameField), as vanilla's AnvilScreen
         this.setInitialFocus(this.name);
     }
 
@@ -55,13 +55,8 @@ public class LoreInscriberScreen extends AbstractContainerScreen<LoreInscriberMe
         this.menu.removeSlotListener(this);
     }
 
-    @Override
-    public void render(GuiGraphicsExtractor graphics, int x, int y, float partialTick) {
-        super.render(graphics, x, y, partialTick);
-        RenderSystem.disableBlend();
-        this.renderNameField(graphics, x, y, partialTick);
-        this.renderTooltip(graphics, x, y);
-    }
+    // 26.1.2-port: the render() override is gone. The screen now draws its own background (extractBackground) and the
+    // hovered slot's tooltip (AbstractContainerScreen.extractRenderState), which is all the override did.
 
     @Override
     // 26.1.2-port: renderBg -> extractBackground (public, new argument order). The dimmed world behind the screen is
@@ -92,11 +87,7 @@ public class LoreInscriberScreen extends AbstractContainerScreen<LoreInscriberMe
 
     @Override
     protected void extractLabels(GuiGraphicsExtractor graphics, int x, int y) { // 26.1.2-port: renderLabels -> extractLabels, drawString -> text
-        graphics.text(this.font, this.title, 52, 13, 4210752);
-    }
-
-    public void renderNameField(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
-        this.name.render(graphics, mouseX, mouseY, partialTicks);
+        graphics.text(this.font, this.title, 52, 13, ARGB.opaque(4210752)); // 26.1.2-port: text() skips colours with alpha 0
     }
 
     private void onNameChanged(String input) {

@@ -8,6 +8,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
@@ -25,12 +26,8 @@ public class AntiqueBagScreen extends AbstractContainerScreen<AntiqueBagContaine
         super(menu, inventory, component);
     }
 
-    @Override
-    public void render(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(graphics, mouseX, mouseY, partialTicks);
-        super.render(graphics, mouseX, mouseY, partialTicks);
-        this.renderTooltip(graphics, mouseX, mouseY);
-    }
+    // 26.1.2-port: the render() override is gone. The screen now draws its own background (extractBackground) and the
+    // hovered slot's tooltip (AbstractContainerScreen.extractRenderState), which is all the override did.
 
     @Override
     protected List<Component> getTooltipFromContainerItem(ItemStack stack) {
@@ -41,9 +38,9 @@ public class AntiqueBagScreen extends AbstractContainerScreen<AntiqueBagContaine
 
     @Override
     protected void extractLabels(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY) { // 26.1.2-port: renderLabels -> extractLabels, drawString -> text
-        guiGraphics.text(this.font, this.title, this.titleLabelX + 1, this.titleLabelY + 1, 0x8f7ec4, false);
-        guiGraphics.text(this.font, this.title, this.titleLabelX, this.titleLabelY, 0xb2cfdb, false);
-        guiGraphics.text(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 4210752, false);
+        guiGraphics.text(this.font, this.title, this.titleLabelX + 1, this.titleLabelY + 1, ARGB.opaque(0x8f7ec4), false); // 26.1.2-port: text() skips colours with alpha 0
+        guiGraphics.text(this.font, this.title, this.titleLabelX, this.titleLabelY, ARGB.opaque(0xb2cfdb), false);
+        guiGraphics.text(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, ARGB.opaque(4210752), false);
     }
 
     @Override
