@@ -198,7 +198,7 @@ public class Infinimeal extends BaseItem {
                 data *= 3;
                 d1 = 1.0D;
                 d0 = 3.0D;
-            } else if (blockstate.isSolidRender(world, pos)) {
+            } else if (blockstate.isSolidRender()) {
                 pos = pos.above();
                 data *= 3;
                 d0 = 3.0D;

@@ -87,7 +87,7 @@ public class ExtradimensionalEye extends BaseItem {
                 target.teleportTo(pos.x, pos.y, pos.z);
                 stack.consume(1, player);
                 player.playSound(SoundEvents.PLAYER_TELEPORT, 1.0F, player.getRandom().nextFloat() * 0.2F + 0.9F);
-                return InteractionResult.sidedSuccess(player.level().isClientSide());
+                return InteractionResult.SUCCESS; // 26.1.2-port: sidedSuccess was removed
             }
         }
         return super.interactLivingEntity(stack, player, target, hand);

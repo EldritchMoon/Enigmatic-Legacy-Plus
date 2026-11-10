@@ -67,7 +67,7 @@ public class ExplorerScroll extends BaseCurioItem {
             }
         }
         List<Entity> entities = level.getEntitiesOfClass(Entity.class, player.getBoundingBox().inflate(d),
-                entity -> entity instanceof ContainerEntity container && container.getLootTable() != null);
+                entity -> entity instanceof ContainerEntity container && container.getContainerLootTable() != null);
         for (Entity entity : entities) entity.setGlowingTag(true);
     }
 

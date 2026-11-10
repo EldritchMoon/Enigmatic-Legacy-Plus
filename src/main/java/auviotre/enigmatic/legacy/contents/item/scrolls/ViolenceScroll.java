@@ -96,11 +96,6 @@ public class ViolenceScroll extends BaseCurioItem {
     }
 
     @Override
-    public String getDescriptionId() {
-        return super.getDescriptionId();
-    }
-
-    @Override
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);

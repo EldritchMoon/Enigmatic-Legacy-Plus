@@ -130,7 +130,7 @@ public class EtheriumHammer extends Item {
             boolean unbreakable = state.is(BlockTags.WITHER_IMMUNE) || block == Blocks.SPAWNER || state.getDestroySpeed(level, pos) < 0F;
 
             if (isEffective && !unbreakable) {
-                boolean removed = state.onDestroyedByPlayer(level, pos, player, validHarvest, level.getFluidState(pos));
+                boolean removed = state.onDestroyedByPlayer(level, pos, player, tool, validHarvest, level.getFluidState(pos)); // 26.1.2-port: gained the tool stack
                 if (removed) {
                     block.destroy(level, pos, state);
                     block.playerDestroy(level, player, pos, state, blockEntity, tool);

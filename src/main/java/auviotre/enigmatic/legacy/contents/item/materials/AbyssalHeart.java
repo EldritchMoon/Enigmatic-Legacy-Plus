@@ -144,7 +144,7 @@ public class AbyssalHeart extends BaseCursedItem implements ITaintable, ISharabl
             if (killed instanceof EnderDragon || killed instanceof AbyssalHeartBearer) {
                 if (event.isRecentlyHit() && event.getSource().getEntity() instanceof Player player && EnigmaticHandler.isTheWorthyOne(player)) {
                     CompoundTag data = EnigmaticHandler.getPersistedData(player);
-                    if (data.getInt("AbyssalHeartsGained") < getMaxCount(player)) {
+                    if (data.getIntOr("AbyssalHeartsGained", 0) < getMaxCount(player)) {
                         ((AbyssalHeartBearer) killed).dropAbyssalHeart(player);
                     }
                 }

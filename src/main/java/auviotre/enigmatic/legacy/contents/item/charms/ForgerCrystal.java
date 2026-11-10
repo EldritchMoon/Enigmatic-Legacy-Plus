@@ -18,11 +18,11 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.Unit;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.component.Unbreakable;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -119,14 +119,14 @@ public class ForgerCrystal extends CursedCurioItem {
                 ItemStack left = event.getLeft();
                 ItemStack right = event.getRight();
                 if (!left.isEmpty() && !right.isEmpty()) {
-                    boolean check = left.isDamageableItem() && !left.has(DataComponents.UNBREAKABLE) && !right.has(DataComponents.UNBREAKABLE) && left.isRepairable();
+                    boolean check = left.isDamageableItem() && !left.has(DataComponents.UNBREAKABLE) && !right.has(DataComponents.UNBREAKABLE) && left.isCombineRepairable(); // 26.1.2-port: isRepairable -> isCombineRepairable
                     if (check && unbreakableRestriction.get())
                         // 26.1.2-port: TieredItem/ArmorItem were removed; tools, swords and armor are identified by tag.
                         check = isToolOrArmor(left);
                     if (player.getAbilities().instabuild && left.isDamageableItem()) check = true;
                     if (left.is(right.getItem()) && check && left.getDamageValue() == 0 && right.getDamageValue() == 0 && !left.isEnchanted() && !right.isEnchanted()) {
                         ItemStack copy = left.copy();
-                        copy.set(DataComponents.UNBREAKABLE, new Unbreakable(true));
+                        copy.set(DataComponents.UNBREAKABLE, Unit.INSTANCE); // 26.1.2-port: the unbreakable component is a plain Unit now
                         copy.set(DataComponents.REPAIR_COST, copy.getOrDefault(DataComponents.REPAIR_COST, 0) + 8);
                         if (event.getName() != null && !event.getName().isEmpty())
                             copy.set(DataComponents.CUSTOM_NAME, Component.literal(event.getName()));

@@ -185,7 +185,7 @@ public class CursedXpScroll extends XpScroll {
             Player player = event.getEntity();
             if (EnigmaticHandler.hasItem(player, EnigmaticItems.CURSED_XP_SCROLL) || EnigmaticHandler.hasCurio(player, EnigmaticItems.CURSED_XP_SCROLL)) {
                 ExperienceOrb orb = event.getOrb();
-                orb.value = orb.getValue() / 4;
+                orb.setValue(orb.getValue() / 4); // 26.1.2-port: the value field became synced data
             }
         }
     }

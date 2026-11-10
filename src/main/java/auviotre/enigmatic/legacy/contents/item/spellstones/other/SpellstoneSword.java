@@ -313,7 +313,7 @@ public class SpellstoneSword extends Item {
         if (resonance.isEmpty()) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneResonateAbsent");
         } else {
-            MutableComponent component = Component.translatable(resonance.getDescriptionId());
+            MutableComponent component = Component.translatable(resonance.getItem().getDescriptionId()); // 26.1.2-port: ItemStack.getDescriptionId was removed
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneResonate", ChatFormatting.GOLD, component);
         }
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.spellstoneSwordLevel", ChatFormatting.GOLD, level);

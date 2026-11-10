@@ -265,7 +265,7 @@ public class ChaosElytra extends BaseElytraItem {
                 if (owner instanceof Player player) {
                     CompoundTag data = EnigmaticHandler.getPersistedData(player);
                     data.remove("ChaoAchievementCheck");
-                    if (owner instanceof ServerPlayer serverPlayer && data.getInt("ChaoExplosionKillCount") >= 10)
+                    if (owner instanceof ServerPlayer serverPlayer && data.getIntOr("ChaoExplosionKillCount", 0) >= 10)
                         EnigmaticTriggers.ENIGMATIC_TRIGGER.get().trigger(serverPlayer, 4);
                     data.remove("ChaoExplosionKillCount");
                 }

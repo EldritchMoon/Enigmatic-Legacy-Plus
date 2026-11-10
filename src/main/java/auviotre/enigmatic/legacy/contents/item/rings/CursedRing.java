@@ -232,7 +232,7 @@ public class CursedRing extends CursedCurioItem {
                 if (mob instanceof Piglin piglin && !EnigmaticHandler.hasCurio(player, EnigmaticItems.AVARICE_SCROLL)) {
                     if (piglin.getTarget() == null || !piglin.getTarget().isAlive())
                         if (player.hasLineOfSight(mob) || player.distanceTo(mob) <= noCheckDistance)
-                            PiglinAi.wasHurtBy(piglin, player);
+                            PiglinAi.wasHurtBy((ServerLevel) player.level(), piglin, player); // 26.1.2-port: takes the level (server side here)
                 } else if (mob instanceof NeutralMob neutral) {
                     if (neutral == player) continue;
                     if (neutral instanceof TraceableEntity ownable && ownable.getOwner() != null && player.is(ownable.getOwner()))

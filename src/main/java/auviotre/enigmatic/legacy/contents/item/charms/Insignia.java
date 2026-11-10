@@ -106,7 +106,7 @@ public class Insignia extends BaseCurioItem {
     @Override
     public InteractionResult useOn(UseOnContext context) {
         if (context.getPlayer() == null) return InteractionResult.PASS;
-        return this.use(context.getLevel(), context.getPlayer(), context.getHand()).getResult();
+        return this.use(context.getLevel(), context.getPlayer(), context.getHand()); // 26.1.2-port: use() returns the InteractionResult itself
     }
 
     @Override

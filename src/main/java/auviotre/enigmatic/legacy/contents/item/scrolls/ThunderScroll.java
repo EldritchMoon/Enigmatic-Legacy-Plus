@@ -157,7 +157,7 @@ public class ThunderScroll extends CursedCurioItem {
 
         @SubscribeEvent(priority = EventPriority.HIGHEST)
         private static void onLightningStrike(@NotNull EntityStruckByLightningEvent event) {
-            if (event.getLightning().getTags().contains("HarmlessThunder")) {
+            if (event.getLightning().entityTags().contains("HarmlessThunder")) {
                 if (event.getEntity() instanceof ItemEntity) {
                     event.setCanceled(true);
                 }

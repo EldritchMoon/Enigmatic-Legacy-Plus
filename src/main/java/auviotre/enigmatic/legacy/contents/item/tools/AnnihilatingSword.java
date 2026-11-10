@@ -385,7 +385,7 @@ public class AnnihilatingSword extends Item {
             if (event.getSource().getEntity() instanceof LivingEntity entity && entity.getMainHandItem().is(EnigmaticItems.ANNIHILATING_SWORD)) {
                 if (!entity.getOffhandItem().isEmpty()) return;
                 CompoundTag data = victim.getPersistentData();
-                float annihilation = data.getFloat("AnnihilationPoint") + 0.08F * event.getNewDamage() / victim.getHealth();
+                float annihilation = data.getFloatOr("AnnihilationPoint", 0.0F) + 0.08F * event.getNewDamage() / victim.getHealth();
                 if (entity.getRandom().nextFloat() < annihilation) {
                     data.putBoolean("AnnihilationKill", true);
                     if (victim.isAlive()) event.setNewDamage(event.getNewDamage() * 10F);

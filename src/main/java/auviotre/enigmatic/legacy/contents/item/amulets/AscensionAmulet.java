@@ -42,7 +42,7 @@ public class AscensionAmulet extends EnigmaticAmulet {
 
     @Override
     public Component getName(ItemStack stack) {
-        return Component.translatable(this.getDescriptionId(stack));
+        return Component.translatable(this.getDescriptionId()); // 26.1.2-port: getDescriptionId(ItemStack) was removed
     }
 
     @Override

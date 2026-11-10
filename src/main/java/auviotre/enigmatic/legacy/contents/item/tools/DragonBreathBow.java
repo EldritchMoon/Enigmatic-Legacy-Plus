@@ -164,7 +164,7 @@ public class DragonBreathBow extends ProjectileWeaponItem {
                         int index = 0;
                         while (newEffects.size() < 4 && remains.size() > index) newEffects.add(remains.get(index++));
                         access.set(Items.GLASS_BOTTLE.getDefaultInstance());
-                        stack.set(DataComponents.POTION_CONTENTS, new PotionContents(Optional.empty(), Optional.empty(), newEffects));
+                        stack.set(DataComponents.POTION_CONTENTS, new PotionContents(Optional.empty(), Optional.empty(), newEffects, Optional.empty())); // 26.1.2-port: PotionContents gained the custom name
                         return true;
                     }
                 }

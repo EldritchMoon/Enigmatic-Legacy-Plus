@@ -89,7 +89,7 @@ public class LootGenerator extends BaseItem {
         player.swing(hand);
 
         if (player instanceof ServerPlayer)
-            player.displayClientMessage(Component.literal("Table: " + LOOT_LIST.get(getLootTableIndex(stack)).identifier()), true);
+            player.sendOverlayMessage(Component.literal("Table: " + LOOT_LIST.get(getLootTableIndex(stack)).identifier())); // 26.1.2-port: displayClientMessage(msg, true) -> sendOverlayMessage
         return InteractionResult.SUCCESS;
     }
 

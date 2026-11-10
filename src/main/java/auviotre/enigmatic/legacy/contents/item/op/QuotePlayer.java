@@ -55,7 +55,7 @@ public class QuotePlayer extends Item {
             player.swing(hand);
 
             if (player instanceof ServerPlayer)
-                player.displayClientMessage(Component.literal("Quote: " + Quote.getAllQuotes().get(getQuoteIndex(stack)).getName().toUpperCase()), true);
+                player.sendOverlayMessage(Component.literal("Quote: " + Quote.getAllQuotes().get(getQuoteIndex(stack)).getName().toUpperCase())); // 26.1.2-port: displayClientMessage(msg, true) -> sendOverlayMessage
         } else if (player instanceof ServerPlayer splayer) {
             Quote.getAllQuotes().get(getQuoteIndex(stack)).play(splayer, Quote.PlayOptions.defaultPlay().delay(10));
         }
@@ -65,6 +65,6 @@ public class QuotePlayer extends Item {
     @Override
     public InteractionResult useOn(UseOnContext context) {
         if (context.getPlayer() == null) return InteractionResult.PASS;
-        return this.use(context.getLevel(), context.getPlayer(), context.getHand()).getResult();
+        return this.use(context.getLevel(), context.getPlayer(), context.getHand()); // 26.1.2-port: use() returns the InteractionResult itself
     }
 }

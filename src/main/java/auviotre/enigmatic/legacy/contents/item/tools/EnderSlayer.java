@@ -145,7 +145,7 @@ public class EnderSlayer extends Item {
         @SubscribeEvent(priority = EventPriority.LOWEST)
         private static void onLivingDropsLowest(@NotNull LivingDropsEvent event) {
             LivingEntity killed = event.getEntity();
-            if (killed instanceof EnderMan && killed.getPersistentData().getBoolean("EnderSlayerVictim")) {
+            if (killed instanceof EnderMan && killed.getPersistentData().getBooleanOr("EnderSlayerVictim", false)) {
                 for (ItemEntity entity : event.getDrops()) {
                     if (entity.getItem().is(Items.ENDER_PEARL)) {
                         dropXPOrb(killed.level(), killed.getX(), killed.getY(), killed.getZ(), 10);

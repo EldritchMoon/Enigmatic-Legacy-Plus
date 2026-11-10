@@ -93,7 +93,7 @@ public class ScorchedCharm extends CursedCurioItem {
             if (entity.tickCount % 20 == 0) entity.heal((float) lavaHealAmount.get());
             if (entity instanceof Player player && !player.isAffectedByFluids()) return;
             CollisionContext collisionContext = CollisionContext.of(entity);
-            if (collisionContext.isAbove(LiquidBlock.STABLE_SHAPE, entity.blockPosition(), true) && !entity.level().getFluidState(entity.blockPosition().above()).is(FluidTags.LAVA)) {
+            if (collisionContext.isAbove(entity.getLiquidCollisionShape(), entity.blockPosition(), true) && !entity.level().getFluidState(entity.blockPosition().above()).is(FluidTags.LAVA)) {
                 entity.setOnGround(true);
             } else {
                 entity.setDeltaMovement(entity.getDeltaMovement().add(0.0, entity.isCrouching() ? -0.01 : 0.07, 0.0));

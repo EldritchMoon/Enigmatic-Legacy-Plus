@@ -96,7 +96,7 @@ public class Spelltuner extends BaseCurioItem {
         } else {
             if (spellContext != null) {
                 Item spellstone = spellContext.spellstone.getItem();
-                TooltipHandler.line(list, "tooltip.enigmaticlegacy.spelltunerContext", ChatFormatting.GOLD, spellContext.spellstone().getItem().getDescription());
+                TooltipHandler.line(list, "tooltip.enigmaticlegacy.spelltunerContext", ChatFormatting.GOLD, spellContext.spellstone().getItemName()); // 26.1.2-port: Item.getDescription was removed
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.spelltunerEffect");
                 try {
                     assert spellstone instanceof SpellstoneItem;
