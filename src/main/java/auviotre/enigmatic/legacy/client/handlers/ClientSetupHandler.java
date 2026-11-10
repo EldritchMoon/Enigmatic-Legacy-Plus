@@ -19,6 +19,7 @@ import auviotre.enigmatic.legacy.client.screen.SpellstoneTableScreen;
 import auviotre.enigmatic.legacy.client.screen.button.EnderChestInventoryButton;
 import auviotre.enigmatic.legacy.client.screen.button.MagnetRingInventoryButton;
 import auviotre.enigmatic.legacy.contents.item.charms.HellBladeCharm;
+import auviotre.enigmatic.legacy.contents.item.charms.Insignia;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseItem;
 import auviotre.enigmatic.legacy.contents.item.spellstones.IllusionLantern;
 import auviotre.enigmatic.legacy.contents.item.spellstones.other.SpellstoneSword;
@@ -176,6 +177,7 @@ public class ClientSetupHandler {
             public <T extends Avatar & ClientAvatarEntity> void accept(T avatar, AvatarRenderState state) {
                 EnigmaticElytraLayer.extractElytra(avatar, state);
                 EtheriumShieldLayer.extractShield(avatar, state);
+                Insignia.extractNameplate(avatar, state);
             }
         });
         event.registerEntityModifier(ArmorStandRenderer.class, (ArmorStand stand, ArmorStandRenderState state) -> EnigmaticElytraLayer.extractElytra(stand, state));

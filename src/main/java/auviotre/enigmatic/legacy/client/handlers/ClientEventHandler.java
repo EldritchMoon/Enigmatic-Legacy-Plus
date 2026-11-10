@@ -4,6 +4,7 @@ import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.client.KeyHandler;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
+import auviotre.enigmatic.legacy.contents.item.charms.Insignia;
 import auviotre.enigmatic.legacy.contents.item.etherium.EtheriumArmor;
 import auviotre.enigmatic.legacy.contents.item.etherium.EtheriumProperties;
 import auviotre.enigmatic.legacy.contents.item.food.ForbiddenFruit;
@@ -219,6 +220,12 @@ public class ClientEventHandler {
             if (!insignia.isEmpty() && insignia.getOrDefault(EnigmaticComponents.BOOLEAN, false))
                 event.setCanRender(TriState.TRUE);
         }
+    }
+
+    // 26.1.2-port: new. Fired just before vanilla submits a name tag; adds the Insignia's small "(real name)" line.
+    @SubscribeEvent
+    private static void renderInsigniaTrueName(RenderNameTagEvent.DoRender event) {
+        Insignia.submitTrueName(event);
     }
 
     // TODO(port): Caelus is no longer a dependency, so its RenderCapeEvent is gone. Hiding the cape while an elytra is

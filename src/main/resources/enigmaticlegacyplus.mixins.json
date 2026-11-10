@@ -41,7 +41,6 @@
     "MixinWorldListEntry",
     "accessor.EffectInstanceAccessor",
     "accessor.PostChainAccessor",
-    "client.MixinEntityRenderer",
     "client.MixinGameRenderer",
     "client.MixinItemRenderer"
   ]
