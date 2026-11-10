@@ -36,15 +36,16 @@ public class AddCurseLootModifier extends AddTableLootModifier {
     }
 
     protected @Nonnull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> list, LootContext context) {
-        if (!context.hasParam(LootContextParams.ATTACKING_ENTITY)) return list;
-        Entity entity = context.getParam(LootContextParams.ATTACKING_ENTITY);
+        // 26.1.2-port: hasParam -> hasParameter, getParam -> getParameter
+        if (!context.hasParameter(LootContextParams.ATTACKING_ENTITY)) return list;
+        Entity entity = context.getParameter(LootContextParams.ATTACKING_ENTITY);
         if (entity instanceof LivingEntity attacker) {
             if (EnigmaticHandler.isTheCursedOne(attacker)) {
                 if (!CursedRing.enableSpecialDrops.get()) return list;
             } else if (RedemptionRing.Helper.getLevel(attacker) > 3) {
                 if (!RedemptionRing.enableSpecialDrops.get()) return list;
             } else return list;
-            context.getResolver().get(Registries.LOOT_TABLE, this.lootTable).ifPresent(tableRefer -> {
+            context.getResolver().get(this.lootTable).ifPresent(tableRefer -> { // 26.1.2-port: the key carries its registry, get(registry, key) is gone
                 LootTable table = tableRefer.value();
                 Objects.requireNonNull(list);
                 table.getRandomItemsRaw(context, LootTable.createStackSplitter(context.getLevel(), list::add));

@@ -51,9 +51,10 @@ public class SpecialLootModifier extends LootModifier {
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> list, LootContext context) {
         ServerLevel level = context.getLevel();
         if (list.isEmpty()) return list;
-        Entity entity = context.getParamOrNull(LootContextParams.THIS_ENTITY);
-        Vec3 origin = context.getParamOrNull(LootContextParams.ORIGIN);
-        BlockState blockState = context.getParamOrNull(LootContextParams.BLOCK_STATE);
+        // 26.1.2-port: getParamOrNull -> getOptionalParameter
+        Entity entity = context.getOptionalParameter(LootContextParams.THIS_ENTITY);
+        Vec3 origin = context.getOptionalParameter(LootContextParams.ORIGIN);
+        BlockState blockState = context.getOptionalParameter(LootContextParams.BLOCK_STATE);
         if (entity instanceof ServerPlayer player) {
             CompoundTag data = EnigmaticHandler.getPersistedData(player);
 
@@ -86,7 +87,7 @@ public class SpecialLootModifier extends LootModifier {
             }
 
             if (entity.level().dimension().equals(Level.NETHER) && context.getQueriedLootTableId().getPath().startsWith("chests/") && !data.getBooleanOr("LootedHellBladeCharm", false)) {
-                if (data.getFloat("HellPoint") > 100.0F) {
+                if (data.getFloatOr("HellPoint", 0.0F) > 100.0F) { // 26.1.2-port: getFloat returns Optional now
                     list.set(0, EnigmaticItems.HELL_BLADE_CHARM.toStack());
                     data.putBoolean("LootedHellBladeCharm", true);
                     data.remove("HellPoint");
