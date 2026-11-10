@@ -13,6 +13,7 @@ import net.minecraft.client.gui.screens.GenericMessageScreen;
 import net.minecraft.client.gui.screens.ProgressScreen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.network.chat.Component;
@@ -72,7 +73,7 @@ public class ClientProxy extends CommonProxy {
     public void displayPermanentDeathScreen() {
         if (Minecraft.getInstance().level != null) {
             boolean local = Minecraft.getInstance().isLocalServer();
-            Minecraft.getInstance().level.disconnect();
+            Minecraft.getInstance().level.disconnect(ClientLevel.DEFAULT_QUIT_MESSAGE); // 26.1.2-port: disconnect takes the message
 
             if (local) {
                 Minecraft.getInstance().clearClientLevel(new GenericMessageScreen(Component.translatable("menu.savingLevel")));

@@ -21,13 +21,13 @@ import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.illusivesoulworks.caelus.api.RenderCapeEvent;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.fog.FogRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
@@ -210,7 +210,7 @@ public class ClientEventHandler {
     }
 
     @SubscribeEvent
-    private static void renderNameplate(RenderNameTagEvent event) {
+    private static void renderNameplate(RenderNameTagEvent.CanRender event) { // 26.1.2-port: the event was split; CanRender has the entity and setCanRender
         if (event.getEntity() == Minecraft.getInstance().player) {
             ItemStack insignia = EnigmaticHandler.getCurio(Minecraft.getInstance().player, EnigmaticItems.INSIGNIA);
             if (!insignia.isEmpty() && insignia.getOrDefault(EnigmaticComponents.BOOLEAN, false))
@@ -256,10 +256,8 @@ public class ClientEventHandler {
                 int x = guiGraphics.guiWidth() / 2 - 101 + EtheriumArmor.iconOffsetX.get();
                 int y = guiGraphics.guiHeight() - minecraft.gui.rightHeight + EtheriumArmor.iconOffsetY.get();
                 if (timer > 5) y += timer / 2 % 2 == 0 ? 1 : -1;
-                RenderSystem.enableBlend();
-                guiGraphics.blitSprite(ETHEREAL_SHIELD_SPRITE, x, y, 9, 9);
-                if (timer > 0) guiGraphics.blitSprite(ETHEREAL_SHIELD_HIGHLIGHT_SPRITE, x, y, 9, 9);
-                RenderSystem.disableBlend();
+                guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, ETHEREAL_SHIELD_SPRITE, x, y, 9, 9);
+                if (timer > 0) guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, ETHEREAL_SHIELD_HIGHLIGHT_SPRITE, x, y, 9, 9);
             }
         } else if (event.getName().equals(VanillaGuiLayers.EXPERIENCE_LEVEL) && player != null && spellstone.is(EnigmaticItems.BLAZING_CORE)) {
             if (minecraft.gameMode != null && minecraft.gameMode.hasExperience()) {
@@ -273,11 +271,11 @@ public class ClientEventHandler {
                 int x = (guiGraphics.guiWidth() - font.width(title)) / 2 + 1;
                 int y = guiGraphics.guiHeight() - 31 - 4;
                 int boundaryColor = 5832704;
-                guiGraphics.drawString(font, title, x + 1, y, boundaryColor);
-                guiGraphics.drawString(font, title, x - 1, y, boundaryColor);
-                guiGraphics.drawString(font, title, x, y + 1, boundaryColor);
-                guiGraphics.drawString(font, title, x, y - 1, boundaryColor);
-                guiGraphics.drawString(font, title, x, y, 16770638);
+                guiGraphics.text(font, title, x + 1, y, boundaryColor);
+                guiGraphics.text(font, title, x - 1, y, boundaryColor);
+                guiGraphics.text(font, title, x, y + 1, boundaryColor);
+                guiGraphics.text(font, title, x, y - 1, boundaryColor);
+                guiGraphics.text(font, title, x, y, 16770638);
             }
         } else if (event.getName().equals(VanillaGuiLayers.EXPERIENCE_BAR) && player != null && spellstone.is(EnigmaticItems.BLAZING_CORE)) {
             if (minecraft.gameMode != null && minecraft.gameMode.hasExperience()) {
@@ -293,16 +291,13 @@ public class ClientEventHandler {
                 int k = (int) (barFiller * 183.0F);
                 int x = guiGraphics.guiWidth() / 2 - 91;
                 int y = guiGraphics.guiHeight() - 32 + 3;
-                RenderSystem.enableBlend();
-                guiGraphics.blitSprite(LAVA_BAR_BACKGROUND_SPRITE, 182, 5, 0, 0, x, y, 182, 5);
-                guiGraphics.blitSprite(LAVA_BAR_PROGRESS_SPRITE, 182, 5, 0, 0, x, y, k, 5);
-                RenderSystem.disableBlend();
+                guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, LAVA_BAR_BACKGROUND_SPRITE, 182, 5, 0, 0, x, y, 182, 5);
+                guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, LAVA_BAR_PROGRESS_SPRITE, 182, 5, 0, 0, x, y, k, 5);
             }
         } else if (event.getName().equals(VanillaGuiLayers.FOOD_LEVEL) && minecraft.gameMode != null && minecraft.gameMode.canHurtPlayer()) {
             if (ForbiddenFruit.isForbiddenCursed(player)) {
                 event.setCanceled(true);
 
-                RenderSystem.enableBlend();
                 int left = guiGraphics.guiWidth() / 2 + 91;
                 int top = guiGraphics.guiHeight() - minecraft.gui.rightHeight;
                 minecraft.gui.rightHeight += 10;
@@ -319,14 +314,13 @@ public class ClientEventHandler {
                     if (minecraft.gui.getGuiTicks() % (level * 3 + 1) == 0) {
                         y = top + (player.getRandom().nextInt(3) - 1);
                     }
-                    guiGraphics.blitSprite(FORBIDDEN_FOOD_EMPTY_SPRITE, x, y, 9, 9);
+                    guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, FORBIDDEN_FOOD_EMPTY_SPRITE, x, y, 9, 9);
                     if (idx < level) {
-                        guiGraphics.blitSprite(FORBIDDEN_FOOD_FULL_SPRITE, x, y, 9, 9);
+                        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, FORBIDDEN_FOOD_FULL_SPRITE, x, y, 9, 9);
                     } else if (idx == level) {
-                        guiGraphics.blitSprite(FORBIDDEN_FOOD_HALF_SPRITE, x, y, 9, 9);
+                        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, FORBIDDEN_FOOD_HALF_SPRITE, x, y, 9, 9);
                     }
                 }
-                RenderSystem.disableBlend();
             }
         }
     }

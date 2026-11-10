@@ -9,7 +9,6 @@ import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -115,7 +114,7 @@ public class Quote {
     private CompoundTag getHeardContainer(ServerPlayer player) {
         CompoundTag data = EnigmaticHandler.getPersistedData(player);
 
-        if (!data.contains(HEARD_TAG, Tag.TAG_COMPOUND)) {
+        if (data.getCompound(HEARD_TAG).isEmpty()) { // 26.1.2-port: contains(name, type) was removed; getCompound is empty unless a compound is stored
             data.put(HEARD_TAG, new CompoundTag());
         }
 

@@ -62,7 +62,7 @@ public class QuoteHandler {
 
         if (this.delayTicks == 0) {
             SimpleSoundInstance instance = new SimpleSoundInstance(
-                    this.currentQuote.getSound().getLocation(),
+                    this.currentQuote.getSound().location(), // 26.1.2-port: SoundEvent is a record
                     SoundSource.VOICE, 0.7F, 1, RANDOM, false, 0, SoundInstance.Attenuation.NONE, 0, 0, 0, true
             );
 
@@ -143,7 +143,7 @@ public class QuoteHandler {
         int lineY = y;
         int textColor = ChatFormatting.YELLOW.getColor() | (alpha << 24);
         for (FormattedCharSequence line : lines) {
-            graphics.drawString(font, line, window.getGuiScaledWidth() / 2 - font.width(line) / 2, lineY, textColor, true);
+            graphics.text(font, line, window.getGuiScaledWidth() / 2 - font.width(line) / 2, lineY, textColor, true);
             lineY += font.lineHeight + 2;
         }
     }
