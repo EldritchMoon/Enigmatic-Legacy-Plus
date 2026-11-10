@@ -8,7 +8,6 @@ import net.minecraft.world.level.storage.LevelSummary;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -20,15 +19,13 @@ public class MixinWorldListEntry {
     @Shadow
     @Final
     LevelSummary summary;
-    @Unique
-    private Component EL$cachedInfo;
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/storage/LevelSummary;getInfo()Lnet/minecraft/network/chat/Component;"))
-    private Component getAltInfo(LevelSummary summary) {
-        if (this.EL$cachedInfo == null) {
-            this.EL$cachedInfo = EnigmaticHandler.getModdedInfo(summary);
-        }
-        return this.EL$cachedInfo;
+    // 26.1.2-port: the entry no longer draws its text every frame in render(); its constructor builds a text widget
+    // from summary.getInfo() once. So the redirect moved to the constructor, and the cache it needed for the per-frame
+    // call is gone. The handler is static because it runs while the entry is still being constructed.
+    @Redirect(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/storage/LevelSummary;getInfo()Lnet/minecraft/network/chat/Component;"))
+    private static Component getAltInfo(LevelSummary summary) {
+        return EnigmaticHandler.getModdedInfo(summary);
     }
 
     @Inject(method = "joinWorld", at = @At("HEAD"), cancellable = true)

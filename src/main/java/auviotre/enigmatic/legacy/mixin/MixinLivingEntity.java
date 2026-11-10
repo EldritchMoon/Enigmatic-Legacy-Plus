@@ -29,6 +29,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -45,12 +47,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 
 @Mixin(LivingEntity.class)
 public abstract class MixinLivingEntity extends Entity implements ILivingEntityExtension {
-    @Shadow
-    protected ItemStack useItem;
-
     @Shadow
     private boolean effectsDirty;
 
@@ -59,7 +60,7 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntityE
     }
 
     @Shadow
-    public abstract boolean isUsingItem();
+    public abstract ItemStack getItemBlockingWith();
 
     @Shadow
     public abstract ItemStack getItemInHand(InteractionHand hand);
@@ -94,18 +95,17 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntityE
         // !this.self().hasEffect(EnigmaticAddonEffects.FROZEN_HEART_EFFECT) &&
     }
 
-    @Inject(method = "isDamageSourceBlocked", at = @At("HEAD"), cancellable = true)
-    private void onDamageSourceBlocking(DamageSource source, CallbackInfoReturnable<Boolean> info) {
-        if (EnigmaticHandler.onDamageSourceBlocking(this.self(), this.useItem, source)) {
-            info.setReturnValue(true);
-        }
-    }
-
-    @Inject(method = "isBlocking", at = @At("HEAD"), cancellable = true)
-    private void isBlockingMix(CallbackInfoReturnable<Boolean> info) {
-        if (this.isUsingItem() && this.useItem.getItem() instanceof InfernalShield) {
-            info.setReturnValue(true);
-        }
+    // 26.1.2-port: the isDamageSourceBlocked() and isBlocking() injectors that were here are gone.
+    // LivingEntity.isDamageSourceBlocked() no longer exists: blocking is applyItemBlocking(), driven by the
+    // blocks_attacks component. The Infernal Shield's on-block effects moved to InfernalShield.Events.onShieldBlock, and
+    // "blocks the moment it is raised" is the component's block delay of 0, which is all the isBlocking() injector did.
+    // What is left is the one thing the old injector did that neither of those can: it answered before vanilla's
+    // piercing-arrow check, so a player's Infernal Shield also stopped piercing arrows.
+    @WrapOperation(method = "applyItemBlocking", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/arrow/AbstractArrow;getPierceLevel()B"))
+    private byte infernalShieldStopsPiercingArrows(AbstractArrow arrow, Operation<Byte> original) {
+        ItemStack blockingWith = this.getItemBlockingWith();
+        if (this.self() instanceof Player && blockingWith != null && blockingWith.getItem() instanceof InfernalShield) return 0;
+        return original.call(arrow);
     }
 
     @Inject(method = "canStandOnFluid", at = @At("RETURN"), cancellable = true)

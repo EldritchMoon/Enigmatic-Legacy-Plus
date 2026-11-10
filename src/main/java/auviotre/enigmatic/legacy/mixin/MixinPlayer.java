@@ -1,7 +1,6 @@
 package auviotre.enigmatic.legacy.mixin;
 
 import auviotre.enigmatic.legacy.contents.item.spellstones.other.SpellstoneSword;
-import auviotre.enigmatic.legacy.contents.item.tools.InfernalShield;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -36,10 +35,8 @@ public abstract class MixinPlayer extends LivingEntity {
         if (this.getUseItem().is(EnigmaticItems.STARLIGHT_BUCKET)) info.setReturnValue(true);
     }
 
-    @Inject(method = "disableShield", at = @At("HEAD"), cancellable = true)
-    public void disableShieldMix(CallbackInfo info) {
-        if (this.getUseItem().getItem() instanceof InfernalShield) info.cancel();
-    }
+    // 26.1.2-port: the disableShield() injector that was here is gone with Player.disableShield(). An Infernal Shield
+    // still cannot be disabled: its blocks_attacks component has a disable cooldown scale of 0 (see InfernalShield).
 
     @Inject(method = "destroyVanishingCursedItems", at = @At("TAIL"))
     public void onDestroyVanishingCursedItems(CallbackInfo info) {
@@ -54,7 +51,9 @@ public abstract class MixinPlayer extends LivingEntity {
         });
     }
 
-    @Inject(method = "sweepAttack", at = @At("TAIL"))
+    // 26.1.2-port: Player.sweepAttack() (which only sent the sweep particle) was folded into the private doSweepAttack().
+    // The descriptor picks the five-argument overload; the deprecated four-argument one forwards to it.
+    @Inject(method = "doSweepAttack(Lnet/minecraft/world/entity/Entity;FLnet/minecraft/world/damagesource/DamageSource;FLnet/minecraft/world/phys/AABB;)V", at = @At("TAIL"))
     public void sweepMix(CallbackInfo info) {
         ItemStack stack = getWeaponItem();
         if (stack.is(EnigmaticItems.SPELLSTONE_SWORD) && SpellstoneSword.isResonatingWith(stack, EnigmaticItems.VOID_PEARL)) {

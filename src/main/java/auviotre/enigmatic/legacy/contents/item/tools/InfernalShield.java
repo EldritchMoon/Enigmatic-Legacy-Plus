@@ -20,12 +20,14 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingShieldBlockEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,10 +50,13 @@ public class InfernalShield extends BaseCursedItem {
         super(IItemHelper.singleProperties().fireResistant().rarity(Rarity.RARE).durability(ToolMaterial.NETHERITE.durability())
                 .equippableUnswappable(EquipmentSlot.OFFHAND)
                 .repairable(Items.OBSIDIAN).enchantable(16) // 26.1.2-port: were isValidRepairItem/getEnchantmentValue
-                // 26.1.2-port: blocking is the blocks_attacks component now (was the SHIELD_BLOCK ability);
-                // these are the vanilla shield's values, matching 1.21.1 shield behaviour.
+                // 26.1.2-port: blocking is the blocks_attacks component now (was the SHIELD_BLOCK ability). The
+                // first two numbers replace two mixins: block delay 0 (MixinLivingEntity made isBlocking() true the
+                // moment the shield was raised, where a vanilla shield waits 0.25 s) and disable cooldown scale 0
+                // (MixinPlayer cancelled Player.disableShield(), so axes could not disable it). The rest are the
+                // vanilla shield's values.
                 .delayedComponent(DataComponents.BLOCKS_ATTACKS, context -> new BlocksAttacks(
-                        0.25F, 1.0F,
+                        0.0F, 0.0F,
                         List.of(new BlocksAttacks.DamageReduction(90.0F, Optional.empty(), 0.0F, 1.0F)),
                         new BlocksAttacks.ItemDamageFunction(3.0F, 1.0F, 1.0F),
                         Optional.of(context.getOrThrow(DamageTypeTags.BYPASSES_SHIELD)),
@@ -128,6 +133,17 @@ public class InfernalShield extends BaseCursedItem {
                     }
                 }
             }
+        }
+
+        // 26.1.2-port: new. The shield's on-block effects (Blazing Might, burning the attacker) used to be triggered by
+        // a MixinLivingEntity injector at the head of LivingEntity.isDamageSourceBlocked(), which no longer exists.
+        // NeoForge fires this event from LivingEntity.applyItemBlocking() once vanilla has worked out how much of the
+        // hit is blocked. onDamageSourceBlocking() still makes its own player/shield/bypass/front-facing checks.
+        @SubscribeEvent(priority = EventPriority.LOWEST)
+        private static void onShieldBlock(@NotNull LivingShieldBlockEvent event) {
+            LivingEntity blocker = event.getEntity();
+            if (event.getBlocked() && event.getBlockedDamage() > 0.0F)
+                EnigmaticHandler.onDamageSourceBlocking(blocker, blocker.getItemBlockingWith(), event.getDamageSource());
         }
     }
 }
