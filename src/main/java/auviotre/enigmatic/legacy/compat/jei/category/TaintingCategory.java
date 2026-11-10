@@ -11,9 +11,10 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
@@ -35,7 +36,7 @@ public class TaintingCategory implements IRecipeCategory<TaintingCategory.Recipe
     }
 
     @Override
-    public RecipeType<Recipe> getRecipeType() {
+    public IRecipeType<Recipe> getRecipeType() {
         return EnigmaticRecipeTypes.TAINTING;
     }
 
@@ -61,16 +62,16 @@ public class TaintingCategory implements IRecipeCategory<TaintingCategory.Recipe
 
     @Override
     public void draw(Recipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
-        guiGraphics.blitSprite(SPRITE, 0, 0, getWidth(), getHeight());
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, SPRITE, 0, 0, getWidth(), getHeight()); // 26.1.2-port: blitSprite takes the render pipeline
     }
 
     @Override
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull TaintingCategory.Recipe recipe, IFocusGroup focuses) {
-        builder.addInputSlot(13, 13).addItemStack(recipe.input()).setStandardSlotBackground();
+        builder.addInputSlot(13, 13).add(recipe.input()).setStandardSlotBackground(); // 26.1.2-port: JEI renamed addItemStack/addIngredients to add
         ItemStack output = recipe.input().copy();
         if (output.getItem() instanceof ITaintable) output.set(EnigmaticComponents.TAINTABLE.get(), true);
-        builder.addOutputSlot(79, 13).addItemStack(output).setStandardSlotBackground();
-        builder.addSlot(RecipeIngredientRole.CATALYST, 46, 23).addIngredients(recipe.condition());
+        builder.addOutputSlot(79, 13).add(output).setStandardSlotBackground();
+        builder.addSlot(RecipeIngredientRole.CRAFTING_STATION, 46, 23).add(recipe.condition()); // 26.1.2-port: JEI renamed CATALYST to CRAFTING_STATION
     }
 
     public record Recipe(ItemStack input, Ingredient condition) {

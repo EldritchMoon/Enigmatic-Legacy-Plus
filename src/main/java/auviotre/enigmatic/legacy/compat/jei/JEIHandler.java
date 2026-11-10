@@ -60,7 +60,7 @@ public class JEIHandler implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(@NotNull IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(EnigmaticBlocks.SPELLSTONE_TABLE.toStack(), EnigmaticRecipeTypes.SPELLSTONE_CRAFTING);
+        registration.addCraftingStation(EnigmaticRecipeTypes.SPELLSTONE_CRAFTING, EnigmaticBlocks.SPELLSTONE_TABLE.toStack()); // 26.1.2-port: was addRecipeCatalyst(stack, type)
     }
 
     @Override

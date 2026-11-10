@@ -14,11 +14,5 @@ public class TaintableSubtypeInterpreter implements ISubtypeInterpreter<ItemStac
         return ingredient.getOrDefault(EnigmaticComponents.TAINTABLE, false) && context.equals(UidContext.Recipe);
     }
 
-    @Override
-    public String getLegacyStringSubtypeInfo(@NotNull ItemStack ingredient, UidContext context) {
-        String description = ingredient.getItem().getDescriptionId();
-        if (ingredient.getOrDefault(EnigmaticComponents.TAINTABLE, false) && context.equals(UidContext.Recipe))
-            return description + ".tainted";
-        return description;
-    }
+    // 26.1.2-port: getLegacyStringSubtypeInfo() was removed from the JEI interface; getSubtypeData() above is all it uses.
 }

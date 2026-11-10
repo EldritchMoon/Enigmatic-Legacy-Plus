@@ -2,7 +2,6 @@ package auviotre.enigmatic.legacy.compat.jei.category;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.compat.jei.EnigmaticRecipeTypes;
-import auviotre.enigmatic.legacy.compat.jei.JEIHandler;
 import auviotre.enigmatic.legacy.contents.crafting.SpellstoneTableRecipe;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticTags;
@@ -13,10 +12,10 @@ import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
-import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.core.NonNullList;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
@@ -47,7 +46,7 @@ public class SpellstoneCraftingCategory implements IRecipeCategory<RecipeHolder<
     }
 
     @Override
-    public RecipeType<RecipeHolder<SpellstoneTableRecipe>> getRecipeType() {
+    public IRecipeType<RecipeHolder<SpellstoneTableRecipe>> getRecipeType() {
         return EnigmaticRecipeTypes.SPELLSTONE_CRAFTING;
     }
 
@@ -73,8 +72,8 @@ public class SpellstoneCraftingCategory implements IRecipeCategory<RecipeHolder<
 
     @Override
     public void draw(RecipeHolder<SpellstoneTableRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
-        guiGraphics.blitSprite(SPRITE, 0, 0, getWidth(), getHeight());
-        if (recipe.value().isAllDifferent()) guiGraphics.blitSprite(ICON, 124, 0, 8, 8);
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, SPRITE, 0, 0, getWidth(), getHeight()); // 26.1.2-port: blitSprite takes the render pipeline
+        if (recipe.value().isAllDifferent()) guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, ICON, 124, 0, 8, 8);
     }
 
     @Override
@@ -90,7 +89,7 @@ public class SpellstoneCraftingCategory implements IRecipeCategory<RecipeHolder<
         IRecipeSlotBuilder slot = builder.addInputSlot(5, 32);
         IRecipeSlotBuilder spell = builder.addInputSlot(111, 32);
         IRecipeSlotBuilder core = builder.addInputSlot(58, 32);
-        NonNullList<Ingredient> ingredients = recipe.getIngredients();
+        List<Ingredient> ingredients = recipe.getIngredients(); // 26.1.2-port: a plain List now
         for (int i = 0; i < 7; i++) {
             Pair<Integer, Integer> pair = OFFSETS.get(i);
             if (i < ingredients.size()) {
@@ -102,17 +101,17 @@ public class SpellstoneCraftingCategory implements IRecipeCategory<RecipeHolder<
                         list.set(j, items.get((j + i) % items.size()));
                     }
                     builder.addInputSlot(pair.getA(), pair.getB()).addItemStacks(list);
-                } else builder.addInputSlot(pair.getA(), pair.getB()).addIngredients(ingredient);
+                } else builder.addInputSlot(pair.getA(), pair.getB()).add(ingredient); // 26.1.2-port: JEI renamed addIngredients/addItemStack to add
             } else builder.addInputSlot(pair.getA(), pair.getB());
         }
         if (holder.id().equals(EnigmaticLegacy.location("spellstone_fragmentation"))) {
             spell.addIngredients(Ingredient.of(EnigmaticTags.Items.SPELLSTONES));
-            builder.addOutputSlot(58, 59).addItemStack(EnigmaticItems.SPELLSTONE_DEBRIS.toStack(4));
+            builder.addOutputSlot(58, 59).add(EnigmaticItems.SPELLSTONE_DEBRIS.toStack(4));
             return;
         }
 
-        if (recipe.getCount() > 0) slot.addItemStack(EnigmaticItems.SPELLSTONE_DEBRIS.toStack(recipe.getCount()));
-        core.addItemStack(EnigmaticItems.SPELLCORE.toStack());
-        builder.addOutputSlot(58, 59).addItemStack(recipe.getResultItem(JEIHandler.getLevel().registryAccess()));
+        if (recipe.getCount() > 0) slot.add(EnigmaticItems.SPELLSTONE_DEBRIS.toStack(recipe.getCount()));
+        core.add(EnigmaticItems.SPELLCORE.toStack());
+        builder.addOutputSlot(58, 59).add(recipe.getResultItem()); // 26.1.2-port: getResultItem() no longer takes registries
     }
 }
