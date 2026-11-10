@@ -4,10 +4,11 @@ import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.contents.gui.LoreInscriberMenu;
 import auviotre.enigmatic.legacy.packets.server.LoreInscriberRenamePacket;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -63,35 +64,35 @@ public class LoreInscriberScreen extends AbstractContainerScreen<LoreInscriberMe
     }
 
     @Override
-    protected void renderBg(GuiGraphicsExtractor graphics, float partialTicks, int x, int y) {
-        RenderSystem.clearColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, TEXTURE);
+    // 26.1.2-port: renderBg -> extractBackground (public, new argument order). The dimmed world behind the screen is
+    // drawn by super now, blit names its pipeline and the texture size, and the RenderSystem state calls are gone.
+    public void extractBackground(GuiGraphicsExtractor graphics, int x, int y, float partialTicks) {
+        super.extractBackground(graphics, x, y, partialTicks);
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
-        graphics.blit(TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
-        graphics.blit(TEXTURE, i + 52, j + 26, 0, this.imageHeight + (this.menu.getSlot(0).hasItem() ? 0 : 16), 102, 16);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, i, j, 0.0F, 0.0F, this.imageWidth, this.imageHeight, 256, 256);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, i + 52, j + 26, 0.0F, this.imageHeight + (this.menu.getSlot(0).hasItem() ? 0 : 16), 102, 16, 256, 256);
         if (this.menu.getSlot(0).hasItem() && !this.menu.getSlot(1).hasItem()) {
-            graphics.blit(TEXTURE, i + 71, j + 49, this.imageWidth, 0, 28, 21);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, i + 71, j + 49, this.imageWidth, 0.0F, 28, 21, 256, 256);
         }
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == 256 && this.minecraft.player != null) this.minecraft.player.closeContainer();
-        return this.name.keyPressed(keyCode, scanCode, modifiers) || this.name.canConsumeInput() || super.keyPressed(keyCode, scanCode, modifiers);
+    public boolean keyPressed(KeyEvent event) { // 26.1.2-port: key presses arrive as a KeyEvent
+        if (event.isEscape() && this.minecraft.player != null) this.minecraft.player.closeContainer();
+        return this.name.keyPressed(event) || this.name.canConsumeInput() || super.keyPressed(event);
     }
 
     @Override
-    public void resize(Minecraft minecraft, int width, int height) {
+    public void resize(int width, int height) { // 26.1.2-port: resize and init no longer take the Minecraft instance
         String s = this.name.getValue();
-        this.init(minecraft, width, height);
+        this.init(width, height);
         this.name.setValue(s);
     }
 
     @Override
-    protected void renderLabels(GuiGraphicsExtractor graphics, int x, int y) {
-        graphics.drawString(this.font, this.title, 52, 13, 4210752);
-        RenderSystem.disableBlend();
+    protected void extractLabels(GuiGraphicsExtractor graphics, int x, int y) { // 26.1.2-port: renderLabels -> extractLabels, drawString -> text
+        graphics.text(this.font, this.title, 52, 13, 4210752);
     }
 
     public void renderNameField(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {

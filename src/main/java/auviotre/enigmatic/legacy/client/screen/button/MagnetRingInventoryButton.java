@@ -16,6 +16,7 @@ import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.gui.screens.recipebook.RecipeUpdateListener;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Tuple;
 import net.neoforged.api.distmarker.Dist;
@@ -59,7 +60,7 @@ public class MagnetRingInventoryButton extends ImageButton {
     }
 
     @Override
-    public void renderWidget(@Nonnull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
+    public void extractContents(@Nonnull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) { // 26.1.2-port: renderWidget -> extractContents
         this.active = true;
         if (this.parentGui instanceof InventoryScreen || this.parentGui instanceof ICuriosScreen) {
             boolean lastVisible = this.isRecipeBookVisible;
@@ -79,7 +80,7 @@ public class MagnetRingInventoryButton extends ImageButton {
             EnigmaticData data = player.getData(EnigmaticAttachments.ENIGMATIC_DATA);
             if (EnigmaticHandler.hasCurio(player, EnigmaticItems.MAGNET_RING) || EnigmaticHandler.hasCurio(player, EnigmaticItems.DISLOCATION_RING)) {
                 Identifier location = SPRITES.get(data.isMagnetRingEnable(), isHoveredOrFocused());
-                graphics.blitSprite(location, this.getX(), this.getY(), this.width, this.height);
+                graphics.blitSprite(RenderPipelines.GUI_TEXTURED, location, this.getX(), this.getY(), this.width, this.height);
             } else this.active = false;
         } else this.active = false;
     }

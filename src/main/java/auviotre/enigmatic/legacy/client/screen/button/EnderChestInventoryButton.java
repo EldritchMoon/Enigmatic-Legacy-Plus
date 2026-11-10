@@ -65,7 +65,7 @@ public class EnderChestInventoryButton extends ImageButton {
     }
 
     @Override
-    public void renderWidget(@Nonnull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
+    public void extractContents(@Nonnull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) { // 26.1.2-port: renderWidget -> extractContents
         this.active = true;
         if (this.parentGui instanceof InventoryScreen || this.parentGui instanceof ICuriosScreen) {
             boolean lastVisible = this.isRecipeBookVisible;
@@ -82,7 +82,7 @@ public class EnderChestInventoryButton extends ImageButton {
         }
         LocalPlayer player = Minecraft.getInstance().player;
         if (EnigmaticHandler.isTheCursedOne(player) && CursedRing.enableEnderRing.get() || EnigmaticHandler.hasCurio(player, EnigmaticItems.ENDER_RING)) {
-            super.renderWidget(graphics, mouseX, mouseY, partialTicks);
+            super.extractContents(graphics, mouseX, mouseY, partialTicks);
         } else this.active = false;
     }
 

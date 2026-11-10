@@ -5,6 +5,7 @@ import auviotre.enigmatic.legacy.contents.gui.SpellstoneTableMenu;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
@@ -32,14 +33,15 @@ public class SpellstoneTableScreen extends AbstractContainerScreen<SpellstoneTab
     }
 
     @Override
-    protected void renderBg(@NotNull GuiGraphicsExtractor graphics, float partialTicks, int x, int y) {
-        RenderSystem.clearColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, TEXTURE);
+    // 26.1.2-port: renderBg -> extractBackground (public, new argument order). The dimmed world behind the screen is
+    // drawn by super now, blit names its pipeline and the texture size, and the RenderSystem state calls are gone.
+    public void extractBackground(@NotNull GuiGraphicsExtractor graphics, int x, int y, float partialTicks) {
+        super.extractBackground(graphics, x, y, partialTicks);
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
-        graphics.blit(TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, i, j, 0.0F, 0.0F, this.imageWidth, this.imageHeight, 256, 256);
         if (this.menu.hasOutput()) {
-            graphics.blit(TEXTURE, i + 85, j + 53, 176, 0, 6, 6);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, i + 85, j + 53, 176.0F, 0.0F, 6, 6, 256, 256);
         }
     }
 }
