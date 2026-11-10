@@ -11,7 +11,6 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.PotionContents;
@@ -21,6 +20,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 import net.neoforged.neoforge.event.level.ModifyCustomSpawnersEvent;
@@ -55,9 +55,10 @@ public class EnigmaticSetupHandler {
     @SubscribeEvent
     private static void onPotionRegistry(@NotNull RegisterBrewingRecipesEvent event) {
         PotionBrewing.Builder builder = event.getBuilder();
-        ItemStack awkward = Items.POTION.getDefaultInstance();
-        awkward.set(DataComponents.POTION_CONTENTS, new PotionContents(Potions.AWKWARD));
-        builder.addRecipe(Ingredient.of(awkward), Ingredient.of(Items.ENDER_EYE), EnigmaticItems.RECALL_POTION.toStack());
+        // 26.1.2-port: Ingredient.of(ItemStack) was removed; a plain Ingredient only matches items now. Match a potion
+        // whose contents are Awkward with NeoForge's component ingredient.
+        Ingredient awkward = DataComponentIngredient.of(false, DataComponents.POTION_CONTENTS, new PotionContents(Potions.AWKWARD), Items.POTION);
+        builder.addRecipe(awkward, Ingredient.of(Items.ENDER_EYE), EnigmaticItems.RECALL_POTION.toStack());
         builder.addRecipe(Ingredient.of(EnigmaticItems.RECALL_POTION), Ingredient.of(Items.FERMENTED_SPIDER_EYE), EnigmaticItems.WORMHOLE_POTION.toStack());
         builder.addStartMix(Items.QUARTZ, EnigmaticPotions.HASTE);
         builder.addMix(Potions.FIRE_RESISTANCE, Items.BLAZE_ROD, EnigmaticPotions.MOLTEN_HEART);

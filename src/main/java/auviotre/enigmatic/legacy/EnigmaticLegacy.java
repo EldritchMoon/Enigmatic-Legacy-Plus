@@ -21,7 +21,6 @@ import auviotre.enigmatic.legacy.registries.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.*;
-import net.minecraft.server.packs.repository.BuiltInPackSource;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.world.entity.EntityType;
@@ -47,13 +46,13 @@ import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import net.neoforged.neoforge.resource.JarContentsPackResources;
 import net.neoforged.neoforgespi.language.IModFileInfo;
 import net.neoforged.neoforgespi.locating.IModFile;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.file.Path;
 import java.util.Optional;
 
 @Mod(EnigmaticLegacy.MODID)
@@ -205,11 +204,12 @@ public class EnigmaticLegacy {
                     "enigmaticlegacyplus:3d_book_models", Component.translatable("resource.3d_book_models.title"),
                     PackSource.BUILT_IN, Optional.empty()
             );
-            Path resourcePath = modFile.findResource("resourcepacks/3d_book_models");
             PackSelectionConfig config = new PackSelectionConfig(false, Pack.Position.TOP, false);
             event.addRepositorySource(consumer -> {
                 Pack pack = Pack.readMetaAndCreate(locationInfo,
-                        BuiltInPackSource.fromName(path -> new PathPackResources(path, resourcePath)),
+                        // 26.1.2-port: IModFile.findResource and BuiltInPackSource.fromName are gone; read the pack from the
+                        // mod jar's contents, as NeoForge's own AddPackFindersEvent.addPackFinders does
+                        new JarContentsPackResources.JarContentsResourcesSupplier(modFile.getContents(), "resourcepacks/3d_book_models"),
                         PackType.CLIENT_RESOURCES, config);
                 if (pack != null) consumer.accept(pack);
             });

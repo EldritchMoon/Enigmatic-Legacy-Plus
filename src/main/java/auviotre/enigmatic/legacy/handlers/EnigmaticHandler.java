@@ -19,7 +19,6 @@ import auviotre.enigmatic.legacy.registries.EnigmaticTags;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -204,14 +203,17 @@ public interface EnigmaticHandler {
         Item item = itemLike.asItem();
         if (!canUse(entity, item.getDefaultInstance())) return ItemStack.EMPTY;
         if (entity instanceof Player player) {
-            for (NonNullList<ItemStack> compartment : player.getInventory().compartments) {
-                for (ItemStack stack : compartment) {
-                    if (stack.is(item.asItem())) return stack;
-                }
+            // 26.1.2-port: Inventory.compartments was removed; the inventory itself iterates over the main slots
+            // followed by the equipment slots (armour and offhand, as before, plus the unused body and saddle slots)
+            for (ItemStack stack : player.getInventory()) {
+                if (stack.is(item.asItem())) return stack;
             }
         } else {
-            for (ItemStack stack : entity.getAllSlots())
+            // 26.1.2-port: LivingEntity.getAllSlots was removed; check each equipment slot (hands and armour as before, plus saddle)
+            for (EquipmentSlot slot : EquipmentSlot.VALUES) {
+                ItemStack stack = entity.getItemBySlot(slot);
                 if (stack.is(item.asItem())) return stack;
+            }
         }
         return ItemStack.EMPTY;
     }
@@ -252,7 +254,9 @@ public interface EnigmaticHandler {
     }
 
     static boolean isAffectedBySoulLoss(@NotNull Player player, boolean hadRing) {
-        boolean keepInventory = player.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY);
+        // 26.1.2-port: game rules are only on the server level now (Level.getGameRules is gone), and
+        // getBoolean(RULE_KEEPINVENTORY) -> get(KEEP_INVENTORY). The only caller runs on the server (LivingDropsEvent).
+        boolean keepInventory = player.level() instanceof ServerLevel serverLevel && serverLevel.getGameRules().get(GameRules.KEEP_INVENTORY);
         return switch (CursedRing.soulCrystalsMode.get()) {
             case ALWAYS_LOSS -> true;
             case NEED_CURSE_RING -> hadRing && !keepInventory;
@@ -497,8 +501,9 @@ public interface EnigmaticHandler {
             return false;
         else {
             List<ItemStack> allInventories = new ArrayList<>();
-            allInventories.addAll(player.getInventory().items);
-            allInventories.addAll(player.getInventory().offhand);
+            // 26.1.2-port: Inventory.items is private and the offhand list is gone (the offhand is an equipment slot)
+            allInventories.addAll(player.getInventory().getNonEquipmentItems());
+            allInventories.add(player.getOffhandItem());
             for (ItemStack invStack : allInventories) {
                 if (canMergeStacks(invStack, stack, player.getInventory().getMaxStackSize()))
                     return false;

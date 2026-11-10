@@ -21,6 +21,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.LevelData;
 import net.minecraft.world.level.storage.LevelResource;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
@@ -71,11 +72,15 @@ public class SoulArchive {
     }
 
     public static DimensionalPosition getRespawnPos(ServerPlayer player) {
-        ResourceKey<Level> respawnDimension = player.getRespawnDimension();
-        ServerLevel destLevel = player.level().getServer().getLevel(respawnDimension);
-        if (destLevel == null) destLevel = player.level().getServer().overworld();
-        BlockPos respawnPos = player.getRespawnPosition();
-        if (respawnPos == null) respawnPos = destLevel.getSharedSpawnPos();
+        // 26.1.2-port: the player's respawn point is one RespawnConfig (was getRespawnDimension/getRespawnPosition), and
+        // the fallback world spawn is the server's RespawnData, which carries its own dimension
+        // (ServerLevel.getSharedSpawnPos is gone).
+        MinecraftServer server = player.level().getServer();
+        ServerPlayer.RespawnConfig config = player.getRespawnConfig();
+        LevelData.RespawnData respawn = config != null ? config.respawnData() : server.getRespawnData();
+        ServerLevel destLevel = server.getLevel(respawn.dimension());
+        if (destLevel == null) destLevel = server.overworld();
+        BlockPos respawnPos = respawn.pos();
         return new SoulArchive.DimensionalPosition(respawnPos.getX() + 0.5, respawnPos.getY() + 1.5, respawnPos.getZ() + 0.5, destLevel);
     }
 

@@ -48,7 +48,6 @@ import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.jetbrains.annotations.NotNull;
-import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.event.CurioAttributeModifierEvent;
 import top.theillusivec4.curios.api.event.CurioCanUnequipEvent;
 import top.theillusivec4.curios.api.event.DropRulesEvent;
@@ -71,7 +70,7 @@ public class EnigmaticEnchantments {
         HolderGetter<EntityType<?>> entityTypeGetter = context.lookup(Registries.ENTITY_TYPE); // 26.1.2-port: predicates need the registry lookup
         register(context, SLAYER, Enchantment.enchantment(
                                 Enchantment.definition(
-                                        itemGetter.getOrThrow(ItemTags.WEAPON_ENCHANTABLE), itemGetter.getOrThrow(ItemTags.SWORD_ENCHANTABLE),
+                                        itemGetter.getOrThrow(ItemTags.WEAPON_ENCHANTABLE), itemGetter.getOrThrow(ItemTags.MELEE_WEAPON_ENCHANTABLE), // 26.1.2-port: enchantable/sword was removed; vanilla Sharpness uses enchantable/melee_weapon
                                         5, 5, Enchantment.dynamicCost(5, 8), Enchantment.dynamicCost(25, 8), 2, EquipmentSlotGroup.MAINHAND
                                 )
                         ).exclusiveWith(enchantmentGetter.getOrThrow(EnchantmentTags.DAMAGE_EXCLUSIVE))
@@ -148,7 +147,7 @@ public class EnigmaticEnchantments {
         );
         register(context, NEMESIS_CURSE, Enchantment.enchantment(
                         Enchantment.definition(
-                                itemGetter.getOrThrow(ItemTags.SHARP_WEAPON_ENCHANTABLE), itemGetter.getOrThrow(ItemTags.SWORD_ENCHANTABLE),
+                                itemGetter.getOrThrow(ItemTags.SHARP_WEAPON_ENCHANTABLE), itemGetter.getOrThrow(ItemTags.MELEE_WEAPON_ENCHANTABLE), // 26.1.2-port: enchantable/sword was removed; vanilla Sharpness uses enchantable/melee_weapon
                                 1, 1, Enchantment.constantCost(25), Enchantment.constantCost(50), 8, EquipmentSlotGroup.MAINHAND
                         )
                 )
@@ -272,12 +271,13 @@ public class EnigmaticEnchantments {
 
         @SubscribeEvent
         private static void getCurioAttribute(@NotNull CurioAttributeModifierEvent event) {
-            SlotContext context = event.getSlotContext();
-            if (context.entity() == null) return;
+            // 26.1.2-port: Curios 15 fires this event for the item alone, with no slot context (no entity, slot or index).
+            // The per-slot part of the modifier id is no longer built here: Curios appends "/<slot>/<index>" itself when
+            // it applies the modifier. Without an entity there is no level to resolve the enchantment holder, so the
+            // stack's own enchantments are checked by key.
             ItemStack stack = event.getItemStack();
-            Identifier location = EnigmaticLegacy.location("enchantment.etheric_resonance/" + context.identifier().replace(':','/') + "_" + context.index());
-            var ethereal = EnigmaticHandler.get(context.entity().level(), Registries.ENCHANTMENT, ETHERIC_RESONANCE);
-            if (stack.getEnchantmentLevel(ethereal) > 0) {
+            Identifier location = EnigmaticLegacy.location("enchantment.etheric_resonance");
+            if (stack.getTagEnchantments().keySet().stream().anyMatch(enchantment -> enchantment.is(ETHERIC_RESONANCE))) {
                 event.addModifier(EnigmaticAttributes.ETHERIUM_SHIELD, new AttributeModifier(location, 0.01, AttributeModifier.Operation.ADD_VALUE));
             }
         }
