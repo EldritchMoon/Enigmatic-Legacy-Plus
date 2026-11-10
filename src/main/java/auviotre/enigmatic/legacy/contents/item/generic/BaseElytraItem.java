@@ -14,7 +14,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -36,7 +35,7 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 
 // 26.1.2-port: the Equipable interface, ElytraItem and Caelus are gone. Chest-slot gliding comes from the vanilla
 // GLIDER + EQUIPPABLE components (vanilla also handles flight durability and glide events for the chest slot).
-// TODO(port): gliding from the Curios back slot needs a LivingEntity.canGlide mixin (phase 6).
+// Gliding from a Curios slot, which Caelus used to provide, is the canGlide()/updateFallFlying() pair in MixinLivingEntity.
 public abstract class BaseElytraItem extends BaseCurioItem {
     protected static final Identifier LOCATION = EnigmaticLegacy.location("elytra");
     protected static final AttributeModifier ELYTRA_MODIFIER = new AttributeModifier(LOCATION, 1.0, AttributeModifier.Operation.ADD_VALUE);
@@ -52,6 +51,13 @@ public abstract class BaseElytraItem extends BaseCurioItem {
     /** 26.1.2-port: replaces ElytraItem.isFlyEnabled. */
     public static boolean isFlyEnabled(ItemStack stack) {
         return !stack.nextDamageWillBreak();
+    }
+
+    /** 26.1.2-port: new. True when a BaseElytraItem that can still fly sits in a Curios slot; used by MixinLivingEntity. */
+    public static boolean hasCurioGlider(LivingEntity entity) {
+        return CuriosApi.getCuriosInventory(entity)
+                .flatMap(handler -> handler.findFirstCurio(stack -> stack.getItem() instanceof BaseElytraItem && isFlyEnabled(stack)))
+                .isPresent();
     }
 
     public static ItemStack getElytra(LivingEntity entity) {
@@ -84,7 +90,9 @@ public abstract class BaseElytraItem extends BaseCurioItem {
             if (nextFlightTick % 10 == 0) {
                 if (nextFlightTick % 20 == 0)
                     stack.hurtAndBreak(1, entity, EquipmentSlot.CHEST);
-                entity.gameEvent(GameEvent.ELYTRA_GLIDE);
+                // 26.1.2-port: the ELYTRA_GLIDE game event that was sent here now comes from vanilla's
+                // LivingEntity.updateFallFlying() for every gliding entity (and from MixinLivingEntity when the only
+                // glider is in a Curios slot), so sending it here as well would double it.
             }
         } else if (entity instanceof Player player) handleBoosting(player);
         return true;

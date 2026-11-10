@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.mixin;
 
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
 import auviotre.enigmatic.legacy.contents.item.charms.ScorchedCharm;
+import auviotre.enigmatic.legacy.contents.item.generic.BaseElytraItem;
 import auviotre.enigmatic.legacy.contents.item.rings.RedemptionRing;
 import auviotre.enigmatic.legacy.contents.item.scrolls.CursedScroll;
 import auviotre.enigmatic.legacy.contents.item.spellstones.ForgottenIce;
@@ -106,6 +107,30 @@ public abstract class MixinLivingEntity extends Entity implements ILivingEntityE
         ItemStack blockingWith = this.getItemBlockingWith();
         if (this.self() instanceof Player && blockingWith != null && blockingWith.getItem() instanceof InfernalShield) return 0;
         return original.call(arrow);
+    }
+
+    // 26.1.2-port: new, replaces the Caelus fall-flying attribute. Vanilla's canGlide() only looks at equipment slots
+    // (chest-slot mod elytra already work through their GLIDER component). This adds a usable mod elytra in a Curios
+    // slot, under the same conditions vanilla applies. Player.canGlide() calls this through super, so creative flight
+    // still rules it out.
+    @Inject(method = "canGlide", at = @At("RETURN"), cancellable = true)
+    private void canGlideWithCurioElytra(CallbackInfoReturnable<Boolean> info) {
+        if (!info.getReturnValue() && !this.onGround() && !this.isPassenger() && !this.self().hasEffect(MobEffects.LEVITATION)
+                && BaseElytraItem.hasCurioGlider(this.self())) {
+            info.setReturnValue(true);
+        }
+    }
+
+    // 26.1.2-port: new, needed by the injector above. Every second of gliding, vanilla picks a random equipment slot
+    // that holds a glider and damages that item. With only a Curios elytra there is no such slot and picking from the
+    // empty list would throw. So in that case this sends the game event vanilla was about to send and leaves; the
+    // Curios elytra's own durability is handled by BaseElytraItem.elytraFlightTick().
+    @Inject(method = "updateFallFlying", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Util;getRandom(Ljava/util/List;Lnet/minecraft/util/RandomSource;)Ljava/lang/Object;"), cancellable = true)
+    private void skipEquipmentWearForCurioElytra(CallbackInfo info) {
+        if (EquipmentSlot.VALUES.stream().noneMatch(slot -> LivingEntity.canGlideUsing(this.self().getItemBySlot(slot), slot))) {
+            this.gameEvent(GameEvent.ELYTRA_GLIDE);
+            info.cancel();
+        }
     }
 
     @Inject(method = "canStandOnFluid", at = @At("RETURN"), cancellable = true)

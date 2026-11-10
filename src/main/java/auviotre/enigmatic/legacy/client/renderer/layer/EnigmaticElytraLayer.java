@@ -11,6 +11,7 @@ import net.minecraft.client.model.object.equipment.ElytraModel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
@@ -55,6 +56,9 @@ public class EnigmaticElytraLayer<S extends HumanoidRenderState, M extends Entit
             if (!curio.slotContext().visible()) notRender.set(true);
         });
         boolean render = !notRender.get() && !elytra.isEmpty() && elytra.getItem() instanceof BaseElytraItem;
+        // 26.1.2-port: was the Caelus RenderCapeEvent handler in ClientEventHandler: no cape while a mod elytra is
+        // worn (whether or not its Curios slot is visible, as before). CapeLayer reads showCape from the state.
+        if (!elytra.isEmpty() && state instanceof AvatarRenderState avatar) avatar.showCape = false;
         // the state outlives this call, so it gets a copy of the stack (vanilla does the same for worn equipment)
         state.setRenderData(ELYTRA, render ? elytra.copy() : null);
     }

@@ -228,12 +228,8 @@ public class ClientEventHandler {
         Insignia.submitTrueName(event);
     }
 
-    // TODO(port): Caelus is no longer a dependency, so its RenderCapeEvent is gone. Hiding the cape while an elytra is
-    // worn in the Curios back slot belongs with the back-slot gliding mixin (phase 6).
-    // @SubscribeEvent
-    // private static void renderCape(@NotNull RenderCapeEvent event) {
-    //     if (!BaseElytraItem.getElytra(event.getEntity()).isEmpty()) event.setCanceled(true);
-    // }
+    // 26.1.2-port: the Caelus RenderCapeEvent handler that was here (no cape while a mod elytra is worn) is now part of
+    // EnigmaticElytraLayer.extractElytra(), which clears AvatarRenderState.showCape.
 
     @SubscribeEvent
     private static void renderScreenEffect(@NotNull RenderBlockScreenEffectEvent event) {
