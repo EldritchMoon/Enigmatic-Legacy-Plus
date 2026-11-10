@@ -9,7 +9,6 @@ import auviotre.enigmatic.legacy.registries.EnigmaticEntities;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.core.GlobalPos;
@@ -24,6 +23,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.ActivityData;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -52,6 +52,7 @@ import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Optional;
 import net.minecraft.tags.ItemTags;
 import auviotre.enigmatic.legacy.handlers.SaveDataHelper;
@@ -86,6 +87,8 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
             MemoryModuleType.NEAREST_VISIBLE_NEMESIS,
             MemoryModuleType.HOME
     );
+    // 26.1.2-port: a brain is built in one step now; the provider also takes the activities (was Ai.makeBrain)
+    private static final Brain.Provider<PiglinWanderer> BRAIN_PROVIDER = Brain.provider(MEMORY_TYPES, SENSOR_TYPES, Ai::getActivities);
     private static final EntityDataAccessor<Boolean> DATA_IS_CHARGING = SynchedEntityData.defineId(PiglinWanderer.class, EntityDataSerializers.BOOLEAN);
 
     public PiglinWanderer(EntityType<? extends AbstractPiglin> entityType, Level level) {
@@ -133,14 +136,10 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
         return flag;
     }
 
+    // 26.1.2-port: brainProvider() is gone and makeBrain takes the saved memories (Brain.Packed) instead of a Dynamic
     @Override
-    protected Brain.Provider<PiglinWanderer> brainProvider() {
-        return Brain.provider(MEMORY_TYPES, SENSOR_TYPES);
-    }
-
-    @Override
-    protected Brain<?> makeBrain(Dynamic<?> dynamic) {
-        return Ai.makeBrain(this, this.brainProvider().makeBrain(dynamic));
+    protected Brain<PiglinWanderer> makeBrain(Brain.Packed packedBrain) {
+        return BRAIN_PROVIDER.makeBrain(this, packedBrain);
     }
 
     @Override
@@ -167,12 +166,12 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
         this.makeSound(SoundEvents.PIGLIN_ANGRY);
     }
 
+    // 26.1.2-port: hurt -> hurtServer (server side only, so the client-side early return is gone)
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        boolean flag = super.hurt(source, amount);
-        if (this.level().isClientSide()) return false;
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+        boolean flag = super.hurtServer(level, source, amount);
         if (flag && source.getEntity() instanceof LivingEntity)
-            Ai.wasHurtBy(this, (LivingEntity) source.getEntity());
+            Ai.wasHurtBy(level, this, (LivingEntity) source.getEntity());
         return flag;
     }
 
@@ -251,14 +250,10 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
     }
 
     protected static class Ai {
-        protected static Brain<?> makeBrain(PiglinWanderer wanderer, Brain<PiglinWanderer> brain) {
-            initCoreActivity(brain);
-            initIdleActivity(brain);
-            initFightActivity(wanderer, brain);
-            brain.setCoreActivities(ImmutableSet.of(Activity.CORE));
-            brain.setDefaultActivity(Activity.IDLE);
-            brain.useDefaultActivity();
-            return brain;
+        // 26.1.2-port: activities are returned as ActivityData and handed to the Brain constructor, which also sets
+        // CORE as the core activity and starts the default activity (IDLE), as the old makeBrain did by hand.
+        protected static List<ActivityData<PiglinWanderer>> getActivities(PiglinWanderer wanderer) {
+            return List.of(initCoreActivity(), initIdleActivity(), initFightActivity(wanderer));
         }
 
         protected static void initMemories(PiglinWanderer wanderer) {
@@ -266,8 +261,8 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
             wanderer.getBrain().setMemory(MemoryModuleType.HOME, globalpos);
         }
 
-        private static void initCoreActivity(Brain<PiglinWanderer> brain) {
-            brain.addActivity(Activity.CORE, 0, ImmutableList.of(
+        private static ActivityData<PiglinWanderer> initCoreActivity() {
+            return ActivityData.<PiglinWanderer>create(Activity.CORE, 0, ImmutableList.of(
                     new LookAtTargetSink(45, 90),
                     new MoveToTargetSink(),
                     InteractWithDoor.create(),
@@ -275,18 +270,19 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
             ));
         }
 
-        private static void initIdleActivity(Brain<PiglinWanderer> brain) {
-            brain.addActivity(Activity.IDLE, 10, ImmutableList.of(
-                    StartAttacking.create(Ai::findNearestValidAttackTarget),
+        // 26.1.2-port: target finders and stop conditions receive the ServerLevel as their first argument
+        private static ActivityData<PiglinWanderer> initIdleActivity() {
+            return ActivityData.<PiglinWanderer>create(Activity.IDLE, 10, ImmutableList.of(
+                    StartAttacking.<PiglinWanderer>create(Ai::findNearestValidAttackTarget),
                     createIdleLookBehaviors(),
                     createIdleMovementBehaviors(),
                     SetLookAndInteract.create(EntityType.PLAYER, 4)
             ));
         }
 
-        private static void initFightActivity(PiglinWanderer wanderer, Brain<PiglinWanderer> brain) {
-            brain.addActivityAndRemoveMemoryWhenStopped(Activity.FIGHT, 10, ImmutableList.of(
-                    StopAttackingIfTargetInvalid.create((entity) -> !isNearestValidAttackTarget(wanderer, entity)),
+        private static ActivityData<PiglinWanderer> initFightActivity(PiglinWanderer wanderer) {
+            return ActivityData.<PiglinWanderer>create(Activity.FIGHT, 10, ImmutableList.of(
+                    StopAttackingIfTargetInvalid.<PiglinWanderer>create((level, entity) -> !isNearestValidAttackTarget(level, wanderer, entity)),
                     BehaviorBuilder.triggerIf(Ai::hasSpear, BackUpIfTooClose.create(10, 0.75F)),
                     SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(piglin -> hasSpear(piglin) ? (isCharging(piglin) ? 0.4F : 0.6F) : 1.0F),
                     new SpearAttack<>(),
@@ -325,13 +321,13 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
             wanderer.setAggressive(brain.hasMemoryValue(MemoryModuleType.ATTACK_TARGET));
         }
 
-        private static boolean isNearestValidAttackTarget(AbstractPiglin piglin, LivingEntity target) {
-            return findNearestValidAttackTarget(piglin).filter((entity) -> entity == target).isPresent();
+        private static boolean isNearestValidAttackTarget(ServerLevel level, AbstractPiglin piglin, LivingEntity target) {
+            return findNearestValidAttackTarget(level, piglin).filter((entity) -> entity == target).isPresent();
         }
 
-        private static Optional<? extends LivingEntity> findNearestValidAttackTarget(AbstractPiglin piglin) {
+        private static Optional<? extends LivingEntity> findNearestValidAttackTarget(ServerLevel level, AbstractPiglin piglin) {
             Optional<LivingEntity> optional = BehaviorUtils.getLivingEntityFromUUIDMemory(piglin, MemoryModuleType.ANGRY_AT);
-            if (optional.isPresent() && Sensor.isEntityAttackableIgnoringLineOfSight(piglin, optional.get())) {
+            if (optional.isPresent() && Sensor.isEntityAttackableIgnoringLineOfSight(level, piglin, optional.get())) {
                 return optional;
             } else {
                 Optional<? extends LivingEntity> optional1 = getTargetIfWithinRange(piglin);
@@ -343,9 +339,9 @@ public class PiglinWanderer extends AbstractPiglin implements SpearAttackMob {
             return piglin.getBrain().getMemory(MemoryModuleType.NEAREST_VISIBLE_ATTACKABLE_PLAYER).filter(entity -> entity.closerThan(piglin, 16.0));
         }
 
-        protected static void wasHurtBy(PiglinWanderer wanderer, LivingEntity target) {
+        protected static void wasHurtBy(ServerLevel level, PiglinWanderer wanderer, LivingEntity target) {
             if (!(target instanceof AbstractPiglin)) {
-                PiglinAi.maybeRetaliate(wanderer, target);
+                PiglinAi.maybeRetaliate(level, wanderer, target);
             }
         }
 
