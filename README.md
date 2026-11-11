@@ -8,7 +8,7 @@
 
 **NeoForge Version:** 21.1.1 or later.
 
-**Dependencies:** CuriosAPI-NeoForge 1.21.1-9.5.1 or later; Patchouli 1.21.1-93 or later; Caelus API 1.21.1-7.0.1 or later.
+**Dependencies:** CuriosAPI-NeoForge 1.21.1-9.5.1 or later; Patchouli 26.1-94 or later; Caelus API 1.21.1-7.0.1 or later.
 
 This mod is designed to bring new magical-themed content to the game, mainly of utilitary nature. New trinkets and powerful relics are restlessly waiting to contribute to your creational and/or destructional purposes, whatever moral is standing behind them, if any at all...
 
