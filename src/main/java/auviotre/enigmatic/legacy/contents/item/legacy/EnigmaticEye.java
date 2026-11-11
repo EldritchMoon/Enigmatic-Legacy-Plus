@@ -181,7 +181,9 @@ public class EnigmaticEye extends BaseCurioItem {
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
         if (this.isDormant(stack)) return attributes;
-        if (!(context.entity() instanceof Player)) return attributes;
+        // 26.1.2-port: was "if (!(context.entity() instanceof Player)) return attributes;". Curios 15 asks without a
+        // wearer (see BaseCurioItem.getDefaultCurioAttributeModifiers), so an unknown wearer counts as a player.
+        if (context.entity() != null && !(context.entity() instanceof Player)) return attributes;
         CuriosApi.addSlotModifier(attributes, "charm", IItemHelper.getLocation(this), 1.0, AttributeModifier.Operation.ADD_VALUE);
         return attributes;
     }

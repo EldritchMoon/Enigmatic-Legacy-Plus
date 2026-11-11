@@ -8,20 +8,16 @@ import auviotre.enigmatic.legacy.contents.item.generic.CursedCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Phantom;
@@ -106,11 +102,22 @@ public class NightScroll extends CursedCurioItem {
         return tooltips;
     }
 
+    // 26.1.2-port: was getAttributeModifiers(SlotContext, Identifier, ItemStack). The bonus depends on how dark it is
+    // around the wearer, and Curios 15 works a curio's modifiers out for the item alone, with no wearer (see
+    // BaseCurioItem.getDefaultCurioAttributeModifiers). Curios 15 still calls onEquip and onUnequip with the wearer,
+    // server side, in the same block where it adds and removes a curio's modifiers, so the bonus is set there. It is
+    // worked out once, when the scroll is equipped, and does not follow the light afterwards; the old method was
+    // only asked at that moment too.
     @Override
-    public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, Identifier id, ItemStack stack) {
-        Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
-        attributes.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(IItemHelper.getLocation(this), damageBoost.get() / 100.0F * getDarkModifier(slotContext.entity()), AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        return attributes;
+    public void onEquip(SlotContext context, ItemStack prevStack, ItemStack stack) {
+        AttributeInstance instance = context.entity().getAttribute(Attributes.ATTACK_DAMAGE);
+        if (instance != null) instance.addOrUpdateTransientModifier(new AttributeModifier(IItemHelper.getLocation(this), damageBoost.get() / 100.0F * getDarkModifier(context.entity()), AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+    }
+
+    @Override
+    public void onUnequip(SlotContext context, ItemStack newStack, ItemStack stack) {
+        AttributeInstance instance = context.entity().getAttribute(Attributes.ATTACK_DAMAGE);
+        if (instance != null) instance.removeModifier(IItemHelper.getLocation(this));
     }
 
     @Mod(value = EnigmaticLegacy.MODID)

@@ -84,7 +84,10 @@ public class ForgerGem extends BaseCurioItem {
     @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
-        if (context.entity() instanceof Player) {
+        // 26.1.2-port: was "if (context.entity() instanceof Player)". Curios 15 asks without a wearer (see
+        // BaseCurioItem.getDefaultCurioAttributeModifiers), so an unknown wearer has to count as a player here or
+        // the extra slot is never given. The mod's Curios data gives curio slots to players only.
+        if (context.entity() == null || context.entity() instanceof Player) {
             CuriosApi.addSlotModifier(attributes, "charm", IItemHelper.getLocation(this), 1.0, AttributeModifier.Operation.ADD_VALUE);
         }
         return attributes;

@@ -53,7 +53,10 @@ public class EnchanterPearl extends CursedCurioItem {
     @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext context, Identifier id, ItemStack stack) {
         Multimap<Holder<Attribute>, AttributeModifier> attributes = HashMultimap.create();
-        if (EnigmaticHandler.canUse(context.entity(), stack))
+        // 26.1.2-port: was "if (EnigmaticHandler.canUse(context.entity(), stack))". Curios 15 asks without a wearer
+        // (see BaseCurioItem.getDefaultCurioAttributeModifiers). EnigmaticEventHandler.canEquip makes the same check
+        // before the pearl can be equipped at all, so an unknown wearer is let through here.
+        if (context.entity() == null || EnigmaticHandler.canUse(context.entity(), stack))
             CuriosApi.addSlotModifier(attributes, "charm", IItemHelper.getLocation(this), 1.0, AttributeModifier.Operation.ADD_VALUE);
         return attributes;
     }
