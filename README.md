@@ -4,7 +4,7 @@
 
 **Current Version:** 1.1.2
 
-**Minecraft Version:** 1.21.1
+**Minecraft Version:** 26.1.2
 
 **NeoForge Version:** 21.1.1 or later.
 
