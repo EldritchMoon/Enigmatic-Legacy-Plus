@@ -36,6 +36,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -61,6 +62,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.BlocksAttacks;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ItemLike;
@@ -91,6 +93,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static auviotre.enigmatic.legacy.registries.EnigmaticComponents.INT;
@@ -362,6 +365,7 @@ public class SpellstoneSword extends Item {
     public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
         // 26.1.2-port: inventoryTick is server-only and gets the equipment slot; MAINHAND = selected hotbar stack.
         boolean isSelected = slot == EquipmentSlot.MAINHAND;
+        syncVoidPearlBlocking(stack, level);
         if (isSelected && entity.getInBlockState().is(Blocks.BUBBLE_COLUMN) && isResonatingWith(stack, EnigmaticItems.OCEAN_STONE) && entity.tickCount % 4 == 0 && stack.getOrDefault(SPELL_LEVEL, 0) > 4) {
             stack.set(INT, Math.min(getMaxEnergy(stack), stack.getOrDefault(INT, 0) + 2));
         }
@@ -698,8 +702,31 @@ public class SpellstoneSword extends Item {
 
     @Override
     public boolean canPerformAction(ItemInstance stack, ItemAbility ability) { // 26.1.2-port: ItemStack -> ItemInstance
-        // TODO(port): blocking with the Void Pearl resonance needs the blocks_attacks component (SHIELD_BLOCK is gone).
+        // 26.1.2-port: was "the default sword actions, plus the default shield actions while resonating with the
+        // Void Pearl". SHIELD_BLOCK no longer exists as an ability; see syncVoidPearlBlocking.
         return ability == ItemAbilities.SWORD_SWEEP;
+    }
+
+    // 26.1.2-port: new. Vanilla shield blocking used to come from canPerformAction(SHIELD_BLOCK), which was true
+    // while the sword resonated with the Void Pearl. It is the blocks_attacks data component now, and a component
+    // lives on the stack, so it is put on and taken off as the resonance changes. inventoryTick calls this every
+    // tick on the server, which also covers swords saved before this existed.
+    // The values are the vanilla shield's (0.25 s before it counts, axes disable it, 90 degrees to each side, item
+    // damage from 3 points up, not against damage that bypasses shields), which is what SHIELD_BLOCK gave any item.
+    // Most hits never get this far: the sword's own parry in onDamage cancels frontal hits from an entity first.
+    private static void syncVoidPearlBlocking(ItemStack stack, ServerLevel level) {
+        boolean shouldBlock = isResonatingWith(stack, EnigmaticItems.VOID_PEARL);
+        if (shouldBlock == stack.has(DataComponents.BLOCKS_ATTACKS)) return;
+        if (shouldBlock) {
+            stack.set(DataComponents.BLOCKS_ATTACKS, new BlocksAttacks(
+                    0.25F, 1.0F,
+                    List.of(new BlocksAttacks.DamageReduction(90.0F, Optional.empty(), 0.0F, 1.0F)),
+                    new BlocksAttacks.ItemDamageFunction(3.0F, 1.0F, 1.0F),
+                    Optional.of(level.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypeTags.BYPASSES_SHIELD)),
+                    Optional.of(SoundEvents.SHIELD_BLOCK), Optional.of(SoundEvents.SHIELD_BREAK)));
+        } else {
+            stack.remove(DataComponents.BLOCKS_ATTACKS);
+        }
     }
 
 
