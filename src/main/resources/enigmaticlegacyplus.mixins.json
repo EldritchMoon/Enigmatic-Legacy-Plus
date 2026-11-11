@@ -6,6 +6,7 @@
     "MixinAnvilMenu",
     "MixinApplyBonusCount",
     "MixinBeaconBlockEntity",
+    "MixinCurioStacksHandler",
     "MixinEnchantmentMenu",
     "MixinEnderEyeItem",
     "MixinEntity",
