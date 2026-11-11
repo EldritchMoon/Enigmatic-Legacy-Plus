@@ -41,6 +41,9 @@ public abstract class SpellstoneItem extends BaseCurioItem implements ISpellston
 
     @Override
     public boolean canEquip(SlotContext context, ItemStack stack) {
-        return super.canEquip(context, stack) && ISpellstone.get(context.entity()).isEmpty();
+        // 26.1.2-port: was "... && ISpellstone.get(context.entity()).isEmpty()". The worn spellstone may be this
+        // very stack, see BaseCurioItem.canEquip.
+        ItemStack worn = ISpellstone.get(context.entity());
+        return super.canEquip(context, stack) && (worn.isEmpty() || worn == stack);
     }
 }

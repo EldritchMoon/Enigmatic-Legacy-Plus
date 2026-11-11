@@ -207,7 +207,10 @@ public class EnigmaticAmulet extends BaseCurioItem implements IAmulet {
                 HolderLookup<Item> holder = event.getEntity().level().holderLookup(Registries.ITEM);
                 holder.get(EnigmaticTags.Items.AMULETS).ifPresent(holders -> {
                     for (Holder<Item> itemHolder : holders) {
-                        if (EnigmaticHandler.hasCurio(event.getEntity(), itemHolder.value())) {
+                        // 26.1.2-port: added the "!= event.getStack()" half, the worn amulet may be the one being
+                        // asked about; see BaseCurioItem.canEquip.
+                        if (EnigmaticHandler.hasCurio(event.getEntity(), itemHolder.value())
+                                && EnigmaticHandler.getCurio(event.getEntity(), itemHolder.value()) != event.getStack()) {
                             event.setEquipResult(TriState.FALSE);
                             return;
                         }

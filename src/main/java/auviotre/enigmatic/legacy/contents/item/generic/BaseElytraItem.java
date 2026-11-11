@@ -110,7 +110,10 @@ public abstract class BaseElytraItem extends BaseCurioItem {
 
     @Override
     public boolean canEquip(SlotContext context, ItemStack stack) {
-        return super.canEquip(context, stack) && getElytra(context.entity()).isEmpty();
+        // 26.1.2-port: was "... && getElytra(context.entity()).isEmpty()". The worn elytra may be this very stack,
+        // see BaseCurioItem.canEquip.
+        ItemStack worn = getElytra(context.entity());
+        return super.canEquip(context, stack) && (worn.isEmpty() || worn == stack);
     }
 
     @Override

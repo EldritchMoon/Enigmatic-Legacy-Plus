@@ -22,9 +22,14 @@ public class BaseCurioItem extends BaseItem implements ICurioItem {
         return true;
     }
 
+    // 26.1.2-port: "not already wearing one" must not count the stack that is being asked about. Curios 15 asks
+    // canEquip() again for every worn curio when the player joins, while that curio is still in its slot; the old
+    // check then found the curio itself and Curios handed it back to the inventory. Was:
+    // !EnigmaticHandler.hasCurio(context.entity(), this) && ICurioItem.super.canEquip(context, stack)
     @Override
     public boolean canEquip(SlotContext context, ItemStack stack) {
-        return !EnigmaticHandler.hasCurio(context.entity(), this) && ICurioItem.super.canEquip(context, stack);
+        boolean wearingAnother = EnigmaticHandler.hasCurio(context.entity(), this) && EnigmaticHandler.getCurio(context.entity(), this) != stack;
+        return !wearingAnother && ICurioItem.super.canEquip(context, stack);
     }
 
     // 26.1.2-port: Curios 15 takes a curio's attribute modifiers from this method and no longer reaches
