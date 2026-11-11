@@ -2,21 +2,11 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
-        "B": {
-            "item": "minecraft:coal"
-        },
-        "C": {
-            "item": "minecraft:copper_ingot"
-        },
-        "F": {
-            "item": "minecraft:blast_furnace"
-        },
-        "I": {
-            "item": "minecraft:iron_pickaxe"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:iron_ring"
-        }
+        "B": "minecraft:coal",
+        "C": "minecraft:copper_ingot",
+        "F": "minecraft:blast_furnace",
+        "I": "minecraft:iron_pickaxe",
+        "X": "enigmaticlegacyplus:iron_ring"
     },
     "pattern": [
         "CIC",

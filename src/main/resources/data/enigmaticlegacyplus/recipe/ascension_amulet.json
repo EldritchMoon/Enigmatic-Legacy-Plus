@@ -2,24 +2,12 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
-        "A": {
-            "item": "minecraft:amethyst_shard"
-        },
-        "B": {
-            "item": "minecraft:dragon_breath"
-        },
-        "D": {
-            "item": "enigmaticlegacyplus:astral_dust"
-        },
-        "E": {
-            "item": "enigmaticlegacyplus:starlight_ingot"
-        },
-        "V": {
-            "item": "enigmaticlegacyplus:cosmic_heart"
-        },
-        "X": {
-            "tag": "enigmaticlegacyplus:enigmatic_amulets"
-        }
+        "A": "minecraft:amethyst_shard",
+        "B": "minecraft:dragon_breath",
+        "D": "enigmaticlegacyplus:astral_dust",
+        "E": "enigmaticlegacyplus:starlight_ingot",
+        "V": "enigmaticlegacyplus:cosmic_heart",
+        "X": "#enigmaticlegacyplus:enigmatic_amulets"
     },
     "pattern": [
         "ADA",

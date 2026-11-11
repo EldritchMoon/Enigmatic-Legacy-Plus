@@ -2,21 +2,11 @@
     "type": "enigmaticlegacyplus:cursed_shaped",
     "category": "equipment",
     "key": {
-        "A": {
-            "item": "enigmaticlegacyplus:sacred_crystal"
-        },
-        "G": {
-            "item": "minecraft:glowstone_dust"
-        },
-        "I": {
-            "item": "enigmaticlegacyplus:ichor_droplet"
-        },
-        "Q": {
-            "item": "minecraft:quartz"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:enchantment_transposer"
-        }
+        "A": "enigmaticlegacyplus:sacred_crystal",
+        "G": "minecraft:glowstone_dust",
+        "I": "enigmaticlegacyplus:ichor_droplet",
+        "Q": "minecraft:quartz",
+        "X": "enigmaticlegacyplus:enchantment_transposer"
     },
     "pattern": [
         "GIG",

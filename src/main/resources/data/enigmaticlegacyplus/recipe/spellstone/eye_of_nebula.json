@@ -2,27 +2,13 @@
     "type": "enigmaticlegacyplus:spellstone_table",
     "debris_count": 7,
     "ingredients": [
-        {
-            "item": "enigmaticlegacyplus:ender_rod"
-        },
-        {
-            "item": "minecraft:chorus_fruit"
-        },
-        {
-            "item": "minecraft:end_stone_bricks"
-        },
-        {
-            "item": "minecraft:ender_eye"
-        },
-        {
-            "item": "minecraft:end_stone_bricks"
-        },
-        {
-            "item": "minecraft:chorus_fruit"
-        },
-        {
-            "item": "enigmaticlegacyplus:ender_rod"
-        }
+        "enigmaticlegacyplus:ender_rod",
+        "minecraft:chorus_fruit",
+        "minecraft:end_stone_bricks",
+        "minecraft:ender_eye",
+        "minecraft:end_stone_bricks",
+        "minecraft:chorus_fruit",
+        "enigmaticlegacyplus:ender_rod"
     ],
     "result": {
         "count": 1,

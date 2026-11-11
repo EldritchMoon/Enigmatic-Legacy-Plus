@@ -2,24 +2,12 @@
     "type": "enigmaticlegacyplus:cursed_shaped",
     "category": "misc",
     "key": {
-        "E": {
-            "item": "enigmaticlegacyplus:evil_essence"
-        },
-        "L": {
-            "item": "minecraft:lava_bucket"
-        },
-        "P": {
-            "item": "enigmaticlegacyplus:infernal_cinder"
-        },
-        "S": {
-            "item": "minecraft:stone"
-        },
-        "T": {
-            "item": "enigmaticlegacyplus:twisted_heart"
-        },
-        "X": {
-            "item": "minecraft:nether_star"
-        }
+        "E": "enigmaticlegacyplus:evil_essence",
+        "L": "minecraft:lava_bucket",
+        "P": "enigmaticlegacyplus:infernal_cinder",
+        "S": "minecraft:stone",
+        "T": "enigmaticlegacyplus:twisted_heart",
+        "X": "minecraft:nether_star"
     },
     "pattern": [
         "LTL",

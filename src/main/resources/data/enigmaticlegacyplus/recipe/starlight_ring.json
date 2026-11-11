@@ -2,21 +2,11 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
-        "A": {
-            "item": "enigmaticlegacyplus:astral_dust"
-        },
-        "B": {
-            "item": "minecraft:beacon"
-        },
-        "P": {
-            "item": "enigmaticlegacyplus:starlight_particle"
-        },
-        "S": {
-            "item": "enigmaticlegacyplus:starlight_ingot"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:quartz_ring"
-        }
+        "A": "enigmaticlegacyplus:astral_dust",
+        "B": "minecraft:beacon",
+        "P": "enigmaticlegacyplus:starlight_particle",
+        "S": "enigmaticlegacyplus:starlight_ingot",
+        "X": "enigmaticlegacyplus:quartz_ring"
     },
     "pattern": [
         "PPP",

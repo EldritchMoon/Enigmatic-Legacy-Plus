@@ -2,27 +2,13 @@
     "type": "enigmaticlegacyplus:spellstone_table",
     "debris_count": 8,
     "ingredients": [
-        {
-            "item": "enigmaticlegacyplus:starlight_particle"
-        },
-        {
-            "item": "minecraft:phantom_membrane"
-        },
-        {
-            "item": "minecraft:glowstone"
-        },
-        {
-            "item": "enigmaticlegacyplus:quartz_ring"
-        },
-        {
-            "item": "minecraft:glowstone"
-        },
-        {
-            "item": "minecraft:phantom_membrane"
-        },
-        {
-            "item": "enigmaticlegacyplus:starlight_particle"
-        }
+        "enigmaticlegacyplus:starlight_particle",
+        "minecraft:phantom_membrane",
+        "minecraft:glowstone",
+        "enigmaticlegacyplus:quartz_ring",
+        "minecraft:glowstone",
+        "minecraft:phantom_membrane",
+        "enigmaticlegacyplus:starlight_particle"
     ],
     "result": {
         "count": 1,

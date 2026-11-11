@@ -2,15 +2,9 @@
     "type": "minecraft:crafting_shaped",
     "category": "misc",
     "key": {
-        "A": {
-            "item": "enigmaticlegacyplus:astral_dust"
-        },
-        "B": {
-            "item": "minecraft:blaze_rod"
-        },
-        "X": {
-            "item": "minecraft:ender_eye"
-        }
+        "A": "enigmaticlegacyplus:astral_dust",
+        "B": "minecraft:blaze_rod",
+        "X": "minecraft:ender_eye"
     },
     "pattern": [
         "  B",

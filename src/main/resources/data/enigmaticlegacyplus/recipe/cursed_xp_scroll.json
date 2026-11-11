@@ -2,21 +2,11 @@
     "type": "enigmaticlegacyplus:cursed_shaped",
     "category": "equipment",
     "key": {
-        "B": {
-            "item": "enigmaticlegacyplus:evil_essence"
-        },
-        "E": {
-            "item": "minecraft:emerald_block"
-        },
-        "G": {
-            "item": "minecraft:experience_bottle"
-        },
-        "T": {
-            "item": "enigmaticlegacyplus:darkest_scroll"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:twisted_heart"
-        }
+        "B": "enigmaticlegacyplus:evil_essence",
+        "E": "minecraft:emerald_block",
+        "G": "minecraft:experience_bottle",
+        "T": "enigmaticlegacyplus:darkest_scroll",
+        "X": "enigmaticlegacyplus:twisted_heart"
     },
     "pattern": [
         "GXG",

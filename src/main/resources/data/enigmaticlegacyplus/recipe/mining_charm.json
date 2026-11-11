@@ -2,24 +2,12 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
-        "A": {
-            "item": "minecraft:glowstone_dust"
-        },
-        "D": {
-            "item": "minecraft:diamond"
-        },
-        "G": {
-            "item": "minecraft:gold_ingot"
-        },
-        "I": {
-            "item": "minecraft:iron_nugget"
-        },
-        "T": {
-            "item": "minecraft:ghast_tear"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:earth_heart"
-        }
+        "A": "minecraft:glowstone_dust",
+        "D": "minecraft:diamond",
+        "G": "minecraft:gold_ingot",
+        "I": "minecraft:iron_nugget",
+        "T": "minecraft:ghast_tear",
+        "X": "enigmaticlegacyplus:earth_heart"
     },
     "pattern": [
         "IDI",

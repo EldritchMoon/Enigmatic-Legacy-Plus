@@ -2,24 +2,12 @@
     "type": "enigmaticlegacyplus:shapeless_no_remain",
     "category": "misc",
     "ingredients": [
-        {
-            "item": "minecraft:dragon_breath"
-        },
-        {
-            "item": "minecraft:glistering_melon_slice"
-        },
-        {
-            "tag": "c:gems/prismarine"
-        },
-        {
-            "item": "minecraft:phantom_membrane"
-        },
-        {
-            "item": "minecraft:blaze_powder"
-        },
-        {
-            "item": "minecraft:ghast_tear"
-        }
+        "minecraft:dragon_breath",
+        "minecraft:glistering_melon_slice",
+        "#c:gems/prismarine",
+        "minecraft:phantom_membrane",
+        "minecraft:blaze_powder",
+        "minecraft:ghast_tear"
     ],
     "result": {
         "count": 1,

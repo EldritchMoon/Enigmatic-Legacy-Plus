@@ -3,9 +3,7 @@
     "category": "misc",
     "cookingtime": 200,
     "experience": 0.8,
-    "ingredient": {
-        "item": "enigmaticlegacyplus:raw_etherium"
-    },
+    "ingredient": "enigmaticlegacyplus:raw_etherium",
     "result": {
         "count": 1,
         "id": "enigmaticlegacyplus:etherium_ingot"

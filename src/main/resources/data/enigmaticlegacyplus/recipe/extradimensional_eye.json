@@ -2,21 +2,11 @@
     "type": "minecraft:crafting_shaped",
     "category": "misc",
     "key": {
-        "B": {
-            "item": "minecraft:blaze_powder"
-        },
-        "G": {
-            "item": "minecraft:gold_ingot"
-        },
-        "N": {
-            "item": "minecraft:gold_nugget"
-        },
-        "P": {
-            "item": "minecraft:phantom_membrane"
-        },
-        "X": {
-            "item": "minecraft:ender_eye"
-        }
+        "B": "minecraft:blaze_powder",
+        "G": "minecraft:gold_ingot",
+        "N": "minecraft:gold_nugget",
+        "P": "minecraft:phantom_membrane",
+        "X": "minecraft:ender_eye"
     },
     "pattern": [
         " P ",

@@ -2,24 +2,12 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
-        "A": {
-            "item": "minecraft:gold_ingot"
-        },
-        "N": {
-            "item": "minecraft:netherite_ingot"
-        },
-        "P": {
-            "item": "enigmaticlegacyplus:infernal_cinder"
-        },
-        "R": {
-            "item": "minecraft:blaze_rod"
-        },
-        "V": {
-            "item": "minecraft:wither_skeleton_skull"
-        },
-        "X": {
-            "item": "minecraft:diamond_axe"
-        }
+        "A": "minecraft:gold_ingot",
+        "N": "minecraft:netherite_ingot",
+        "P": "enigmaticlegacyplus:infernal_cinder",
+        "R": "minecraft:blaze_rod",
+        "V": "minecraft:wither_skeleton_skull",
+        "X": "minecraft:diamond_axe"
     },
     "pattern": [
         "AVN",

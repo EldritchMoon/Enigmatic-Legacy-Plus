@@ -2,21 +2,11 @@
     "type": "enigmaticlegacyplus:cursed_shaped",
     "category": "equipment",
     "key": {
-        "E": {
-            "item": "minecraft:emerald"
-        },
-        "P": {
-            "item": "minecraft:blaze_powder"
-        },
-        "T": {
-            "item": "minecraft:crying_obsidian"
-        },
-        "V": {
-            "item": "enigmaticlegacyplus:evil_essence"
-        },
-        "X": {
-            "item": "minecraft:ender_pearl"
-        }
+        "E": "minecraft:emerald",
+        "P": "minecraft:blaze_powder",
+        "T": "minecraft:crying_obsidian",
+        "V": "enigmaticlegacyplus:evil_essence",
+        "X": "minecraft:ender_pearl"
     },
     "pattern": [
         " E ",

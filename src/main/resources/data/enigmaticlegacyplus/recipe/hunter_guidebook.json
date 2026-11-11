@@ -2,21 +2,11 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
-        "B": {
-            "item": "minecraft:bone"
-        },
-        "E": {
-            "item": "minecraft:ender_pearl"
-        },
-        "G": {
-            "item": "minecraft:gold_nugget"
-        },
-        "L": {
-            "item": "minecraft:leather"
-        },
-        "X": {
-            "item": "minecraft:book"
-        }
+        "B": "minecraft:bone",
+        "E": "minecraft:ender_pearl",
+        "G": "minecraft:gold_nugget",
+        "L": "minecraft:leather",
+        "X": "minecraft:book"
     },
     "pattern": [
         "BE ",

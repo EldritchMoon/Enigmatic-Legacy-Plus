@@ -3,15 +3,9 @@
     "category": "misc",
     "group": "starlight_ingot",
     "key": {
-        "I": {
-            "item": "enigmaticlegacyplus:etherium_ingot"
-        },
-        "N": {
-            "item": "enigmaticlegacyplus:etherium_nugget"
-        },
-        "S": {
-            "item": "enigmaticlegacyplus:starlight_particle"
-        }
+        "I": "enigmaticlegacyplus:etherium_ingot",
+        "N": "enigmaticlegacyplus:etherium_nugget",
+        "S": "enigmaticlegacyplus:starlight_particle"
     },
     "pattern": [
         "SSS",

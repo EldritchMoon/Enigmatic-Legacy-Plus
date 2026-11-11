@@ -2,21 +2,11 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
-        "D": {
-            "item": "minecraft:diamond"
-        },
-        "G": {
-            "item": "minecraft:gold_ingot"
-        },
-        "I": {
-            "item": "minecraft:iron_ingot"
-        },
-        "R": {
-            "item": "minecraft:redstone"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:iron_ring"
-        }
+        "D": "minecraft:diamond",
+        "G": "minecraft:gold_ingot",
+        "I": "minecraft:iron_ingot",
+        "R": "minecraft:redstone",
+        "X": "enigmaticlegacyplus:iron_ring"
     },
     "pattern": [
         " D ",

@@ -2,15 +2,9 @@
     "type": "minecraft:crafting_shaped",
     "category": "misc",
     "key": {
-        "A": {
-            "item": "minecraft:beetroot"
-        },
-        "G": {
-            "item": "minecraft:ghast_tear"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:ichor_droplet"
-        }
+        "A": "minecraft:beetroot",
+        "G": "minecraft:ghast_tear",
+        "X": "enigmaticlegacyplus:ichor_droplet"
     },
     "pattern": [
         "AXA",

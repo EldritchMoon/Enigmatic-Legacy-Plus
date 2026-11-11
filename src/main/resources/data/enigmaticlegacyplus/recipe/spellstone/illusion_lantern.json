@@ -2,27 +2,13 @@
     "type": "enigmaticlegacyplus:spellstone_table",
     "debris_count": 10,
     "ingredients": [
-        {
-            "item": "minecraft:soul_soil"
-        },
-        {
-            "item": "minecraft:cyan_stained_glass"
-        },
-        {
-            "item": "minecraft:netherite_scrap"
-        },
-        {
-            "item": "minecraft:blaze_powder"
-        },
-        {
-            "item": "minecraft:netherite_scrap"
-        },
-        {
-            "item": "minecraft:cyan_stained_glass"
-        },
-        {
-            "item": "minecraft:soul_soil"
-        }
+        "minecraft:soul_soil",
+        "minecraft:cyan_stained_glass",
+        "minecraft:netherite_scrap",
+        "minecraft:blaze_powder",
+        "minecraft:netherite_scrap",
+        "minecraft:cyan_stained_glass",
+        "minecraft:soul_soil"
     ],
     "result": {
         "count": 1,

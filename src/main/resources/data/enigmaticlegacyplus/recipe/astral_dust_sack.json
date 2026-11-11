@@ -2,9 +2,7 @@
     "type": "minecraft:crafting_shaped",
     "category": "building",
     "key": {
-        "#": {
-            "item": "enigmaticlegacyplus:astral_dust"
-        }
+        "#": "enigmaticlegacyplus:astral_dust"
     },
     "pattern": [
         "###",

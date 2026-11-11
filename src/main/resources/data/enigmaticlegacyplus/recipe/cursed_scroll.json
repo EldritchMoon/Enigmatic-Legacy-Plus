@@ -2,27 +2,13 @@
     "type": "enigmaticlegacyplus:cursed_shaped",
     "category": "equipment",
     "key": {
-        "B": {
-            "item": "minecraft:ink_sac"
-        },
-        "C": {
-            "item": "enigmaticlegacyplus:infernal_cinder"
-        },
-        "E": {
-            "item": "minecraft:enchanted_book"
-        },
-        "R": {
-            "item": "minecraft:redstone"
-        },
-        "T": {
-            "item": "enigmaticlegacyplus:darkest_scroll"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:twisted_heart"
-        },
-        "Y": {
-            "item": "minecraft:feather"
-        }
+        "B": "minecraft:ink_sac",
+        "C": "enigmaticlegacyplus:infernal_cinder",
+        "E": "minecraft:enchanted_book",
+        "R": "minecraft:redstone",
+        "T": "enigmaticlegacyplus:darkest_scroll",
+        "X": "enigmaticlegacyplus:twisted_heart",
+        "Y": "minecraft:feather"
     },
     "pattern": [
         "CXC",

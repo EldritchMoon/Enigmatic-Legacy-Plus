@@ -2,9 +2,7 @@
     "type": "minecraft:crafting_shaped",
     "category": "building",
     "key": {
-        "#": {
-            "item": "enigmaticlegacyplus:starlight_ingot"
-        }
+        "#": "enigmaticlegacyplus:starlight_ingot"
     },
     "pattern": [
         "###",

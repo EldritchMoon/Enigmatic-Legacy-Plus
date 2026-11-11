@@ -2,27 +2,13 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
-        "B": {
-            "item": "minecraft:ink_sac"
-        },
-        "E": {
-            "item": "minecraft:phantom_membrane"
-        },
-        "I": {
-            "item": "minecraft:feather"
-        },
-        "R": {
-            "item": "enigmaticlegacyplus:recall_potion"
-        },
-        "S": {
-            "item": "minecraft:soul_lantern"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:blank_scroll"
-        },
-        "Y": {
-            "item": "minecraft:ender_eye"
-        }
+        "B": "minecraft:ink_sac",
+        "E": "minecraft:phantom_membrane",
+        "I": "minecraft:feather",
+        "R": "enigmaticlegacyplus:recall_potion",
+        "S": "minecraft:soul_lantern",
+        "X": "enigmaticlegacyplus:blank_scroll",
+        "Y": "minecraft:ender_eye"
     },
     "pattern": [
         "SYS",

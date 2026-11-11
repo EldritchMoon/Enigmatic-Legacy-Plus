@@ -2,27 +2,13 @@
     "type": "enigmaticlegacyplus:spellstone_table",
     "debris_count": 6,
     "ingredients": [
-        {
-            "item": "minecraft:dark_prismarine"
-        },
-        {
-            "item": "minecraft:prismarine_crystals"
-        },
-        {
-            "item": "minecraft:lapis_block"
-        },
-        {
-            "item": "minecraft:heart_of_the_sea"
-        },
-        {
-            "item": "minecraft:lapis_block"
-        },
-        {
-            "item": "minecraft:prismarine_crystals"
-        },
-        {
-            "item": "minecraft:dark_prismarine"
-        }
+        "minecraft:dark_prismarine",
+        "minecraft:prismarine_crystals",
+        "minecraft:lapis_block",
+        "minecraft:heart_of_the_sea",
+        "minecraft:lapis_block",
+        "minecraft:prismarine_crystals",
+        "minecraft:dark_prismarine"
     ],
     "result": {
         "count": 1,

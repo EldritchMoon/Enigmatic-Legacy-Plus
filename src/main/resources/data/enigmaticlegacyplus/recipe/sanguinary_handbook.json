@@ -2,24 +2,12 @@
     "type": "enigmaticlegacyplus:cursed_shaped",
     "category": "equipment",
     "key": {
-        "B": {
-            "item": "enigmaticlegacyplus:hunter_guidebook"
-        },
-        "C": {
-            "item": "enigmaticlegacyplus:infernal_cinder"
-        },
-        "D": {
-            "item": "minecraft:dragon_breath"
-        },
-        "G": {
-            "item": "minecraft:ghast_tear"
-        },
-        "S": {
-            "item": "minecraft:netherite_ingot"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:twisted_heart"
-        }
+        "B": "enigmaticlegacyplus:hunter_guidebook",
+        "C": "enigmaticlegacyplus:infernal_cinder",
+        "D": "minecraft:dragon_breath",
+        "G": "minecraft:ghast_tear",
+        "S": "minecraft:netherite_ingot",
+        "X": "enigmaticlegacyplus:twisted_heart"
     },
     "pattern": [
         "CSC",

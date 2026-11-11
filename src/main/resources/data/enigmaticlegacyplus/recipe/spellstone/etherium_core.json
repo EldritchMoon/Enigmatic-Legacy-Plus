@@ -2,27 +2,13 @@
     "type": "enigmaticlegacyplus:spellstone_table",
     "debris_count": 9,
     "ingredients": [
-        {
-            "item": "enigmaticlegacyplus:ender_rod"
-        },
-        {
-            "item": "enigmaticlegacyplus:etherium_block"
-        },
-        {
-            "item": "enigmaticlegacyplus:ender_rod"
-        },
-        {
-            "item": "enigmaticlegacyplus:earth_heart"
-        },
-        {
-            "item": "enigmaticlegacyplus:ender_rod"
-        },
-        {
-            "item": "enigmaticlegacyplus:etherium_block"
-        },
-        {
-            "item": "enigmaticlegacyplus:ender_rod"
-        }
+        "enigmaticlegacyplus:ender_rod",
+        "enigmaticlegacyplus:etherium_block",
+        "enigmaticlegacyplus:ender_rod",
+        "enigmaticlegacyplus:earth_heart",
+        "enigmaticlegacyplus:ender_rod",
+        "enigmaticlegacyplus:etherium_block",
+        "enigmaticlegacyplus:ender_rod"
     ],
     "result": {
         "count": 1,

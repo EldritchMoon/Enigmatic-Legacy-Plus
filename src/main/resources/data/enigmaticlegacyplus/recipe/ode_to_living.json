@@ -2,27 +2,13 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
-        "A": {
-            "item": "enigmaticlegacyplus:animal_guidebook"
-        },
-        "B": {
-            "item": "enigmaticlegacyplus:hunter_guidebook"
-        },
-        "E": {
-            "item": "minecraft:experience_bottle"
-        },
-        "G": {
-            "item": "minecraft:gold_ingot"
-        },
-        "I": {
-            "item": "enigmaticlegacyplus:ichor_droplet"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:earth_heart"
-        },
-        "Y": {
-            "item": "minecraft:golden_apple"
-        }
+        "A": "enigmaticlegacyplus:animal_guidebook",
+        "B": "enigmaticlegacyplus:hunter_guidebook",
+        "E": "minecraft:experience_bottle",
+        "G": "minecraft:gold_ingot",
+        "I": "enigmaticlegacyplus:ichor_droplet",
+        "X": "enigmaticlegacyplus:earth_heart",
+        "Y": "minecraft:golden_apple"
     },
     "pattern": [
         "GEG",

@@ -2,24 +2,12 @@
     "type": "enigmaticlegacyplus:cursed_shaped",
     "category": "equipment",
     "key": {
-        "N": {
-            "item": "minecraft:netherite_ingot"
-        },
-        "O": {
-            "item": "minecraft:obsidian"
-        },
-        "P": {
-            "item": "enigmaticlegacyplus:infernal_cinder"
-        },
-        "R": {
-            "item": "minecraft:blaze_rod"
-        },
-        "U": {
-            "item": "minecraft:shield"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:twisted_heart"
-        }
+        "N": "minecraft:netherite_ingot",
+        "O": "minecraft:obsidian",
+        "P": "enigmaticlegacyplus:infernal_cinder",
+        "R": "minecraft:blaze_rod",
+        "U": "minecraft:shield",
+        "X": "enigmaticlegacyplus:twisted_heart"
     },
     "pattern": [
         "PNP",

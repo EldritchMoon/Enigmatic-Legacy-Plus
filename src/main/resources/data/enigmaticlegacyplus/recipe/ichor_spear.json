@@ -2,15 +2,9 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
-        "B": {
-            "item": "minecraft:blaze_rod"
-        },
-        "G": {
-            "item": "minecraft:gold_ingot"
-        },
-        "I": {
-            "item": "enigmaticlegacyplus:ichor_droplet"
-        }
+        "B": "minecraft:blaze_rod",
+        "G": "minecraft:gold_ingot",
+        "I": "enigmaticlegacyplus:ichor_droplet"
     },
     "pattern": [
         " IG",

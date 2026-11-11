@@ -2,21 +2,11 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
-        "E": {
-            "item": "enigmaticlegacyplus:etherium_ingot"
-        },
-        "F": {
-            "item": "enigmaticlegacyplus:forger_gem"
-        },
-        "H": {
-            "item": "enigmaticlegacyplus:etherium_hammer"
-        },
-        "R": {
-            "item": "enigmaticlegacyplus:ender_rod"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:earth_heart"
-        }
+        "E": "enigmaticlegacyplus:etherium_ingot",
+        "F": "enigmaticlegacyplus:forger_gem",
+        "H": "enigmaticlegacyplus:etherium_hammer",
+        "R": "enigmaticlegacyplus:ender_rod",
+        "X": "enigmaticlegacyplus:earth_heart"
     },
     "pattern": [
         " F ",

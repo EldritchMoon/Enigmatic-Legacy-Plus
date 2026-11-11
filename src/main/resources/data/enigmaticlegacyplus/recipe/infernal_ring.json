@@ -2,21 +2,11 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
-        "B": {
-            "item": "minecraft:blaze_powder"
-        },
-        "C": {
-            "item": "enigmaticlegacyplus:infernal_cinder"
-        },
-        "G": {
-            "item": "minecraft:ghast_tear"
-        },
-        "N": {
-            "item": "minecraft:netherite_scrap"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:iron_ring"
-        }
+        "B": "minecraft:blaze_powder",
+        "C": "enigmaticlegacyplus:infernal_cinder",
+        "G": "minecraft:ghast_tear",
+        "N": "minecraft:netherite_scrap",
+        "X": "enigmaticlegacyplus:iron_ring"
     },
     "pattern": [
         "CNC",

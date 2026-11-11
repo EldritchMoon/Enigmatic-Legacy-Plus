@@ -2,21 +2,11 @@
     "type": "enigmaticlegacyplus:cursed_shaped",
     "category": "misc",
     "key": {
-        "A": {
-            "item": "enigmaticlegacyplus:sacred_crystal"
-        },
-        "B": {
-            "item": "minecraft:glowstone_dust"
-        },
-        "I": {
-            "item": "enigmaticlegacyplus:ichor_droplet"
-        },
-        "P": {
-            "item": "enigmaticlegacyplus:pure_heart"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:cursed_stone"
-        }
+        "A": "enigmaticlegacyplus:sacred_crystal",
+        "B": "minecraft:glowstone_dust",
+        "I": "enigmaticlegacyplus:ichor_droplet",
+        "P": "enigmaticlegacyplus:pure_heart",
+        "X": "enigmaticlegacyplus:cursed_stone"
     },
     "pattern": [
         "IAI",

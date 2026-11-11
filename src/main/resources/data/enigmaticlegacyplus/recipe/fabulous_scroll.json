@@ -2,21 +2,11 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
-        "A": {
-            "item": "enigmaticlegacyplus:astral_dust"
-        },
-        "D": {
-            "item": "minecraft:dragon_breath"
-        },
-        "I": {
-            "item": "enigmaticlegacyplus:etherium_ingot"
-        },
-        "U": {
-            "item": "minecraft:elytra"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:heaven_scroll"
-        }
+        "A": "enigmaticlegacyplus:astral_dust",
+        "D": "minecraft:dragon_breath",
+        "I": "enigmaticlegacyplus:etherium_ingot",
+        "U": "minecraft:elytra",
+        "X": "enigmaticlegacyplus:heaven_scroll"
     },
     "pattern": [
         "IAI",

@@ -2,15 +2,9 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
-        "D": {
-            "item": "minecraft:diamond"
-        },
-        "R": {
-            "item": "enigmaticlegacyplus:ender_rod"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:etherium_ingot"
-        }
+        "D": "minecraft:diamond",
+        "R": "enigmaticlegacyplus:ender_rod",
+        "X": "enigmaticlegacyplus:etherium_ingot"
     },
     "pattern": [
         " X ",

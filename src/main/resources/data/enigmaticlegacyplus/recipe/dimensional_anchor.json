@@ -2,21 +2,11 @@
     "type": "minecraft:crafting_shaped",
     "category": "misc",
     "key": {
-        "E": {
-            "item": "minecraft:ender_eye"
-        },
-        "I": {
-            "item": "enigmaticlegacyplus:etherium_ingot"
-        },
-        "R": {
-            "item": "minecraft:respawn_anchor"
-        },
-        "S": {
-            "item": "minecraft:end_stone"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:eye_of_nebula"
-        }
+        "E": "minecraft:ender_eye",
+        "I": "enigmaticlegacyplus:etherium_ingot",
+        "R": "minecraft:respawn_anchor",
+        "S": "minecraft:end_stone",
+        "X": "enigmaticlegacyplus:eye_of_nebula"
     },
     "pattern": [
         " E ",

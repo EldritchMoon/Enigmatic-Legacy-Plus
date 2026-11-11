@@ -2,24 +2,12 @@
     "type": "enigmaticlegacyplus:cursed_shaped",
     "category": "equipment",
     "key": {
-        "B": {
-            "item": "minecraft:wither_rose"
-        },
-        "E": {
-            "item": "minecraft:ender_eye"
-        },
-        "M": {
-            "item": "minecraft:phantom_membrane"
-        },
-        "T": {
-            "item": "enigmaticlegacyplus:darkest_scroll"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:twisted_heart"
-        },
-        "Y": {
-            "item": "minecraft:feather"
-        }
+        "B": "minecraft:wither_rose",
+        "E": "minecraft:ender_eye",
+        "M": "minecraft:phantom_membrane",
+        "T": "enigmaticlegacyplus:darkest_scroll",
+        "X": "enigmaticlegacyplus:twisted_heart",
+        "Y": "minecraft:feather"
     },
     "pattern": [
         "MXM",

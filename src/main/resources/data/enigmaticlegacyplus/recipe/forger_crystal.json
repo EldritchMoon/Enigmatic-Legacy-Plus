@@ -2,18 +2,10 @@
     "type": "enigmaticlegacyplus:cursed_shaped",
     "category": "equipment",
     "key": {
-        "E": {
-            "item": "minecraft:gold_ingot"
-        },
-        "P": {
-            "item": "minecraft:totem_of_undying"
-        },
-        "Q": {
-            "item": "enigmaticlegacyplus:sacred_crystal"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:forger_gem"
-        }
+        "E": "minecraft:gold_ingot",
+        "P": "minecraft:totem_of_undying",
+        "Q": "enigmaticlegacyplus:sacred_crystal",
+        "X": "enigmaticlegacyplus:forger_gem"
     },
     "pattern": [
         " Q ",

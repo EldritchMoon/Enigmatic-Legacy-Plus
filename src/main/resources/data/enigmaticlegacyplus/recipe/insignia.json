@@ -2,21 +2,11 @@
     "type": "minecraft:crafting_shaped",
     "category": "misc",
     "key": {
-        "E": {
-            "item": "minecraft:emerald"
-        },
-        "G": {
-            "item": "minecraft:gold_ingot"
-        },
-        "N": {
-            "item": "minecraft:name_tag"
-        },
-        "P": {
-            "item": "minecraft:prismarine_crystals"
-        },
-        "R": {
-            "item": "minecraft:ender_eye"
-        }
+        "E": "minecraft:emerald",
+        "G": "minecraft:gold_ingot",
+        "N": "minecraft:name_tag",
+        "P": "minecraft:prismarine_crystals",
+        "R": "minecraft:ender_eye"
     },
     "pattern": [
         " R ",

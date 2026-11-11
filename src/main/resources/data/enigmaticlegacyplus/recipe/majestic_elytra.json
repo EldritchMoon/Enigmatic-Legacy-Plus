@@ -2,24 +2,12 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
-        "A": {
-            "item": "enigmaticlegacyplus:angel_blessing"
-        },
-        "B": {
-            "item": "minecraft:dragon_breath"
-        },
-        "D": {
-            "item": "enigmaticlegacyplus:astral_dust"
-        },
-        "E": {
-            "item": "enigmaticlegacyplus:etherium_ingot"
-        },
-        "V": {
-            "item": "enigmaticlegacyplus:eye_of_nebula"
-        },
-        "X": {
-            "item": "minecraft:elytra"
-        }
+        "A": "enigmaticlegacyplus:angel_blessing",
+        "B": "minecraft:dragon_breath",
+        "D": "enigmaticlegacyplus:astral_dust",
+        "E": "enigmaticlegacyplus:etherium_ingot",
+        "V": "enigmaticlegacyplus:eye_of_nebula",
+        "X": "minecraft:elytra"
     },
     "pattern": [
         "BAB",

@@ -2,15 +2,9 @@
     "type": "minecraft:crafting_shaped",
     "category": "misc",
     "key": {
-        "G": {
-            "item": "enigmaticlegacyplus:earth_heart_fragment"
-        },
-        "N": {
-            "item": "minecraft:gold_nugget"
-        },
-        "X": {
-            "tag": "enigmaticlegacyplus:enigmatic_amulets"
-        }
+        "G": "enigmaticlegacyplus:earth_heart_fragment",
+        "N": "minecraft:gold_nugget",
+        "X": "#enigmaticlegacyplus:enigmatic_amulets"
     },
     "pattern": [
         " N ",

@@ -2,27 +2,13 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
-        "B": {
-            "item": "minecraft:ink_sac"
-        },
-        "E": {
-            "item": "minecraft:sugar_cane"
-        },
-        "I": {
-            "item": "minecraft:feather"
-        },
-        "L": {
-            "item": "minecraft:sugar"
-        },
-        "M": {
-            "item": "minecraft:rabbit_foot"
-        },
-        "W": {
-            "item": "minecraft:lapis_lazuli"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:blank_scroll"
-        }
+        "B": "minecraft:ink_sac",
+        "E": "minecraft:sugar_cane",
+        "I": "minecraft:feather",
+        "L": "minecraft:sugar",
+        "M": "minecraft:rabbit_foot",
+        "W": "minecraft:lapis_lazuli",
+        "X": "enigmaticlegacyplus:blank_scroll"
     },
     "pattern": [
         "WLW",

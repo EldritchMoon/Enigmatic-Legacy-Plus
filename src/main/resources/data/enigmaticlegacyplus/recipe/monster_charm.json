@@ -2,21 +2,11 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
-        "A": {
-            "item": "minecraft:experience_bottle"
-        },
-        "G": {
-            "item": "minecraft:blaze_powder"
-        },
-        "L": {
-            "item": "minecraft:soul_lantern"
-        },
-        "T": {
-            "item": "minecraft:netherite_ingot"
-        },
-        "X": {
-            "item": "minecraft:skeleton_skull"
-        }
+        "A": "minecraft:experience_bottle",
+        "G": "minecraft:blaze_powder",
+        "L": "minecraft:soul_lantern",
+        "T": "minecraft:netherite_ingot",
+        "X": "minecraft:skeleton_skull"
     },
     "pattern": [
         " L ",

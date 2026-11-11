@@ -2,21 +2,11 @@
     "type": "enigmaticlegacyplus:cursed_shaped",
     "category": "equipment",
     "key": {
-        "E": {
-            "item": "minecraft:ender_eye"
-        },
-        "G": {
-            "item": "minecraft:ghast_tear"
-        },
-        "O": {
-            "item": "minecraft:obsidian"
-        },
-        "S": {
-            "item": "minecraft:stick"
-        },
-        "V": {
-            "item": "enigmaticlegacyplus:evil_essence"
-        }
+        "E": "minecraft:ender_eye",
+        "G": "minecraft:ghast_tear",
+        "O": "minecraft:obsidian",
+        "S": "minecraft:stick",
+        "V": "enigmaticlegacyplus:evil_essence"
     },
     "pattern": [
         "VOV",

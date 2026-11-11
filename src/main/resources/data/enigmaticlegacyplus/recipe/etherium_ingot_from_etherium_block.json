@@ -3,9 +3,7 @@
     "category": "misc",
     "group": "etherium_ingot",
     "ingredients": [
-        {
-            "item": "enigmaticlegacyplus:etherium_block"
-        }
+        "enigmaticlegacyplus:etherium_block"
     ],
     "result": {
         "count": 9,

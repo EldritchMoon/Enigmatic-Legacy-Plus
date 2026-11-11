@@ -2,9 +2,7 @@
     "type": "minecraft:crafting_shaped",
     "category": "building",
     "key": {
-        "S": {
-            "item": "enigmaticlegacyplus:astral_glass"
-        }
+        "S": "enigmaticlegacyplus:astral_glass"
     },
     "pattern": [
         "SS",

@@ -3,9 +3,7 @@
     "category": "misc",
     "cookingtime": 200,
     "experience": 0.8,
-    "ingredient": {
-        "item": "enigmaticlegacyplus:etherium_ore"
-    },
+    "ingredient": "enigmaticlegacyplus:etherium_ore",
     "result": {
         "count": 1,
         "id": "enigmaticlegacyplus:raw_etherium"

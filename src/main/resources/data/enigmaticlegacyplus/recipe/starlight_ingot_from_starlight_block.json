@@ -3,9 +3,7 @@
     "category": "misc",
     "group": "starlight_ingot",
     "ingredients": [
-        {
-            "item": "enigmaticlegacyplus:starlight_block"
-        }
+        "enigmaticlegacyplus:starlight_block"
     ],
     "result": {
         "count": 9,

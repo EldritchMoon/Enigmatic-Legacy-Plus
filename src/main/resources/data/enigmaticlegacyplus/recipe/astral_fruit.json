@@ -2,12 +2,8 @@
     "type": "minecraft:crafting_shaped",
     "category": "misc",
     "key": {
-        "A": {
-            "item": "enigmaticlegacyplus:astral_dust"
-        },
-        "X": {
-            "item": "minecraft:apple"
-        }
+        "A": "enigmaticlegacyplus:astral_dust",
+        "X": "minecraft:apple"
     },
     "pattern": [
         "AAA",

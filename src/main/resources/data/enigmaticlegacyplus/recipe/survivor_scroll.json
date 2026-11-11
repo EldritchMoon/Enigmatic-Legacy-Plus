@@ -2,27 +2,13 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
-        "B": {
-            "item": "minecraft:ink_sac"
-        },
-        "E": {
-            "item": "minecraft:gold_ingot"
-        },
-        "I": {
-            "item": "minecraft:feather"
-        },
-        "L": {
-            "item": "minecraft:leather"
-        },
-        "M": {
-            "item": "minecraft:campfire"
-        },
-        "W": {
-            "item": "minecraft:wheat"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:blank_scroll"
-        }
+        "B": "minecraft:ink_sac",
+        "E": "minecraft:gold_ingot",
+        "I": "minecraft:feather",
+        "L": "minecraft:leather",
+        "M": "minecraft:campfire",
+        "W": "minecraft:wheat",
+        "X": "enigmaticlegacyplus:blank_scroll"
     },
     "pattern": [
         "WLW",

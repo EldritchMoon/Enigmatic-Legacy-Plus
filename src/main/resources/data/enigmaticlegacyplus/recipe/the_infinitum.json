@@ -2,24 +2,12 @@
     "type": "enigmaticlegacyplus:cursed_shaped",
     "category": "equipment",
     "key": {
-        "A": {
-            "item": "enigmaticlegacyplus:abyssal_heart"
-        },
-        "C": {
-            "item": "enigmaticlegacyplus:cosmic_heart"
-        },
-        "E": {
-            "item": "enigmaticlegacyplus:evil_essence"
-        },
-        "I": {
-            "item": "minecraft:netherite_ingot"
-        },
-        "P": {
-            "item": "enigmaticlegacyplus:enchanter_pearl"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:the_twist"
-        }
+        "A": "enigmaticlegacyplus:abyssal_heart",
+        "C": "enigmaticlegacyplus:cosmic_heart",
+        "E": "enigmaticlegacyplus:evil_essence",
+        "I": "minecraft:netherite_ingot",
+        "P": "enigmaticlegacyplus:enchanter_pearl",
+        "X": "enigmaticlegacyplus:the_twist"
     },
     "pattern": [
         "CPC",

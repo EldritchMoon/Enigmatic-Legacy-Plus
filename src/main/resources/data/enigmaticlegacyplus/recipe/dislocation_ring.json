@@ -2,18 +2,10 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
-        "E": {
-            "item": "minecraft:ender_eye"
-        },
-        "G": {
-            "item": "minecraft:gold_ingot"
-        },
-        "L": {
-            "item": "minecraft:lapis_lazuli"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:magnet_ring"
-        }
+        "E": "minecraft:ender_eye",
+        "G": "minecraft:gold_ingot",
+        "L": "minecraft:lapis_lazuli",
+        "X": "enigmaticlegacyplus:magnet_ring"
     },
     "pattern": [
         "LEL",

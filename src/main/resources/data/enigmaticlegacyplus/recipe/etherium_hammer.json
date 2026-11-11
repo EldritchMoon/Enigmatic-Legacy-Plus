@@ -2,12 +2,8 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
-        "R": {
-            "item": "enigmaticlegacyplus:ender_rod"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:etherium_ingot"
-        }
+        "R": "enigmaticlegacyplus:ender_rod",
+        "X": "enigmaticlegacyplus:etherium_ingot"
     },
     "pattern": [
         "XXX",

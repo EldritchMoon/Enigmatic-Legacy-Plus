@@ -2,9 +2,7 @@
     "type": "minecraft:crafting_shaped",
     "category": "building",
     "key": {
-        "#": {
-            "item": "enigmaticlegacyplus:etherium_ingot"
-        }
+        "#": "enigmaticlegacyplus:etherium_ingot"
     },
     "pattern": [
         "###",

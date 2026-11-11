@@ -2,21 +2,11 @@
     "type": "enigmaticlegacyplus:cursed_shaped",
     "category": "equipment",
     "key": {
-        "E": {
-            "item": "minecraft:basalt"
-        },
-        "N": {
-            "item": "minecraft:netherite_scrap"
-        },
-        "P": {
-            "item": "enigmaticlegacyplus:pure_heart"
-        },
-        "Q": {
-            "item": "enigmaticlegacyplus:sacred_crystal"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:blazing_core"
-        }
+        "E": "minecraft:basalt",
+        "N": "minecraft:netherite_scrap",
+        "P": "enigmaticlegacyplus:pure_heart",
+        "Q": "enigmaticlegacyplus:sacred_crystal",
+        "X": "enigmaticlegacyplus:blazing_core"
     },
     "pattern": [
         "N N",

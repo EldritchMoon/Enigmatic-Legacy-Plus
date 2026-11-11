@@ -2,24 +2,12 @@
     "type": "enigmaticlegacyplus:cursed_shaped",
     "category": "equipment",
     "key": {
-        "C": {
-            "item": "enigmaticlegacyplus:infernal_cinder"
-        },
-        "G": {
-            "item": "minecraft:ghast_tear"
-        },
-        "P": {
-            "item": "minecraft:blaze_powder"
-        },
-        "S": {
-            "item": "minecraft:golden_sword"
-        },
-        "T": {
-            "item": "minecraft:netherite_ingot"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:twisted_heart"
-        }
+        "C": "enigmaticlegacyplus:infernal_cinder",
+        "G": "minecraft:ghast_tear",
+        "P": "minecraft:blaze_powder",
+        "S": "minecraft:golden_sword",
+        "T": "minecraft:netherite_ingot",
+        "X": "enigmaticlegacyplus:twisted_heart"
     },
     "pattern": [
         "PSP",

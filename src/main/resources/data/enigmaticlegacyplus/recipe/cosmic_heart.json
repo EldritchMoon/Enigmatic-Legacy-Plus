@@ -2,21 +2,11 @@
     "type": "minecraft:crafting_shaped",
     "category": "misc",
     "key": {
-        "A": {
-            "item": "enigmaticlegacyplus:astral_dust"
-        },
-        "H": {
-            "item": "minecraft:heart_of_the_sea"
-        },
-        "N": {
-            "item": "minecraft:nether_star"
-        },
-        "P": {
-            "item": "minecraft:blaze_powder"
-        },
-        "X": {
-            "item": "minecraft:ender_eye"
-        }
+        "A": "enigmaticlegacyplus:astral_dust",
+        "H": "minecraft:heart_of_the_sea",
+        "N": "minecraft:nether_star",
+        "P": "minecraft:blaze_powder",
+        "X": "minecraft:ender_eye"
     },
     "pattern": [
         "ANA",

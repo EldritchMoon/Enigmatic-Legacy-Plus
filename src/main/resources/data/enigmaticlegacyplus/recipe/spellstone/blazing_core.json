@@ -2,27 +2,13 @@
     "type": "enigmaticlegacyplus:spellstone_table",
     "debris_count": 6,
     "ingredients": [
-        {
-            "item": "minecraft:magma_block"
-        },
-        {
-            "item": "minecraft:blaze_powder"
-        },
-        {
-            "item": "minecraft:basalt"
-        },
-        {
-            "item": "minecraft:magma_cream"
-        },
-        {
-            "item": "minecraft:basalt"
-        },
-        {
-            "item": "minecraft:blaze_powder"
-        },
-        {
-            "item": "minecraft:magma_block"
-        }
+        "minecraft:magma_block",
+        "minecraft:blaze_powder",
+        "minecraft:basalt",
+        "minecraft:magma_cream",
+        "minecraft:basalt",
+        "minecraft:blaze_powder",
+        "minecraft:magma_block"
     ],
     "result": {
         "count": 1,

@@ -2,24 +2,12 @@
     "type": "enigmaticlegacyplus:cursed_shaped",
     "category": "equipment",
     "key": {
-        "B": {
-            "item": "minecraft:ink_sac"
-        },
-        "G": {
-            "item": "minecraft:gold_ingot"
-        },
-        "R": {
-            "item": "enigmaticlegacyplus:golden_ring"
-        },
-        "T": {
-            "item": "enigmaticlegacyplus:darkest_scroll"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:twisted_heart"
-        },
-        "Y": {
-            "item": "minecraft:feather"
-        }
+        "B": "minecraft:ink_sac",
+        "G": "minecraft:gold_ingot",
+        "R": "enigmaticlegacyplus:golden_ring",
+        "T": "enigmaticlegacyplus:darkest_scroll",
+        "X": "enigmaticlegacyplus:twisted_heart",
+        "Y": "minecraft:feather"
     },
     "pattern": [
         "GRG",

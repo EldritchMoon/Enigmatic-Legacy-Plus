@@ -2,27 +2,13 @@
     "type": "enigmaticlegacyplus:cursed_shaped",
     "category": "equipment",
     "key": {
-        "B": {
-            "item": "minecraft:ink_sac"
-        },
-        "E": {
-            "item": "minecraft:lapis_lazuli"
-        },
-        "I": {
-            "item": "enigmaticlegacyplus:ichor_droplet"
-        },
-        "P": {
-            "item": "enigmaticlegacyplus:sacred_crystal"
-        },
-        "S": {
-            "item": "enigmaticlegacyplus:ocean_stone"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:darkest_scroll"
-        },
-        "Y": {
-            "item": "minecraft:feather"
-        }
+        "B": "minecraft:ink_sac",
+        "E": "minecraft:lapis_lazuli",
+        "I": "enigmaticlegacyplus:ichor_droplet",
+        "P": "enigmaticlegacyplus:sacred_crystal",
+        "S": "enigmaticlegacyplus:ocean_stone",
+        "X": "enigmaticlegacyplus:darkest_scroll",
+        "Y": "minecraft:feather"
     },
     "pattern": [
         "ISI",

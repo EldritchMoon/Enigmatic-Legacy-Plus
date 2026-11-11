@@ -2,21 +2,11 @@
     "type": "minecraft:crafting_shaped",
     "category": "misc",
     "key": {
-        "B": {
-            "item": "minecraft:black_dye"
-        },
-        "N": {
-            "item": "minecraft:netherite_scrap"
-        },
-        "T": {
-            "item": "enigmaticlegacyplus:darkest_scroll"
-        },
-        "W": {
-            "item": "minecraft:wither_rose"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:blank_scroll"
-        }
+        "B": "minecraft:black_dye",
+        "N": "minecraft:netherite_scrap",
+        "T": "enigmaticlegacyplus:darkest_scroll",
+        "W": "minecraft:wither_rose",
+        "X": "enigmaticlegacyplus:blank_scroll"
     },
     "pattern": [
         "BNB",

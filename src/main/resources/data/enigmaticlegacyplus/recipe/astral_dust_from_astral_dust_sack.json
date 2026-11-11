@@ -3,9 +3,7 @@
     "category": "misc",
     "group": "astral_dust",
     "ingredients": [
-        {
-            "item": "enigmaticlegacyplus:astral_dust_sack"
-        }
+        "enigmaticlegacyplus:astral_dust_sack"
     ],
     "result": {
         "count": 9,

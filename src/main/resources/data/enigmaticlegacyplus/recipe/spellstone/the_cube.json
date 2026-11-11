@@ -3,27 +3,13 @@
     "all_different": true,
     "debris_count": 24,
     "ingredients": [
-        {
-            "tag": "enigmaticlegacyplus:materials_of_the_cube"
-        },
-        {
-            "tag": "enigmaticlegacyplus:materials_of_the_cube"
-        },
-        {
-            "tag": "enigmaticlegacyplus:materials_of_the_cube"
-        },
-        {
-            "item": "enigmaticlegacyplus:cosmic_heart"
-        },
-        {
-            "tag": "enigmaticlegacyplus:materials_of_the_cube"
-        },
-        {
-            "tag": "enigmaticlegacyplus:materials_of_the_cube"
-        },
-        {
-            "tag": "enigmaticlegacyplus:materials_of_the_cube"
-        }
+        "#enigmaticlegacyplus:materials_of_the_cube",
+        "#enigmaticlegacyplus:materials_of_the_cube",
+        "#enigmaticlegacyplus:materials_of_the_cube",
+        "enigmaticlegacyplus:cosmic_heart",
+        "#enigmaticlegacyplus:materials_of_the_cube",
+        "#enigmaticlegacyplus:materials_of_the_cube",
+        "#enigmaticlegacyplus:materials_of_the_cube"
     ],
     "result": {
         "count": 1,

@@ -2,18 +2,10 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
-        "B": {
-            "item": "minecraft:blaze_powder"
-        },
-        "I": {
-            "item": "enigmaticlegacyplus:ichor_droplet"
-        },
-        "M": {
-            "item": "minecraft:magma_cream"
-        },
-        "N": {
-            "item": "minecraft:nether_brick"
-        }
+        "B": "minecraft:blaze_powder",
+        "I": "enigmaticlegacyplus:ichor_droplet",
+        "M": "minecraft:magma_cream",
+        "N": "minecraft:nether_brick"
     },
     "pattern": [
         "IBI",

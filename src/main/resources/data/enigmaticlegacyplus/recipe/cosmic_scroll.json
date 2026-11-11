@@ -2,21 +2,11 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
-        "A": {
-            "item": "minecraft:enchanted_golden_apple"
-        },
-        "C": {
-            "item": "enigmaticlegacyplus:cosmic_heart"
-        },
-        "D": {
-            "item": "enigmaticlegacyplus:astral_dust"
-        },
-        "I": {
-            "item": "enigmaticlegacyplus:starlight_ingot"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:darkest_scroll"
-        }
+        "A": "minecraft:enchanted_golden_apple",
+        "C": "enigmaticlegacyplus:cosmic_heart",
+        "D": "enigmaticlegacyplus:astral_dust",
+        "I": "enigmaticlegacyplus:starlight_ingot",
+        "X": "enigmaticlegacyplus:darkest_scroll"
     },
     "pattern": [
         "DAD",

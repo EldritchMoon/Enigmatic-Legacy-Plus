@@ -2,24 +2,12 @@
     "type": "enigmaticlegacyplus:cursed_shaped",
     "category": "equipment",
     "key": {
-        "A": {
-            "item": "enigmaticlegacyplus:abyssal_heart"
-        },
-        "C": {
-            "item": "enigmaticlegacyplus:cosmic_heart"
-        },
-        "E": {
-            "item": "enigmaticlegacyplus:evil_essence"
-        },
-        "I": {
-            "item": "minecraft:netherite_ingot"
-        },
-        "V": {
-            "item": "enigmaticlegacyplus:void_pearl"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:golden_ring"
-        }
+        "A": "enigmaticlegacyplus:abyssal_heart",
+        "C": "enigmaticlegacyplus:cosmic_heart",
+        "E": "enigmaticlegacyplus:evil_essence",
+        "I": "minecraft:netherite_ingot",
+        "V": "enigmaticlegacyplus:void_pearl",
+        "X": "enigmaticlegacyplus:golden_ring"
     },
     "pattern": [
         "CAC",

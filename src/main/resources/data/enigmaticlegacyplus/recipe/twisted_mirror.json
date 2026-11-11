@@ -2,18 +2,10 @@
     "type": "enigmaticlegacyplus:cursed_shaped",
     "category": "equipment",
     "key": {
-        "G": {
-            "item": "minecraft:glass_pane"
-        },
-        "I": {
-            "item": "minecraft:iron_ingot"
-        },
-        "P": {
-            "item": "enigmaticlegacyplus:recall_potion"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:twisted_heart"
-        }
+        "G": "minecraft:glass_pane",
+        "I": "minecraft:iron_ingot",
+        "P": "enigmaticlegacyplus:recall_potion",
+        "X": "enigmaticlegacyplus:twisted_heart"
     },
     "pattern": [
         "IGI",

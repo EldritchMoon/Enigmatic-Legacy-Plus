@@ -2,24 +2,12 @@
     "type": "enigmaticlegacyplus:cursed_shaped",
     "category": "misc",
     "key": {
-        "A": {
-            "item": "enigmaticlegacyplus:mining_charm"
-        },
-        "E": {
-            "item": "minecraft:enchanted_golden_apple"
-        },
-        "G": {
-            "item": "minecraft:golden_apple"
-        },
-        "P": {
-            "item": "enigmaticlegacyplus:pure_heart"
-        },
-        "Q": {
-            "item": "enigmaticlegacyplus:sacred_crystal"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:golden_ring"
-        }
+        "A": "enigmaticlegacyplus:mining_charm",
+        "E": "minecraft:enchanted_golden_apple",
+        "G": "minecraft:golden_apple",
+        "P": "enigmaticlegacyplus:pure_heart",
+        "Q": "enigmaticlegacyplus:sacred_crystal",
+        "X": "enigmaticlegacyplus:golden_ring"
     },
     "pattern": [
         "PGP",

@@ -2,24 +2,12 @@
     "type": "enigmaticlegacyplus:cursed_shaped",
     "category": "equipment",
     "key": {
-        "A": {
-            "item": "minecraft:golden_apple"
-        },
-        "C": {
-            "item": "enigmaticlegacyplus:sacred_crystal"
-        },
-        "D": {
-            "item": "minecraft:glowstone_dust"
-        },
-        "N": {
-            "item": "minecraft:nether_star"
-        },
-        "P": {
-            "item": "enigmaticlegacyplus:pure_heart"
-        },
-        "X": {
-            "tag": "enigmaticlegacyplus:enigmatic_amulets"
-        }
+        "A": "minecraft:golden_apple",
+        "C": "enigmaticlegacyplus:sacred_crystal",
+        "D": "minecraft:glowstone_dust",
+        "N": "minecraft:nether_star",
+        "P": "enigmaticlegacyplus:pure_heart",
+        "X": "#enigmaticlegacyplus:enigmatic_amulets"
     },
     "pattern": [
         "CDC",

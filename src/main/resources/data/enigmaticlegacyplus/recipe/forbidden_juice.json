@@ -2,12 +2,8 @@
     "type": "enigmaticlegacyplus:shapeless_no_remain",
     "category": "misc",
     "ingredients": [
-        {
-            "item": "enigmaticlegacyplus:forbidden_fruit"
-        },
-        {
-            "item": "minecraft:honey_bottle"
-        }
+        "enigmaticlegacyplus:forbidden_fruit",
+        "minecraft:honey_bottle"
     ],
     "result": {
         "count": 1,

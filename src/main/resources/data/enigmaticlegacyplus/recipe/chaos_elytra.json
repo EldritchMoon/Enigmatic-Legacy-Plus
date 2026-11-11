@@ -2,24 +2,12 @@
     "type": "enigmaticlegacyplus:cursed_shaped",
     "category": "equipment",
     "key": {
-        "A": {
-            "item": "enigmaticlegacyplus:abyssal_heart"
-        },
-        "C": {
-            "item": "enigmaticlegacyplus:cosmic_heart"
-        },
-        "E": {
-            "item": "enigmaticlegacyplus:evil_essence"
-        },
-        "I": {
-            "item": "enigmaticlegacyplus:evil_ingot"
-        },
-        "V": {
-            "item": "enigmaticlegacyplus:void_pearl"
-        },
-        "X": {
-            "item": "minecraft:elytra"
-        }
+        "A": "enigmaticlegacyplus:abyssal_heart",
+        "C": "enigmaticlegacyplus:cosmic_heart",
+        "E": "enigmaticlegacyplus:evil_essence",
+        "I": "enigmaticlegacyplus:evil_ingot",
+        "V": "enigmaticlegacyplus:void_pearl",
+        "X": "minecraft:elytra"
     },
     "pattern": [
         "CAC",

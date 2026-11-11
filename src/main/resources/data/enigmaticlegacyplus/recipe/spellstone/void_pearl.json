@@ -2,27 +2,13 @@
     "type": "enigmaticlegacyplus:spellstone_table",
     "debris_count": 10,
     "ingredients": [
-        {
-            "item": "minecraft:gold_block"
-        },
-        {
-            "item": "enigmaticlegacyplus:etherium_nugget"
-        },
-        {
-            "item": "minecraft:ender_pearl"
-        },
-        {
-            "item": "enigmaticlegacyplus:void_stone"
-        },
-        {
-            "item": "minecraft:ender_pearl"
-        },
-        {
-            "item": "enigmaticlegacyplus:etherium_nugget"
-        },
-        {
-            "item": "minecraft:gold_block"
-        }
+        "minecraft:gold_block",
+        "enigmaticlegacyplus:etherium_nugget",
+        "minecraft:ender_pearl",
+        "enigmaticlegacyplus:void_stone",
+        "minecraft:ender_pearl",
+        "enigmaticlegacyplus:etherium_nugget",
+        "minecraft:gold_block"
     ],
     "result": {
         "count": 1,

@@ -2,24 +2,12 @@
     "type": "enigmaticlegacyplus:cursed_shaped",
     "category": "equipment",
     "key": {
-        "A": {
-            "item": "enigmaticlegacyplus:abyssal_heart"
-        },
-        "E": {
-            "item": "enigmaticlegacyplus:evil_essence"
-        },
-        "I": {
-            "item": "minecraft:netherite_ingot"
-        },
-        "S": {
-            "item": "minecraft:nether_star"
-        },
-        "T": {
-            "item": "enigmaticlegacyplus:twisted_heart"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:ascension_amulet"
-        }
+        "A": "enigmaticlegacyplus:abyssal_heart",
+        "E": "enigmaticlegacyplus:evil_essence",
+        "I": "minecraft:netherite_ingot",
+        "S": "minecraft:nether_star",
+        "T": "enigmaticlegacyplus:twisted_heart",
+        "X": "enigmaticlegacyplus:ascension_amulet"
     },
     "pattern": [
         "EAE",

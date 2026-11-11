@@ -2,15 +2,9 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
-        "A": {
-            "item": "minecraft:amethyst_shard"
-        },
-        "S": {
-            "item": "enigmaticlegacyplus:spellstone_debris"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:spellcore"
-        }
+        "A": "minecraft:amethyst_shard",
+        "S": "enigmaticlegacyplus:spellstone_debris",
+        "X": "enigmaticlegacyplus:spellcore"
     },
     "pattern": [
         "SAA",

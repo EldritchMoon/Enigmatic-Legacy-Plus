@@ -2,27 +2,13 @@
     "type": "minecraft:crafting_shaped",
     "category": "equipment",
     "key": {
-        "B": {
-            "item": "minecraft:ink_sac"
-        },
-        "G": {
-            "item": "minecraft:gold_ingot"
-        },
-        "I": {
-            "item": "minecraft:feather"
-        },
-        "L": {
-            "item": "minecraft:lapis_lazuli"
-        },
-        "S": {
-            "item": "minecraft:nether_star"
-        },
-        "U": {
-            "item": "enigmaticlegacyplus:angel_blessing"
-        },
-        "X": {
-            "item": "enigmaticlegacyplus:blank_scroll"
-        }
+        "B": "minecraft:ink_sac",
+        "G": "minecraft:gold_ingot",
+        "I": "minecraft:feather",
+        "L": "minecraft:lapis_lazuli",
+        "S": "minecraft:nether_star",
+        "U": "enigmaticlegacyplus:angel_blessing",
+        "X": "enigmaticlegacyplus:blank_scroll"
     },
     "pattern": [
         "GSG",
