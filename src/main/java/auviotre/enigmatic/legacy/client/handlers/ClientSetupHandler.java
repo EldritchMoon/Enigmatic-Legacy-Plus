@@ -2,6 +2,7 @@ package auviotre.enigmatic.legacy.client.handlers;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
+import auviotre.enigmatic.legacy.client.BlockingHandTransform;
 import auviotre.enigmatic.legacy.client.ELItemModelProperties;
 import auviotre.enigmatic.legacy.client.KeyHandler;
 import auviotre.enigmatic.legacy.client.particles.IchorParticle;
@@ -148,6 +149,10 @@ public class ClientSetupHandler {
     @SubscribeEvent
     private static void registerClientExtensions(@NotNull RegisterClientExtensionsEvent event) {
         event.registerItem(new SpellstoneSword.ClientExtension(), EnigmaticItems.SPELLSTONE_SWORD);
+        // 26.1.2-port: the other items that use the BLOCK animation; see BlockingHandTransform. The Spellstone Sword
+        // calls it from its own extension.
+        event.registerItem(new BlockingHandTransform(), EnigmaticItems.INFERNAL_SHIELD, EnigmaticItems.ETHERIUM_SWORD,
+                EnigmaticItems.ANNIHILATING_SWORD, EnigmaticItems.SACRED_CHALICE);
     }
 
     // 26.1.2-port: PlayerSkin.Model -> PlayerModelType and getSkin() -> getPlayerRenderer(). The event hands out typed

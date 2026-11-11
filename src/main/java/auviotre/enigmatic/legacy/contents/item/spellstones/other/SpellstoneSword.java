@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.spellstones.other;
 
+import auviotre.enigmatic.legacy.client.BlockingHandTransform;
 import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.ELEnumExtensions;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
@@ -874,7 +875,10 @@ public class SpellstoneSword extends Item {
                 poseStack.mulPose(Axis.XN.rotationDegrees(i * 75.0F));
                 return true;
             }
-            return false;
+            // 26.1.2-port: was "return false". The forms that block (Blazing Core, Lost Engine, Void Pearl) end up
+            // here, and vanilla now adds a sword tilt for BLOCK that their models were not drawn for; see
+            // BlockingHandTransform. For every other case this still returns false.
+            return BlockingHandTransform.apply(poseStack, player, arm, stack, equipProcess);
         }
 
         private void swingTransform(PoseStack poseStack, int i, float swingProcess) {
