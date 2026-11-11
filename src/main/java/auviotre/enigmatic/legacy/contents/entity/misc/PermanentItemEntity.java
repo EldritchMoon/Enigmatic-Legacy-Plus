@@ -11,8 +11,6 @@ import auviotre.enigmatic.legacy.packets.client.AcceptorSyncPacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticEntities;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -164,7 +162,7 @@ public class PermanentItemEntity extends Entity {
 
             if (this.level().isClientSide()) {
                 this.noPhysics = false;
-                LocalPlayer player = Minecraft.getInstance().player;
+                Player player = EnigmaticLegacy.PROXY.getClientPlayer();
                 if (this.acceptors == null || (player != null && this.acceptors.contains(player.getUUID()))) {
                     this.level().addParticle(ParticleTypes.PORTAL, this.getX(), this.getY() + (this.getBbHeight() / 2), this.getZ(), ((Math.random() - 0.5) * 2.0), ((Math.random() - 0.5) * 2.0), ((Math.random() - 0.5) * 2.0));
                 }

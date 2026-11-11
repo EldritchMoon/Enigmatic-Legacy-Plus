@@ -1,12 +1,12 @@
 package auviotre.enigmatic.legacy.contents.item.etherium;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticEnchantments;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -65,8 +65,8 @@ public class EtheriumScythe extends Item {
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumScythe", ChatFormatting.GOLD, 3, 3);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumDisable");
-        if (Minecraft.getInstance().level != null) {
-            var holder = EnigmaticHandler.get(Minecraft.getInstance().level, Registries.ENCHANTMENT, EnigmaticEnchantments.ETHERIC_RESONANCE);
+        if (EnigmaticLegacy.PROXY.getClientLevel() != null) {
+            var holder = EnigmaticHandler.get(EnigmaticLegacy.PROXY.getClientLevel(), Registries.ENCHANTMENT, EnigmaticEnchantments.ETHERIC_RESONANCE);
             if (stack.getEnchantmentLevel(holder) > 0)
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumScytheBuff");
         }

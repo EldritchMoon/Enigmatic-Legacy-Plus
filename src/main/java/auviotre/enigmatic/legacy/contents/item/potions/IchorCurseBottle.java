@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.potions;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseDrinkableItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
@@ -7,7 +8,6 @@ import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.StringUtil;
@@ -47,7 +47,7 @@ public class IchorCurseBottle extends BaseDrinkableItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         MutableComponent component = Component.translatable(EnigmaticEffects.ICHOR_CURSE.get().getDescriptionId());
         list.accept(Component.translatable("potion.withDuration", component, Component.literal(StringUtil.formatTickDuration(9600 * 4, context.tickRate()))).withStyle(ChatFormatting.RED));
-        if (EnigmaticHandler.isTheBlessedOne(Minecraft.getInstance().player)) {
+        if (EnigmaticHandler.isTheBlessedOne(EnigmaticLegacy.PROXY.getClientPlayer())) {
             component = Component.translatable(MobEffects.ABSORPTION.value().getDescriptionId());
             component = Component.translatable("potion.withAmplifier", component, Component.translatable("potion.potency.4"));
             list.accept(Component.translatable("potion.withDuration", component, Component.literal(StringUtil.formatTickDuration(2400, context.tickRate()))).withStyle(ChatFormatting.BLUE));

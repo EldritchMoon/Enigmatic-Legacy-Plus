@@ -1,12 +1,12 @@
 package auviotre.enigmatic.legacy.contents.item.rings;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -27,7 +27,7 @@ public class GoldenRing extends BaseCurioItem {
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         List<Component> list = super.getAttributesTooltip(tooltips, context, stack);
         if (list.isEmpty()) return list;
-        if (EnigmaticHandler.isTheCursedOne(Minecraft.getInstance().player))
+        if (EnigmaticHandler.isTheCursedOne(EnigmaticLegacy.PROXY.getClientPlayer()))
             list.add(Component.translatable("tooltip.enigmaticlegacy.goldenRing").withStyle(ChatFormatting.RED, ChatFormatting.STRIKETHROUGH));
         else list.add(Component.translatable("tooltip.enigmaticlegacy.goldenRing").withStyle(ChatFormatting.BLUE));
         return list;

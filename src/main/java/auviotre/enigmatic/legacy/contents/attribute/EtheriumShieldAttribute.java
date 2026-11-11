@@ -3,14 +3,13 @@ package auviotre.enigmatic.legacy.contents.attribute;
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttributes;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.neoforge.common.config.NeoForgeCommonConfig;
 import net.neoforged.neoforge.common.PercentageAttribute;
@@ -32,7 +31,7 @@ public class EtheriumShieldAttribute extends PercentageAttribute {
 
     @Override
     public MutableComponent toBaseComponent(double value, double entityBase, boolean merged, TooltipFlag flag) {
-        LocalPlayer player = Minecraft.getInstance().player;
+        Player player = EnigmaticLegacy.PROXY.getClientPlayer();
         double currentBase = entityBase;
         double current = value;
         if (player != null) {

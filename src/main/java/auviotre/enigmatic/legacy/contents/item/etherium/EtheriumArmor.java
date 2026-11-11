@@ -10,7 +10,6 @@ import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttributes;
 import auviotre.enigmatic.legacy.registries.EnigmaticEnchantments;
 import auviotre.enigmatic.legacy.registries.EnigmaticSounds;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -89,8 +88,8 @@ public class EtheriumArmor extends Item {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumArmor");
-        if (Minecraft.getInstance().level != null) {
-            var holder = EnigmaticHandler.get(Minecraft.getInstance().level, Registries.ENCHANTMENT, EnigmaticEnchantments.ETHERIC_RESONANCE);
+        if (EnigmaticLegacy.PROXY.getClientLevel() != null) {
+            var holder = EnigmaticHandler.get(EnigmaticLegacy.PROXY.getClientLevel(), Registries.ENCHANTMENT, EnigmaticEnchantments.ETHERIC_RESONANCE);
             if (stack.getEnchantmentLevel(holder) > 0)
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumArmorBuff");
         }

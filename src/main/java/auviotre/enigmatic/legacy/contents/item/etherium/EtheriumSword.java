@@ -9,8 +9,6 @@ import auviotre.enigmatic.legacy.registries.EnigmaticEnchantments;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticSounds;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
@@ -52,15 +50,15 @@ public class EtheriumSword extends Item {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         double power = 10;
-        LocalPlayer player = Minecraft.getInstance().player;
+        Player player = EnigmaticLegacy.PROXY.getClientPlayer();
         if (player != null) {
             power += EtheriumProperties.getShieldThreshold(player) * 50;
             if (player.isUsingItem() && player.getUseItem().is(EnigmaticItems.ETHERIUM_SWORD))
                 power *= 1.5;
         }
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumSword", ChatFormatting.GOLD, String.format("%.1f%%", power));
-        if (Minecraft.getInstance().level != null) {
-            var holder = EnigmaticHandler.get(Minecraft.getInstance().level, Registries.ENCHANTMENT, EnigmaticEnchantments.ETHERIC_RESONANCE);
+        if (EnigmaticLegacy.PROXY.getClientLevel() != null) {
+            var holder = EnigmaticHandler.get(EnigmaticLegacy.PROXY.getClientLevel(), Registries.ENCHANTMENT, EnigmaticEnchantments.ETHERIC_RESONANCE);
             if (stack.getEnchantmentLevel(holder) > 0)
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumSwordBuff");
         }

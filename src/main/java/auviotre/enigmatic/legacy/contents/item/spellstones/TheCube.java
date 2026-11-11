@@ -18,7 +18,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -113,7 +112,7 @@ public class TheCube extends SpellstoneItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theCube2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theCube3");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theCube4");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.theCube5", ChatFormatting.GOLD, String.format("%d", (int) getDamageLimit(Minecraft.getInstance().player)));
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.theCube5", ChatFormatting.GOLD, String.format("%d", (int) getDamageLimit(EnigmaticLegacy.PROXY.getClientPlayer())));
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theCube6");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theCube7");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theCube8");

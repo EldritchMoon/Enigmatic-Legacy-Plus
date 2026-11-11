@@ -13,7 +13,6 @@ import auviotre.enigmatic.legacy.registries.EnigmaticParticles;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
@@ -73,13 +72,13 @@ public class EarthPromise extends CursedCurioItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
         if (ClientHelper.hasShiftDown()) {
-            if (EnigmaticHandler.isTheCursedOne(Minecraft.getInstance().player)) {
+            if (EnigmaticHandler.isTheCursedOne(EnigmaticLegacy.PROXY.getClientPlayer())) {
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.curseAlteration", ChatFormatting.GOLD, Component.translatable("tooltip.enigmaticlegacy.firstCurse"));
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.firstCurseAlteration", ChatFormatting.GOLD, firstCurseModifier.get() + "%");
                 TooltipHandler.line(list);
             }
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.earthPromise1", ChatFormatting.GOLD, healthThreshold.get() + "%");
-            int cool = RedemptionRing.Helper.canUseRelic(Minecraft.getInstance().player) ? cooldown.get() / 25 : cooldown.get() / 20;
+            int cool = RedemptionRing.Helper.canUseRelic(EnigmaticLegacy.PROXY.getClientPlayer()) ? cooldown.get() / 25 : cooldown.get() / 20;
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.earthPromise2", ChatFormatting.GOLD, cool);
         } else TooltipHandler.holdShift(list);
         TooltipHandler.line(list);
@@ -107,7 +106,7 @@ public class EarthPromise extends CursedCurioItem {
     public List<Component> getAttributesTooltip(List<Component> tooltips, TooltipContext context, ItemStack stack) {
         List<Component> list = super.getAttributesTooltip(tooltips, context, stack);
         if (!list.isEmpty())
-            list.add(Component.translatable("attribute.modifier.plus.0", EnigmaticHandler.hasCurio(Minecraft.getInstance().player, EnigmaticItems.MINING_CHARM) ? 3 : 2, Component.translatable("attribute.name.fortune_level")).withStyle(ChatFormatting.BLUE));
+            list.add(Component.translatable("attribute.modifier.plus.0", EnigmaticHandler.hasCurio(EnigmaticLegacy.PROXY.getClientPlayer(), EnigmaticItems.MINING_CHARM) ? 3 : 2, Component.translatable("attribute.name.fortune_level")).withStyle(ChatFormatting.BLUE));
         return list;
     }
 

@@ -139,7 +139,7 @@ public class Insignia extends BaseCurioItem {
         if (insignia.isEmpty()) return;
         Optional<Component> customName = EnigmaticItems.INSIGNIA.get().getCustomName(insignia);
         if (customName.isEmpty()) return;
-        Player viewer = Minecraft.getInstance().player;
+        Player viewer = EnigmaticLegacy.PROXY.getClientPlayer();
         boolean seesTrueName = entity != viewer && EnigmaticItems.INSIGNIA.get().canSeeTrueName(viewer);
         state.scoreText = null;
         if (Minecraft.getInstance().font.width(customName.get()) > 0) {

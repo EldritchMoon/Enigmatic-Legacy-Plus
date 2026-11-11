@@ -7,7 +7,6 @@ import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -39,7 +38,7 @@ public class AnimalGuidebook extends BaseItem {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.inInventory", ChatFormatting.GOLD);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.animalGuidebook1");
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.animalGuidebook2");
-        if (EnigmaticHandler.isTheCursedOne(Minecraft.getInstance().player)) {
+        if (EnigmaticHandler.isTheCursedOne(EnigmaticLegacy.PROXY.getClientPlayer())) {
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.curseAlteration", ChatFormatting.GOLD, Component.translatable("tooltip.enigmaticlegacy.secondCurse"));
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.secondCurseAlteration1");

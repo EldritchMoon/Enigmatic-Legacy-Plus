@@ -6,7 +6,6 @@ import auviotre.enigmatic.legacy.contents.item.generic.BaseCursedItem;
 import auviotre.enigmatic.legacy.contents.item.rings.RedemptionRing;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -42,7 +41,7 @@ public class BlessAmplifier extends BaseCursedItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.blessAmplifier1");
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.blessAmplifier2");
-        if (RedemptionRing.Helper.canUseRelic(Minecraft.getInstance().player)) {
+        if (RedemptionRing.Helper.canUseRelic(EnigmaticLegacy.PROXY.getClientPlayer())) {
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.blessAmplifier3");
         }

@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.tools;
 
 import net.minecraft.world.InteractionResult;
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCursedItem;
 import auviotre.enigmatic.legacy.contents.item.rings.RedemptionRing;
@@ -9,7 +10,6 @@ import auviotre.enigmatic.legacy.packets.client.SacredChalicePacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
 import auviotre.enigmatic.legacy.registries.EnigmaticSounds;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -42,7 +42,7 @@ public class SacredChalice extends BaseCursedItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.sacredChalice2");
         } else {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.sacredChalice3");
-            if (RedemptionRing.Helper.canUseRelic(Minecraft.getInstance().player))
+            if (RedemptionRing.Helper.canUseRelic(EnigmaticLegacy.PROXY.getClientPlayer()))
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.sacredChalice4Alt");
             else TooltipHandler.line(list, "tooltip.enigmaticlegacy.sacredChalice4");
         }

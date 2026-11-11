@@ -15,7 +15,6 @@ import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
@@ -101,13 +100,13 @@ public class HellBladeCharm extends BaseCurioItem {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
-        ItemStack curio = EnigmaticHandler.getCurio(Minecraft.getInstance().player, EnigmaticItems.HELL_BLADE_CHARM);
+        ItemStack curio = EnigmaticHandler.getCurio(EnigmaticLegacy.PROXY.getClientPlayer(), EnigmaticItems.HELL_BLADE_CHARM);
         if (curio == stack && !stack.getOrDefault(EnigmaticComponents.BOOLEAN, false)) {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.hellBladeCharmUnequip");
             TooltipHandler.line(list);
         }
         if (ClientHelper.hasShiftDown()) {
-            int threshold = EnigmaticHandler.isTheCursedOne(Minecraft.getInstance().player) ? 80 : 64;
+            int threshold = EnigmaticHandler.isTheCursedOne(EnigmaticLegacy.PROXY.getClientPlayer()) ? 80 : 64;
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.hellBladeCharm1", ChatFormatting.GOLD, threshold + "%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.hellBladeCharm2");
         } else TooltipHandler.holdShift(list);
@@ -118,7 +117,7 @@ public class HellBladeCharm extends BaseCurioItem {
     public List<Component> getAttributesTooltip(List<Component> list, TooltipContext context, ItemStack stack) {
         TooltipHandler.line(list::add);
         TooltipHandler.line(list::add, "curios.modifiers.charm", ChatFormatting.GOLD);
-        float modifier = (int) (getModifier(Minecraft.getInstance().player) * 10) * 0.1F;
+        float modifier = (int) (getModifier(EnigmaticLegacy.PROXY.getClientPlayer()) * 10) * 0.1F;
         TooltipHandler.line(list::add, "attribute.modifier.plus.0", ChatFormatting.BLUE, modifier, Component.translatable("attribute.name.generic.attack_damage"));
         TooltipHandler.line(list::add, "attribute.modifier.plus.1", ChatFormatting.BLUE, attackDamage.get(), Component.translatable("attribute.name.generic.attack_damage"));
         TooltipHandler.line(list::add, "attribute.modifier.take.1", ChatFormatting.RED, armorDebuff.get(), Component.translatable("attribute.name.generic.armor"));
@@ -166,7 +165,7 @@ public class HellBladeCharm extends BaseCurioItem {
 
         @Override
         public boolean render(GuiGraphicsExtractor graphics, Font font, @NotNull ItemStack stack, int x, int y) {
-            ItemStack curio = EnigmaticHandler.getCurio(Minecraft.getInstance().player, EnigmaticItems.HELL_BLADE_CHARM);
+            ItemStack curio = EnigmaticHandler.getCurio(EnigmaticLegacy.PROXY.getClientPlayer(), EnigmaticItems.HELL_BLADE_CHARM);
             if (curio == stack && !stack.getOrDefault(EnigmaticComponents.BOOLEAN, false)) {
                 graphics.pose().pushMatrix(); // 26.1.2-port: pushPose -> pushMatrix (2D matrix stack)
                 graphics.blitSprite(RenderPipelines.GUI_TEXTURED, SPRITE, x - 1, y - 1, 18, 18); // 26.1.2-port: blitSprite names its pipeline

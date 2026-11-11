@@ -13,11 +13,9 @@ import auviotre.enigmatic.legacy.registries.*;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -214,7 +212,7 @@ public class AnnihilatingSword extends Item {
     @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         if (ClientHelper.hasShiftDown()) {
-            LocalPlayer player = Minecraft.getInstance().player;
+            Player player = EnigmaticLegacy.PROXY.getClientPlayer();
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.annihilatingSword1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.annihilatingSword2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.annihilatingSword3");
@@ -233,7 +231,7 @@ public class AnnihilatingSword extends Item {
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.annihilatingSword7", ChatFormatting.GOLD, energy);
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.annihilatingSword8", ChatFormatting.GOLD, String.format("×%.02f", 1 + energy * 0.2));
             }
-            if (EnigmaticHandler.isAbyssBoosted(Minecraft.getInstance().player)) {
+            if (EnigmaticHandler.isAbyssBoosted(EnigmaticLegacy.PROXY.getClientPlayer())) {
                 TooltipHandler.line(list);
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.abyssBoost");
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.annihilatingSwordBoost");

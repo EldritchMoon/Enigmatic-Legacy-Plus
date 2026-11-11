@@ -22,7 +22,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
@@ -1208,7 +1207,7 @@ public class SpellstoneSword extends Item {
         @SubscribeEvent
         @OnlyIn(Dist.CLIENT)
         private static void onHand(RenderHandEvent event) {
-            LocalPlayer player = Minecraft.getInstance().player;
+            Player player = EnigmaticLegacy.PROXY.getClientPlayer();
             if (player == null) return;
             ItemStack useItem = player.getUseItem();
             if (useItem.is(EnigmaticItems.SPELLSTONE_SWORD) && isResonatingWith(useItem, EnigmaticItems.ANGEL_BLESSING)) {

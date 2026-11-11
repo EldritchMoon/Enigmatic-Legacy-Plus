@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.contents.item.charms;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCurioItem;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
@@ -9,7 +10,6 @@ import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticEnchantments;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -47,8 +47,8 @@ public class EtherealForgingCharm extends BaseCurioItem {
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.etherealForgingCharm3");
         }
-        if (Minecraft.getInstance().level != null) {
-            var holder = EnigmaticHandler.get(Minecraft.getInstance().level, Registries.ENCHANTMENT, EnigmaticEnchantments.ETHERIC_RESONANCE);
+        if (EnigmaticLegacy.PROXY.getClientLevel() != null) {
+            var holder = EnigmaticHandler.get(EnigmaticLegacy.PROXY.getClientLevel(), Registries.ENCHANTMENT, EnigmaticEnchantments.ETHERIC_RESONANCE);
             if (stack.getEnchantmentLevel(holder) > 0)
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.etherealForgingCharmBuff");
         }

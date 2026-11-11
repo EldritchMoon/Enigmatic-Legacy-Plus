@@ -14,7 +14,6 @@ import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -77,8 +76,8 @@ public class CosmicScroll extends BaseCurioItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cosmicScroll3");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cosmicScroll4");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cosmicScroll5", ChatFormatting.GOLD, cooldown.get() / 20);
-            if (Minecraft.getInstance().player != null) {
-                int reviveCooldown = Minecraft.getInstance().player.getData(EnigmaticAttachments.ENIGMATIC_DATA).getReviveCooldown();
+            if (EnigmaticLegacy.PROXY.getClientPlayer() != null) {
+                int reviveCooldown = EnigmaticLegacy.PROXY.getClientPlayer().getData(EnigmaticAttachments.ENIGMATIC_DATA).getReviveCooldown();
                 if (reviveCooldown > 0) {
                     TooltipHandler.line(list);
                     TooltipHandler.line(list, "tooltip.enigmaticlegacy.cosmicScrollCooldown", ChatFormatting.GOLD, reviveCooldown / 20);

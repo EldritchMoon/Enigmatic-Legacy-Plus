@@ -23,7 +23,6 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -191,7 +190,7 @@ public class CursedRing extends CursedCurioItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingLore7");
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.eternallyBound1");
-            if (EnigmaticHandler.canUnequipBoundRelics(Minecraft.getInstance().player)) {
+            if (EnigmaticHandler.canUnequipBoundRelics(EnigmaticLegacy.PROXY.getClientPlayer())) {
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.eternallyBound2_creative");
             } else TooltipHandler.line(list, "tooltip.enigmaticlegacy.eternallyBound2");
 

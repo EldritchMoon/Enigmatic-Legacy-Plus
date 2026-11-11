@@ -77,7 +77,7 @@ public abstract class BaseElytraItem extends BaseCurioItem {
 
     @OnlyIn(Dist.CLIENT)
     public void handleBoosting(Player player) {
-        if (Minecraft.getInstance().player != player) return;
+        if (EnigmaticLegacy.PROXY.getClientPlayer() != player) return;
         if (Minecraft.getInstance().options.keyJump.isDown() && flyingBoost(player)) {
             if (!isBoosting) ClientPacketDistributor.sendToServer(new UpdateElytraBoostPacket(isBoosting = true));
         } else if (isBoosting) ClientPacketDistributor.sendToServer(new UpdateElytraBoostPacket(isBoosting = false));
@@ -151,7 +151,7 @@ public abstract class BaseElytraItem extends BaseCurioItem {
                 chest.handleBoosting(player);
             if (player.level().isClientSide() && data.isElytraBoosting()) {
                 if (!player.isFallFlying()) {
-                    if (player == Minecraft.getInstance().player)
+                    if (player == EnigmaticLegacy.PROXY.getClientPlayer())
                         if (stack.getItem() instanceof BaseElytraItem elytra)
                             elytra.handleBoosting(player);
                         else data.setElytraBoosting(false);

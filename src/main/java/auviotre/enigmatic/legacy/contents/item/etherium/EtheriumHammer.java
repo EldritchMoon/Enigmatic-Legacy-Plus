@@ -1,12 +1,12 @@
 package auviotre.enigmatic.legacy.contents.item.etherium;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import net.minecraft.world.InteractionResult;
 import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.*;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
@@ -59,8 +59,8 @@ public class EtheriumHammer extends Item {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumDisable");
         }
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumDisable2");
-        if (Minecraft.getInstance().level != null) {
-            var holder = EnigmaticHandler.get(Minecraft.getInstance().level, Registries.ENCHANTMENT, EnigmaticEnchantments.ETHERIC_RESONANCE);
+        if (EnigmaticLegacy.PROXY.getClientLevel() != null) {
+            var holder = EnigmaticHandler.get(EnigmaticLegacy.PROXY.getClientLevel(), Registries.ENCHANTMENT, EnigmaticEnchantments.ETHERIC_RESONANCE);
             if (stack.getEnchantmentLevel(holder) > 0)
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.etheriumHammerBuff");
         }

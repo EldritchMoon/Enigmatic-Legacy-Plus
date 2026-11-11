@@ -11,7 +11,6 @@ import auviotre.enigmatic.legacy.packets.server.EmptyLeftClickPacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -67,7 +66,7 @@ public class ThunderScroll extends CursedCurioItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.thunderScroll2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.thunderScroll3");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.thunderScroll4");
-            if (RedemptionRing.Helper.canUseRelic(Minecraft.getInstance().player)) {
+            if (RedemptionRing.Helper.canUseRelic(EnigmaticLegacy.PROXY.getClientPlayer())) {
                 TooltipHandler.line(list);
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.thunderScroll5");
             }

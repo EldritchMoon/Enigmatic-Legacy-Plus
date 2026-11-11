@@ -11,7 +11,6 @@ import auviotre.enigmatic.legacy.packets.client.ChaosDescendingPacket;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticEffects;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -74,7 +73,7 @@ public class DesolationRing extends BaseCurioItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.desolationRing3");
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.desolationRing4");
-            if (EnigmaticHandler.isAbyssBoosted(Minecraft.getInstance().player)) {
+            if (EnigmaticHandler.isAbyssBoosted(EnigmaticLegacy.PROXY.getClientPlayer())) {
                 TooltipHandler.line(list);
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.abyssBoost");
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.desolationRingBoost");

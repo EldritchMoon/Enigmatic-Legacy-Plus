@@ -11,9 +11,7 @@ import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
@@ -21,6 +19,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
@@ -90,7 +89,7 @@ public class BerserkEmblem extends CursedCurioItem {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm8");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.berserkCharm9");
         } else TooltipHandler.holdShift(list);
-        LocalPlayer player = Minecraft.getInstance().player;
+        Player player = EnigmaticLegacy.PROXY.getClientPlayer();
         if (player != null && ItemStack.isSameItemSameComponents(stack, EnigmaticHandler.getCurio(player, this))) {
             float missingPool = getMissingHealthPool(player);
             int percentage = (int) (missingPool * 100F);

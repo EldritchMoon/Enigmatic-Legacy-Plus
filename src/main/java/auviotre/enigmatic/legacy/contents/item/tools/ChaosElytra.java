@@ -11,7 +11,6 @@ import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.packets.client.ChaosDescendingPacket;
 import auviotre.enigmatic.legacy.registries.*;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -88,7 +87,7 @@ public class ChaosElytra extends BaseElytraItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> list, TooltipFlag flag) {
         TooltipHandler.line(list);
         if (ClientHelper.hasShiftDown()) {
-            boolean boosted = EnigmaticHandler.isAbyssBoosted(Minecraft.getInstance().player);
+            boolean boosted = EnigmaticHandler.isAbyssBoosted(EnigmaticLegacy.PROXY.getClientPlayer());
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.majesticElytra1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.majesticElytra2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.majesticElytra3");

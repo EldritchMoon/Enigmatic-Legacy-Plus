@@ -1,5 +1,6 @@
 package auviotre.enigmatic.legacy.proxy;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import auviotre.enigmatic.legacy.registries.EnigmaticPotions;
 import net.minecraft.core.dispenser.BlockSource;
@@ -65,7 +66,7 @@ public class CommonProxy {
     /**
      * 26.1.2-port: new. The player on this client, or null on a dedicated server.
      * <p>
-     * Common code must use this and not {@code Minecraft.getInstance().player}: that field is a LocalPlayer, a class
+     * Common code must use this and not {@code EnigmaticLegacy.PROXY.getClientPlayer()}: that field is a LocalPlayer, a class
      * a dedicated server does not have, and NeoForge 26.1.2 no longer strips {@code @OnlyIn(Dist.CLIENT)} methods
      * out of classes there. The return type is the common Player on purpose.
      */

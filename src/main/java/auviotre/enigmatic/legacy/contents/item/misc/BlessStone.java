@@ -1,6 +1,7 @@
 package auviotre.enigmatic.legacy.contents.item.misc;
 
 import net.minecraft.world.InteractionResult;
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.IItemHelper;
 import auviotre.enigmatic.legacy.contents.entity.misc.PermanentItemEntity;
 import auviotre.enigmatic.legacy.contents.item.generic.BaseCursedItem;
@@ -10,7 +11,6 @@ import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -47,10 +47,10 @@ public class BlessStone extends BaseCursedItem {
         TooltipHandler.line(list);
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.canUndone");
         if (flag.isAdvanced()) {
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.blessLevel", ChatFormatting.DARK_GRAY, RedemptionRing.Helper.getPossibleLevel(Minecraft.getInstance().player));
+            TooltipHandler.line(list, "tooltip.enigmaticlegacy.blessLevel", ChatFormatting.DARK_GRAY, RedemptionRing.Helper.getPossibleLevel(EnigmaticLegacy.PROXY.getClientPlayer()));
         }
         TooltipHandler.line(list);
-        ChatFormatting color = EnigmaticHandler.isTheCursedOne(Minecraft.getInstance().player) ? ChatFormatting.GOLD : ChatFormatting.DARK_RED;
+        ChatFormatting color = EnigmaticHandler.isTheCursedOne(EnigmaticLegacy.PROXY.getClientPlayer()) ? ChatFormatting.GOLD : ChatFormatting.DARK_RED;
         list.accept(Component.translatable("tooltip.enigmaticlegacy.cursedOnesOnly1").withStyle(color));
         list.accept(Component.translatable("tooltip.enigmaticlegacy.cursedOnesOnly2").withStyle(color));
     }

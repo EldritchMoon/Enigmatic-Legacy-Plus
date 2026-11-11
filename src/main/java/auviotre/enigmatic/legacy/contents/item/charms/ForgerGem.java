@@ -13,7 +13,6 @@ import com.google.common.collect.Multimap;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -69,7 +68,7 @@ public class ForgerGem extends BaseCurioItem {
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.forgerGem1");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.forgerGem2");
-            if (EnigmaticHandler.isTheOne(Minecraft.getInstance().player)) {
+            if (EnigmaticHandler.isTheOne(EnigmaticLegacy.PROXY.getClientPlayer())) {
                 TooltipHandler.line(list);
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.forgerGem3");
             }

@@ -15,7 +15,6 @@ import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -117,7 +116,7 @@ public class TheInfinitum extends TheAcknowledgment implements IBagContent {
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitum4");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitum5", ChatFormatting.GOLD, undeadProbability.get() + "%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitum6");
-            if (EnigmaticHandler.isAbyssBoosted(Minecraft.getInstance().player)) {
+            if (EnigmaticHandler.isAbyssBoosted(EnigmaticLegacy.PROXY.getClientPlayer())) {
                 TooltipHandler.line(list);
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.abyssBoost");
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.theInfinitumBoost1");

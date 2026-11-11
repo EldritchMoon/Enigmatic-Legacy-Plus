@@ -9,7 +9,6 @@ import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -84,7 +83,7 @@ public class LivingOde extends BaseItem {
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.hunterGuidebook1", ChatFormatting.GOLD, String.format("%.0f", effectiveRange.get()));
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.hunterGuidebook2");
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.odeToLiving1", ChatFormatting.GOLD, redirectResistance.get() + "%");
-        if (EnigmaticHandler.isTheCursedOne(Minecraft.getInstance().player)) {
+        if (EnigmaticHandler.isTheCursedOne(EnigmaticLegacy.PROXY.getClientPlayer())) {
             TooltipHandler.line(list);
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.curseAlteration", ChatFormatting.GOLD, Component.translatable("tooltip.enigmaticlegacy.secondCurse"));
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.secondCurseAlteration2");

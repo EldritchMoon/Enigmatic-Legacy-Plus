@@ -1,12 +1,12 @@
 package auviotre.enigmatic.legacy.handlers;
 
+import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.client.ClientHelper;
 import auviotre.enigmatic.legacy.contents.item.materials.AbyssalHeart;
 import auviotre.enigmatic.legacy.contents.item.rings.CursedRing;
 import auviotre.enigmatic.legacy.contents.item.rings.RedemptionRing;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -46,11 +46,11 @@ public interface TooltipHandler {
     }
 
     static void cursedOnly(Consumer<Component> list, ItemStack stack) {
-        if (EnigmaticHandler.isBlessedItem(stack) && RedemptionRing.Helper.canUseRelic(Minecraft.getInstance().player) && RedemptionRing.uniqueLegacy.get()) {
+        if (EnigmaticHandler.isBlessedItem(stack) && RedemptionRing.Helper.canUseRelic(EnigmaticLegacy.PROXY.getClientPlayer()) && RedemptionRing.uniqueLegacy.get()) {
             list.accept(Component.translatable("tooltip.enigmaticlegacy.blessOneAvailable1").withStyle(ChatFormatting.GOLD));
             list.accept(Component.translatable("tooltip.enigmaticlegacy.blessOneAvailable2").withStyle(ChatFormatting.GOLD));
         } else {
-            ChatFormatting color = EnigmaticHandler.isTheCursedOne(Minecraft.getInstance().player) && CursedRing.uniqueLegacy.get() ? ChatFormatting.GOLD : ChatFormatting.DARK_RED;
+            ChatFormatting color = EnigmaticHandler.isTheCursedOne(EnigmaticLegacy.PROXY.getClientPlayer()) && CursedRing.uniqueLegacy.get() ? ChatFormatting.GOLD : ChatFormatting.DARK_RED;
             list.accept(Component.translatable("tooltip.enigmaticlegacy.cursedOnesOnly1").withStyle(color));
             list.accept(Component.translatable("tooltip.enigmaticlegacy.cursedOnesOnly2").withStyle(color));
         }
@@ -59,7 +59,7 @@ public interface TooltipHandler {
 
     static void worthyOnly(Consumer<Component> list, ItemStack stack) {
         if (ClientHelper.hasShiftDown()) {
-            Player player = Minecraft.getInstance().player;
+            Player player = EnigmaticLegacy.PROXY.getClientPlayer();
             ChatFormatting color = player != null && EnigmaticHandler.isTheWorthyOne(player) ? ChatFormatting.GOLD : ChatFormatting.DARK_RED;
             double threshold = AbyssalHeart.abyssThreshold.get();
             if (!EnigmaticHandler.getCurio(player, EnigmaticItems.DIMNESS_CHARM).isEmpty() || stack.is(EnigmaticItems.DIMNESS_CHARM)) threshold = Math.clamp(2 * threshold - 1, 0, 0.999);

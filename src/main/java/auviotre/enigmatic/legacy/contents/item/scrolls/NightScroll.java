@@ -9,7 +9,6 @@ import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.TooltipHandler;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -88,7 +87,7 @@ public class NightScroll extends CursedCurioItem {
         } else TooltipHandler.holdShift(list);
         TooltipHandler.line(list);
         TooltipHandler.line(list, "curios.modifiers.scroll", ChatFormatting.GOLD);
-        float darkModifier = getDarkModifier(Minecraft.getInstance().player);
+        float darkModifier = getDarkModifier(EnigmaticLegacy.PROXY.getClientPlayer());
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.nightScroll3", ChatFormatting.GOLD, String.format("%.01f%%", darkModifier * damageBoost.get()));
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.nightScroll4", ChatFormatting.GOLD, String.format("%.01f%%", darkModifier * damageResistance.get()));
         TooltipHandler.line(list, "tooltip.enigmaticlegacy.nightScroll5", ChatFormatting.GOLD, String.format("%.01f%%", darkModifier * lifeSteal.get()));
