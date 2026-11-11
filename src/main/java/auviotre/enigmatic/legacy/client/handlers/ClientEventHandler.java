@@ -45,6 +45,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
@@ -67,39 +68,37 @@ public class ClientEventHandler {
     public static float violenceLastTimer = 0;
     private static boolean spaceDown = false;
 
-    // TODO(port): RenderTooltipEvent.Color was removed. Tooltip backgrounds and borders are sprites now
-    // (RenderTooltipEvent.Texture or the tooltip_style component), so the cursed / blessed / eldritch colours below
-    // need tooltip sprite assets (phase 7). The colours are kept here as the reference for those sprites.
-    // @SubscribeEvent
-    // private static void onTooltipRendering(RenderTooltipEvent.@NotNull Color event) {
-    //     ItemStack stack = event.getItemStack();
-    //     if (!stack.isEmpty()) {
-    //         if (EnigmaticHandler.isCursedItem(stack)) {
-    //             if (EnigmaticHandler.isTheBlessedOne(Minecraft.getInstance().player) && EnigmaticHandler.isBlessedItem(stack)) {
-    //                 event.setBackground(0xF01a0a07);
-    //                 event.setBorderStart(0xF0FFA400);
-    //                 event.setBorderEnd(0x80D07540);
-    //             } else if (EnigmaticHandler.isEldritchItem(stack)) {
-    //                 event.setBackground(0xF0201020);
-    //                 event.setBorderStart(0xF08F609A);
-    //                 event.setBorderEnd(0x805A3A7A);
-    //             } else {
-    //                 event.setBackground(0xF0201010);
-    //                 event.setBorderStart(0xF0A01000);
-    //                 event.setBorderEnd(0x70901000);
-    //             }
-    //         }
-    //         if (stack.is(EnigmaticItems.CURSED_RING)) {
-    //             event.setBackground(0xF0201010);
-    //             event.setBorderStart(0xF0A01000);
-    //             event.setBorderEnd(0x70901000);
-    //         } else if (stack.is(EnigmaticItems.REDEMPTION_RING)) {
-    //             event.setBackground(0xF01a0a07);
-    //             event.setBorderStart(0xF0FFA400);
-    //             event.setBorderEnd(0x80D07540);
-    //         }
-    //     }
-    // }
+    // 26.1.2-port: was onTooltipRendering(RenderTooltipEvent.Color), which set a background colour and a border
+    // gradient. A tooltip is drawn from two sprites now, tooltip/<style>_background and tooltip/<style>_frame, and
+    // RenderTooltipEvent.Texture chooses the style. The three colour sets became the sprites in
+    // textures/gui/sprites/tooltip/:
+    //   cursed    background 0xF0201010, border 0xF0A01000 -> 0x70901000
+    //   blessed   background 0xF01A0A07, border 0xF0FFA400 -> 0x80D07540
+    //   eldritch  background 0xF0201020, border 0xF08F609A -> 0x805A3A7A
+    private static final Identifier CURSED_TOOLTIP = EnigmaticLegacy.location("cursed");
+    private static final Identifier BLESSED_TOOLTIP = EnigmaticLegacy.location("blessed");
+    private static final Identifier ELDRITCH_TOOLTIP = EnigmaticLegacy.location("eldritch");
+
+    @SubscribeEvent
+    private static void onTooltipRendering(RenderTooltipEvent.@NotNull Texture event) {
+        ItemStack stack = event.getItemStack();
+        if (!stack.isEmpty()) {
+            if (EnigmaticHandler.isCursedItem(stack)) {
+                if (EnigmaticHandler.isTheBlessedOne(Minecraft.getInstance().player) && EnigmaticHandler.isBlessedItem(stack)) {
+                    event.setTexture(BLESSED_TOOLTIP);
+                } else if (EnigmaticHandler.isEldritchItem(stack)) {
+                    event.setTexture(ELDRITCH_TOOLTIP);
+                } else {
+                    event.setTexture(CURSED_TOOLTIP);
+                }
+            }
+            if (stack.is(EnigmaticItems.CURSED_RING)) {
+                event.setTexture(CURSED_TOOLTIP);
+            } else if (stack.is(EnigmaticItems.REDEMPTION_RING)) {
+                event.setTexture(BLESSED_TOOLTIP);
+            }
+        }
+    }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     private static void onTooltip(@NotNull ItemTooltipEvent event) {
