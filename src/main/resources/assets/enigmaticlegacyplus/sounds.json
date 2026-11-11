@@ -89,7 +89,7 @@
     ]
   },
   "block.cosmic_cake.restore": {
-    "subtitle": "subtitle.enigmaticlegacy.cosmic_cake.restore",
+    "subtitle": "subtitle.enigmaticlegacy.block.cosmic_cake.restore",
     "sounds": [
       {
         "name": "enigmaticlegacyplus:misc/uneat1",

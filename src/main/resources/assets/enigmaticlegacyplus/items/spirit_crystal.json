@@ -1,6 +1,5 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "enigmaticlegacyplus:item/unknown"
+    "type": "minecraft:empty"
   }
 }

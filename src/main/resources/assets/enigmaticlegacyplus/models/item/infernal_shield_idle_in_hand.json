@@ -3,7 +3,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"2": "enigmaticlegacyplus:item/infernal_shield_model"
+		"2": "enigmaticlegacyplus:item/infernal_shield_model",
+		"particle": "enigmaticlegacyplus:item/infernal_shield_model"
 	},
 	"elements": [
 		{
