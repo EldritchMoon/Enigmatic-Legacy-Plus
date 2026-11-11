@@ -41,6 +41,9 @@
   },
   "client": [
     "MixinWorldListEntry",
+    "accessor.PostChainAccessor",
+    "accessor.PostPassAccessor",
+    "client.MixinGameRenderer",
     "client.MixinItemModelResolver"
   ]
 }

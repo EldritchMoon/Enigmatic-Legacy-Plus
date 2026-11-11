@@ -162,14 +162,6 @@ sourceSets.main.java {
         exclude 'auviotre/enigmatic/legacy/compat/thirst/**'
         // these five are also taken out of enigmaticlegacyplus.mixins.json; put both back together
         exclude 'auviotre/enigmatic/legacy/mixin/compat/**'
-        // TODO(port): the Abyssal Heart "darken" screen effect is parked (phase 7). It built its own PostChain and set
-        // shader uniforms every frame through EffectInstance; that class is gone, post effects are loaded by id from
-        // assets/<namespace>/post_effect/ through the ShaderManager, and their uniforms are fixed when they load. It
-        // needs a redesign together with a rewrite of shaders/post/darken.json. These three are also taken out of
-        // enigmaticlegacyplus.mixins.json; put both back together.
-        exclude 'auviotre/enigmatic/legacy/mixin/client/MixinGameRenderer.java'
-        exclude 'auviotre/enigmatic/legacy/mixin/accessor/EffectInstanceAccessor.java'
-        exclude 'auviotre/enigmatic/legacy/mixin/accessor/PostChainAccessor.java'
         // TODO(port): data generators parked until phase 9; their JSON output is already in src/generated
         exclude 'auviotre/enigmatic/legacy/data/**'
 }
