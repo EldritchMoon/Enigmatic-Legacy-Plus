@@ -1,0 +1,62 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "minecraft:using_item",
+    "on_true": {
+      "type": "minecraft:select",
+      "property": "minecraft:display_context",
+      "cases": [
+        {
+          "when": [
+            "gui",
+            "fixed",
+            "ground",
+            "on_shelf"
+          ],
+          "model": {
+            "type": "minecraft:model",
+            "model": "enigmaticlegacyplus:item/gui/ichor_spear"
+          }
+        },
+        {
+          "when": [
+            "firstperson_righthand",
+            "firstperson_lefthand"
+          ],
+          "model": {
+            "type": "minecraft:model",
+            "model": "enigmaticlegacyplus:item/gui/ichor_spear_using"
+          }
+        }
+      ],
+      "fallback": {
+        "type": "minecraft:model",
+        "model": "enigmaticlegacyplus:item/3d/ichor_spear_using"
+      }
+    },
+    "on_false": {
+      "type": "minecraft:select",
+      "property": "minecraft:display_context",
+      "cases": [
+        {
+          "when": [
+            "gui",
+            "fixed",
+            "ground",
+            "on_shelf",
+            "firstperson_righthand",
+            "firstperson_lefthand"
+          ],
+          "model": {
+            "type": "minecraft:model",
+            "model": "enigmaticlegacyplus:item/gui/ichor_spear"
+          }
+        }
+      ],
+      "fallback": {
+        "type": "minecraft:model",
+        "model": "enigmaticlegacyplus:item/3d/ichor_spear"
+      }
+    }
+  }
+}

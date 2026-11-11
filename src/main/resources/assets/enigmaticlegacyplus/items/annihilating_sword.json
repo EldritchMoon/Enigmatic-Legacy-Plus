@@ -1,0 +1,134 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "property": "enigmaticlegacyplus:eldritch_open",
+    "entries": [
+      {
+        "threshold": 0.5,
+        "model": {
+          "type": "minecraft:select",
+          "property": "minecraft:display_context",
+          "cases": [
+            {
+              "when": [
+                "gui",
+                "fixed",
+                "ground",
+                "on_shelf"
+              ],
+              "model": {
+                "type": "minecraft:model",
+                "model": "enigmaticlegacyplus:item/gui/annihilating_sword_1"
+              }
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:model",
+            "model": "enigmaticlegacyplus:item/3d/annihilating_sword_1"
+          }
+        }
+      },
+      {
+        "threshold": 1.0,
+        "model": {
+          "type": "minecraft:condition",
+          "property": "enigmaticlegacyplus:using_in_hand",
+          "hand": "main_hand",
+          "on_true": {
+            "type": "minecraft:select",
+            "property": "minecraft:display_context",
+            "cases": [
+              {
+                "when": [
+                  "firstperson_righthand",
+                  "firstperson_lefthand",
+                  "thirdperson_righthand",
+                  "thirdperson_lefthand"
+                ],
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "enigmaticlegacyplus:item/3d/annihilating_sword_charging"
+                }
+              }
+            ],
+            "fallback": {
+              "type": "minecraft:model",
+              "model": "enigmaticlegacyplus:item/gui/annihilating_sword_2"
+            }
+          },
+          "on_false": {
+            "type": "minecraft:condition",
+            "property": "enigmaticlegacyplus:using_in_hand",
+            "hand": "off_hand",
+            "on_true": {
+              "type": "minecraft:select",
+              "property": "minecraft:display_context",
+              "cases": [
+                {
+                  "when": [
+                    "firstperson_righthand",
+                    "firstperson_lefthand",
+                    "thirdperson_righthand",
+                    "thirdperson_lefthand"
+                  ],
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "enigmaticlegacyplus:item/3d/annihilating_sword_blocking"
+                  }
+                }
+              ],
+              "fallback": {
+                "type": "minecraft:model",
+                "model": "enigmaticlegacyplus:item/gui/annihilating_sword_2"
+              }
+            },
+            "on_false": {
+              "type": "minecraft:select",
+              "property": "minecraft:display_context",
+              "cases": [
+                {
+                  "when": [
+                    "gui",
+                    "fixed",
+                    "ground",
+                    "on_shelf"
+                  ],
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "enigmaticlegacyplus:item/gui/annihilating_sword_2"
+                  }
+                }
+              ],
+              "fallback": {
+                "type": "minecraft:model",
+                "model": "enigmaticlegacyplus:item/3d/annihilating_sword_2"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:select",
+      "property": "minecraft:display_context",
+      "cases": [
+        {
+          "when": [
+            "gui",
+            "fixed",
+            "ground",
+            "on_shelf"
+          ],
+          "model": {
+            "type": "minecraft:model",
+            "model": "enigmaticlegacyplus:item/gui/annihilating_sword_0"
+          }
+        }
+      ],
+      "fallback": {
+        "type": "minecraft:model",
+        "model": "enigmaticlegacyplus:item/3d/annihilating_sword_0"
+      }
+    }
+  }
+}

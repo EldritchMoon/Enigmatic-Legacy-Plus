@@ -1,0 +1,133 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "property": "enigmaticlegacyplus:spellstone_sword_form",
+    "entries": [
+      {
+        "threshold": 0.05,
+        "model": {
+          "type": "minecraft:model",
+          "model": "enigmaticlegacyplus:item/spellstone_sword/golem_heart"
+        }
+      },
+      {
+        "threshold": 0.15,
+        "model": {
+          "type": "minecraft:model",
+          "model": "enigmaticlegacyplus:item/spellstone_sword/blazing_core"
+        }
+      },
+      {
+        "threshold": 0.25,
+        "model": {
+          "type": "minecraft:model",
+          "model": "enigmaticlegacyplus:item/spellstone_sword/ocean_stone"
+        }
+      },
+      {
+        "threshold": 0.35,
+        "model": {
+          "type": "minecraft:model",
+          "model": "enigmaticlegacyplus:item/spellstone_sword/forgotten_ice"
+        }
+      },
+      {
+        "threshold": 0.45,
+        "model": {
+          "type": "minecraft:model",
+          "model": "enigmaticlegacyplus:item/spellstone_sword/revival_leaf"
+        }
+      },
+      {
+        "threshold": 0.55,
+        "model": {
+          "type": "minecraft:condition",
+          "property": "enigmaticlegacyplus:angel_blessing_charged",
+          "on_true": {
+            "type": "minecraft:model",
+            "model": "enigmaticlegacyplus:item/spellstone_sword/angel_blessing_charged"
+          },
+          "on_false": {
+            "type": "minecraft:range_dispatch",
+            "property": "enigmaticlegacyplus:angel_blessing_pull",
+            "entries": [
+              {
+                "threshold": 0.3,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "enigmaticlegacyplus:item/spellstone_sword/angel_blessing_pulling_0"
+                }
+              },
+              {
+                "threshold": 0.6,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "enigmaticlegacyplus:item/spellstone_sword/angel_blessing_pulling_1"
+                }
+              },
+              {
+                "threshold": 0.9,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "enigmaticlegacyplus:item/spellstone_sword/angel_blessing_pulling_2"
+                }
+              }
+            ],
+            "fallback": {
+              "type": "minecraft:model",
+              "model": "enigmaticlegacyplus:item/spellstone_sword/angel_blessing"
+            }
+          }
+        }
+      },
+      {
+        "threshold": 0.65,
+        "model": {
+          "type": "minecraft:condition",
+          "property": "enigmaticlegacyplus:engine_hook_out",
+          "on_true": {
+            "type": "minecraft:model",
+            "model": "enigmaticlegacyplus:item/spellstone_sword/lost_engine_out"
+          },
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "enigmaticlegacyplus:item/spellstone_sword/lost_engine"
+          }
+        }
+      },
+      {
+        "threshold": 0.75,
+        "model": {
+          "type": "minecraft:model",
+          "model": "enigmaticlegacyplus:item/spellstone_sword/illusion_lantern"
+        }
+      },
+      {
+        "threshold": 0.85,
+        "model": {
+          "type": "minecraft:model",
+          "model": "enigmaticlegacyplus:item/spellstone_sword/eye_of_nebula"
+        }
+      },
+      {
+        "threshold": 0.95,
+        "model": {
+          "type": "minecraft:condition",
+          "property": "minecraft:using_item",
+          "on_true": {
+            "type": "minecraft:model",
+            "model": "enigmaticlegacyplus:item/spellstone_sword/void_pearl_blocking"
+          },
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "enigmaticlegacyplus:item/spellstone_sword/void_pearl"
+          }
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "enigmaticlegacyplus:item/spellstone_sword"
+    }
+  }
+}

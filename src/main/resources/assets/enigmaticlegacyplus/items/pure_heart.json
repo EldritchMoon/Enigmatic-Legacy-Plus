@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "enigmaticlegacyplus:tainted",
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "enigmaticlegacyplus:item/pure_heart_on"
+    },
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "enigmaticlegacyplus:item/pure_heart"
+    }
+  }
+}

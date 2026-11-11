@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "enigmaticlegacyplus:miner_ring_on",
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "enigmaticlegacyplus:item/miner_ring_on"
+    },
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "enigmaticlegacyplus:item/miner_ring"
+    }
+  }
+}

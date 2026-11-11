@@ -2,13 +2,5 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "enigmaticlegacyplus:item/miner_ring"
-  },
-  "overrides": [
-    {
-      "predicate": {
-        "minecraft:on": 1.0
-      },
-      "model": "enigmaticlegacyplus:item/miner_ring_on"
-    }
-  ]
+  }
 }
