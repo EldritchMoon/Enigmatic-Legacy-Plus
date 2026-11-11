@@ -8,7 +8,6 @@ import auviotre.enigmatic.legacy.handlers.EnigmaticHandler;
 import auviotre.enigmatic.legacy.handlers.SoulArchive;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
 import com.google.common.base.Objects;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -17,6 +16,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -75,11 +75,13 @@ public class SoulCompass extends BaseCursedItem {
     // or a dropped item), which no longer exists. Item model properties get an ItemOwner now, which is the living
     // holder or that other entity, so "entity" became "owner" and "living" is owner.asLivingEntity().
     @OnlyIn(Dist.CLIENT)
-    public float getAngle(ItemStack stack, @Nullable ClientLevel level, @Nullable ItemOwner owner, int seed) {
+    // 26.1.2-port (dedicated server): the level parameter was a ClientLevel, a class a server does not have, and it
+    // sat in this common class's method signature. Only Level methods are used; the caller is client-only either way.
+    public float getAngle(ItemStack stack, @Nullable Level level, @Nullable ItemOwner owner, int seed) {
         if (owner == null) return 0.0F;
         LivingEntity living = owner.asLivingEntity();
-        if (level == null && owner.level() instanceof ClientLevel) {
-            level = (ClientLevel) owner.level();
+        if (level == null && owner.level().isClientSide()) { // was: owner.level() instanceof ClientLevel
+            level = owner.level();
         }
         assert level != null;
         BlockPos target = this.nearestCrystal;

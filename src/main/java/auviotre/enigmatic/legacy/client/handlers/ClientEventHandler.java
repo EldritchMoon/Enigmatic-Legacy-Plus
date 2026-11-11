@@ -2,9 +2,9 @@ package auviotre.enigmatic.legacy.client.handlers;
 
 import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.ISpellstone;
+import auviotre.enigmatic.legacy.client.InsigniaNameplate;
 import auviotre.enigmatic.legacy.client.KeyHandler;
 import auviotre.enigmatic.legacy.contents.attachement.EnigmaticData;
-import auviotre.enigmatic.legacy.contents.item.charms.Insignia;
 import auviotre.enigmatic.legacy.contents.item.etherium.EtheriumArmor;
 import auviotre.enigmatic.legacy.contents.item.etherium.EtheriumProperties;
 import auviotre.enigmatic.legacy.contents.item.food.ForbiddenFruit;
@@ -224,7 +224,7 @@ public class ClientEventHandler {
     // 26.1.2-port: new. Fired just before vanilla submits a name tag; adds the Insignia's small "(real name)" line.
     @SubscribeEvent
     private static void renderInsigniaTrueName(RenderNameTagEvent.DoRender event) {
-        Insignia.submitTrueName(event);
+        InsigniaNameplate.submitTrueName(event);
     }
 
     // 26.1.2-port: the Caelus RenderCapeEvent handler that was here (no cape while a mod elytra is worn) is now part of
