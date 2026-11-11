@@ -10,6 +10,9 @@ import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 public class ClientProxy extends CommonProxy {
     @Override
@@ -50,5 +53,15 @@ public class ClientProxy extends CommonProxy {
     @Override
     public String getClientUsername() {
         return Minecraft.getInstance().getUser().getName();
+    }
+
+    @Override
+    public @Nullable Player getClientPlayer() {
+        return Minecraft.getInstance().player;
+    }
+
+    @Override
+    public @Nullable Level getClientLevel() {
+        return Minecraft.getInstance().level;
     }
 }

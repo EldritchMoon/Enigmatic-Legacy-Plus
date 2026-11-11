@@ -6,7 +6,10 @@ import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.ProjectileDispenseBehavior;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
+import org.jetbrains.annotations.Nullable;
 
 public class CommonProxy {
     public void init() {
@@ -56,6 +59,22 @@ public class CommonProxy {
     }
 
     public String getClientUsername() {
+        return null;
+    }
+
+    /**
+     * 26.1.2-port: new. The player on this client, or null on a dedicated server.
+     * <p>
+     * Common code must use this and not {@code Minecraft.getInstance().player}: that field is a LocalPlayer, a class
+     * a dedicated server does not have, and NeoForge 26.1.2 no longer strips {@code @OnlyIn(Dist.CLIENT)} methods
+     * out of classes there. The return type is the common Player on purpose.
+     */
+    public @Nullable Player getClientPlayer() {
+        return null;
+    }
+
+    /** 26.1.2-port: new. The level on this client, or null on a dedicated server; see {@link #getClientPlayer()}. */
+    public @Nullable Level getClientLevel() {
         return null;
     }
 }
