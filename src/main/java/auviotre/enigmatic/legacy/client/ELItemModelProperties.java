@@ -4,6 +4,7 @@ import auviotre.enigmatic.legacy.EnigmaticLegacy;
 import auviotre.enigmatic.legacy.api.item.ITaintable;
 import auviotre.enigmatic.legacy.contents.item.rings.MinerRing;
 import auviotre.enigmatic.legacy.contents.item.spellstones.other.SpellstoneSword;
+import auviotre.enigmatic.legacy.contents.item.spellstones.other.Spelltuner;
 import auviotre.enigmatic.legacy.registries.EnigmaticAttachments;
 import auviotre.enigmatic.legacy.registries.EnigmaticComponents;
 import auviotre.enigmatic.legacy.registries.EnigmaticItems;
@@ -11,15 +12,18 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.client.color.item.ItemTintSource;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.item.properties.conditional.ConditionalItemModelProperty;
 import net.minecraft.client.renderer.item.properties.numeric.RangeSelectItemModelProperty;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.ItemOwner;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterConditionalItemModelPropertyEvent;
 import net.neoforged.neoforge.client.event.RegisterRangeSelectItemModelPropertyEvent;
 import org.jetbrains.annotations.Nullable;
@@ -60,6 +64,8 @@ import org.jetbrains.annotations.Nullable;
  *                                                              "component": "enigmaticlegacyplus:general_boolean"
  *
  * Every old function was clamped to 0..1 by ItemProperties; the numeric ones below clamp the same way.
+ *
+ * The definitions are written (phase 7b). The Spelltuner's item colour handler is the tint source at the top.
  */
 public final class ELItemModelProperties {
     private ELItemModelProperties() {
@@ -79,6 +85,31 @@ public final class ELItemModelProperties {
         event.register(EnigmaticLegacy.location("spellstone_sword_form"), SpellstoneSwordForm.MAP_CODEC);
         event.register(EnigmaticLegacy.location("enigmatic_eye_activated"), EnigmaticEyeActivated.MAP_CODEC);
         event.register(EnigmaticLegacy.location("soul_compass_angle"), SoulCompassAngle.MAP_CODEC);
+    }
+
+    public static void registerTintSources(RegisterColorHandlersEvent.ItemTintSources event) {
+        event.register(EnigmaticLegacy.location("spelltuner"), SpelltunerTint.MAP_CODEC);
+    }
+
+    // --------------------------------------------------------------------------------------------------- tint sources
+
+    /**
+     * Was the item colour handler registered for the Spelltuner: (stack, index) -> index > 0 ? -1 : Spelltuner.getColor(stack).
+     * RegisterColorHandlersEvent.Item is gone; a model definition lists one tint source per tint index, so
+     * items/spelltuner.json names this one for index 0 and nothing for the other layer, which leaves it untinted.
+     */
+    public record SpelltunerTint() implements ItemTintSource {
+        public static final MapCodec<SpelltunerTint> MAP_CODEC = MapCodec.unit(new SpelltunerTint());
+
+        @Override
+        public int calculate(ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity owner) {
+            return ARGB.opaque(Spelltuner.getColor(stack));
+        }
+
+        @Override
+        public MapCodec<SpelltunerTint> type() {
+            return MAP_CODEC;
+        }
     }
 
     // ---------------------------------------------------------------------------------------------- yes/no properties

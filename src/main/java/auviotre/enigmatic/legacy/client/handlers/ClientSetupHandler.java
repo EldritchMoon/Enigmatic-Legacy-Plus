@@ -84,12 +84,12 @@ public class ClientSetupHandler {
         event.register(EnigmaticBlocks.STARLIGHT_BLOCK, new BaseItem.WIPDecorator());
     }
 
-    // TODO(port): RegisterColorHandlersEvent.Item was removed. Item colours are tint sources declared in the item model
-    // definition now, so the Spelltuner tint becomes a custom tint source plus its items/spelltuner.json (phase 7).
-    // @SubscribeEvent
-    // private static void registerItemColor(RegisterColorHandlersEvent.@NotNull Item event) {
-    //     event.register((stack, index) -> index > 0 ? -1 : Spelltuner.getColor(stack), EnigmaticItems.SPELLTUNER);
-    // }
+    // 26.1.2-port: was registerItemColor(RegisterColorHandlersEvent.Item), which is gone. Item colours are tint sources
+    // named by the item model definition; the Spelltuner's is ELItemModelProperties.SpelltunerTint.
+    @SubscribeEvent
+    private static void registerItemTintSources(RegisterColorHandlersEvent.@NotNull ItemTintSources event) {
+        ELItemModelProperties.registerTintSources(event);
+    }
 
     @SubscribeEvent
     private static void registerScreens(@NotNull RegisterMenuScreensEvent event) {
