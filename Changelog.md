@@ -1,3 +1,8 @@
+### Release 26.1.2-1.1.2 [2026/11/13]
+**Features:**
+- Ported to Minecraft 26.1.2 (NeoForge).
+- Added the `enableNeutralAnger` config option (in `sevenCurses`) to disable the **Second Curse** of the **Ring of the Seven Curses**. When set to false, neutral creatures and piglins no longer turn hostile towards the bearer, and the curse is hidden from the ring's tooltip. Enabled by default.
+
 ### Release 1.1.0 [2026/07/27]
 **Features:**
 - Added lots of new Items:

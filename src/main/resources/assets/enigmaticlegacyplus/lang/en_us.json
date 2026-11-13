@@ -1367,6 +1367,8 @@
   "enigmaticlegacyplus.configuration.sevenCurses": "Ring of Seven Curses Configs",
   "enigmaticlegacyplus.configuration.painMultiplier": "§5First Curse§d - Pain Multiplier",
   "enigmaticlegacyplus.configuration.painMultiplier.tooltip": "Defines how much damage bearers of the ring receive from any source. Measured as percentage.",
+  "enigmaticlegacyplus.configuration.enableNeutralAnger": "§5Second Curse§d - Neutral Anger",
+  "enigmaticlegacyplus.configuration.enableNeutralAnger.tooltip": "Set to false to stop neutral creatures and piglins from turning hostile towards bearers of the ring.",
   "enigmaticlegacyplus.configuration.neutralAngerRange": "§5Second Curse§d - Neutral Anger Range",
   "enigmaticlegacyplus.configuration.neutralAngerRange.tooltip": "Range in which neutral creatures are angered against bearers of the ring.",
   "enigmaticlegacyplus.configuration.armorDebuff": "§5Third Curse§d - Armor Debuff Coefficient",

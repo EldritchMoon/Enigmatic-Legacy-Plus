@@ -99,6 +99,7 @@ public class CursedRing extends CursedCurioItem {
     public static final Multimap<Player, ItemLike> POSSESSIONS = ArrayListMultimap.create();
     public static final Map<Player, Map<String, ItemStack>> RESTORE_MAP = new HashMap<>();
     public static ModConfigSpec.IntValue painMultiplier;
+    public static ModConfigSpec.BooleanValue enableNeutralAnger;
     public static ModConfigSpec.DoubleValue neutralAngerRange;
     public static ModConfigSpec.IntValue armorDebuff;
     public static ModConfigSpec.IntValue monsterDamageDebuff;
@@ -128,6 +129,7 @@ public class CursedRing extends CursedCurioItem {
     public static void onConfig(ModConfigSpec.Builder builder, ModConfig.Type type) {
         builder.push("sevenCurses");
         painMultiplier = builder.defineInRange("painMultiplier", 200, 100, 500);
+        enableNeutralAnger = builder.define("enableNeutralAnger", true);
         neutralAngerRange = builder.defineInRange("neutralAngerRange", 24.0, 4.0, 100.0);
         armorDebuff = builder.defineInRange("armorDebuff", 30, 0, 100);
         monsterDamageDebuff = builder.defineInRange("monsterDamageDebuff", 40, 0, 100);
@@ -165,7 +167,7 @@ public class CursedRing extends CursedCurioItem {
             if (multiplier == 200) TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurse1");
             else
                 TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurse1_alt", ChatFormatting.GOLD, multiplier + "%");
-            TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurse2");
+            if (enableNeutralAnger.get()) TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurse2");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurse3", ChatFormatting.GOLD, armorDebuff.get() + "%");
             TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurse4", ChatFormatting.GOLD, monsterDamageDebuff.get() + "%");
             if (eternalBurning.get()) TooltipHandler.line(list, "tooltip.enigmaticlegacy.cursedRingCurse5");
@@ -218,7 +220,10 @@ public class CursedRing extends CursedCurioItem {
 
         if (EnigmaticHandler.hasItem(player, EnigmaticItems.ODE_TO_LIVING)) return;
         double angerRange = neutralAngerRange.getAsDouble();
-        List<LivingEntity> genericMobs = player.level().getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(angerRange, angerRange / 3, angerRange));
+        // Second curse: neutral creatures (and piglins) turn on the bearer. Can be switched off in the config.
+        List<LivingEntity> genericMobs = enableNeutralAnger.get()
+                ? player.level().getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(angerRange, angerRange / 3, angerRange))
+                : List.of();
         for (LivingEntity mob : genericMobs) {
             double visibility = player.getVisibilityPercent(mob);
             double noCheckDistance = Math.max(angerRange / 3.2, 5.4);
